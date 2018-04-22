@@ -78,8 +78,6 @@ void ServerDialog::OnBnClickedEdtCreate()
 			pDoc->Name = name;
 			pDoc->ServerIp = pDoc->GetServerIP();
 			
-			
-
 			memcpy(pDoc->chName, pDoc->StringToChar( pDoc->Name), strlen(pDoc->StringToChar( pDoc->Name)));
 			pDoc->CreateRoot();
 

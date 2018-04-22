@@ -1815,29 +1815,19 @@ void CMyView::SetGhostFigure()
 	POINT c;
 
 	int l=0;
-	bool brk=false;
 	while(fg->end.y < VERNUM ){
-			
 		for(l=0 ; l < FG_FIXEDNUM ; l++){
 			c = fg->FgInfo[l];
 			//바닥이나 도형에 착지
 			if(c.y == VERNUM-1 || ME->GameBoard[ c.y+1 ][ c.x ] == 1){
-				brk=true;
+				break;
 			}
 		}
-		if(brk)
+		if(l!=FG_FIXEDNUM)
 			break;
 
 		MoveToGhostDown();
 	}
-	
-
-	//for(int i=0 ; i < FG_FIXEDNUM ; i++){
-
-	//	c = fg->FgInfo[i];
-	//	ME->GhostBoard[ c.y ][ c.x ] = fg->Figure;
-	//}
-
 }
 
 //서버에게 끝났음을 통보
@@ -1868,18 +1858,20 @@ bool CMyView::CheckLineDestroy(){
 				Bingo++;
 
 		//없어질 줄이 발견되면 위에서부터 비어질 아래로 끌어온다
-		if(Bingo == HORNUM){
+		if(Bingo == HORNUM)
+		{
 			des = true;
 			final_line=i;
-			for(int m=i-1 ; m>0 ; m--)
-				for(int n=0 ; n< HORNUM ; n++){
-					
-					ME->GameBoard[m+1][n]=ME->GameBoard[m][n];
-					ME->FixedBoard[m+1][n]=ME->FixedBoard[m][n];
-					ME->GameBoard[m][n]=0;
-					ME->FixedBoard[m][n]=0;
+			for (int m = i - 1; m > 0; m--)
+			{
+				for (int n = 0; n < HORNUM; n++) 
+				{
+					ME->GameBoard[m + 1][n] = ME->GameBoard[m][n];
+					ME->FixedBoard[m + 1][n] = ME->FixedBoard[m][n];
+					ME->GameBoard[m][n] = 0;
+					ME->FixedBoard[m][n] = 0;
 				}
-						
+			}
 		}
 		Bingo=0;
 	}
@@ -1904,17 +1896,11 @@ bool CMyView::CheckLineDestroy(){
 				ME->GameBoard[l][i] = 0;
 				//cs
 			}
-
-
 		}
-
-
 	}
 	else
 		Combo=0;
 
-
-	
 
 	if(Combo>=COMBONUM && des){
 		pDoc->MySocket->SendLine(ADDCOMBOLINE, false);
@@ -2027,7 +2013,6 @@ void CMyView::MoveToRight(){
 	if(ME == NULL)
 		return;
 
-	POINT c;
 	for(int i=0 ; i < FG_FIXEDNUM ; i++)
 		ME->FG.FgInfo[i].x+=1;
 

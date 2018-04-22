@@ -529,9 +529,6 @@ void CMyDoc::Client_ProcessStart(ON_STARTSIGNAL on_start){
 		}
 	}
 
-
-
-
 	pView->VirtualDraw();
 }
 
@@ -601,7 +598,6 @@ void CMyDoc::ProcessDead(ON_NAME on_name){
 
 	if(user == NULL)
 		return;
-	
 
 	user->SetSurvive(false);
 
@@ -620,7 +616,6 @@ void CMyDoc::ProcessDead(ON_NAME on_name){
 		}
 		Server_UserList.GetNext(pos);
 	}
-
 	if(deadnum == Server_UserList.GetCount()-1){
 		
    		memset( &send_name, 0, sizeof(send_name));
@@ -633,10 +628,7 @@ void CMyDoc::ProcessDead(ON_NAME on_name){
 		send_name.namelen = strlen( send_name.name);
 		send_name.struct_size = sizeof(send_name) - sizeof(int)*HEADER_NUM;
 		MySocket->Broadcast( &send_name, END_SIGNAL);
-
-
 	}
-
 }
 
 //서버에서 클라이언트로 게임종료를 알림
@@ -655,8 +647,6 @@ void CMyDoc::Client_ProcessEnd(ON_NAME on_name){
 		
 		if( user->GetUserName().Compare(name) != 0)
 			user->SetSurvive(false);
-
-
 	}
 	user = this->Client_NameToTUser(name);
 	user->SetSurvive(true);
@@ -675,8 +665,6 @@ void CMyDoc::Client_ProcessEnd(ON_NAME on_name){
 	pView->KillTimer(TIMER_SENDMAPSTATE);
 	End = true;
 	Start = false;
-
-	
 	
 	pView->VirtualDraw();
 }
