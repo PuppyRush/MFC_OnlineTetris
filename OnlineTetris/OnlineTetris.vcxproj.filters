@@ -151,9 +151,6 @@
     <ClInclude Include="MySocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MyListen.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TUser.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -190,9 +187,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MySocket.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MyListen.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TUser.cpp">

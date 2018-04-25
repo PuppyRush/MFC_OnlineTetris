@@ -1,4 +1,6 @@
 
+#define CSTRTCH (LPSTR)(LPCTSTR) 
+
 enum USER_MSG{
 
 	SUCC_SERVEROPEN=0,

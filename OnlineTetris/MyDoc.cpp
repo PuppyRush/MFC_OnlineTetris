@@ -32,10 +32,9 @@ END_MESSAGE_MAP()
 CMyDoc::CMyDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
-	srand((unsigned)time(NULL));
+	srand((unsigned)time(nullptr));
 	End = Ready = Open = Enter = Start = false;
-	pListen = NULL;
-	MySocket= NULL;
+	m_mySocket= nullptr;
 	memset( chName, 0, ID_LEN);
 	Map = Level = 1;
 	Bgm = true;
@@ -117,9 +116,9 @@ void CMyDoc::SetSearchContent(const CString& value)
 	}
 	else
 	{
-		CMFCFilterChunkValueImpl *pChunk = NULL;
+		CMFCFilterChunkValueImpl *pChunk = nullptr;
 		ATLTRY(pChunk = new CMFCFilterChunkValueImpl);
-		if (pChunk != NULL)
+		if (pChunk != nullptr)
 		{
 			pChunk->SetTextValue(PKEY_Search_Contents, value, CHUNK_TEXT);
 			SetChunkValue(pChunk);
@@ -151,8 +150,8 @@ char *CMyDoc::StringToChar(const CString& str){
 
 	char name[ID_LEN]={0};
 
-	int len = WideCharToMultiByte(CP_ACP, 0, str, -1, NULL, 0, NULL, NULL);
-	WideCharToMultiByte(CP_ACP, 0, str, -1, name, len, NULL, NULL);
+	int len = WideCharToMultiByte(CP_ACP, 0, str, -1, nullptr, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_ACP, 0, str, -1, name, len, nullptr, nullptr);
 
 	return name;
 
@@ -172,7 +171,7 @@ CString CMyDoc::GetServerIP(){
     {
         if( gethostname ( name, sizeof(name)) == 0)
         {
-            if((hostinfo = gethostbyname(name)) != NULL)
+            if((hostinfo = gethostbyname(name)) != nullptr)
             {
                 ip = inet_ntoa (*(struct in_addr *)*hostinfo->h_addr_list);
             }
@@ -188,7 +187,7 @@ CMySocket* CMyDoc::NameToSocket(CString name){
 
 	TUser *tmp;
 	POSITION pos = Server_UserList.GetHeadPosition();
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		tmp = (TUser  *)Server_UserList.GetNext(pos);
 		if( (CMySocket *)tmp->GetUserName().Compare(name) == 0){
@@ -198,7 +197,7 @@ CMySocket* CMyDoc::NameToSocket(CString name){
 		}
 	}
 
-	return NULL;
+	return nullptr;
 
 }
 //서버함수
@@ -206,7 +205,7 @@ TUser* CMyDoc::NameToTUser(CString name){
 
 	TUser *tmp;
 	POSITION pos = Server_UserList.GetHeadPosition();
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		tmp = (TUser  *)Server_UserList.GetNext(pos);
 		if( (CMySocket *)tmp->GetUserName().Compare(name) == 0){
@@ -216,14 +215,14 @@ TUser* CMyDoc::NameToTUser(CString name){
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 TUser *CMyDoc::SocketToTUser(CMySocket *soc){
 
 	TUser *tmp;
 	POSITION pos = Server_UserList.GetHeadPosition();
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		tmp = (TUser  *)Server_UserList.GetNext(pos);
 		if( tmp->GetSocket() == soc){
@@ -233,19 +232,19 @@ TUser *CMyDoc::SocketToTUser(CMySocket *soc){
 		}
 	}
 
-	return NULL;
+	return nullptr;
 
 }
 
 bool CMyDoc::ExistUser(CString name){
 
 	POSITION pos = Client_UserList.GetHeadPosition();
-	TUser *user = NULL;
+	TUser *user = nullptr;
 
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		user = (TUser *)Client_UserList.GetNext(pos);
-		if(user == NULL)
+		if(user == nullptr)
 			continue;
 		if(user->GetUserName().Compare(name) == 0)
 			return true;
@@ -258,23 +257,23 @@ bool CMyDoc::ExistUser(CString name){
 void CMyDoc::CreateRoot(){
 
 	//서버도 하나의 클라이언트로 취급하여 게임을 하는 모든 유저에 대해 일관성있게 처리 할 수 있게 한다.
-	if(MySocket == NULL)
-		MySocket = new CMySocket();
-
-	MySocket->pView = pView;
-	MySocket->pDoc = this;
-	MySocket->Create();
-	MySocket->Connect( ServerIp, PORTNUM);
-	
-	TUser *tmp = new TUser(Name);
-	Client_UserList.AddTail(tmp);
-	pView->ME = tmp;
-
-	if(!MySocket->Sendname(chName, strlen(chName)))
-		pView->MessageHandler(FAIL_SENDMSG);
-
-	Enter = false;
-	Open = true;
+	//if(m_mySocket == nullptr)
+	//	m_mySocket = new CMySocket();
+	//
+	//m_mySocket->pView = pView;
+	//m_mySocket->pDoc = this;
+	//m_mySocket->Create();
+	//m_mySocket->Connect( ServerIp, PORTNUM);
+	//
+	//TUser *tmp = new TUser(Name);
+	//Client_UserList.AddTail(tmp);
+	//pView->ME = tmp;
+	//
+	//if(!m_mySocket->Sendname(chName, strlen(chName)))
+	//	pView->MessageHandler(FAIL_SENDMSG);
+	//
+	//Enter = false;
+	//Open = true;
 }
 
 
@@ -296,7 +295,7 @@ bool CMyDoc::Adduser(char *name, int namelen, CMySocket *soc){
 	}
 
 	TUser *usr = SocketToTUser(soc);
-	if( usr != NULL){
+	if( usr != nullptr){
 		usr->SetName(str);					
 		Server_EnterUsers.Add(str);
 	}
@@ -311,9 +310,9 @@ bool CMyDoc::Adduser(char *name, int namelen, CMySocket *soc){
 
 TUser *CMyDoc::Client_NameToTUser(CString name){
 
-	TUser *tmp = NULL;
+	TUser *tmp = nullptr;
 	POSITION pos = Client_UserList.GetHeadPosition();
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		tmp = (TUser  *)Client_UserList.GetNext(pos);
 		if( (CMySocket *)tmp->GetUserName().Compare(name) == 0){
@@ -323,7 +322,7 @@ TUser *CMyDoc::Client_NameToTUser(CString name){
 		}
 	}
 
-	return NULL;
+	return nullptr;
 
 }
 
@@ -340,7 +339,7 @@ void CMyDoc::AddChat(char *msg, int msglen){
 void CMyDoc::SetEnterUsers(CMyDoc::ON_NAMES names){
 
 	POSITION pos= Client_UserList.GetHeadPosition();
-	TUser *user = NULL, *temp = NULL;
+	TUser *user = nullptr, *temp = nullptr;
 	bool nothing = true;
 
 	Client_EnterUsers.RemoveAll();
@@ -359,14 +358,14 @@ void CMyDoc::SetEnterUsers(CMyDoc::ON_NAMES names){
 
 		Client_EnterUsers.Add(name);
 		
-		temp = NULL;
+		temp = nullptr;
 		pos =  Client_UserList.GetHeadPosition();
 		nothing= true;
 	}
 	
 	ME = Client_NameToTUser(Name);
 	pView->ME = ME;
-	if(ME==NULL){
+	if(ME==nullptr){
 		pView->MessageHandler(FAIL_FINDNAME);
 		return;
 	}
@@ -375,13 +374,13 @@ void CMyDoc::SetEnterUsers(CMyDoc::ON_NAMES names){
 
 void CMyDoc::SetReady(CMyDoc::ON_READIES rdy){
 
-	TUser *user = NULL;
+	TUser *user = nullptr;
 	int rdynum=0;
 	for(int i=0 ; i < rdy.enternum ; i++){
 		CString name(rdy.name[i], rdy.namelen[i]);
 
 		user = Client_NameToTUser(name);
-		if(user == NULL){
+		if(user == nullptr){
 			pView->MessageHandler(FAIL_FINDNAME);
 			continue;
 		}
@@ -401,11 +400,11 @@ void CMyDoc::SetReady(CMyDoc::ON_READIES rdy){
 
 void CMyDoc::SetOrder(){
 
-	TUser *user = NULL;
+	TUser *user = nullptr;
 	
 	for(int i=0 ; i < Client_EnterUsers.GetCount() ; i++){
 		user = Client_NameToTUser( Client_EnterUsers[i]);
-		if(user == NULL){
+		if(user == nullptr){
 			pView->MessageHandler(FAIL_FINDNAME);
 			continue;
 		}
@@ -438,7 +437,7 @@ void CMyDoc::ProcessEnter(CString name){
 	TUser *tmp = new TUser(Name);
 	Client_UserList.AddTail(tmp);
 
-	if(!MySocket->Sendname(chName, strlen( chName) ))
+	if(!m_mySocket->Sendname(chName, strlen( chName) ))
 		pView->MessageHandler(FAIL_SENDMSG);
 
 	pView->Btn_Start->EnableWindow(false);
@@ -461,35 +460,35 @@ void CMyDoc::Client_ProcessStart(ON_STARTSIGNAL on_start){
 	Start = true;
 	switch(on_start.level){
 		case 0:
-			pView->SetTimer(TIMER_TETRIS, 1700, NULL);
+			pView->SetTimer(TIMER_TETRIS, 1700, nullptr);
 			break;
 		case 2:
-			pView->SetTimer(TIMER_TETRIS, 1300, NULL);
+			pView->SetTimer(TIMER_TETRIS, 1300, nullptr);
 			break;
 		case 3:
-			pView->SetTimer(TIMER_TETRIS, 1000, NULL);
+			pView->SetTimer(TIMER_TETRIS, 1000, nullptr);
 			break;
 		case 4:
-			pView->SetTimer(TIMER_TETRIS, 800, NULL);
+			pView->SetTimer(TIMER_TETRIS, 800, nullptr);
 			break;
 		case 5:
-			pView->SetTimer(TIMER_TETRIS, 600, NULL);
+			pView->SetTimer(TIMER_TETRIS, 600, nullptr);
 			break;
 		case 6:
-			pView->SetTimer(TIMER_TETRIS, 400, NULL);
+			pView->SetTimer(TIMER_TETRIS, 400, nullptr);
 			break;
 		case 7:
-			pView->SetTimer(TIMER_TETRIS, 200, NULL);
+			pView->SetTimer(TIMER_TETRIS, 200, nullptr);
 			break;
 		case 8:
-			pView->SetTimer(TIMER_TETRIS, 100, NULL);
+			pView->SetTimer(TIMER_TETRIS, 100, nullptr);
 			break;
 		case 9:
-			pView->SetTimer(TIMER_TETRIS, 50, NULL);
+			pView->SetTimer(TIMER_TETRIS, 50, nullptr);
 			break;
 
 		default:
-			pView->SetTimer(TIMER_TETRIS, 1700, NULL);
+			pView->SetTimer(TIMER_TETRIS, 1700, nullptr);
 			break;
 
 	}
@@ -497,13 +496,13 @@ void CMyDoc::Client_ProcessStart(ON_STARTSIGNAL on_start){
 	ME->FG.Figure = ME->FG.NextFigure = -1;
 
 	pView->CreateFigure();
-	MySocket->Sendmapstate();
+	m_mySocket->Sendmapstate();
 
-	pView->SetTimer(TIMER_SENDMAPSTATE , SENDTIME , NULL);
+	pView->SetTimer(TIMER_SENDMAPSTATE , SENDTIME , nullptr);
 	
 	int bgm = rand()%BGM_NUM;
 	if(bgm){
-		PlaySound(NULL, AfxGetInstanceHandle(),  NULL);
+		PlaySound(nullptr, AfxGetInstanceHandle(),  NULL);
 		switch(bgm){
 
 			case 0:
@@ -534,15 +533,15 @@ void CMyDoc::Client_ProcessStart(ON_STARTSIGNAL on_start){
 
 void CMyDoc::Server_ProceeStart(){
 
-	MySocket->Broadcast(NULL, START_SIGNAL);
+	m_mySocket->Broadcast(nullptr, START_SIGNAL);
 
 	POSITION pos = Server_UserList.GetHeadPosition();
-	TUser *user = NULL;
+	TUser *user = nullptr;
 
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		user = (TUser *)Server_UserList.GetNext(pos);
-		if(user == NULL)
+		if(user == nullptr)
 			continue;
 
 		user->SetSurvive(true);
@@ -550,7 +549,7 @@ void CMyDoc::Server_ProceeStart(){
 	}
 
 	Start = true;
-	pView->SetTimer( TIMER_NEXTLEVEL, 1000, NULL);
+	pView->SetTimer( TIMER_NEXTLEVEL, 1000, nullptr);
 	pView->Btn_Start->SetWindowTextW( _T("다시시작"));
 }
 
@@ -559,7 +558,7 @@ bool CMyDoc::ExitUser(char* name, int len){
 	CString str(name,len);
 	TUser *user = Client_NameToTUser(str);
 	
-	if(user ==NULL)
+	if(user ==nullptr)
 		return false;
 	
 	Client_UserList.RemoveAt(Client_UserList.Find(user));
@@ -571,12 +570,12 @@ bool CMyDoc::ExitUser(char* name, int len){
 	}
 
 	POSITION pos = Client_UserList.GetHeadPosition();
-	user = NULL;
+	user = nullptr;
 
-	while(pos != NULL){
+	while(pos != nullptr){
 
 		user = (TUser *)Client_UserList.GetNext(pos);
-		if(user != NULL){
+		if(user != nullptr){
 			continue;
 		}
 
@@ -596,16 +595,16 @@ void CMyDoc::ProcessDead(ON_NAME on_name){
  	CString str(on_name.name , on_name.namelen);
 	TUser *user = NameToTUser(str);
 
-	if(user == NULL)
+	if(user == nullptr)
 		return;
 
 	user->SetSurvive(false);
 
 	//죽은 사람이 유저수-1 이면 살아남은 사람이 승리하고 게임을 끝낸다.
 	int deadnum=0;
-	POSITION live = NULL;
+	POSITION live = nullptr;
 	POSITION pos = this->Server_UserList.GetHeadPosition();
-	while(pos != NULL){
+	while(pos != nullptr){
 		
 		user = (TUser *)Server_UserList.GetAt(pos);
 		if(user->GetSurvive() == false)
@@ -627,7 +626,7 @@ void CMyDoc::ProcessDead(ON_NAME on_name){
 		send_name.msg_idx = END_SIGNAL;
 		send_name.namelen = strlen( send_name.name);
 		send_name.struct_size = sizeof(send_name) - sizeof(int)*HEADER_NUM;
-		MySocket->Broadcast( &send_name, END_SIGNAL);
+		m_mySocket->Broadcast( &send_name, END_SIGNAL);
 	}
 }
 
@@ -640,9 +639,9 @@ void CMyDoc::Client_ProcessEnd(ON_NAME on_name){
 	str+= _T("님이 승리하셨습니다!");
 	ChatLog += ( _T("\r\n")+str);
 	
-	TUser *user = NULL;
+	TUser *user = nullptr;
 	POSITION pos = this->Client_UserList.GetHeadPosition();
-	while( pos != NULL){
+	while( pos != nullptr){
 		user = (TUser *)Client_UserList.GetNext(pos);
 		
 		if( user->GetUserName().Compare(name) != 0)
@@ -672,9 +671,9 @@ void CMyDoc::Client_ProcessEnd(ON_NAME on_name){
 void CMyDoc::RestartGame(){
 
 	POSITION pos = Client_UserList.GetHeadPosition();
-	TUser* user=NULL;
+	TUser* user=nullptr;
 
-	while(pos != NULL){
+	while(pos != nullptr){
 		user = (TUser *)Client_UserList.GetNext(pos);
 		user->SetReady(false);
 		memset( user->StateBoard , 0 , sizeof(user->StateBoard));

@@ -4,9 +4,11 @@
 
 #pragma once
 
+#include <memory>
+
 #include "TUser.h"
 #include "DefineInfo.h"
-
+#include "ServerSocket.h"
 
 class CMyListen;
 class CMySocket;
@@ -200,8 +202,7 @@ public:
 	bool Ghost;			//낙하예상지점 옵션
 	bool Bgm;
 	bool Gravity;		//중력모드
-	CMyListen *pListen;
-	CMySocket *MySocket;
+	CMySocket *m_mySocket;
 	CMyView *pView;
 
 	SEND_PERMIT per;

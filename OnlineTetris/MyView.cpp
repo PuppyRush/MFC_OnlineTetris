@@ -113,7 +113,7 @@ void CMyView::OnInitialUpdate()
 	}
 	if( pServerDlg == NULL){
 		pServerDlg = new ServerDialog;
-		pServerDlg->Create( _SERVER);
+		pServerDlg->Create( _DLG_SERVER);
 		pServerDlg->pView = this;
 		pServerDlg->pDoc = pDoc;
 	}
@@ -842,7 +842,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	else if( nIDEvent == TIMER_SENDMAPSTATE && ME->GetSurvive() && ( pDoc->Open || pDoc->Enter) ){
-		pDoc->MySocket->Sendmapstate();
+		pDoc->m_mySocket->Sendmapstate();
 		VirtualDraw();
 	}
 
@@ -850,7 +850,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 		pDoc->LineRemain++;
 		
 		if(pDoc->LineRemain % 10 ==0){
-			pDoc->MySocket->SendLine(1, true);
+			pDoc->m_mySocket->SendLine(1, true);
 		}
 	}
 	
@@ -1354,7 +1354,7 @@ void CMyView::ReadyBtnClicked(){
 		send_ready.ready = true;
 	}
 
-	pDoc->MySocket->Sendready();
+	pDoc->m_mySocket->Sendready();
 
 }
 
@@ -1363,7 +1363,7 @@ void CMyView::ReadyBtnClicked(){
 void CMyView::StartBtnClicked(){
 
 	if(pDoc->End){
-		pDoc->MySocket->SendRestart();
+		pDoc->m_mySocket->SendRestart();
 		return;
 	}
 
@@ -1391,7 +1391,7 @@ void CMyView::OnMenuServer()
 		}
 		else{
 			pServerDlg = new ServerDialog;
-			pServerDlg->Create( _SERVER);
+			pServerDlg->Create( _DLG_SERVER);
 			pServerDlg->pView = this;
 			pServerDlg->pDoc = pDoc;
 			pServerDlg->ShowWindow(SW_SHOW);
@@ -1838,7 +1838,7 @@ void CMyView::SetGameover(){
 	pDoc->Start=false;
 	KillTimer(TIMER_TETRIS);
 	KillTimer(TIMER_SENDMAPSTATE);
-	pDoc->MySocket->SendDead();
+	pDoc->m_mySocket->SendDead();
 
 }
 
@@ -1903,7 +1903,7 @@ bool CMyView::CheckLineDestroy(){
 
 
 	if(Combo>=COMBONUM && des){
-		pDoc->MySocket->SendLine(ADDCOMBOLINE, false);
+		pDoc->m_mySocket->SendLine(ADDCOMBOLINE, false);
 
 	}
 

@@ -8,17 +8,20 @@
 
 // CMySocket
 
-CMySocket::CMySocket()
+CMySocket::CMySocket(const string &username, const IPString ipstring, const int port)
+	:m_username(username), m_ipString(ipstring), m_port(port)
 {
 }
+
 
 CMySocket::~CMySocket()
 {
 }
 
-
-// CMySocket ¸â¹ö ÇÔ¼ö
-
+bool CMySocket::ConnectToServer()
+{
+	return this->Connect(CString(m_ipString.GetString()), m_port);
+}
 
 void CMySocket::OnClose(int nErrorCode){
 
@@ -491,7 +494,7 @@ bool CMySocket::Sendname(char *name, int namelen){
 	memcpy( send_name.name,name, namelen);
 	send_name.namelen = namelen;
 	send_name.struct_size = sizeof( send_name);
-	if(pDoc->MySocket->Send( (char *)&send_name, sizeof(send_name))>0)
+	if(pDoc->m_mySocket->Send( (char *)&send_name, sizeof(send_name))>0)
 		return true;
 	else 
 		return false;

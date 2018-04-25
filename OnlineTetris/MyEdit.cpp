@@ -87,7 +87,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				msg.struct_size = sizeof( msg);
 				
 				
-				pDoc->MySocket->Send( (char *)&msg, sizeof(msg));
+				pDoc->m_mySocket->Send( (char *)&msg, sizeof(msg));
 				Sleep(50);
 		
 			}
