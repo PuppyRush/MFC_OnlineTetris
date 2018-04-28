@@ -1,7 +1,8 @@
 
 #define CSTRTCH (LPSTR)(LPCTSTR) 
 
-enum USER_MSG{
+typedef enum USER_MSG
+{
 
 	SUCC_SERVEROPEN=0,
 	FAIL_SERVEROPEN,
@@ -19,7 +20,8 @@ enum USER_MSG{
 	CLOSE_SERVER
 };
 
-enum CLIENT_MSG{
+typedef enum CLIENT_MSG
+{
 	//클라이언트가 받을 메세지
 	PER_NAME=100,
 	SEND_MESSAGE,
@@ -37,7 +39,8 @@ enum CLIENT_MSG{
 };
 
 
-enum SERVER_MSG{
+typedef enum SERVER_MSG
+{
 	//서버가 받을 메세지
 	ON_NAME=300,
 	ON_MESSAGE,
@@ -49,7 +52,8 @@ enum SERVER_MSG{
 	BC_RESTART
 };
 
-enum MAP{
+typedef enum MAP
+{
 	STAIRWAY =0,
 	PYRAMID,
 	RAIN,
@@ -59,7 +63,8 @@ enum MAP{
 	
 };
 
-enum TETRIS_FIGURE{
+typedef enum TETRIS_FIGURE
+{
 	 JMINO=2,	
 	 LMINO,
 	 OMINO,
@@ -70,7 +75,8 @@ enum TETRIS_FIGURE{
 	 GMINO,
 };
 
-enum ETC{
+typedef enum ETC
+{
 	TOLEFT=0,
 	TORIGHT
 };

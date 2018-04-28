@@ -8,11 +8,12 @@
 
 // CMySocket
 
-CMySocket::CMySocket(const string &username, const IPString ipstring, const int port)
-	:m_username(username), m_ipString(ipstring), m_port(port)
+using namespace msg_header;
+
+CMySocket::CMySocket(const IPString ipstring, const size_t port)
+	: m_ipString(ipstring), m_port(port)
 {
 }
-
 
 CMySocket::~CMySocket()
 {
@@ -20,7 +21,10 @@ CMySocket::~CMySocket()
 
 bool CMySocket::ConnectToServer()
 {
-	return this->Connect(CString(m_ipString.GetString()), m_port);
+	if (!Connect(CString(m_ipString.GetString()), m_port))
+		return false;
+
+
 }
 
 void CMySocket::OnClose(int nErrorCode){
@@ -80,7 +84,7 @@ void CMySocket::OnClose(int nErrorCode){
 
 
 	//접속해 있는 나머지 사람들에게 나갔음을 알린다.
-	CMyDoc::SEND_NAME tmp;
+	mSendName msg(Header(EXIT_USER),)
 	memset(&tmp, 0 , sizeof(tmp));
 	memcpy(tmp.name, chname, strlen(chname));
 	tmp.namelen = strlen(chname);
@@ -88,6 +92,7 @@ void CMySocket::OnClose(int nErrorCode){
 	if(!Broadcast( &tmp, EXIT_USER))
 		pView->MessageHandler(FAIL_SENDMSG);
 	
+
 
 	char msg[MSG_LEN] = {0};
 	memset(&on_msg, 0, sizeof(on_msg));
@@ -270,8 +275,8 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 	switch(msgidx){
 
 		case ON_MESSAGE:{
-			CMyDoc::ON_MESSAGE *tmp = (CMyDoc::ON_MESSAGE *)strc;
-			CMyDoc::SEND_MESSAGE msg;
+			mOnMESSAGE *tmp = (mOnMESSAGE *)strc;
+			mSendMESSAGE msg;
 			memset(&msg , 0, sizeof(msg));
 			memcpy(msg.msg,  tmp->msg, tmp->msglen);
 			msg.IsServer = false;
@@ -317,8 +322,8 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 			break;
 
 		case EXIT_USER:{
-			CMyDoc::SEND_NAME *send_name = (CMyDoc::SEND_NAME *)strc;
-			CMyDoc::SEND_NAME name;
+			mSendName *send_name = (mSendName *)strc;
+			mSendName name;
 			memset(&name, 0, sizeof(name));
 			memcpy(name.name, send_name->name, send_name->namelen);
 			name.namelen = send_name->namelen;
@@ -390,7 +395,7 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 			break;
 
 		case ON_MAPSTATE:{
-			CMyDoc::ON_MAPSTATE aa = *((CMyDoc::ON_MAPSTATE *)strc);
+			m_OnMapstate aa = *((m_OnMapstate *)strc);
 			memset( &send_map, 0, sizeof(send_map));
 			memcpy( send_map.board , aa.board , sizeof(aa.board));
 			memcpy( send_map.name , aa.name , aa.namelen);
@@ -413,12 +418,12 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 		}
 
 		case END_SIGNAL:{
-			CMyDoc::SEND_NAME send_name;
+			mSendName send_name;
 			memset(&send_name,0,sizeof(send_name));
 			send_name.IsServer = false;
 			send_name.msg_idx = msgidx;
-			memcpy( send_name.name , ((CMyDoc::SEND_NAME *)strc)->name , strlen(  ((CMyDoc::SEND_NAME *)strc)->name ));
-			send_name.namelen = strlen (  ((CMyDoc::SEND_NAME *)strc)->name  );
+			memcpy( send_name.name , ((mSendName *)strc)->name , strlen(  ((mSendName *)strc)->name ));
+			send_name.namelen = strlen (  ((mSendName *)strc)->name  );
 			send_name.struct_size = sizeof(send_name) - sizeof(int)*HEADER_NUM;
 			
 			while(pos != NULL){
@@ -433,10 +438,11 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 		}
 
 		case ON_ADDLINE:{
-			CMyDoc::ON_ADDLINE *on_line = (CMyDoc::ON_ADDLINE *)strc;
+			ON_ADDLINE *on_line = (ON_ADDLINE *)strc;
 			CString name(on_line->name, on_line->namelen);
+
+
 			memset(&send_per, 0, sizeof(send_per));
-			send_per.IsServer = false;
 			send_per.msg_idx = msgidx;
 			send_per.res = on_line->linenum;
 			while(pos != NULL){
@@ -453,9 +459,7 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 		}
 		case RESTART_SIGNAL:
 			memset(&send_per, 0, sizeof(send_per));
-			send_per.IsServer = false;
 			send_per.msg_idx = msgidx;
-			
 
 			while(pos != NULL){
 				user = (TUser *)pDoc->Server_UserList.GetNext(pos);				
@@ -473,7 +477,7 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 				
 				if(user->GetSocket() == NULL)
 					continue;
-				if(user->GetSocket()->Send( (char *)(CMyDoc::SEND_MAPSTATES *)strc, sizeof(*(CMyDoc::SEND_MAPSTATES *)strc) ) <=0)
+				if(user->GetSocket()->Send( (char *)(SEND_MAPSTATES *)strc, sizeof(*(SEND_MAPSTATES *)strc) ) <=0)
 					return false;
 		
 			}
@@ -543,7 +547,7 @@ bool CMySocket::Sendready(){
 	}
 }
 
-bool CMySocket::ProcessReady(CMyDoc::ON_READY rdy){
+bool CMySocket::ProcessReady(m_OnReady rdy){
 
 	CString name(rdy.fromname, rdy.namelen);
 	TUser *user = pDoc->NameToTUser(name);
@@ -554,10 +558,10 @@ bool CMySocket::ProcessReady(CMyDoc::ON_READY rdy){
 	return true;
 }
 
-bool CMySocket::ProcessMapsate(CMyDoc::ON_MAPSTATE on_map){
+bool CMySocket::ProcessMapsate(m_OnMapstate on_map){
 
 	static CStringArray AsyncSend;
-	static CMyDoc::SEND_MAPSTATES map_state;
+	static SEND_MAPSTATES map_state;
 	static int idx=0;
 
 	TUser *user=NULL;
@@ -613,7 +617,7 @@ bool CMySocket::SendDead(){
 bool CMySocket::SendRestart(){
 
 	memset(&send_per, 0, sizeof(send_per));
-	send_per.IsServer = true;
+	//send_per.IsServer = true;
 	send_per.msg_idx = BC_RESTART;
 	
 	if( Send(&send_per, sizeof(send_per)) >0 )

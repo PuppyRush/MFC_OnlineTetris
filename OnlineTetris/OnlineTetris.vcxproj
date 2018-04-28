@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="DefineInfo.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MessageHeader.h" />
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="MyDoc.h" />
     <ClInclude Include="MyEdit.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ServerDialog.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Validator.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TUser.h" />
   </ItemGroup>
@@ -165,6 +167,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Validator.cpp" />
     <ClCompile Include="TUser.cpp" />
   </ItemGroup>
   <ItemGroup>

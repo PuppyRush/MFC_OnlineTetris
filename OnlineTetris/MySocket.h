@@ -2,6 +2,9 @@
 
 // CMySocket 명령 대상입니다.
 
+#include "MessageHeader.h"
+#include "DefineInfo.h"
+
 class CMyView;
 class CMyDoc;
 
@@ -35,43 +38,43 @@ public:
 		}
 	};
 
-private:
-
-	CMySocket(const string &username, const IPString ipstring, const int port);
-
 public:
 
+	CMySocket(const IPString ipstring, const size_t port);
+
+
 	IPString m_ipString;
-	int m_port;
+	size_t m_port;
 	string m_username;
 
 	CMyView *pView;
 	CMyDoc *pDoc;
 
-	CMyDoc::ON_MESSAGE on_msg;
-	CMyDoc::SEND_MESSAGE send_msg;
-	CMyDoc::SEND_NAME send_name;
-	CMyDoc::SEND_NAMES send_names;
-	CMyDoc::ON_NAME on_name;
-	CMyDoc::ON_NAMES on_names;
-	CMyDoc::ON_READY on_ready;
-	CMyDoc::SEND_READIES send_readies;
-	CMyDoc::ON_READIES on_readies;
-	CMyDoc::SEND_PERMIT send_per;
-	CMyDoc::ON_PERMIT on_per;
-	CMyDoc::ON_STARTSIGNAL on_start;
-	CMyDoc::SEND_STARTSIGNAL send_start;
-	CMyDoc::ON_MAPSTATE on_map;
-	CMyDoc::ON_MAPSTATES on_maps;
-	CMyDoc::SEND_MAPSTATE send_map;
-	CMyDoc::SEND_READY send_ready;
-	CMyDoc::SEND_ADDLINE send_line;
-	CMyDoc::ON_ADDLINE on_line;
+	//mOnMESSAGE on_msg;
+	//mSendMESSAGE send_msg;
+	//SEND_NAME send_name;
+	//SEND_NAMES send_names;
+	//m_OnName on_name;
+	//ON_NAMES on_names;
+	//m_OnReady on_ready;
+	//SEND_READIES send_readies;
+	//ON_READIES on_readies;
+	//mSendPermit send_per;
+	//ON_PERMIT on_per;
+	//ON_STARTSIGNAL on_start;
+	//SEND_STARTSIGNAL send_start;
+	//m_OnMapstate on_map;
+	//m_OnMapstates on_maps;
+	//SEND_MAPSTATE send_map;
+	//SEND_READY send_ready;
+	//SEND_ADDLINE send_line;
+	//m_OnAddLine on_line;
 
 	template<class... _Types>
-	static shared_ptr<CServerSocket> MakeShared(_Types&&... _Args)
+	static shared_ptr<CMySocket> GetSocket(_Types&&... _Args)
 	{
-		return make_shared<CServerSocket>(forward<_Types>(_Args)...);
+		static auto mysocket = make_shared<CMySocket>(forward<_Types>(_Args)...);
+		return mysocket;
 	}
 
 
@@ -89,8 +92,8 @@ public:
 	bool SendDead();
 	bool SendRestart();
 	bool SendLine(int , bool);
-	bool ProcessReady(CMyDoc::ON_READY rdy);
-	bool ProcessMapsate(CMyDoc::ON_MAPSTATE on_map);
+	bool ProcessReady(m_OnReady rdy);
+	bool ProcessMapsate(m_OnMapstate on_map);
 };
 
 

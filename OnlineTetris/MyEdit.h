@@ -13,7 +13,7 @@ class CMyEdit : public CEdit
 
 public:
 
-	CMyDoc::SEND_MESSAGE msg;
+	CMyDoc::mSendMESSAGE msg;
 	CMainFrame *pMF;
 	CMyView *pView;
 	CMyDoc *pDoc;

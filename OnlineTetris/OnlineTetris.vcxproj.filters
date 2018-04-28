@@ -169,6 +169,12 @@
     <ClInclude Include="MyButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Validator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageHeader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OnlineTetris.cpp">
@@ -202,6 +208,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyButton.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Validator.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,8 +7,6 @@ class TUser
 
 private:
 
-
-
 	int Order;
 	char chName[12];
 	CString Name;

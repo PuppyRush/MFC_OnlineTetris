@@ -13,7 +13,7 @@ public:
 
 	CMyDoc *pDoc;
 	CMyView *pView;
-	CMyDoc::SEND_PERMIT per;
+	CMyDoc::mSendPermit per;
 
 public:
 	CMyListen();

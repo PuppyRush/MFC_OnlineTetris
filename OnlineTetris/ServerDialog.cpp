@@ -1,23 +1,19 @@
 // ServerDialog.cpp : 구현 파일입니다.
 //
 
-#include "stdafx.h"
-#include "OnlineTetris.h"
-
-#include "MyDoc.h"
-#include "MyView.h"
-#include "MyListen.h"
+#include "StdAfx.h"
 
 #include "ServerDialog.h"
-#include "afxdialogex.h"
 
-#include "MySocket.h"
 // ServerDialog 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(ServerDialog, CDialogEx)
 
 ServerDialog::ServerDialog(CWnd* pParent /*=NULL*/)
-	: CDialogEx(ServerDialog::IDD, pParent)
+	:CDialogEx(ServerDialog::IDD, pParent)
+	,isValidationMakeRoomInfo(false)
+	,isValidationEnterRoomInfo(false)
+	, ipstring({ 0,0,0,0 })
 {
 
 }
@@ -95,6 +91,7 @@ void ServerDialog::OnBnClickedBtnCreate()
 	//	pDoc->Open = pDoc->Enter = false;
 	//}
 
+	isValidationMakeRoomInfo = true;
 	this->DestroyWindow();
 	
 }
@@ -105,16 +102,10 @@ void ServerDialog::OnBnClickedBtnEnter()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CString name;
 	Edt_Entername.GetWindowTextW(name);
-	if(name.GetLength()==0){
-		MessageBox( _T("아이디를 입력하세요"));
+	string str_name = CSTRTCH(name);
+
+	if (!Validator::IdCheck(str_name,5,10))
 		return;
-	}
-	int len = WideCharToMultiByte(CP_ACP, 0, name, -1, NULL, 0, NULL, NULL);
-	if(len>=ID_LEN){
-		MessageBox( _T("아이디의 길이는 영어 1~10자 한글 1~5자입니다"));
-		return;
-	}
-	Edt_Entername.GetWindowTextW( name);
 
 	BYTE a1,a2,a3,a4;
 	Edt_Serverip.GetAddress(a1, a2, a3, a4);
@@ -122,11 +113,22 @@ void ServerDialog::OnBnClickedBtnEnter()
 	
 	CString str_portnum;
 	Edt_Portnum.GetWindowTextW(str_portnum);
-	int portnum = atoi(CSTRTCH(str_portnum));
+	size_t portnum = atoi(CSTRTCH(str_portnum));
+	if (!(portnum >= 1000 && portnum <= 10000))
+	{
+		MessageBox(_T("포트는 1000~10000만 가능합니다"));
+		return;
+	}
 
-	bool res = pDoc->m_mySocket->Connect( pDoc->ServerIp, PORTNUM);
+	username = str_name;
+	this->portnum = portnum;
+	this->ipstring = ipstring;
 
-	if(res)
+	isValidationEnterRoomInfo = true;
+
+//	bool res = pDoc->m_mySocket->Connect( pDoc->ServerIp, PORTNUM);
+
+	/*if(res)
 		pDoc->ProcessEnter(name);
 	
 	else{
@@ -135,7 +137,7 @@ void ServerDialog::OnBnClickedBtnEnter()
 		pDoc->m_mySocket->Close();
 		delete pDoc->m_mySocket;
 		pDoc->m_mySocket = NULL;
-	}
+	}*/
 	
 	this->DestroyWindow();
 }
@@ -166,8 +168,6 @@ void ServerDialog::OnClose()
 void ServerDialog::PostNcDestroy()
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	pView->pServerDlg = NULL;
 	this->DestroyWindow();
-
 	CDialogEx::PostNcDestroy();
 }

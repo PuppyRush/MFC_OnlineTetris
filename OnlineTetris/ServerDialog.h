@@ -1,12 +1,12 @@
 #pragma once
-#include "afxwin.h"
 
-#include "ServerSocket.h"
-
+#include "afxdialogex.h"
+#include "MySocket.h"
+#include "Validator.h"
+#include <regex>
 // ServerDialog 대화 상자입니다.
 
 
-class CMyListen;
 class CMyDoc;
 class CMyView;
 
@@ -34,11 +34,16 @@ public:
 	CEdit Edt_Roomname;
 	CEdit Edt_Portnum;
 
-	CMyView *pView;
-	CMyDoc *pDoc;
-	
-	CMyDoc::SEND_NAME send_name;
-	CMyDoc::SEND_PERMIT per;
+	string username;
+	string roomname;
+	CMySocket::IPString ipstring;
+	size_t portnum;
+
+	bool isValidationMakeRoomInfo;
+	bool isValidationEnterRoomInfo;
+
+	//CMyDoc::SEND_NAME send_name;
+	//CMyDoc::SEND_PERMIT per;
 	
 	afx_msg void OnBnClickedBtnCreate();
 	afx_msg void OnBnClickedBtnEnter();

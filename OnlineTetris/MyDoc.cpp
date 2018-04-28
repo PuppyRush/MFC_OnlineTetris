@@ -284,7 +284,7 @@ bool CMyDoc::Adduser(char *name, int namelen, CMySocket *soc){
 	CString str( name, namelen);
 	for(int i=0 ; i < Server_EnterUsers.GetCount() ; i++){
 		if( Server_EnterUsers[i].Compare( str) ==0 ){
-			SEND_PERMIT send_per;
+			mSendPermit send_per;
 			memset(&send_per, 0, sizeof(send_per));
 			send_per.IsServer = false;
 			send_per.msg_idx = FAIL_ENTER;

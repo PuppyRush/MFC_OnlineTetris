@@ -11,8 +11,9 @@
 #include "OnlineTetris.h"
 #endif
 
-#include "MyDoc.h"
+
 #include "MyView.h"
+#include "MyDoc.h"
 #include "ServerDialog.h"
 #include "MyEdit.h"
 #include "MySocket.h"
@@ -114,8 +115,6 @@ void CMyView::OnInitialUpdate()
 	if( pServerDlg == NULL){
 		pServerDlg = new ServerDialog;
 		pServerDlg->Create( _DLG_SERVER);
-		pServerDlg->pView = this;
-		pServerDlg->pDoc = pDoc;
 	}
 	if( pOptionDlg == NULL){
 		pOptionDlg = new OptionDialog;
@@ -1385,18 +1384,22 @@ void CMyView::StartBtnClicked(){
 void CMyView::OnMenuServer()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if(!pDoc->Enter && !pDoc->Open){
-		if(pServerDlg != NULL){
+	if(!pDoc->Enter && !pDoc->Open)
+	{
+		if(pServerDlg != NULL)
 			pServerDlg->ShowWindow(SW_SHOW);
-		}
-		else{
+		else
+		{
 			pServerDlg = new ServerDialog;
 			pServerDlg->Create( _DLG_SERVER);
-			pServerDlg->pView = this;
-			pServerDlg->pDoc = pDoc;
 			pServerDlg->ShowWindow(SW_SHOW);
-
 		}
+
+		if (pServerDlg->isValidationMakeRoomInfo || pServerDlg->isValidationMakeRoomInfo)
+			CMySocket::GetSocket(pServerDlg->ipstring, pServerDlg->portnum);
+
+		if (pServerDlg->isValidationMakeRoomInfo)
+			pDoc->m_mySocket->ConnectToServer();
 	}
 }
 
@@ -1534,7 +1537,7 @@ void CMyView::SetMap(int i){
 }
 
 //시작 후 서버가 보낸 다른 유저들의 맵정보를 자신의 것을 제외하고 그려낸다.
-void CMyView::ProcessMapState(CMyDoc::ON_MAPSTATE *map){
+void CMyView::ProcessMapState(CMyDoc::m_OnMapstate *map){
 
 	TUser *user= NULL;
 	CString name( map->name , map->namelen);
