@@ -18,8 +18,6 @@ private:
 	bool Server;
 	bool Survive;
 
-	
-
 public:
 
 

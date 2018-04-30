@@ -3,7 +3,6 @@
 // CMySocket 명령 대상입니다.
 
 #include "MessageHeader.h"
-#include "DefineInfo.h"
 
 class CMyView;
 class CMyDoc;
@@ -50,25 +49,25 @@ public:
 	CMyView *pView;
 	CMyDoc *pDoc;
 
-	//mOnMESSAGE on_msg;
-	//mSendMESSAGE send_msg;
+	//mOnMessage on_msg;
+	//mSendMessage send_msg;
 	//SEND_NAME send_name;
 	//SEND_NAMES send_names;
-	//m_OnName on_name;
-	//ON_NAMES on_names;
-	//m_OnReady on_ready;
-	//SEND_READIES send_readies;
-	//ON_READIES on_readies;
+	//mOnName on_name;
+	//mOnNames on_names;
+	//mOnReady on_ready;
+	//mSendRadies send_readies;
+	//mOnReadies on_readies;
 	//mSendPermit send_per;
-	//ON_PERMIT on_per;
-	//ON_STARTSIGNAL on_start;
-	//SEND_STARTSIGNAL send_start;
-	//m_OnMapstate on_map;
-	//m_OnMapstates on_maps;
-	//SEND_MAPSTATE send_map;
-	//SEND_READY send_ready;
-	//SEND_ADDLINE send_line;
-	//m_OnAddLine on_line;
+	//mOnPermit on_per;
+	//mOnStartsignal on_start;
+	//mSendStartsignal send_start;
+	//mOnMapstate on_map;
+	//mOnMapstates on_maps;
+	//mSendMapstate send_map;
+	//mSendReady send_ready;
+	//mSendAddline send_line;
+	//mOnAddline on_line;
 
 	template<class... _Types>
 	static shared_ptr<CMySocket> GetSocket(_Types&&... _Args)
@@ -88,12 +87,12 @@ public:
 	bool Broadcast(void* strc, int msgidx);
 	bool Sendname(char* name, int namelen);
 	bool Sendmapstate();
-	bool Sendready();
+	bool Sendready(bool isReady);
 	bool SendDead();
 	bool SendRestart();
 	bool SendLine(int , bool);
-	bool ProcessReady(m_OnReady rdy);
-	bool ProcessMapsate(m_OnMapstate on_map);
+	bool ProcessReady(mOnReady rdy);
+	bool ProcessMapsate(mOnMapstate on_map);
 };
 
 

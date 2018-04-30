@@ -8,7 +8,6 @@
 
 #include "TUser.h"
 #include "MessageHeader.h"
-#include "DefineInfo.h"
 #include "ServerSocket.h"
 
 using namespace msg_header;
@@ -41,11 +40,6 @@ public:
 	CMySocket *m_mySocket;
 	CMyView *pView;
 
-	//mSendPermit per;
-	//SEND_STARTSIGNAL send_start;
-	//mSendMESSAGE send_msg;
-	//SEND_NAME send_name;
-
 	CStringArray Server_EnterUsers;		//접속자의 이름을 위한 변수
 	CStringArray Client_EnterUsers;
 
@@ -59,6 +53,7 @@ public:
 
 	CString Name;
 	char chName[ID_LEN];
+	size_t namelen;
 
 	int Map;
 	int Level;
@@ -88,16 +83,16 @@ public:
 	CString GetServerIP();
 	void AddChat(char *msg, int msglen);
 	bool Adduser(char *name, int namelen, CMySocket *soc);
-	void SetEnterUsers(ON_NAMES names);
-	void SetReady(ON_READIES rdy);
+	void SetEnterUsers(mOnNames names);
+	void SetReady(mOnReadies rdy);
 	void SetOrder();
 	bool ExitUser(char *name, int namelen);
 	bool ExistUser(CString name);
 	void ProcessEnter(CString );
 	void ProcessClose();
-	void Client_ProcessEnd(m_OnName on_name);
-	void ProcessDead(m_OnName on_name);
-	void Client_ProcessStart(ON_STARTSIGNAL on_start);
+	void Client_ProcessEnd(mOnName on_name);
+	void ProcessDead(mOnName on_name);
+	void Client_ProcessStart(mOnStartsignal on_start);
 	void Server_ProceeStart();
 	void RestartGame();
 #ifdef _DEBUG

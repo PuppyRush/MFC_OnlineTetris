@@ -25,9 +25,9 @@ public:
 // 작업입니다.
 public:
 	
-	SEND_READY send_ready;
-	SEND_STARTSIGNAL send_start;
-	SEND_MAPSTATE send_map;
+	//mSendReady send_ready;
+	//mSendStartsignal send_start;
+	//mSendMapstate send_map;
 
 	CMyButton *Btn_Start;
 	CMyButton *Btn_Ready;
@@ -94,7 +94,7 @@ public:
 	bool CheckLineDestroy();
 	void AddLine(int );
 	bool CheckDup(TUser::FIGURE backup);
-	void ProcessMapState(CMyDoc::m_OnMapstate *map);
+	void ProcessMapState(mOnMapstate *map);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 

@@ -108,7 +108,7 @@ typedef enum ETC
 //크기, 갯수정의	
 #define MAX_ENTER		6
 #define ID_LEN			12
-#define HEADER_NUM		3
+#define HEADER_NUM		2
 #define MSG_LEN			1024
 #define FG_KINDNUM		7		//도형의 종류는 7개
 #define FG_FIXEDNUM		4		//모든 종류의 도형갯수는 4개

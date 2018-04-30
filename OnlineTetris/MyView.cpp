@@ -1335,26 +1335,21 @@ void CMyView::MessageHandler(int msg){
 
 }
 
-void CMyView::ReadyBtnClicked(){
-
+void CMyView::ReadyBtnClicked()
+{
 	if(!pDoc->Open && !pDoc->Enter){
 		MessageHandler(NOT_OPENNENTER);
 		return ;
 	}
 
-
-
 	if(pDoc->Ready){
 		pDoc->Ready = false;
-		send_ready.ready = false;
+		pDoc->m_mySocket->Sendready(false);
 	}
 	else{
 		pDoc->Ready = true;
-		send_ready.ready = true;
+		pDoc->m_mySocket->Sendready(true);
 	}
-
-	pDoc->m_mySocket->Sendready();
-
 }
 
 
@@ -1537,7 +1532,7 @@ void CMyView::SetMap(int i){
 }
 
 //시작 후 서버가 보낸 다른 유저들의 맵정보를 자신의 것을 제외하고 그려낸다.
-void CMyView::ProcessMapState(CMyDoc::m_OnMapstate *map){
+void CMyView::ProcessMapState(mOnMapstate *map){
 
 	TUser *user= NULL;
 	CString name( map->name , map->namelen);
