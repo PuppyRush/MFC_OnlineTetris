@@ -91,7 +91,6 @@
     <None Include="res\SUB_BK.bmp">
       <Filter>리소스 파일</Filter>
     </None>
-    <None Include="ClassDiagram1.cd" />
     <None Include="res\bitmap2.bmp">
       <Filter>리소스 파일</Filter>
     </None>
@@ -157,9 +156,6 @@
     <ClInclude Include="MyEdit.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="DefineInfo.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ServerDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -167,12 +163,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MyButton.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Validator.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MessageHeader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -208,9 +198,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyButton.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Validator.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

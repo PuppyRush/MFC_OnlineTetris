@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 class CMyDoc;
 class ServerDialog;
 class CMyEdit;

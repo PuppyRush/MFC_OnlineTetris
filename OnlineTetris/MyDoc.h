@@ -1,13 +1,11 @@
 
 // MyDoc.h : CMyDoc 클래스의 인터페이스
-//b
 
 #pragma once
 
 #include <memory>
-
 #include "TUser.h"
-#include "MessageHeader.h"
+#include "../Commons/MessageHeader.h"
 #include "ServerSocket.h"
 
 using namespace msg_header;

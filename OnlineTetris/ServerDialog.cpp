@@ -2,7 +2,6 @@
 //
 
 #include "StdAfx.h"
-
 #include "ServerDialog.h"
 
 // ServerDialog 대화 상자입니다.
@@ -104,12 +103,12 @@ void ServerDialog::OnBnClickedBtnEnter()
 	Edt_Entername.GetWindowTextW(name);
 	string str_name = CSTRTCH(name);
 
-	if (!Validator::IdCheck(str_name,5,10))
+	if (!validator::IdCheck(str_name,5,10))
 		return;
 
 	BYTE a1,a2,a3,a4;
 	Edt_Serverip.GetAddress(a1, a2, a3, a4);
-	CMySocket::IPString ipstring({ a1,a2,a3,a4 });
+	IPString ipstring(initializer_list<size_t>{ a1,a2,a3,a4 });
 	
 	CString str_portnum;
 	Edt_Portnum.GetWindowTextW(str_portnum);

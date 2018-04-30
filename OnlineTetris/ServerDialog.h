@@ -1,11 +1,13 @@
 #pragma once
 
-#include "afxdialogex.h"
-#include "MySocket.h"
-#include "Validator.h"
-#include <regex>
-// ServerDialog 대화 상자입니다.
 
+#include "afxdialogex.h"
+#include "OnlineTetris.h"
+#include "MySocket.h"
+#include "../Commons/structs.h"
+#include "../Commons/Validator.h"
+
+#include <regex>
 
 class CMyDoc;
 class CMyView;
@@ -15,14 +17,13 @@ class ServerDialog : public CDialogEx
 	DECLARE_DYNAMIC(ServerDialog)
 
 public:
-	ServerDialog(CWnd* pParent = NULL);   // 표준 생성자입니다.
+	ServerDialog(CWnd* pParent = NULL);   
 	virtual ~ServerDialog();
 
-// 대화 상자 데이터입니다.
 	enum { IDD = _DLG_SERVER };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
+	virtual void DoDataExchange(CDataExchange* pDX);   
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -36,7 +37,7 @@ public:
 
 	string username;
 	string roomname;
-	CMySocket::IPString ipstring;
+	IPString ipstring;
 	size_t portnum;
 
 	bool isValidationMakeRoomInfo;
