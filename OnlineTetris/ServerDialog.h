@@ -3,9 +3,8 @@
 
 #include "afxdialogex.h"
 #include "OnlineTetris.h"
-#include "MySocket.h"
 #include "../Commons/structs.h"
-#include "../Commons/Validator.h"
+
 
 #include <regex>
 
@@ -43,9 +42,6 @@ public:
 	bool isValidationMakeRoomInfo;
 	bool isValidationEnterRoomInfo;
 
-	//CMyDoc::SEND_NAME send_name;
-	//CMyDoc::SEND_PERMIT per;
-	
 	afx_msg void OnBnClickedBtnCreate();
 	afx_msg void OnBnClickedBtnEnter();
 	virtual BOOL OnInitDialog();

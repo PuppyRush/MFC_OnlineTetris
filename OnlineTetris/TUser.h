@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../Commons/structs.h"
+
+#undef GetUserName
+
 class CMySocket;
 
 class TUser
@@ -9,49 +13,60 @@ private:
 
 	int Order;
 	char chName[12];
-	CString Name;
-	CString Ip;
+	string Name;
+	string Ip;
 	
 	CMySocket *Socket;
 
-	bool Ready;
-	bool Server;
-	bool Survive;
+	bool isReady;
+	bool isServer;
+	bool isSurvive;
 
 public:
 
-
-typedef struct FIGURE{	
-	POINT FgInfo[4];		//*************************************DefineInfo.h에 의존되어야할 숫자
-	POINT end;				//제일 왼쪽아래의 좌표를 저장한다.
-	int Figure,NextFigure;
-	int Height;
-	int Width;
-	int dir;
-};
-
-	int GameBoard[25][10],FixedBoard[25][10],NextFigureBoard[4][2];
+	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];
 	int StateBoard[25][10];
 	FIGURE FG;
 	FIGURE GhostFG;
 
-public:
+private:
 
 	TUser(void);
-	TUser(CString name);
-	TUser(CString name, CString ip, CMySocket* soc, int idx);
+
+	
+
+public:
+
+	TUser(const string &name);
+	TUser(const string &name, const string &ip, CMySocket* soc, const int idx);
+	
 	~TUser(void);
 
-	CString GetUserName(){ return Name;}
-	char *GetUserchName(){ return chName;}
-	CMySocket *GetSocket(){ return Socket;}
-	bool GetReady(){ return Ready;}
-	int GetOrder(){ return Order;}
-	bool GetSurvive(){ return Survive;}
+	bool operator< (const TUser &user)
+	{
+		return this->Order < user.Order;
+	}
 
-	void SetSurvive(bool n){ Survive = n;}
-	void SetOrder(int idx){ Order = idx;}
-	void SetName(CString name){ Name = name;}
-	void SetReady(bool rdy){ Ready = rdy;}
+	static shared_ptr<TUser> MakeShared(const string &name)
+	{
+		return make_shared<TUser>(name);
+	}
+
+	static shared_ptr<TUser> MakeShared(const string &name, const string &ip, CMySocket* soc, const int idx)
+	{
+		return make_shared<TUser>(name,ip,soc,idx);
+	}
+
+	inline const string GetUserName(){ return Name;}
+	inline CMySocket *GetSocket(){ return Socket;}
+	inline const bool GetReady(){ return isReady;}
+	inline const int GetOrder(){ return Order;}
+	inline const bool GetSurvive(){ return isSurvive;}
+
+	inline void SetSurvive(const bool n){ isSurvive = n;}
+	inline void SetOrder  (const int idx){ Order = idx;}
+	inline void SetName   (const string name){ Name = name;}
+	inline void SetReady  (const bool rdy){ isReady = rdy;}
 };
 
+using SHR_USR = std::shared_ptr<TUser>;

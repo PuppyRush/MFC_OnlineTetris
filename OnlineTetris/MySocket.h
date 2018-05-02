@@ -41,7 +41,7 @@ public:
 	virtual void OnClose(int nErrorCode);
 	void SelfClose();
 	bool Broadcast(void* strc, int msgidx);
-	bool Sendname(char* name, int namelen);
+	bool Sendname(const char* name, int namelen);
 	bool Sendmapstate();
 	bool Sendready(bool isReady);
 	bool SendDead();

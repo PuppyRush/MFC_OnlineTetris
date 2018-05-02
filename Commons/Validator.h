@@ -7,7 +7,7 @@ using namespace std;
 
 namespace validator
 {
-	extern bool IdCheck(const string &id, const size_t min, const size_t max)
+	bool IdCheck(const string &id, const size_t min, const size_t max)
 	{
 		string reg;
 		reg.reserve(50);

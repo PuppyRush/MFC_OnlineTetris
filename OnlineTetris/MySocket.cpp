@@ -12,93 +12,93 @@ using namespace msg_header;
 
 CMySocket::CMySocket(const IPString ipstring, const size_t port)
 	: m_ipString(ipstring), m_port(port)
-{
-}
+{}
 
 CMySocket::~CMySocket()
-{
-}
+{}
 
 bool CMySocket::ConnectToServer()
 {
-	if (!Connect(CString(m_ipString.GetString()), m_port))
+	if(!Connect(CString(m_ipString.GetString()), m_port))
 		return false;
 
 
 }
 
-void CMySocket::OnClose(int nErrorCode){
+void CMySocket::OnClose(int nErrorCode)
+{
 
-	if(pDoc==NULL)
+	if(pDoc == NULL)
 		return;
 
-	TUser *user = pDoc->SocketToTUser(this);
-
-	//서버에서 먼저 닫히는경우.
-	if(user == NULL){
-		this->ShutDown();
-		this->Close();
-		pDoc->ProcessClose();
-
-		pDoc->Server_EnterUsers.RemoveAll();
-			
-		POSITION pos = NULL;
-		pos = pDoc->Server_UserList.GetHeadPosition();
-		while( pos != NULL){
-			((TUser *)pDoc->Server_UserList.GetAt(pos))->GetSocket()->ShutDown();
-			((TUser *)pDoc->Server_UserList.GetAt(pos))->GetSocket()->Close();
-			pDoc->Server_UserList.RemoveAt(pos);
-
-		}
-
-		pDoc->SocketList.RemoveAll();
-	
-		
-		return;
-	}
-
-	//클라이언트가 닫기를 시도하면 서버에서 onclose가 수행됨
-
-	CString name = user->GetUserName();
-	char chname[ID_LEN];
-
-	int len = WideCharToMultiByte(CP_ACP, 0, name, -1, NULL, 0, NULL, NULL);
-	WideCharToMultiByte(CP_ACP, 0, name, -1, chname, len, NULL, NULL);
-
-	//서버에 저장된 접속자이름배열에서 접속을 끊은사람을 지운다.
-	for(int i=0 ; i < pDoc->Server_EnterUsers.GetCount() ; i++)
-		if(pDoc->Server_EnterUsers[i] == name){
-			pDoc->Server_EnterUsers.RemoveAt(i);
-		}
-
-	//서버에 저장된 유저리스트에서 접속을 끊은사람을 지운다.
-	pDoc->Server_UserList.RemoveAt(pDoc->Server_UserList.Find( user));
-	delete user;
-	user = NULL;
-		
-	//서버에 저장된 유저소켓리스트에서 접속을 끊은사람을 지운다.
-	pDoc->SocketList.RemoveAt( pDoc->SocketList.Find(this));
+	//TUser *user = pDoc->SocketToTUser(this);
 	//
-	//this->ShutDown();
-	//this->Close();
-
-
-	//접속해 있는 나머지 사람들에게 나갔음을 알린다.
-	mSendName msg(Header(EXIT_USER), strlen(chname), chname);
-
-	if(!Broadcast( &msg, EXIT_USER))
-		pView->MessageHandler(FAIL_SENDMSG);
-	
-	auto sendmsg = mSendMessage::GetMessage("님이 도중에 나갔습니다");
-
-	if(!Broadcast( &sendmsg, ON_MESSAGE))
-		pView->MessageHandler(FAIL_SENDMSG);
+	////서버에서 먼저 닫히는경우.
+	//if(user == NULL){
+	//	this->ShutDown();
+	//	this->Close();
+	//	pDoc->ProcessClose();
+	//
+	//	pDoc->Server_EnterUsers.RemoveAll();
+	//		
+	//	POSITION pos = NULL;
+	//	pos = pDoc->Server_UserList.GetHeadPosition();
+	//	while( pos != NULL){
+	//		((TUser *)pDoc->Server_UserList.GetAt(pos))->GetSocket()->ShutDown();
+	//		((TUser *)pDoc->Server_UserList.GetAt(pos))->GetSocket()->Close();
+	//		pDoc->Server_UserList.RemoveAt(pos);
+	//
+	//	}
+	//
+	//	pDoc->SocketList.RemoveAll();
+	//
+	//	
+	//	return;
+	//}
+	//
+	////클라이언트가 닫기를 시도하면 서버에서 onclose가 수행됨
+	//
+	//CString name = user->GetUserName();
+	//char chname[ID_LEN];
+	//
+	//int len = WideCharToMultiByte(CP_ACP, 0, name, -1, NULL, 0, NULL, NULL);
+	//WideCharToMultiByte(CP_ACP, 0, name, -1, chname, len, NULL, NULL);
+	//
+	////서버에 저장된 접속자이름배열에서 접속을 끊은사람을 지운다.
+	//for(int i=0 ; i < pDoc->Server_EnterUsers.GetCount() ; i++)
+	//	if(pDoc->Server_EnterUsers[i] == name){
+	//		pDoc->Server_EnterUsers.RemoveAt(i);
+	//	}
+	//
+	////서버에 저장된 유저리스트에서 접속을 끊은사람을 지운다.
+	//pDoc->Server_UserList.RemoveAt(pDoc->Server_UserList.Find( user));
+	//delete user;
+	//user = NULL;
+	//	
+	////서버에 저장된 유저소켓리스트에서 접속을 끊은사람을 지운다.
+	//pDoc->SocketList.RemoveAt( pDoc->SocketList.Find(this));
+	////
+	////this->ShutDown();
+	////this->Close();
+	//
+	//
+	////접속해 있는 나머지 사람들에게 나갔음을 알린다.
+	//mSendName msg(Header(EXIT_USER), strlen(chname), chname);
+	//
+	//if(!Broadcast( &msg, EXIT_USER))
+	//	pView->MessageHandler(FAIL_SENDMSG);
+	//
+	//auto sendmsg = mSendMessage::GetMessage("님이 도중에 나갔습니다");
+	//
+	//if(!Broadcast( &sendmsg, ON_MESSAGE))
+	//	pView->MessageHandler(FAIL_SENDMSG);
 
 	pView->VirtualDraw();
 }
 
 
-void CMySocket::SelfClose(){
+void CMySocket::SelfClose()
+{
 
 	pDoc->Enter = pDoc->Open = false;
 
@@ -107,24 +107,25 @@ void CMySocket::SelfClose(){
 
 }
 
-void CMySocket::OnReceive(int nErrorCode){
-	if(pView == NULL || pDoc==NULL)
+void CMySocket::OnReceive(int nErrorCode)
+{
+	if(pView == NULL || pDoc == NULL)
 		return;
 
 	TUser *usertmp = NULL;
 	CString str;
-	int res=-1; 
- 	DWORD PacketLen=0;
+	int res = -1;
+	DWORD PacketLen = 0;
 	char *Buffer;
- 	int msg = 0;
+	int msg = 0;
 	int header[HEADER_NUM] = {0};
 
 	//클라이언트에서 보낸 패킷의 크기를 얻기 위한 함수
- 	this->IOCtl(FIONREAD, &PacketLen);
+	this->IOCtl(FIONREAD, &PacketLen);
 	Buffer = new char[PacketLen];
-	
-	Receive( Buffer, PacketLen);
-  	memcpy(header, Buffer, sizeof(size_t)*HEADER_NUM);
+
+	Receive(Buffer, PacketLen);
+	memcpy(header, Buffer, sizeof(size_t)*HEADER_NUM);
 
 	////서버가 받을 메세지
 	//if( header[0]){
@@ -169,12 +170,12 @@ void CMySocket::OnReceive(int nErrorCode){
 	//
 	//		case BC_DEAD:
 	//			memset(&on_name, 0 , sizeof(on_name));
- 	//			memcpy(&on_name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
+	//			memcpy(&on_name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
 	//			pDoc->ProcessDead(on_name);
 	//			break;
 	//		case BC_ADDLINE:
 	//			memset(&on_line, 0 , sizeof(on_line));
- 	//			memcpy(&on_line, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
+	//			memcpy(&on_line, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
 	//			Broadcast( &on_line, ON_ADDLINE);
 	//			break;
 	//		case BC_RESTART:
@@ -186,99 +187,101 @@ void CMySocket::OnReceive(int nErrorCode){
 	////클라이언트가 받을 메세지(서버도 하나의 클라이언트로 정의)
 	//else{
 
-	switch(header[0]){
+	switch(header[0])
+	{
 
-		case PER_NAME:
-		{
-			auto msg = mSendMessage::GetMessage(pDoc->chName);
-			Send((char *)&msg, sizeof(msg));
-		}
-		break;
-					  
-		case ON_MESSAGE:
-		{
-			mOnMessage msg;
-			memcpy(&msg, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pDoc->AddChat(msg.msg, msg.msglen);
-		}
-		break;
+	case PER_NAME:
+	{
+		auto msg = mSendMessage::GetMessage(pDoc->Name.c_str());
+		Send((char *)&msg, sizeof(msg));
+	}
+	break;
 
-		case ADD_USERS:
-		{
-			mOnNames names;
-			memcpy(&names, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pDoc->SetEnterUsers(names);
-			pDoc->SetOrder();
-		}
-		break;
-		
-		case ON_READY:
-		{
-			mOnReadies readies;
-			memcpy(&readies, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pDoc->SetReady(readies);
-		}
-		break;
+	case ON_MESSAGE:
+	{
+		mOnMessage msg;
+		memcpy(&msg, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pDoc->AddChat(msg.msg, msg.msglen);
+	}
+	break;
 
-		case EXIT_USER:
-		{
-			mOnName name;
-			memcpy(&name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pDoc->ExitUser(name.name, name.namelen);
-		}
-		break;
+	case ADD_USERS:
+	{
+		mOnNames names;
+		memcpy(&names, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pDoc->SetEnterUsers(names);
+		pDoc->SetOrder();
+	}
+	break;
 
-		case FAIL_ENTER:
-		{
-			mOnPermit permit;
-			memcpy(&permit, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pView->MessageHandler(permit.res);
-			SelfClose();
-		}
-		break;
+	case ON_READY:
+	{
+		mOnReadies readies;
+		memcpy(&readies, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pDoc->SetReady(readies);
+	}
+	break;
 
-		case START_SIGNAL:
-		{
-			mOnStartsignal sig;
-			memcpy(&sig, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pDoc->Client_ProcessStart(sig);
-		}
-		break;
+	case EXIT_USER:
+	{
+		mOnName name;
+		memcpy(&name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pDoc->ExitUser(string(name.name));
+	}
+	break;
 
-		case END_SIGNAL:
-		{
-			mOnName name;
-			memcpy(&name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pDoc->Client_ProcessEnd(name);
-		}
-		break;
+	case FAIL_ENTER:
+	{
+		mOnPermit permit;
+		memcpy(&permit, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pView->MessageHandler(permit.res);
+		SelfClose();
+	}
+	break;
 
-		case ON_MAPSTATE:
-		{
-			mOnMapstate mapstate;
-			memcpy(&mapstate, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pView->ProcessMapState(&mapstate);
-		}
-		break;
+	case START_SIGNAL:
+	{
+		mOnStartsignal sig;
+		memcpy(&sig, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pDoc->Client_ProcessStart(sig);
+	}
+	break;
 
-		case ON_ADDLINE:
-		{
-			mOnAddline addline;
-			memcpy(&addline, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-			pView->AddLine(addline.linenum);
-		}
-		break;
+	case END_SIGNAL:
+	{
+		mOnName name;
+		memcpy(&name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pDoc->Client_ProcessEnd(name);
+	}
+	break;
 
-		case RESTART_SIGNAL:
-		{
-			pDoc->RestartGame();
-		}
-		break;
+	case ON_MAPSTATE:
+	{
+		mOnMapstate mapstate;
+		memcpy(&mapstate, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pView->ProcessMapState(&mapstate);
+	}
+	break;
+
+	case ON_ADDLINE:
+	{
+		mOnAddline addline;
+		memcpy(&addline, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+		pView->AddLine(addline.linenum);
+	}
+	break;
+
+	case RESTART_SIGNAL:
+	{
+		pDoc->RestartGame();
+	}
+	break;
 	}
 
 }
 
-bool CMySocket::Broadcast(void* strc, int msgidx){
+bool CMySocket::Broadcast(void* strc, int msgidx)
+{
 
 	//POSITION pos = pDoc->Server_UserList.GetHeadPosition();
 	//TUser *user = NULL;
@@ -505,25 +508,26 @@ bool CMySocket::Broadcast(void* strc, int msgidx){
 
 }
 
-bool CMySocket::Sendname(char *name, int namelen){
+bool CMySocket::Sendname(const char *name, int namelen)
+{
 
 	mSendName sendname(Header(ON_NAME), namelen, name);
 
-	if(pDoc->m_mySocket->Send( (char *)&sendname, sizeof(sendname))>0)
+	if(pDoc->m_mySocket->Send((char *)&sendname, sizeof(sendname)) > 0)
 		return true;
-	else 
+	else
 		return false;
 }
 
-bool CMySocket::Sendmapstate(){
-
+bool CMySocket::Sendmapstate()
+{
 	if(pDoc == NULL)
 		return false;
-	
-	auto h = Header(BC_MAPSTATE);
-	mSendMapstate mapstate(h, pDoc->namelen, pDoc->chName, pDoc->ME->FixedBoard, pDoc->ME->FG.Figure, pDoc->ME->FG.FgInfo);
 
-	if( Send( (char *)&mapstate, sizeof(mapstate) )>0)
+	auto h = Header(BC_MAPSTATE);
+	mSendMapstate mapstate(h, pDoc->Name.size(), pDoc->Name.c_str(), pDoc->ME->FixedBoard, pDoc->ME->FG.Figure, pDoc->ME->FG.FgInfo);
+
+	if(Send((char *)&mapstate, sizeof(mapstate)) > 0)
 		return true;
 	else
 		return false;
@@ -533,26 +537,27 @@ bool CMySocket::Sendmapstate(){
 
 bool CMySocket::Sendready(bool ready)
 {
+	mSendReady sendready(Header(PER_READY), pDoc->Name.size(), pDoc->Name.c_str(), pDoc->Ready);
 
-	mSendReady sendready(Header(PER_READY), pDoc->namelen, pDoc->chName, pDoc->Ready);
-
-	if(Send( (char *)&sendready, sizeof(sendready)) <=0){
+	if(Send((char *)&sendready, sizeof(sendready)) <= 0)
+	{
 		return false;
 	}
 }
 
-bool CMySocket::ProcessReady(mOnReady rdy){
-
-	CString name(rdy.fromname, rdy.namelen);
-	TUser *user = pDoc->NameToTUser(name);
-	if(user == NULL)
-		return false;
-	
-	user->SetReady(rdy.ready);
+bool CMySocket::ProcessReady(mOnReady rdy)
+{
+	//const auto name = string(rdy.fromname);
+	//auto user = pDoc->NameToTUser(name);
+	//if(user == NULL)
+	//	return false;
+	//
+	//user->SetReady(rdy.ready);
 	return true;
 }
 
-bool CMySocket::ProcessMapsate(mOnMapstate on_map){
+bool CMySocket::ProcessMapsate(mOnMapstate on_map)
+{
 
 	//static CStringArray AsyncSend;
 	//static mSendMapstates map_state;
@@ -592,9 +597,10 @@ bool CMySocket::ProcessMapsate(mOnMapstate on_map){
 
 bool CMySocket::SendDead()
 {
-	mSendName sendname(Header(BC_DEAD), pDoc->namelen, pDoc->chName);
-	
-	if(Send( (char *)&sendname, sizeof(sendname)) >0)
+	const auto header = Header(Header(BC_DEAD));
+	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
+
+	if(Send((char *)&sendname, sizeof(sendname)) > 0)
 		return true;
 	return false;
 }
@@ -603,7 +609,7 @@ bool CMySocket::SendRestart()
 {
 	mSendPermit permit(Header(BC_RESTART), -1);
 
-	if( Send(&permit, sizeof(permit)) >0 )
+	if(Send(&permit, sizeof(permit)) > 0)
 		return true;
 	else
 		return false;
@@ -613,21 +619,14 @@ bool CMySocket::SendRestart()
 
 //자기 제외하고 두줄 추가하기
 //isSelf에 따라 자기자신도 더할지 판단
-bool CMySocket::SendLine(int num=1, bool isSelf=true){
-
-	char name[ID_LEN];
-	memset(name, 0, sizeof(char)*ID_LEN);
-	size_t namelen = 0;
-
-	if (!isSelf)
+bool CMySocket::SendLine(int num = 1, bool isSelf = true)
+{
+	if(!isSelf)
 	{
-		strcat(name, pDoc->chName);
-		namelen = pDoc->namelen;
+		mSendAddline addline(Header(BC_ADDLINE), pDoc->Name.size(), pDoc->Name.c_str(), num);
+
+		if(Send((char *)&addline, sizeof(addline)) > 0)
+			return true;
 	}
-
-	mSendAddline addline(Header(BC_ADDLINE), namelen, name, num);
-
-	if(Send( (char *)&addline, sizeof(addline)) >0)
-		return true;
 	return false;
 }

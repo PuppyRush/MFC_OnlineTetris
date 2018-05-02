@@ -92,7 +92,7 @@ public:
 	void MoveToRight();
 	bool CheckLineDestroy();
 	void AddLine(int );
-	bool CheckDup(TUser::FIGURE backup);
+	bool CheckDup(FIGURE backup);
 	void ProcessMapState(mOnMapstate *map);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);

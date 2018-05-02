@@ -4,6 +4,9 @@
 #pragma once
 
 #include <memory>
+#include <list>
+#include <deque>
+#include <map>
 #include "TUser.h"
 #include "../Commons/MessageHeader.h"
 #include "ServerSocket.h"
@@ -38,20 +41,17 @@ public:
 	CMySocket *m_mySocket;
 	CMyView *pView;
 
-	CStringArray Server_EnterUsers;		//접속자의 이름을 위한 변수
-	CStringArray Client_EnterUsers;
+	std::list<string> Client_EnterUsers;
+	std::list<string> Server_EnterUsers;		//접속자의 이름을 위한 변수
 
-	CString ServerIp;
-	CString ChatLog;
-	CPtrList Server_UserList;			//TUser의 객체가 들어감
+	string ServerIp;
+	string ChatLog;
 	
-	CPtrList Client_UserList;
-	CPtrList SocketList;
+	std::map<string, SHR_USR > Client_UserList;
+	//std::map<string,CMySocket> SocketList;
 	TUser *ME;
 
-	CString Name;
-	char chName[ID_LEN];
-	size_t namelen;
+	string Name;
 
 	int Map;
 	int Level;
@@ -71,27 +71,23 @@ public:
 public:
 	virtual ~CMyDoc();
 
-	char *StringToChar(const CString &str);
-	CString CharToString(const char *ch, int len);
-	CMySocket *NameToSocket(CString name);
-	TUser *SocketToTUser(CMySocket *);
-	TUser *NameToTUser(CString name);
-	TUser *Client_NameToTUser(CString name);
+	SHR_USR NameToTUser(string name);
+	SHR_USR Client_NameToTUser(string name);
 	void CreateRoot();
-	CString GetServerIP();
-	void AddChat(char *msg, int msglen);
-	bool Adduser(char *name, int namelen, CMySocket *soc);
+	string GetServerIP();
+	void AddChat(const char *msg,const int msglen);
+	bool Adduser(const char *name, CMySocket *soc);
 	void SetEnterUsers(mOnNames names);
 	void SetReady(mOnReadies rdy);
 	void SetOrder();
-	bool ExitUser(char *name, int namelen);
-	bool ExistUser(CString name);
-	void ProcessEnter(CString );
+	bool ExitUser(const string name);
+	bool ExistUser(string name);
+	void ProcessEnter(string );
 	void ProcessClose();
 	void Client_ProcessEnd(mOnName on_name);
 	void ProcessDead(mOnName on_name);
 	void Client_ProcessStart(mOnStartsignal on_start);
-	void Server_ProceeStart();
+	//void Server_ProceeStart();
 	void RestartGame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -106,6 +102,6 @@ protected:
 
 #ifdef SHARED_HANDLERS
 	// 검색 처리기에 대한 검색 콘텐츠를 설정하는 도우미 함수
-	void SetSearchContent(const CString& value);
+	void SetSearchContent(const string& value);
 #endif // SHARED_HANDLERS
 };

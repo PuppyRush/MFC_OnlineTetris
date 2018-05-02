@@ -3,6 +3,7 @@
 
 #include "StdAfx.h"
 #include "ServerDialog.h"
+#include "../Commons/Validator.h"
 
 // ServerDialog 대화 상자입니다.
 
