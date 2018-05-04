@@ -1,14 +1,8 @@
-#include "StdAfx.h"
-#include "TUser.h"
+#include "TetrisUser.h"
 
-
-TUser::TUser(const string &name, const string &ip, CMySocket* soc, const int idx)
+TetrisUser::TetrisUser(const string &name, const IPString &ip, const int idx)
+	:Name(name),Ip(ip),isReady(false),Order(idx)
 {
-	Name = name;
-	Ip = ip;
-	Socket = soc;
-	isReady = false;
-	Order = idx;
 
 	//int len = WideCharToMultiByte(CP_ACP, 0, Name, -1, NULL, 0, NULL, NULL);
 	//WideCharToMultiByte(CP_ACP, 0, Name, -1, chName , len, NULL, NULL);
@@ -17,19 +11,13 @@ TUser::TUser(const string &name, const string &ip, CMySocket* soc, const int idx
 	memset(GameBoard, 0, sizeof(GameBoard));
 	memset(FixedBoard, 0, sizeof(FixedBoard));
 
-	GhostFG.end = POINT();
+	GhostFG.end = tPOINT();
 }
 
 
-TUser::~TUser(void)
-{}
-
-TUser::TUser(const string &name)
+TetrisUser::TetrisUser(const string &name)
+	:isReady(false), isSurvive(true),Name(name)
 {
-	isReady = false;
-	isSurvive = true;
-	Name = name;
-
 	//WideCharToMultiByte(CP_ACP, 0, Name, -1, chName , len, NULL, NULL);
 	//int len = WideCharToMultiByte(CP_ACP, 0, Name, -1, NULL, 0, NULL, NULL);
 
@@ -37,6 +25,7 @@ TUser::TUser(const string &name)
 	memset(GameBoard, 0, sizeof(GameBoard));
 	memset(FixedBoard, 0, sizeof(FixedBoard));
 
-	GhostFG.end = POINT();
+	GhostFG.end = tPOINT();
 }
+
 

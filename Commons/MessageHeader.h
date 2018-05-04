@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DefineInfo.h"
+#include "structs.h"
 
 #undef GetMessage
 
@@ -192,9 +193,9 @@ typedef struct mSendMapstate : public Header
 	char name[ID_LEN];
 	int board[VERNUM][HORNUM];
 	int kindfigure;
-	POINT figure[FG_FIXEDNUM];
+	tPOINT figure[FG_FIXEDNUM];
 
-	mSendMapstate(const Header h, const size_t namelen, const char *name ,const int board[VERNUM][HORNUM], const size_t kindfigure, const POINT figure[FG_FIXEDNUM])
+	mSendMapstate(const Header h, const size_t namelen, const char *name ,const int board[VERNUM][HORNUM], const size_t kindfigure, const tPOINT figure[FG_FIXEDNUM])
 		:Header(h), namelen(namelen), kindfigure(kindfigure)
 	{
 		CopyChars(this->name, ID_LEN, name, namelen);

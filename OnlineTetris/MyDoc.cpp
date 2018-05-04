@@ -288,7 +288,7 @@ void CMyDoc::CreateRoot()
 
 //클라이언트함수
 
-SHR_USR CMyDoc::Client_NameToTUser(string name)
+SHR_USRC CMyDoc::Client_NameToTUser(string name)
 {
 	if(Client_UserList.count(name) > 0)
 		return Client_UserList.at(name);
@@ -319,7 +319,7 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 		//클라이언트에 이미 생성된 유저라면 유저객체를 만들지 않는다.
 		//없는것이 판단되면 새로 생성
 		if(Client_UserList.count(name) == 0)
-			Client_UserList.insert(make_pair(name, TUser::MakeShared(name)));
+			Client_UserList.insert(make_pair(name, TetrisUserClient::MakeShared(name)));
 	}
 
 	ME = Client_NameToTUser(Name).get();
@@ -397,7 +397,7 @@ void CMyDoc::ProcessEnter(string name)
 	Enter = true;
 	Name = name;
 
-	auto tmp = TUser::MakeShared(name);
+	auto tmp = TetrisUserClient::MakeShared(name);
 	Client_UserList.insert( make_pair(name, tmp));
 
 	if(!m_mySocket->Sendname(name.c_str(), name.size()))

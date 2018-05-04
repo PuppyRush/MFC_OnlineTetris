@@ -5,7 +5,6 @@
 #include "OnlineTetris.h"
 #include "../Commons/structs.h"
 
-
 #include <regex>
 
 class CMyDoc;

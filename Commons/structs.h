@@ -2,6 +2,8 @@
 
 #include <string>
 
+#undef POINT
+
 using namespace std;
 
 class IPString
@@ -10,6 +12,12 @@ private:
 	string ip;
 
 public:
+
+	IPString()
+	{
+		IPString({192,168,0,1});
+	}
+
 	explicit IPString(initializer_list<size_t> fields)
 	{
 		_ASSERT(fields.size() == 4);
@@ -28,10 +36,17 @@ public:
 	}
 };
 
+typedef struct tPOINT
+{
+	long x;
+	long y;
+} ;
+
+
 typedef struct FIGURE
 {
-	POINT FgInfo[4];		//*************************************DefineInfo.h에 의존되어야할 숫자
-	POINT end;				//제일 왼쪽아래의 좌표를 저장한다.
+	tPOINT FgInfo[4];		//*************************************DefineInfo.h에 의존되어야할 숫자
+	tPOINT end;				//제일 왼쪽아래의 좌표를 저장한다.
 	int Figure, NextFigure;
 	int Height;
 	int Width;

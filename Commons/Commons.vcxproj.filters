@@ -27,5 +27,13 @@
     <ClInclude Include="Validator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TetrisUser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TetirisUser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

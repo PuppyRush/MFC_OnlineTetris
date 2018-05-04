@@ -15,7 +15,7 @@
 #include "MySocket.h"
 #include "ServerDialog.h"
 #include "OptionDialog.h"
-#include "TUser.h"
+#include "TetrisUserClient.h"
 #include "MyButton.h"
 
 #ifdef _DEBUG
@@ -828,7 +828,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 			return;
 
 		FIGURE *fg = &(ME->FG);
-		POINT c;
+		tPOINT c;
 		int i = 0;
 		for(i = 0; i < FG_FIXEDNUM; i++)
 		{
@@ -882,7 +882,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			return;
 		}
 		FIGURE *fg = &(ME->FG);
-		POINT c;
+		tPOINT c;
 
 		if(nChar == VK_SPACE)
 		{
@@ -982,7 +982,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 		else if(nChar == VK_UP)
 		{
-			POINT c = ME->FG.end;
+			auto c = ME->FG.end;
 			FIGURE backup;
 			backup.dir = fg->dir;
 			backup.end = fg->end;
@@ -1836,10 +1836,9 @@ bool CMyView::CreateFigure(void)
 	}
 
 	//생성된 도형이 이미 생성된 도형과 겹친다면 게임 끝
-	POINT c;
 	for(int i = 0; i < FG_FIXEDNUM; i++)
 	{
-		c = ME->FG.FgInfo[i];
+		const auto c = ME->FG.FgInfo[i];
 
 		if(ME->GameBoard[c.y][c.x] != 0)
 		{
@@ -1859,13 +1858,11 @@ bool CMyView::CreateFigure(void)
 
 void CMyView::SetFigure()
 {
-
 	FIGURE *fg = &(ME->FG);
-	POINT c;
 
 	for(int i = 0; i < FG_FIXEDNUM; i++)
 	{
-		c = ME->FG.FgInfo[i];
+		const auto c = ME->FG.FgInfo[i];
 		ME->GameBoard[c.y][c.x] = 1;
 		ME->FixedBoard[c.y][c.x] = fg->Figure;
 	}
@@ -1876,21 +1873,17 @@ void CMyView::SetFigure()
 
 void CMyView::SetGhostFigure()
 {
-
 	FIGURE *fg = &(ME->GhostFG);
-	POINT c;
 
 	int l = 0;
 	while(fg->end.y < VERNUM)
 	{
 		for(l = 0; l < FG_FIXEDNUM; l++)
 		{
-			c = fg->FgInfo[l];
+			const auto c = fg->FgInfo[l];
 			//바닥이나 도형에 착지
 			if(c.y == VERNUM - 1 || ME->GameBoard[c.y + 1][c.x] == 1)
-			{
 				break;
-			}
 		}
 		if(l != FG_FIXEDNUM)
 			break;
@@ -1902,19 +1895,16 @@ void CMyView::SetGhostFigure()
 //서버에게 끝났음을 통보
 void CMyView::SetGameover()
 {
-
 	ME->SetSurvive(false);
 	pDoc->End = true;
 	pDoc->Start = false;
 	KillTimer(TIMER_TETRIS);
 	KillTimer(TIMER_SENDMAPSTATE);
 	pDoc->m_mySocket->SendDead();
-
 }
 
 bool CMyView::CheckLineDestroy()
 {
-
 	int Bingo = 0;
 	static int Combo = 0;
 	int LineNum = 0;
@@ -1924,7 +1914,6 @@ bool CMyView::CheckLineDestroy()
 
 	for(int i = 0; i < VERNUM; i++)
 	{
-
 		for(int l = 0; l < HORNUM; l++)
 			if(ME->GameBoard[i][l] == 1)
 				Bingo++;
@@ -2053,7 +2042,7 @@ bool CMyView::CheckDup(FIGURE backup)
 
 	for(int i = 0; i < FG_FIXEDNUM; i++)
 	{
-		c = ME->FG.FgInfo[i];
+		const auto c = ME->FG.FgInfo[i];
 		//기존 도형과 겹치는지 검사
 		if(ME->GameBoard[c.y][c.x] == 1)
 			return true;

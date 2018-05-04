@@ -15,7 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="UserImages.bmp">
       <Filter>리소스 파일</Filter>
     </None>
@@ -150,9 +149,6 @@
     <ClInclude Include="MySocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TUser.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MyEdit.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -163,6 +159,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MyButton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TetrisUserClient.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,9 +184,6 @@
     <ClCompile Include="MySocket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TUser.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="MyEdit.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -198,6 +194,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyButton.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TetrisUserClient.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
