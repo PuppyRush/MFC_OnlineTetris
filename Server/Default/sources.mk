@@ -25,8 +25,4 @@ CPP_DEPS :=
 SUBDIRS := \
 . \
 Server \
-FileWatcher \
-FileWatcher/Debug \
-FileWatcher/Debug/Server \
-FileWatcher/Debug/FileWatcher \
 

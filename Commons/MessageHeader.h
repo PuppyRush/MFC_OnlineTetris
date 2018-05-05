@@ -1,20 +1,20 @@
 #pragma once
 
 #include "DefineInfo.h"
-
+#include <cassert>
 #undef GetMessage
 
 namespace msg_header
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-//msg_idx//Å¬¶óÀÌ¾ðÆ® È¤Àº ¼­¹ö°¡ ¹ÞÀ» ¸Þ¼¼Áö
-//IsServer//¸Þ¼¼Áö¸¦ ¹ÞÀ» ÁÖÃ¼°¡ ¼­¹öÀÎÁö Å¬¶óÀÌ¾ðÆ® ÀÎÁö?
+//msg_idx//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
+//IsServer//ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½?
 
 template <class T>
 static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t srclen)
 {
-	ASSERT(destlen >= srclen);
+	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
 	std::copy_n(src, srclen, dest);
@@ -23,8 +23,8 @@ static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t 
 template <class T, size_t SIZE1, size_t SIZE2>
 static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t src_dimension1, const size_t src_dimension2)
 {
-	ASSERT(SIZE1 >= src_dimension1);
-	ASSERT(SIZE2 >= src_dimension2);
+	assert(SIZE1 >= src_dimension1);
+	assert(SIZE2 >= src_dimension2);
 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
 
@@ -35,9 +35,9 @@ static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
 static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], const size_t src_dimension1, const size_t src_dimension2, const size_t src_dimension3)
 {
-	ASSERT(SIZE1 >= src_dimension1);
-	ASSERT(SIZE2 >= src_dimension2);
-	ASSERT(SIZE3 >= src_dimension3);
+	assert(SIZE1 >= src_dimension1);
+	assert(SIZE2 >= src_dimension2);
+	assert(SIZE3 >= src_dimension3);
 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2*SIZE3);
 
@@ -56,7 +56,7 @@ typedef struct Header
 	{}
 };
 
-//¸Þ¼¼Áö¸¦ º¸³¾ ±¸Á¶Ã¼
+//ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼
 typedef struct mSendPermit : public Header
 {
 	size_t res;
@@ -111,7 +111,7 @@ typedef struct mSendMessage :public Header
 	static mSendMessage GetMessage(const char* _msg)
 	{
 		auto len = strnlen(_msg,MSG_LEN);
-		ASSERT(len < MSG_LEN);
+		assert(len < MSG_LEN);
 
 		char *msg = new char[MSG_LEN];
 		memset(msg, 0, sizeof(char)*MSG_LEN);

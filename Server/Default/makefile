@@ -9,10 +9,6 @@ RM := rm
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include Server/subdir.mk
--include FileWatcher/Debug/Server/subdir.mk
--include FileWatcher/Debug/FileWatcher/subdir.mk
--include FileWatcher/Debug/subdir.mk
--include FileWatcher/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -42,19 +38,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: FileDeliveryServer
+all: 
 
 # Tool invocations
-FileDeliveryServer: $(OBJS) $(USER_OBJS)
+: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	g++  -o "FileDeliveryServer" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++  -o  $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) FileDeliveryServer
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) 
 	-@echo ' '
 
 .PHONY: all clean dependents
