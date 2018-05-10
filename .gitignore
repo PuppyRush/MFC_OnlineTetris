@@ -216,3 +216,5 @@ pip-log.txt
 .mr.developer.cfg
 OnlineTetris.VC.VC.opendb
 *.db
+
+*.wav

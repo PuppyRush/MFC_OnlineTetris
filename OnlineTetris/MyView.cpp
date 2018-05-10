@@ -13,8 +13,9 @@
 #include "MyDoc.h"
 #include "MyEdit.h"
 #include "MySocket.h"
-#include "ServerDialog.h"
+#include "EnteringDialog.h"
 #include "OptionDialog.h"
+#include "WaitingRoom.h"
 #include "TetrisUserClient.h"
 #include "MyButton.h"
 
@@ -51,7 +52,6 @@ CMyView::CMyView()
 	// TODO: 여기에 생성 코드를 추가합니다.
 	Edt_InputEdit = NULL;
 	pDoc = NULL;
-	pServerDlg = NULL;
 	pOptionDlg = NULL;
 	Btn_Ready = Btn_Start = NULL;
 
@@ -107,11 +107,6 @@ void CMyView::OnInitialUpdate()
 	{
 		pDoc = GetDocument();
 		pDoc->pView = this;
-	}
-	if(pServerDlg == NULL)
-	{
-		pServerDlg = new ServerDialog;
-		pServerDlg->Create(_DLG_SERVER);
 	}
 	if(pOptionDlg == NULL)
 	{
@@ -1427,20 +1422,16 @@ void CMyView::OnMenuServer()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	if(!pDoc->Enter && !pDoc->Open)
 	{
-		if(pServerDlg != NULL)
-			pServerDlg->ShowWindow(SW_SHOW);
-		else
+		auto dlg = ServerDialog::GetDialog();
+		dlg->DoModal();
+
+		const auto isConnected = CMySocket::GetSocket(dlg->ipstring, dlg->portnum)->ConnectToServer();
+		if(isConnected)
 		{
-			pServerDlg = new ServerDialog;
-			pServerDlg->Create(_DLG_SERVER);
-			pServerDlg->ShowWindow(SW_SHOW);
+			pDoc->Enter = true;
+			auto wdlg = WaitingRoom::GetDialog();
+			wdlg->DoModal();
 		}
-
-		if(pServerDlg->isValidationMakeRoomInfo || pServerDlg->isValidationMakeRoomInfo)
-			CMySocket::GetSocket(pServerDlg->ipstring, pServerDlg->portnum);
-
-		if(pServerDlg->isValidationMakeRoomInfo)
-			pDoc->m_mySocket->ConnectToServer();
 	}
 }
 
