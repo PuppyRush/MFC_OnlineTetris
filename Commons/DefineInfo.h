@@ -1,6 +1,4 @@
 
-#define CSTRTCH (LPSTR)(LPCTSTR) 
-
 typedef enum USER_MSG
 {
 

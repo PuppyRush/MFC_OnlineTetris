@@ -3,9 +3,7 @@
 
 #include "StdAfx.h"
 #include "EnteringDialog.h"
-#include "../Commons/Validator.h"
 
-// ServerDialog 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(ServerDialog, CDialogEx)
 
@@ -44,7 +42,7 @@ void ServerDialog::OnBnClickedBtnEnter()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CString name;
 	Edt_Entername.GetWindowTextW(name);
-	string str_name = CSTRTCH(name);
+	string str_name = ToStringFrom(name);
 
 	if (!validator::IdCheck(str_name,5,10))
 		return;
@@ -55,7 +53,8 @@ void ServerDialog::OnBnClickedBtnEnter()
 	
 	CString str_portnum;
 	Edt_Serverport.GetWindowTextW(str_portnum);
-	size_t portnum = atoi(CSTRTCH(str_portnum));
+
+	size_t portnum = atoi(ToStringFrom(str_portnum));
 	if (!(portnum >= 1000 && portnum <= 10000))
 	{
 		MessageBox(_T("포트는 1000~10000만 가능합니다"));
