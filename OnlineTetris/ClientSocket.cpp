@@ -3,29 +3,39 @@
 
 #include "stdafx.h"
 #include "OnlineTetris.h"
-#include "MySocket.h"
+#include "CliektSocket.h"
 #include "TetrisUserClient.h"
 
 // CMySocket
 
 using namespace msg_header;
 
-CMySocket::CMySocket(const IPString ipstring, const size_t port)
+CClientSocket::CClientSocket(const IPString ipstring, const size_t port)
 	: m_ipString(ipstring), m_port(port)
 {}
 
-CMySocket::~CMySocket()
+CClientSocket::~CClientSocket()
 {}
 
-bool CMySocket::ConnectToServer()
+bool CClientSocket::ConnectToServer()
 {
-	if(!Connect(CString(m_ipString.GetString()), m_port))
+	if(Connect(CString(m_ipString.GetString()), m_port))
+		SendConnectionInfo();
+	else
 		return false;
-
-
 }
 
-void CMySocket::OnClose(int nErrorCode)
+bool CClientSocket::SendConnectionInfo()
+{
+	const auto header = Header(Header(BC_DEAD));
+	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
+
+	if(Send((char *)&sendname, sizeof(sendname)) > 0)
+		return true;
+	return false;
+}
+
+void CClientSocket::OnClose(int nErrorCode)
 {
 
 	if(pDoc == NULL)
@@ -97,7 +107,7 @@ void CMySocket::OnClose(int nErrorCode)
 }
 
 
-void CMySocket::SelfClose()
+void CClientSocket::SelfClose()
 {
 
 	pDoc->Enter = pDoc->Open = false;
@@ -107,7 +117,7 @@ void CMySocket::SelfClose()
 
 }
 
-void CMySocket::OnReceive(int nErrorCode)
+void CClientSocket::OnReceive(int nErrorCode)
 {
 	if(pView == NULL || pDoc == NULL)
 		return;
@@ -280,7 +290,7 @@ void CMySocket::OnReceive(int nErrorCode)
 
 }
 
-bool CMySocket::Broadcast(void* strc, int msgidx)
+bool CClientSocket::Broadcast(void* strc, int msgidx)
 {
 
 	//POSITION pos = pDoc->Server_UserList.GetHeadPosition();
@@ -508,7 +518,7 @@ bool CMySocket::Broadcast(void* strc, int msgidx)
 
 }
 
-bool CMySocket::Sendname(const char *name, int namelen)
+bool CClientSocket::Sendname(const char *name, int namelen)
 {
 
 	mSendName sendname(Header(ON_NAME), namelen, name);
@@ -519,7 +529,7 @@ bool CMySocket::Sendname(const char *name, int namelen)
 		return false;
 }
 
-bool CMySocket::Sendmapstate()
+bool CClientSocket::Sendmapstate()
 {
 	if(pDoc == NULL)
 		return false;
@@ -535,7 +545,7 @@ bool CMySocket::Sendmapstate()
 	return false;
 }
 
-bool CMySocket::Sendready(bool ready)
+bool CClientSocket::Sendready(bool ready)
 {
 	mSendReady sendready(Header(PER_READY), pDoc->Name.size(), pDoc->Name.c_str(), pDoc->Ready);
 
@@ -545,7 +555,7 @@ bool CMySocket::Sendready(bool ready)
 	}
 }
 
-bool CMySocket::ProcessReady(mOnReady rdy)
+bool CClientSocket::ProcessReady(mOnReady rdy)
 {
 	//const auto name = string(rdy.fromname);
 	//auto user = pDoc->NameToTUser(name);
@@ -556,7 +566,7 @@ bool CMySocket::ProcessReady(mOnReady rdy)
 	return true;
 }
 
-bool CMySocket::ProcessMapsate(mOnMapstate on_map)
+bool CClientSocket::ProcessMapsate(mOnMapstate on_map)
 {
 
 	//static CStringArray AsyncSend;
@@ -595,7 +605,7 @@ bool CMySocket::ProcessMapsate(mOnMapstate on_map)
 	return false;
 }
 
-bool CMySocket::SendDead()
+bool CClientSocket::SendDead()
 {
 	const auto header = Header(Header(BC_DEAD));
 	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
@@ -605,7 +615,7 @@ bool CMySocket::SendDead()
 	return false;
 }
 
-bool CMySocket::SendRestart()
+bool CClientSocket::SendRestart()
 {
 	mSendPermit permit(Header(BC_RESTART), -1);
 
@@ -619,7 +629,7 @@ bool CMySocket::SendRestart()
 
 //자기 제외하고 두줄 추가하기
 //isSelf에 따라 자기자신도 더할지 판단
-bool CMySocket::SendLine(int num = 1, bool isSelf = true)
+bool CClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{

@@ -1,4 +1,5 @@
 #pragma once
+#include "afxcmn.h"
 
 
 // WaitingRoom 대화 상자입니다.
@@ -27,6 +28,7 @@ protected:
 public:
 
 	virtual ~WaitingRoom();
+	virtual BOOL OnInitDialog();
 
 	static shared_ptr<WaitingRoom> GetDialog()
 	{
@@ -34,4 +36,5 @@ public:
 		return dlg;
 	}
 
+	CListCtrl roomList;
 };

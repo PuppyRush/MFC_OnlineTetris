@@ -146,9 +146,6 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MySocket.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MyEdit.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -165,6 +162,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="EnteringDialog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CliektSocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -184,9 +184,6 @@
     <ClCompile Include="MyView.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MySocket.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="MyEdit.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -203,6 +200,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="EnteringDialog.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientSocket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

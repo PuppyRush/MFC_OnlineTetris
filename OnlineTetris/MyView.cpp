@@ -12,7 +12,7 @@
 #include "MyView.h"
 #include "MyDoc.h"
 #include "MyEdit.h"
-#include "MySocket.h"
+#include "CliektSocket.h"
 #include "EnteringDialog.h"
 #include "OptionDialog.h"
 #include "WaitingRoom.h"
@@ -1425,7 +1425,7 @@ void CMyView::OnMenuServer()
 		auto dlg = ServerDialog::GetDialog();
 		dlg->DoModal();
 
-		const auto isConnected = CMySocket::GetSocket(dlg->ipstring, dlg->portnum)->ConnectToServer();
+		const auto isConnected = CClientSocket::GetSocket(dlg->ipstring, dlg->portnum)->ConnectToServer();
 		if(isConnected)
 		{
 			pDoc->Enter = true;

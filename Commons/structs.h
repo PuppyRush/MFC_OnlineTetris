@@ -23,7 +23,7 @@ public:
 		_ASSERT(fields.size() == 4);
 		ip.reserve(16);
 
-		for each(auto b in fields)
+		for(auto b : fields)
 		{
 			ip.append(std::to_string(static_cast<long>(b)));
 			ip.append(".");

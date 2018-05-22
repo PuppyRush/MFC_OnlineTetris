@@ -23,6 +23,7 @@ WaitingRoom::~WaitingRoom()
 void WaitingRoom::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, _LST_WAITING, roomList);
 }
 
 
@@ -31,3 +32,13 @@ END_MESSAGE_MAP()
 
 
 // WaitingRoom 메시지 처리기입니다.
+
+BOOL WaitingRoom::OnInitDialog()
+{
+	roomList.InsertColumn(0, _T("방 번호"), NULL, 50);
+	roomList.InsertColumn(1, _T("이름"), NULL, 150);
+	roomList.InsertColumn(2, _T("참가인원"), NULL, 50);
+	roomList.InsertColumn(3, _T("방 생성시간"), NULL, 50);
+
+	return true;
+}
