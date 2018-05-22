@@ -139,7 +139,7 @@
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="MyDoc.h" />
     <ClInclude Include="MyEdit.h" />
-    <ClInclude Include="MySocket.h" />
+    <ClInclude Include="CliektSocket.h" />
     <ClInclude Include="MyView.h" />
     <ClInclude Include="OnlineTetris.h" />
     <ClInclude Include="OptionDialog.h" />
@@ -155,7 +155,7 @@
     <ClCompile Include="MyButton.cpp" />
     <ClCompile Include="MyDoc.cpp" />
     <ClCompile Include="MyEdit.cpp" />
-    <ClCompile Include="MySocket.cpp" />
+    <ClCompile Include="ClientSocket.cpp" />
     <ClCompile Include="MyView.cpp" />
     <ClCompile Include="OnlineTetris.cpp" />
     <ClCompile Include="OptionDialog.cpp" />

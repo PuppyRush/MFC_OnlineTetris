@@ -14,7 +14,7 @@
 using namespace msg_header;
 
 class CMyListen;
-class CMySocket;
+class CClientSocket;
 class CMyView;
 
 class CMyDoc : public CDocument
@@ -38,7 +38,7 @@ public:
 	bool Ghost;			//낙하예상지점 옵션
 	bool Bgm;
 	bool Gravity;		//중력모드
-	CMySocket *m_mySocket;
+	CClientSocket *m_mySocket;
 	CMyView *pView;
 
 	std::list<string> Client_EnterUsers;

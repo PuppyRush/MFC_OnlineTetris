@@ -8,16 +8,16 @@
 class CMyView;
 class CMyDoc;
 
-class CMySocket : public CSocket
+class CClientSocket : public CSocket
 {
 private:
-	CMySocket()
+	CClientSocket()
 		:m_ipString({192,168,0,1})
 	{}
 
 public:
 
-	CMySocket(const IPString ipstring, const size_t port);
+	CClientSocket(const IPString ipstring, const size_t port);
 
 	IPString m_ipString;
 	size_t m_port;
@@ -27,21 +27,22 @@ public:
 	CMyDoc *pDoc;
 
 	template<class... _Types>
-	static shared_ptr<CMySocket> GetSocket(_Types&&... _Args)
+	static shared_ptr<CClientSocket> GetSocket(_Types&&... _Args)
 	{
-		static auto mysocket = make_shared<CMySocket>(forward<_Types>(_Args)...);
+		static auto mysocket = make_shared<CClientSocket>(forward<_Types>(_Args)...);
 		return mysocket;
 	}
 
 
 public:
 	
-	virtual ~CMySocket();
+	virtual ~CClientSocket();
 	bool ConnectToServer();
 	virtual void OnReceive(int nErrorCode);
 	virtual void OnClose(int nErrorCode);
 	void SelfClose();
 	bool Broadcast(void* strc, int msgidx);
+	bool SendConnectionInfo();
 	bool Sendname(const char* name, int namelen);
 	bool Sendmapstate();
 	bool Sendready(bool isReady);

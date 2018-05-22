@@ -11,7 +11,7 @@
 
 #include "MyDoc.h"
 #include "MyListen.h"
-#include "MySocket.h"
+#include "CliektSocket.h"
 #include "MyButton.h"
 #include <propkey.h>
 

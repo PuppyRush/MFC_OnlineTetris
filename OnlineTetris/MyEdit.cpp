@@ -7,7 +7,7 @@
 #include "MyDoc.h"
 #include "MyView.h"
 #include "MainFrm.h"
-#include "MySocket.h"
+#include "CliektSocket.h"
 
 // CMyEdit
 

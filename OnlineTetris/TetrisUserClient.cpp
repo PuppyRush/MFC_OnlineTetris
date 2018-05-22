@@ -6,7 +6,7 @@ TetrisUserClient::TetrisUserClient(const string &name)
 {
 }
 
-TetrisUserClient::TetrisUserClient(const string &name, const IPString &ip, CMySocket* soc, const int idx)
+TetrisUserClient::TetrisUserClient(const string &name, const IPString &ip, CClientSocket* soc, const int idx)
 	:TetrisUser(name, ip, idx), Socket(soc)
 {
 	Socket = soc;

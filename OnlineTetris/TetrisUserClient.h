@@ -3,17 +3,17 @@
 #include "../Commons/structs.h"
 #include "../Commons/TetrisUser.h"
 
-class CMySocket;
+class CClientSocket;
 
 class TetrisUserClient : public TetrisUser
 {
 private:
-	CMySocket *Socket;
+	CClientSocket *Socket;
 
 public:
 	
 	explicit TetrisUserClient(const string &name);
-	explicit TetrisUserClient(const string &name, const IPString &ip, CMySocket* soc, const int idx);
+	explicit TetrisUserClient(const string &name, const IPString &ip, CClientSocket* soc, const int idx);
 	virtual ~TetrisUserClient(void)	{}
 
 	static shared_ptr<TetrisUserClient> MakeShared(const string &name)
@@ -21,12 +21,12 @@ public:
 		return make_shared<TetrisUserClient>(name);
 	}
 
-	static shared_ptr<TetrisUserClient> MakeShared(const string &name, const IPString &ip, CMySocket* soc, const int idx)
+	static shared_ptr<TetrisUserClient> MakeShared(const string &name, const IPString &ip, CClientSocket* soc, const int idx)
 	{
 		return make_shared<TetrisUserClient>(name, ip, soc, idx);
 	}
 
-	inline CMySocket *GetSocket()
+	inline CClientSocket *GetSocket()
 	{
 		return Socket;
 	}
