@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include "..\Commons\structs.h"
 
 class CMyDoc;
 class ServerDialog;
 class CMyEdit;
 class OptionDialog;
 class CMyButton;
-class TUser;
+class TetrisUser;
 
 class CMyView : public CView
 {
@@ -25,19 +26,18 @@ public:
 // 작업입니다.
 public:
 	
-	CMyDoc::SEND_READY send_ready;
-	CMyDoc::SEND_STARTSIGNAL send_start;
-	CMyDoc::SEND_MAPSTATE send_map;
+	//mSendReady send_ready;
+	//mSendStartsignal send_start;
+	//mSendMapstate send_map;
 
 	CMyButton *Btn_Start;
 	CMyButton *Btn_Ready;
 	CEdit Edt_ChatEdit;
 
-	TUser *ME;
+	TetrisUser *ME;
 	CMyEdit *Edt_InputEdit;
 	CListBox Lst_EnterList;
 	CMyDoc *pDoc;
-	ServerDialog *pServerDlg;
 	OptionDialog *pOptionDlg;
 
 	CBrush DeadBrush;
@@ -93,8 +93,8 @@ public:
 	void MoveToRight();
 	bool CheckLineDestroy();
 	void AddLine(int );
-	bool CheckDup(TUser::FIGURE backup);
-	void ProcessMapState(CMyDoc::ON_MAPSTATE *map);
+	bool CheckDup(FIGURE backup);
+	void ProcessMapState(mOnMapstate *map);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 

@@ -15,7 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="UserImages.bmp">
       <Filter>리소스 파일</Filter>
     </None>
@@ -91,7 +90,6 @@
     <None Include="res\SUB_BK.bmp">
       <Filter>리소스 파일</Filter>
     </None>
-    <None Include="ClassDiagram1.cd" />
     <None Include="res\bitmap2.bmp">
       <Filter>리소스 파일</Filter>
     </None>
@@ -151,25 +149,22 @@
     <ClInclude Include="MySocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MyListen.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TUser.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MyEdit.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DefineInfo.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ServerDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OptionDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MyButton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TetrisUserClient.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitingRoom.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EnteringDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -192,22 +187,22 @@
     <ClCompile Include="MySocket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MyListen.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TUser.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="MyEdit.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OptionDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyButton.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TetrisUserClient.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitingRoom.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EnteringDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

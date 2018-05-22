@@ -12,13 +12,6 @@ class CMyEdit : public CEdit
 	DECLARE_DYNAMIC(CMyEdit)
 
 public:
-
-	CMyDoc::SEND_MESSAGE msg;
-	CMainFrame *pMF;
-	CMyView *pView;
-	CMyDoc *pDoc;
-
-public:
 	CMyEdit();
 	virtual ~CMyEdit();
 	CString GetEditText();

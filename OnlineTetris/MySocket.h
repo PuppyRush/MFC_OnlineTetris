@@ -2,51 +2,54 @@
 
 // CMySocket 명령 대상입니다.
 
+#include "../Commons/MessageHeader.h"
+#include "../Commons/structs.h"
+
 class CMyView;
 class CMyDoc;
 
 class CMySocket : public CSocket
 {
+private:
+	CMySocket()
+		:m_ipString({192,168,0,1})
+	{}
 
 public:
+
+	CMySocket(const IPString ipstring, const size_t port);
+
+	IPString m_ipString;
+	size_t m_port;
+	string m_username;
+
 	CMyView *pView;
 	CMyDoc *pDoc;
 
-	CMyDoc::ON_MESSAGE on_msg;
-	CMyDoc::SEND_MESSAGE send_msg;
-	CMyDoc::SEND_NAME send_name;
-	CMyDoc::SEND_NAMES send_names;
-	CMyDoc::ON_NAME on_name;
-	CMyDoc::ON_NAMES on_names;
-	CMyDoc::ON_READY on_ready;
-	CMyDoc::SEND_READIES send_readies;
-	CMyDoc::ON_READIES on_readies;
-	CMyDoc::SEND_PERMIT send_per;
-	CMyDoc::ON_PERMIT on_per;
-	CMyDoc::ON_STARTSIGNAL on_start;
-	CMyDoc::SEND_STARTSIGNAL send_start;
-	CMyDoc::ON_MAPSTATE on_map;
-	CMyDoc::ON_MAPSTATES on_maps;
-	CMyDoc::SEND_MAPSTATE send_map;
-	CMyDoc::SEND_READY send_ready;
-	CMyDoc::SEND_ADDLINE send_line;
-	CMyDoc::ON_ADDLINE on_line;
+	template<class... _Types>
+	static shared_ptr<CMySocket> GetSocket(_Types&&... _Args)
+	{
+		static auto mysocket = make_shared<CMySocket>(forward<_Types>(_Args)...);
+		return mysocket;
+	}
+
 
 public:
-	CMySocket();
+	
 	virtual ~CMySocket();
+	bool ConnectToServer();
 	virtual void OnReceive(int nErrorCode);
 	virtual void OnClose(int nErrorCode);
 	void SelfClose();
 	bool Broadcast(void* strc, int msgidx);
-	bool Sendname(char* name, int namelen);
+	bool Sendname(const char* name, int namelen);
 	bool Sendmapstate();
-	bool Sendready();
+	bool Sendready(bool isReady);
 	bool SendDead();
 	bool SendRestart();
 	bool SendLine(int , bool);
-	bool ProcessReady(CMyDoc::ON_READY rdy);
-	bool ProcessMapsate(CMyDoc::ON_MAPSTATE on_map);
+	bool ProcessReady(mOnReady rdy);
+	bool ProcessMapsate(mOnMapstate on_map);
 };
 
 
