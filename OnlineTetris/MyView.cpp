@@ -21,7 +21,11 @@
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
 #endif
+
+using namespace defineinfo;
 
 // CMyView
 
@@ -842,7 +846,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 		VirtualDraw();
 	}
 
-	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->GetSurvive() && (pDoc->Open || pDoc->Enter))
+	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->GetSurvive() && pDoc->m_mySocket->isConnected() )
 	{
 		pDoc->m_mySocket->Sendmapstate();
 		VirtualDraw();
@@ -1370,7 +1374,7 @@ void CMyView::MessageHandler(int msg)
 
 void CMyView::ReadyBtnClicked()
 {
-	if(!pDoc->Open && !pDoc->Enter)
+	if(!pDoc->m_mySocket->isConnected())
 	{
 		MessageHandler(NOT_OPENNENTER);
 		return;
@@ -1399,7 +1403,7 @@ void CMyView::StartBtnClicked()
 		return;
 	}
 
-	if(pDoc->Open == false && pDoc->Enter == false)
+	if(!pDoc->m_mySocket->isConnected())
 	{
 		MessageHandler(NOT_ALLREADY);
 		return;
@@ -1420,28 +1424,27 @@ void CMyView::StartBtnClicked()
 void CMyView::OnMenuServer()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if(!pDoc->Enter && !pDoc->Open)
+	if(!pDoc->m_mySocket->isConnected())
 	{
 		auto dlg = ServerDialog::GetDialog();
 		dlg->DoModal();
 
-		const auto isConnected = CClientSocket::GetSocket(dlg->ipstring, dlg->portnum)->ConnectToServer();
-		if(isConnected)
+		if (CClientSocket::GetSocket(dlg->ipstring, dlg->portnum)->ConnectToServer())
 		{
-			pDoc->Enter = true;
 			auto wdlg = WaitingRoom::GetDialog();
 			wdlg->DoModal();
 		}
+
 	}
 }
 
 void CMyView::OnUpdateMenuServer(CCmdUI *pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(!pDoc->Open && !pDoc->Enter)
-		pCmdUI->Enable(true);
-	else
+	if(pDoc->m_mySocket->isConnected())
 		pCmdUI->Enable(false);
+	else
+		pCmdUI->Enable(true);
 }
 
 void CMyView::SetMap(int i)

@@ -4,6 +4,11 @@
 #include "StdAfx.h"
 #include "EnteringDialog.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
 
 IMPLEMENT_DYNAMIC(ServerDialog, CDialogEx)
 
@@ -42,7 +47,7 @@ void ServerDialog::OnBnClickedBtnEnter()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CString name;
 	Edt_Entername.GetWindowTextW(name);
-	string str_name = ToStringFrom(name);
+	string str_name = StringManager::ToStringFrom(name);
 
 	if (!validator::IdCheck(str_name,5,10))
 		return;
@@ -54,7 +59,7 @@ void ServerDialog::OnBnClickedBtnEnter()
 	CString str_portnum;
 	Edt_Serverport.GetWindowTextW(str_portnum);
 
-	size_t portnum = atoi(ToStringFrom(str_portnum));
+	size_t portnum = atoi(StringManager::ToStringFrom(str_portnum).c_str());
 	if (!(portnum >= 1000 && portnum <= 10000))
 	{
 		MessageBox(_T("포트는 1000~10000만 가능합니다"));
@@ -65,7 +70,8 @@ void ServerDialog::OnBnClickedBtnEnter()
 	this->portnum = portnum;
 	this->ipstring = ipstring;
 
-	this->DestroyWindow();
+
+	CDialogEx::OnOK();
 }
 
 
@@ -76,8 +82,8 @@ BOOL ServerDialog::OnInitDialog()
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
 
 	Edt_Serverip.SetAddress( (BYTE)210, (BYTE)179, (BYTE)101, (BYTE)193);
-	Edt_Serverport.SetWindowTextW(_T("5805"));
-	Edt_Entername.SetWindowTextW( _T("Write_your_name"));
+	Edt_Serverport.SetWindowTextW(_T("5905"));
+	Edt_Entername.SetWindowTextW( _T("your_name"));
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -87,7 +93,7 @@ void ServerDialog::OnClose()
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
-	//CDialogEx::OnClose();
+	CDialogEx::OnClose();
 }
 
 

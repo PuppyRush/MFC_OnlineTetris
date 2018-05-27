@@ -31,7 +31,6 @@ public:
 
 public:
 	
-	bool Open,Enter;	//이 프로그램이 서버이면 open을 클라이언트면 enter를 true시킨다.
 	bool Start;			//모든 접속자가 ready를 누르면 서버가 시작할 수 있다.
 	bool Ready;			//클라이언트의 레디 상태
 	bool End;			//게임이 끝나면 End로

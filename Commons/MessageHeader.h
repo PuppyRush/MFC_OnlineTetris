@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include "DefineInfo.h"
 #include "structs.h"
 
@@ -15,7 +16,7 @@ namespace msg_header
 template <class T>
 static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t srclen)
 {
-	ASSERT(destlen >= srclen);
+	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
 	std::copy_n(src, srclen, dest);
@@ -24,8 +25,8 @@ static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t 
 template <class T, size_t SIZE1, size_t SIZE2>
 static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t src_dimension1, const size_t src_dimension2)
 {
-	ASSERT(SIZE1 >= src_dimension1);
-	ASSERT(SIZE2 >= src_dimension2);
+	assert(SIZE1 >= src_dimension1);
+	assert(SIZE2 >= src_dimension2);
 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
 
@@ -36,9 +37,9 @@ static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
 static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], const size_t src_dimension1, const size_t src_dimension2, const size_t src_dimension3)
 {
-	ASSERT(SIZE1 >= src_dimension1);
-	ASSERT(SIZE2 >= src_dimension2);
-	ASSERT(SIZE3 >= src_dimension3);
+	assert(SIZE1 >= src_dimension1);
+	assert(SIZE2 >= src_dimension2);
+	assert(SIZE3 >= src_dimension3);
 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2*SIZE3);
 
@@ -49,12 +50,14 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 
 typedef struct Header
 {
+public:
 	size_t msg_idx;
 	size_t dataSize;
 
 	explicit Header(const size_t msgIdx)
 		:msg_idx(msgIdx)
 	{}
+
 };
 
 //메세지를 보낼 구조체
@@ -94,6 +97,8 @@ typedef struct mSendNames : public Header
 	{
 		CopyChars<size_t>(this->namelen, size_t(MAX_ENTER), namelen, enternum);
 		CopyChars<char,MAX_ENTER,ID_LEN>(this->name, names, enternum, ID_LEN);
+
+		dataSize = sizeof(mSendNames) - sizeof(h);
 	}
 };
 
@@ -112,13 +117,13 @@ typedef struct mSendMessage :public Header
 	static mSendMessage GetMessage(const char* _msg)
 	{
 		auto len = strnlen(_msg,MSG_LEN);
-		ASSERT(len < MSG_LEN);
+		assert(len < MSG_LEN);
 
 		char *msg = new char[MSG_LEN];
 		memset(msg, 0, sizeof(char)*MSG_LEN);
 		strcat(msg, _msg);
 			
-		return mSendMessage(Header(ON_MESSAGE), len, _msg);
+		return mSendMessage(Header(defineinfo::ON_MESSAGE), len, _msg);
 	}
 };
 
@@ -129,9 +134,8 @@ typedef struct mSendReady : public Header
 	bool ready;
 
 	explicit mSendReady(const Header h, const size_t namelen, const char* fromname, const bool ready)
-		:Header(h)
+		:Header(h), ready(ready)
 	{
-		this->ready = ready;
 		CopyChars(this->fromname, MSG_LEN, fromname, namelen);
 		dataSize = sizeof(mSendReady) - sizeof(h);
 	}
@@ -151,7 +155,7 @@ typedef struct mSendRadies : public Header
 		CopyChars(this->namelen, MAX_ENTER, namelen, enternum);
 		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, name, enternum, ID_LEN);
 			
-		dataSize = sizeof(mSendRadies) - sizeof(h);
+		dataSize = sizeof(this) - sizeof(h);
 	}
 };
 
@@ -277,7 +281,7 @@ typedef struct mOnMapstate
 	char name[ID_LEN];
 	int board[VERNUM][HORNUM];
 	int kindfigure;
-	POINT figure[FG_FIXEDNUM];
+	tPOINT figure[FG_FIXEDNUM];
 };
 
 typedef struct mOnMapstates 

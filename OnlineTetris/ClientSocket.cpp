@@ -6,8 +6,15 @@
 #include "CliektSocket.h"
 #include "TetrisUserClient.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
 // CMySocket
 
+using namespace defineinfo;
 using namespace msg_header;
 
 CClientSocket::CClientSocket(const IPString ipstring, const size_t port)
@@ -19,20 +26,17 @@ CClientSocket::~CClientSocket()
 
 bool CClientSocket::ConnectToServer()
 {
-	if(Connect(CString(m_ipString.GetString()), m_port))
-		SendConnectionInfo();
-	else
-		return false;
+	m_isConnected = Connect(CString(m_ipString.GetString()), m_port)==0;
+	return m_isConnected;
 }
 
-bool CClientSocket::SendConnectionInfo()
+void CClientSocket::OnConnect(int nErrorCode)
 {
+
 	const auto header = Header(Header(BC_DEAD));
 	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
 
-	if(Send((char *)&sendname, sizeof(sendname)) > 0)
-		return true;
-	return false;
+	Send((char *)&sendname, sizeof(sendname));
 }
 
 void CClientSocket::OnClose(int nErrorCode)
@@ -110,7 +114,7 @@ void CClientSocket::OnClose(int nErrorCode)
 void CClientSocket::SelfClose()
 {
 
-	pDoc->Enter = pDoc->Open = false;
+	m_isConnected = false;
 
 	this->ShutDown();
 	this->Close();

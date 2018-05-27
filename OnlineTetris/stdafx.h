@@ -55,3 +55,13 @@
 #endif
 
 
+//¼Ò¸®
+#pragma comment(lib, "winmm")
+#include <MMSystem.h>
+
+#define MAKEINTERSOURCE(i)(LPWSTR)((DWORD)((WORD)(i)))
+
+#include "../Commons/DefineInfo.h"
+#include "../Commons/MessageHeader.h"
+#include "../Commons/structs.h"
+#include "../Commons/Validator.h"

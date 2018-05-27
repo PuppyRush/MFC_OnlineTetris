@@ -9,6 +9,14 @@
 #include "MainFrm.h"
 #include "CliektSocket.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+using namespace defineinfo;
+
 // CMyEdit
 
 IMPLEMENT_DYNAMIC(CMyEdit, CEdit)
@@ -45,12 +53,12 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 
 			if(GetWindowTextLengthW() == 0)
 				return false;
-			else if(pDoc->Open == false && pDoc->Enter == false)
+			else if(!pDoc->m_mySocket->isConnected())
 			{
 				pView->MessageHandler(NOT_OPENNENTER);
 				return false;
 			}
-			else if(pDoc->Open || pDoc->Enter)
+			else if(!pDoc->m_mySocket->isConnected())
 			{
 				char chat[MSG_LEN];
 				char temp[MSG_LEN];

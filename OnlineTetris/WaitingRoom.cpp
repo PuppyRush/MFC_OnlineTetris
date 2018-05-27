@@ -6,6 +6,12 @@
 #include "WaitingRoom.h"
 #include "afxdialogex.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+
+#endif
 // WaitingRoom 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(WaitingRoom, CDialog)

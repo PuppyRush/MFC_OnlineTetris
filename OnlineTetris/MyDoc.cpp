@@ -17,7 +17,11 @@
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
 #endif
+
+using namespace defineinfo;
 
 // CMyDoc
 
@@ -32,7 +36,7 @@ CMyDoc::CMyDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 	srand((unsigned)time(nullptr));
-	End = Ready = Open = Enter = Start = false;
+	End = Ready = Start = false;
 	m_mySocket = nullptr;
 	Map = Level = 1;
 	Bgm = true;
@@ -347,10 +351,8 @@ void CMyDoc::SetReady(mOnReadies rdy)
 			rdynum++;
 	}
 
-	if( (rdynum == Client_EnterUsers.size()) && Open)
+	if( (rdynum == Client_EnterUsers.size()))
 		pView->Btn_Start->EnableWindow(true);
-	else if(Open)
-		pView->Btn_Start->EnableWindow(false);
 
 	pView->VirtualDraw();
 }
@@ -393,7 +395,6 @@ void CMyDoc::SetOrder()
 
 void CMyDoc::ProcessEnter(string name)
 {
-	Open = false;
 	Enter = true;
 	Name = name;
 
@@ -408,7 +409,6 @@ void CMyDoc::ProcessEnter(string name)
 
 void CMyDoc::ProcessClose()
 {
-	Enter = Open = false;
 	pView->MessageHandler(CLOSE_SERVER);
 }
 
@@ -620,13 +620,13 @@ void CMyDoc::Client_ProcessEnd(mOnName on_name)
 			it->second->SetSurvive(true);
 	}
 
-	if(Open)
-	{
-		pView->Btn_Ready->EnableWindow(false);
-		pView->Btn_Start->EnableWindow(true);
-		pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
-	}
-	else if(Enter)
+	//if(Open)
+	//{
+	//	pView->Btn_Ready->EnableWindow(false);
+	//	pView->Btn_Start->EnableWindow(true);
+	//	pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
+	//}
+	if(m_mySocket->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(false);
@@ -659,13 +659,13 @@ void CMyDoc::RestartGame()
 	Ready = false;
 	End = false;
 
-	if(Open)
-	{
-		pView->Btn_Ready->EnableWindow(true);
-		pView->Btn_Start->EnableWindow(true);
-		pView->Btn_Start->SetWindowTextW(_T("시작하기"));
-	}
-	else if(Enter)
+	//if(Open)
+	//{
+	//	pView->Btn_Ready->EnableWindow(true);
+	//	pView->Btn_Start->EnableWindow(true);
+	//	pView->Btn_Start->SetWindowTextW(_T("시작하기"));
+	//}
+	if(m_mySocket->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(true);
