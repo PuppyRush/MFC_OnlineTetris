@@ -37,7 +37,6 @@ CMyDoc::CMyDoc()
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 	srand((unsigned)time(nullptr));
 	End = Ready = Start = false;
-	m_mySocket = nullptr;
 	Map = Level = 1;
 	Bgm = true;
 	LineRemain = 0;
@@ -395,13 +394,12 @@ void CMyDoc::SetOrder()
 
 void CMyDoc::ProcessEnter(string name)
 {
-	Enter = true;
 	Name = name;
 
 	auto tmp = TetrisUserClient::MakeShared(name);
 	Client_UserList.insert( make_pair(name, tmp));
 
-	if(!m_mySocket->Sendname(name.c_str(), name.size()))
+	if(!CClientSocket::GetSocket()->Sendname(name.c_str(), name.size()))
 		pView->MessageHandler(FAIL_SENDMSG);
 
 	pView->Btn_Start->EnableWindow(false);
@@ -456,7 +454,7 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 	ME->FG.Figure = ME->FG.NextFigure = -1;
 
 	pView->CreateFigure();
-	m_mySocket->Sendmapstate();
+	CClientSocket::GetSocket()->Sendmapstate();
 
 	pView->SetTimer(TIMER_SENDMAPSTATE, SENDTIME, nullptr);
 
@@ -626,7 +624,7 @@ void CMyDoc::Client_ProcessEnd(mOnName on_name)
 	//	pView->Btn_Start->EnableWindow(true);
 	//	pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
 	//}
-	if(m_mySocket->isConnected())
+	if(CClientSocket::GetSocket()->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(false);
@@ -665,7 +663,7 @@ void CMyDoc::RestartGame()
 	//	pView->Btn_Start->EnableWindow(true);
 	//	pView->Btn_Start->SetWindowTextW(_T("시작하기"));
 	//}
-	if(m_mySocket->isConnected())
+	if(CClientSocket::GetSocket()->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(true);

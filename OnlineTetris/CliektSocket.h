@@ -11,22 +11,37 @@ class CMyDoc;
 class CClientSocket : public CSocket
 {
 
-
 public:
 
 	CClientSocket(const IPString ipstring, const size_t port);
+	CClientSocket();
 
 	template<class... _Types>
 	static shared_ptr<CClientSocket> GetSocket(_Types&&... _Args)
 	{
-		static auto mysocket = make_shared<CClientSocket>(forward<_Types>(_Args)...);
-		mysocket->Create();
+		static shared_ptr<CClientSocket> mysocket = make_shared<CClientSocket>(forward<_Types>(_Args)...);
+		static bool isCreated = false;
+		
+		if(!isCreated)
+			if(mysocket->Create())
+				isCreated = true;
 		return mysocket;
 	}
 
 public:
 	
 	virtual ~CClientSocket();
+
+	void SetIP(const IPString &ip)
+	{
+		m_ipString = ip;
+	}
+
+	void SetPort(const size_t port)
+	{
+		m_port = port;
+	}
+
 	bool ConnectToServer();
 	virtual void OnConnect(int nErrorCode);
 	virtual void OnReceive(int nErrorCode);
@@ -43,14 +58,10 @@ public:
 	bool ProcessMapsate(mOnMapstate on_map);
 
 	bool isConnected() { return m_isConnected; }
-private:
-	CClientSocket()
-		:m_ipString({ 192,168,0,1 }), m_port(5905)
-	{}
 
 private:
-	const IPString m_ipString;
-	const size_t m_port;
+	IPString m_ipString;
+	size_t m_port;
 	string m_username;
 	bool m_isConnected;
 

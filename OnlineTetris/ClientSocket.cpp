@@ -18,7 +18,11 @@ using namespace defineinfo;
 using namespace msg_header;
 
 CClientSocket::CClientSocket(const IPString ipstring, const size_t port)
-	: m_ipString(ipstring), m_port(port)
+	: m_ipString(ipstring), m_port(port), m_isConnected(false)
+{}
+
+CClientSocket::CClientSocket()
+	: CClientSocket(IPString({192,168,0,1}), 5905)
 {}
 
 CClientSocket::~CClientSocket()
@@ -33,7 +37,7 @@ bool CClientSocket::ConnectToServer()
 void CClientSocket::OnConnect(int nErrorCode)
 {
 
-	const auto header = Header(Header(BC_DEAD));
+	const auto header = Header(Header(ON_NAME));
 	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
 
 	Send((char *)&sendname, sizeof(sendname));
@@ -527,7 +531,7 @@ bool CClientSocket::Sendname(const char *name, int namelen)
 
 	mSendName sendname(Header(ON_NAME), namelen, name);
 
-	if(pDoc->m_mySocket->Send((char *)&sendname, sizeof(sendname)) > 0)
+	if(GetSocket()->Send((char *)&sendname, sizeof(sendname)) > 0)
 		return true;
 	else
 		return false;

@@ -53,12 +53,12 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 
 			if(GetWindowTextLengthW() == 0)
 				return false;
-			else if(!pDoc->m_mySocket->isConnected())
+			else if(!CClientSocket::GetSocket()->isConnected())
 			{
 				pView->MessageHandler(NOT_OPENNENTER);
 				return false;
 			}
-			else if(!pDoc->m_mySocket->isConnected())
+			else if(!CClientSocket::GetSocket()->isConnected())
 			{
 				char chat[MSG_LEN];
 				char temp[MSG_LEN];
@@ -81,7 +81,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, temp);
 
 				mSendMessage msg(Header(SEND_MESSAGE), strlen(chat), chat);
-				pDoc->m_mySocket->Send((char *)&msg, sizeof(msg));
+				CClientSocket::GetSocket()->Send((char *)&msg, sizeof(msg));
 				Sleep(50);
 			}
 		}

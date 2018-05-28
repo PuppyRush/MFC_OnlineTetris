@@ -37,7 +37,6 @@ public:
 	bool Ghost;			//낙하예상지점 옵션
 	bool Bgm;
 	bool Gravity;		//중력모드
-	CClientSocket *m_mySocket;
 	CMyView *pView;
 
 	std::list<string> Client_EnterUsers;
