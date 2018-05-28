@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "OnlineTetris.h"
 #include "MySocket.h"
-#include "TUser.h"
+#include "TetrisUserClient.h"
 
 // CMySocket
 
@@ -112,7 +112,7 @@ void CMySocket::OnReceive(int nErrorCode)
 	if(pView == NULL || pDoc == NULL)
 		return;
 
-	TUser *usertmp = NULL;
+	TetrisUser *usertmp = NULL;
 	CString str;
 	int res = -1;
 	DWORD PacketLen = 0;

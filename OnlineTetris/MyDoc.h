@@ -7,7 +7,7 @@
 #include <list>
 #include <deque>
 #include <map>
-#include "TUser.h"
+#include "TetrisUserClient.h"
 #include "../Commons/MessageHeader.h"
 #include "ServerSocket.h"
 
@@ -47,9 +47,9 @@ public:
 	string ServerIp;
 	string ChatLog;
 	
-	std::map<string, SHR_USR > Client_UserList;
+	std::map<string, SHR_USRC > Client_UserList;
 	//std::map<string,CMySocket> SocketList;
-	TUser *ME;
+	TetrisUser *ME;
 
 	string Name;
 
@@ -71,12 +71,10 @@ public:
 public:
 	virtual ~CMyDoc();
 
-	SHR_USR NameToTUser(string name);
-	SHR_USR Client_NameToTUser(string name);
+	SHR_USRC Client_NameToTUser(string name);
 	void CreateRoot();
 	string GetServerIP();
 	void AddChat(const char *msg,const int msglen);
-	bool Adduser(const char *name, CMySocket *soc);
 	void SetEnterUsers(mOnNames names);
 	void SetReady(mOnReadies rdy);
 	void SetOrder();
@@ -87,7 +85,6 @@ public:
 	void Client_ProcessEnd(mOnName on_name);
 	void ProcessDead(mOnName on_name);
 	void Client_ProcessStart(mOnStartsignal on_start);
-	//void Server_ProceeStart();
 	void RestartGame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;

@@ -15,7 +15,8 @@
 using namespace std;
 using namespace server_manager;
 
-int main(){
+int main()
+{
 
 	pthread_t server_main_thd_th=0;
 	ServerManager sm;

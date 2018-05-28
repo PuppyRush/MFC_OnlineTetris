@@ -5,8 +5,12 @@
  *      Author: cmk
  */
 
-#include "ServerManager.h"
+
+#include <memory.h>
 #include <functional>
+
+#include "ServerManager.h"
+#include "MessageHeader.h"
 
 using namespace std;
 using namespace server_manager;
@@ -63,8 +67,9 @@ void* ServerManager::BeginServer(){
 
 		}
 
+		connectionThreadParam param(cliaddr,accepted_socket);
 		pthread_t tid=0;
-		if((status = pthread_create(&tid, nullptr, &ServerManager::AcceptAndWaitConnectionClient, &accepted_socket)) != 0)
+		if((status = pthread_create(&tid, nullptr, &ServerManager::AcceptAndWaitConnectionClient, &param)) != 0)
 		{
 			printf("%d thread create error: %s\n", 0, strerror(status));
 			exit(0);
@@ -77,20 +82,32 @@ void* ServerManager::BeginServer(){
 
 }
 
-void* ServerManager::AcceptAndWaitConnectionClient(void* sock_)
+void* ServerManager::AcceptAndWaitConnectionClient(void* _sockParam)
 {
+	using namespace msg_header;
+
 	const size_t buflen = 256;
-	int sockfd = *reinterpret_cast<int *>(sock_);
+	const auto sockParam = *reinterpret_cast<connectionThreadParam *>(_sockParam);
 	char buf[buflen];
 	memset(buf,0,buflen);
 	while(1)
 	{
-		auto readn = read(sockfd, buf, buflen);
+		auto readn = read(sockParam.clientSocket, buf, buflen);
 		if(readn <= 0)
 		{
 			perror("Read Error");
 			return NULL;
 		}
+
+		auto Buffer = new char[readn];
+
+		int header[HEADER_NUM] = {0};
+		memcpy(header, Buffer, sizeof(size_t)*HEADER_NUM);
+
+		mOnName onName;
+		memset( &onName, 0, sizeof(onName));
+		memcpy(&onName, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+
 		/*writen = write(sockfd, buf, readn);
 		if(readn != writen)
 		{

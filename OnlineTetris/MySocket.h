@@ -10,9 +10,10 @@ class CMyDoc;
 
 class CMySocket : public CSocket
 {
-public:
-
-	using SHR_SVRSOC = shared_ptr<CServerSocket>;
+private:
+	CMySocket()
+		:m_ipString({192,168,0,1})
+	{}
 
 public:
 

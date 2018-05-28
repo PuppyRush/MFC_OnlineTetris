@@ -25,4 +25,5 @@ CPP_DEPS :=
 SUBDIRS := \
 . \
 Server \
+Server/Room \
 

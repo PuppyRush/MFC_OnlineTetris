@@ -8,6 +8,7 @@ RM := rm
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Server/Room/subdir.mk
 -include Server/subdir.mk
 -include subdir.mk
 -include objects.mk
@@ -38,22 +39,26 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: 
+all: TetrisServer
+
+dependents:
+	-cd /home/pi/workspace/OnlineTetris/Commons/Default && $(MAKE) all
 
 # Tool invocations
-: $(OBJS) $(USER_OBJS)
+TetrisServer: $(OBJS) $(USER_OBJS) /home/pi/workspace/OnlineTetris/Commons/Default/libCommons.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	g++  -o  $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/pi/workspace/OnlineTetris/Commons/Default" -o "TetrisServer" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) 
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) TetrisServer
 	-@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY:
+/home/pi/workspace/OnlineTetris/Commons/Default/libCommons.so:
 
 -include ../makefile.targets

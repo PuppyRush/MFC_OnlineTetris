@@ -4,12 +4,14 @@
 
 #pragma once
 
+#include "..\Commons\structs.h"
+
 class CMyDoc;
 class ServerDialog;
 class CMyEdit;
 class OptionDialog;
 class CMyButton;
-class TUser;
+class TetrisUser;
 
 class CMyView : public CView
 {
@@ -32,7 +34,7 @@ public:
 	CMyButton *Btn_Ready;
 	CEdit Edt_ChatEdit;
 
-	TUser *ME;
+	TetrisUser *ME;
 	CMyEdit *Edt_InputEdit;
 	CListBox Lst_EnterList;
 	CMyDoc *pDoc;
