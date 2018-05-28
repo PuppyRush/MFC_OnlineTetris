@@ -4,6 +4,8 @@
 #include "afxdialogex.h"
 #include "OnlineTetris.h"
 #include "../Commons/structs.h"
+#include "../Commons/Validator.h"
+#include "StringManager.h"
 
 #include <regex>
 

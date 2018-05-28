@@ -28,9 +28,10 @@ public:
 			ip.append(std::to_string(static_cast<long>(b)));
 			ip.append(".");
 		}
+		ip.pop_back();
 	}
 
-	const char* GetString()
+	const char* GetString() const
 	{
 		return ip.c_str();
 	}

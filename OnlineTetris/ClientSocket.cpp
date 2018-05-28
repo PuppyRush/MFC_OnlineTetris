@@ -6,12 +6,23 @@
 #include "CliektSocket.h"
 #include "TetrisUserClient.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
 // CMySocket
 
+using namespace defineinfo;
 using namespace msg_header;
 
 CClientSocket::CClientSocket(const IPString ipstring, const size_t port)
-	: m_ipString(ipstring), m_port(port)
+	: m_ipString(ipstring), m_port(port), m_isConnected(false)
+{}
+
+CClientSocket::CClientSocket()
+	: CClientSocket(IPString({192,168,0,1}), 5905)
 {}
 
 CClientSocket::~CClientSocket()
@@ -19,20 +30,17 @@ CClientSocket::~CClientSocket()
 
 bool CClientSocket::ConnectToServer()
 {
-	if(Connect(CString(m_ipString.GetString()), m_port))
-		SendConnectionInfo();
-	else
-		return false;
+	m_isConnected = Connect(CString(m_ipString.GetString()), m_port)==0;
+	return m_isConnected;
 }
 
-bool CClientSocket::SendConnectionInfo()
+void CClientSocket::OnConnect(int nErrorCode)
 {
-	const auto header = Header(Header(BC_DEAD));
+
+	const auto header = Header(Header(ON_NAME));
 	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
 
-	if(Send((char *)&sendname, sizeof(sendname)) > 0)
-		return true;
-	return false;
+	Send((char *)&sendname, sizeof(sendname));
 }
 
 void CClientSocket::OnClose(int nErrorCode)
@@ -110,7 +118,7 @@ void CClientSocket::OnClose(int nErrorCode)
 void CClientSocket::SelfClose()
 {
 
-	pDoc->Enter = pDoc->Open = false;
+	m_isConnected = false;
 
 	this->ShutDown();
 	this->Close();
@@ -523,7 +531,7 @@ bool CClientSocket::Sendname(const char *name, int namelen)
 
 	mSendName sendname(Header(ON_NAME), namelen, name);
 
-	if(pDoc->m_mySocket->Send((char *)&sendname, sizeof(sendname)) > 0)
+	if(GetSocket()->Send((char *)&sendname, sizeof(sendname)) > 0)
 		return true;
 	else
 		return false;

@@ -167,6 +167,9 @@
     <ClInclude Include="CliektSocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="StringManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OnlineTetris.cpp">
@@ -203,6 +206,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ClientSocket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StringManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

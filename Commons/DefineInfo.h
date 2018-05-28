@@ -1,88 +1,91 @@
 
-#define CSTRTCH (LPSTR)(LPCTSTR) 
+#pragma once
 
-typedef enum USER_MSG
+namespace defineinfo
 {
 
-	SUCC_SERVEROPEN=0,
-	FAIL_SERVEROPEN,
-	PREUSE_PORT,
-	SUCC_SERVERCONN,
-	FAIL_SERVERCONN,
-	EXCESS_ENTER,
-	FAIL_ACCEPT,
-	NOT_READY,
-	FAIL_SENDMSG,
-	FAIL_FINDNAME,
-	DUP_ID,
-	NOT_OPENNENTER,
-	NOT_ALLREADY,
-	CLOSE_SERVER
-};
+	typedef enum USER_MSG
+	{
 
-typedef enum CLIENT_MSG
-{
-	//클라이언트가 받을 메세지
-	PER_NAME=100,
-	SEND_MESSAGE,
-	ADD_USERS,
-	ON_READY,
-	EXIT_USER,
-	FAIL_ENTER,
-	START_SIGNAL,
-	END_SIGNAL,
-	RESTART_SIGNAL,
-	ON_MAPSTATES,
-	ON_MAPSTATE,
-	ON_ADDLINE
+		SUCC_SERVEROPEN = 0,
+		FAIL_SERVEROPEN,
+		PREUSE_PORT,
+		SUCC_SERVERCONN,
+		FAIL_SERVERCONN,
+		EXCESS_ENTER,
+		FAIL_ACCEPT,
+		NOT_READY,
+		FAIL_SENDMSG,
+		FAIL_FINDNAME,
+		DUP_ID,
+		NOT_OPENNENTER,
+		NOT_ALLREADY,
+		CLOSE_SERVER
+	};
 
-};
+	typedef enum CLIENT_MSG
+	{
+		//클라이언트가 받을 메세지
+		PER_NAME = 100,
+		SEND_MESSAGE,
+		ADD_USERS,
+		ON_READY,
+		EXIT_USER,
+		FAIL_ENTER,
+		START_SIGNAL,
+		END_SIGNAL,
+		RESTART_SIGNAL,
+		ON_MAPSTATES,
+		ON_MAPSTATE,
+		ON_ADDLINE
+
+	};
 
 
-typedef enum SERVER_MSG
-{
-	//서버가 받을 메세지
-	ON_NAME=300,
-	ON_MESSAGE,
-	PER_READY,
-	BC_MAPSTATES,		//BROADCAST
-	BC_MAPSTATE,
-	BC_DEAD,
-	BC_ADDLINE,
-	BC_RESTART
-};
+	typedef enum SERVER_MSG
+	{
+		//서버가 받을 메세지
+		ON_NAME = 300,
+		ON_MESSAGE,
+		PER_READY,
+		BC_MAPSTATES,		//BROADCAST
+		BC_MAPSTATE,
+		BC_DEAD,
+		BC_ADDLINE,
+		BC_RESTART
+	};
 
-typedef enum MAP
-{
-	STAIRWAY =0,
-	PYRAMID,
-	RAIN,
-	LINE,
-	RANDOMFIG,
-	RANDOMSEL,
-	
-};
+	typedef enum MAP
+	{
+		STAIRWAY = 0,
+		PYRAMID,
+		RAIN,
+		LINE,
+		RANDOMFIG,
+		RANDOMSEL,
 
-typedef enum TETRIS_FIGURE
-{
-	 JMINO=2,	
-	 LMINO,
-	 OMINO,
-	 TMINO,	
-	 SMINO,
-	 ZMINO,
-	 IMINO,
-	 GMINO,
-};
+	};
 
-typedef enum ETC
-{
-	TOLEFT=0,
-	TORIGHT
-};
+	typedef enum TETRIS_FIGURE
+	{
+		JMINO = 2,
+		LMINO,
+		OMINO,
+		TMINO,
+		SMINO,
+		ZMINO,
+		IMINO,
+		GMINO,
+	};
 
-////////////////////////////////////////////////////////////////////////////////
-//길이정의
+	typedef enum ETC
+	{
+		TOLEFT = 0,
+		TORIGHT
+	};
+
+	////////////////////////////////////////////////////////////////////////////////
+	//길이정의
 #define WIN_WIDTH			1250	//윈도우 화면 크기
 #define	WIN_HEIGHT			1000
 #define MAIN_WIDTH			250		//메인테트리스 화면 크기
@@ -127,16 +130,6 @@ typedef enum ETC
 #define TIMER_NEXTLEVEL		3
 
 
-//소리
-#pragma comment(lib, "winmm")
-#include <MMSystem.h>
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 
-
-#define MAKEINTERSOURCE(i)(LPWSTR)((DWORD)((WORD)(i)))
+}
