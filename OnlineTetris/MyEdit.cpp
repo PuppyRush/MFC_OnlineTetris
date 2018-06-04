@@ -81,7 +81,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, temp);
 
 				mSendMessage msg(Header(SEND_MESSAGE), strlen(chat), chat);
-				CClientSocket::GetSocket()->Send((char *)&msg, sizeof(msg));
+				CClientSocket::GetSocket()->pushMessage(&msg);
 				Sleep(50);
 			}
 		}

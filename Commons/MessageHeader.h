@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cassert>
+#include <iterator>
+
 #include "DefineInfo.h"
 #include "structs.h"
 
 #undef GetMessage
-
 namespace msg_header
 {
 
@@ -13,13 +14,16 @@ namespace msg_header
 //msg_idx//클라이언트 혹은 서버가 받을 메세지
 //IsServer//메세지를 받을 주체가 서버인지 클라이언트 인지?
 
+struct client{};
+struct server{};
+
 template <class T>
 static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t srclen)
 {
 	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
-	std::copy_n(src, srclen, dest);
+	std::copy_n(src, srclen, stdext::checked_array_iterator<T *>(dest,destlen));
 }
 
 template <class T, size_t SIZE1, size_t SIZE2>
@@ -31,7 +35,7 @@ static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
 
 	for (size_t i = 0; i < src_dimension1; i++)
-		std::copy_n(src[i], src_dimension2, dest[i]);
+		std::copy_n(src[i], src_dimension2, stdext::checked_array_iterator<T *>(dest[i], sizeof(dest[i])) );
 }
 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
@@ -44,8 +48,11 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2*SIZE3);
 
 	for (size_t i = 0; i < src_dimension1; i++)
-		for (int l=0 ; l < src_dimension2 ; l++)
-			std::copy_n(src[i][l], src_dimension3, dest[i][l]);
+		for(size_t l = 0; l < src_dimension2; l++)
+		{
+			auto destit = stdext::checked_array_iterator<T *>(dest[i][l], sizeof(dest[i][l]));
+			std::copy_n(src[i][l], src_dimension3,destit );
+		}
 }
 
 typedef struct Header
@@ -121,7 +128,7 @@ typedef struct mSendMessage :public Header
 
 		char *msg = new char[MSG_LEN];
 		memset(msg, 0, sizeof(char)*MSG_LEN);
-		strcat(msg, _msg);
+		strcat_s(msg, MSG_LEN, _msg);
 			
 		return mSendMessage(Header(defineinfo::ON_MESSAGE), len, _msg);
 	}

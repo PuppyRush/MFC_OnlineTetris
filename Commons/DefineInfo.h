@@ -46,6 +46,7 @@ namespace defineinfo
 	{
 		//서버가 받을 메세지
 		ON_NAME = 300,
+		ON_CONNECTION_INFO,
 		ON_MESSAGE,
 		PER_READY,
 		BC_MAPSTATES,		//BROADCAST
@@ -123,13 +124,11 @@ namespace defineinfo
 #define HORNUM	10
 
 //기타정의
-#define PORTNUM	7000
+#define PACKET_LEN 512	
+#define PORTNUM	5905
 #define TIMER_TETRIS		1
 #define	TIMER_SENDMAPSTATE	2
 #define SENDTIME			50		//timer
 #define TIMER_NEXTLEVEL		3
-
-
-
 
 }

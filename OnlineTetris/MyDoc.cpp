@@ -325,10 +325,10 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 			Client_UserList.insert(make_pair(name, TetrisUserClient::MakeShared(name)));
 	}
 
-	ME = Client_NameToTUser(Name).get();
-	pView->ME = ME;
-	if(ME == nullptr)
-		pView->MessageHandler(FAIL_FINDNAME);
+	//ME = Client_NameToTUser(Name).get();
+	//pView->ME = ME;
+	//if(ME == nullptr)
+	//	pView->MessageHandler(FAIL_FINDNAME);
 }
 
 void CMyDoc::SetReady(mOnReadies rdy)
@@ -399,8 +399,7 @@ void CMyDoc::ProcessEnter(string name)
 	auto tmp = TetrisUserClient::MakeShared(name);
 	Client_UserList.insert( make_pair(name, tmp));
 
-	if(!CClientSocket::GetSocket()->Sendname(name.c_str(), name.size()))
-		pView->MessageHandler(FAIL_SENDMSG);
+	CClientSocket::GetSocket()->Sendname(name.c_str(), name.size());
 
 	pView->Btn_Start->EnableWindow(false);
 }
@@ -451,7 +450,8 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 		break;
 	}
 
-	ME->FG.Figure = ME->FG.NextFigure = -1;
+	auto &FG = TetrisUserClient::GetMe()->FG;
+	FG.Figure = FG.NextFigure = -1;
 
 	pView->CreateFigure();
 	CClientSocket::GetSocket()->Sendmapstate();
@@ -649,11 +649,13 @@ void CMyDoc::RestartGame()
 		memset(board, 0, sizeof(board));
 	}
 
-	ME->SetReady(false);
-	ME->SetSurvive(true);
-	memset(ME->GameBoard, 0, sizeof(ME->GameBoard));
-	memset(ME->FixedBoard, 0, sizeof(ME->FixedBoard));
-	memset(ME->NextFigureBoard, 0, sizeof(ME->NextFigureBoard));
+	auto me = TetrisUserClient::GetMe();
+
+	me->SetReady(false);
+	me->SetSurvive(true);
+	memset(me->GameBoard, 0, sizeof(me->GameBoard));
+	memset(me->FixedBoard, 0, sizeof(me->FixedBoard));
+	memset(me->NextFigureBoard, 0, sizeof(me->NextFigureBoard));
 	Ready = false;
 	End = false;
 

@@ -1,0 +1,99 @@
+#pragma once
+
+#include <functional>
+#include <string>
+#include <queue>
+
+#include <thread>
+#include <mutex>
+
+#include "DefineInfo.h"
+#include "Logger.h"
+#include "MessageHeader.h"
+
+using namespace std;
+using namespace defineinfo;
+
+namespace tetris_socket
+{
+
+class TetrisSocket
+{
+
+public:
+
+	TetrisSocket() = delete;
+	~TetrisSocket();
+	explicit TetrisSocket(const int domain, const int type, const int protocol);
+
+	virtual unsigned create(const IPString ip, const unsigned port) = 0;
+	virtual unsigned listen() = 0;
+	
+	static auto getBuffer()
+	{
+		auto msg = new char[PACKET_LEN]{1};
+		return msg;
+	}
+
+	template <class T>
+	inline	void pushMessage(T *msg)
+	{
+		assert(PACKET_LEN > sizeof(msg));
+
+		auto dest = getBuffer();
+		memcpy(dest, msg, PACKET_LEN);
+
+		m_sendQ.push(make_pair(static_cast<const char*>(dest), sizeof(T)));
+	}
+	inline auto popMessage()
+	{
+		if(m_recvQ.empty())
+		{
+			auto msg = m_recvQ.front();
+			m_recvQ.pop();
+			auto msgptr = shared_ptr<const char>(msg.first,
+				[](const char* msg){delete[] msg; });
+			return make_pair(msgptr, msg.second);
+		}
+	}
+
+	unsigned connect();
+	unsigned accept();
+	unsigned close();
+
+	void SetIP(const IPString &ip);
+	void SetPort(const unsigned port);
+
+protected:
+
+	const int m_domain;
+	const int m_type;
+	const int m_protocol;
+
+	IPString m_ip;
+	unsigned m_port;
+
+	virtual unsigned _accept() = 0;
+	virtual unsigned _connect() = 0;
+	virtual unsigned _close() = 0;
+
+	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
+	virtual pair<const char*,const size_t> _recvFrom() = 0;
+	void send();
+	void recv();
+
+private:
+	shared_ptr< std::thread> m_recvThread;
+	shared_ptr< std::thread> m_sendThread;
+	bool m_closeSocket;
+
+	std::queue<std::pair<const char*, const size_t>> m_recvQ;
+	std::queue<std::pair<const char*, const size_t>> m_sendQ;
+	
+	void _run();
+	void _end();
+
+};
+
+
+}

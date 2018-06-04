@@ -5,6 +5,7 @@
 #include "OnlineTetris.h"
 #include "../Commons/structs.h"
 #include "../Commons/Validator.h"
+#include "CliektSocket.h"
 #include "StringManager.h"
 
 #include <regex>
