@@ -1429,15 +1429,6 @@ void CMyView::OnMenuServer()
 		auto dlg = ServerDialog::GetDialog();
 		dlg->DoModal();
 
-		CClientSocket::GetSocket()->SetIP(dlg->ipstring);
-		CClientSocket::GetSocket()->SetPort(dlg->portnum);
-
-		if (CClientSocket::GetSocket()->ConnectToServer())
-		{
-			auto wdlg = WaitingRoom::GetDialog();
-			wdlg->DoModal();
-		}
-
 	}
 }
 

@@ -17,38 +17,43 @@ static char THIS_FILE[] = __FILE__;
 using namespace defineinfo;
 using namespace msg_header;
 
-CClientSocket::CClientSocket(const IPString ipstring, const size_t port)
-	: m_ipString(ipstring), m_port(port), m_isConnected(false)
-{}
-
 CClientSocket::CClientSocket()
-	: CClientSocket(IPString({192,168,0,1}), 5905)
+	:SocketImpl(AF_INET, SOCK_STREAM, 0),
+	m_isConnected(false)
+{
+
+}
+
+CClientSocket::CClientSocket(const int domain, const int type, const int protocol)
+	:SocketImpl(domain, type, protocol),
+	m_isConnected(false)
 {}
 
 CClientSocket::~CClientSocket()
 {}
 
-bool CClientSocket::ConnectToServer()
+void CClientSocket::createThread()
 {
-	m_isConnected = Connect(CString(m_ipString.GetString()), m_port)==0;
-	return m_isConnected;
+	const auto recvTh = &CClientSocket::recvMsg;
+	m_msgThread = std::thread(recvTh, this);
+	m_msgThread.join();
 }
 
-void CClientSocket::OnConnect(int nErrorCode)
+void CClientSocket::Connect(const IPString ip, const unsigned port)
 {
-
-	const auto header = Header(Header(ON_NAME));
-	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
-
-	Send((char *)&sendname, sizeof(sendname));
+	auto socket = CClientSocket::GetSocket();
+	socket->create(ip, port);
+	if(socket->connect() == 0)
+	{
+		const auto me = TetrisUserClient::GetMe();
+		const auto header = Header(ON_CONNECTION_INFO);
+		const mSendName sendname(header, me->GetUserName().size(), me->GetUserName().c_str());
+		pushMessage(&sendname);
+	}
 }
 
-void CClientSocket::OnClose(int nErrorCode)
-{
-
-	if(pDoc == NULL)
-		return;
-
+//void CClientSocket::OnClose(int nErrorCode)
+//{
 	//TUser *user = pDoc->SocketToTUser(this);
 	//
 	////서버에서 먼저 닫히는경우.
@@ -111,101 +116,32 @@ void CClientSocket::OnClose(int nErrorCode)
 	//if(!Broadcast( &sendmsg, ON_MESSAGE))
 	//	pView->MessageHandler(FAIL_SENDMSG);
 
-	pView->VirtualDraw();
-}
+	//pView->VirtualDraw();
+//}
 
 
 void CClientSocket::SelfClose()
 {
 
 	m_isConnected = false;
-
-	this->ShutDown();
-	this->Close();
-
+	close();
 }
 
-void CClientSocket::OnReceive(int nErrorCode)
+void CClientSocket::recvMsg()
 {
-	if(pView == NULL || pDoc == NULL)
-		return;
+	while(m_isConnected)
+	{
+		const auto msg = popMessage();
 
-	TetrisUser *usertmp = NULL;
-	CString str;
-	int res = -1;
-	DWORD PacketLen = 0;
-	char *Buffer;
-	int msg = 0;
-	int header[HEADER_NUM] = {0};
+		int header[2] = {0,0};
+		memcpy(header, msg.first.get() , sizeof(int) * 2);
 
-	//클라이언트에서 보낸 패킷의 크기를 얻기 위한 함수
-	this->IOCtl(FIONREAD, &PacketLen);
-	Buffer = new char[PacketLen];
+		const size_t msgidx = header[0];
 
-	Receive(Buffer, PacketLen);
-	memcpy(header, Buffer, sizeof(size_t)*HEADER_NUM);
+	}
 
-	////서버가 받을 메세지
-	//if( header[0]){
-	//	
-	//	switch(header[1]){
-	//		
-	//		//서버를 포함하여 클라이언트가 접속하면 최초 수행되는 메세지
-	//		//클라이언트가 접속 후 이름없는 TUser객체 생성하고 동시에 이름을 보낸다
-	//		case ON_NAME:
-	//			
-	//			memset( &on_name, 0, sizeof(on_name));
-	//			memcpy(&on_name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-	//			if(pDoc->Adduser( on_name.name, on_name.namelen, this))
-	//				if(!Broadcast( NULL, ADD_USERS))
-	//					pView->MessageHandler(FAIL_SENDMSG);
-	//					
-	//			break;
-	//		 		
-	//		case SEND_MESSAGE:
-	//			memset(&on_msg, 0 , sizeof(on_msg));
-	//			memcpy(&on_msg, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
-	//			if(!Broadcast( &on_msg, ON_MESSAGE))
-	//				pView->MessageHandler(FAIL_SENDMSG);
-	//
-	//			break;
-	//
-	//		case PER_READY:
-	//			memset(&on_ready, 0 , sizeof(on_ready));
-	//			memcpy(&on_ready, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
-	//			if(!ProcessReady(on_ready))
-	//				pView->MessageHandler(-1);
-	//			if(!Broadcast( NULL, ON_READY))
-	//				pView->MessageHandler(FAIL_SENDMSG);
-	//
-	//			break;
-	//
-	//		case BC_MAPSTATE:
-	//			memset(&on_map, 0 , sizeof(on_map));
-	//			memcpy(&on_map, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
-	//			Broadcast( &on_map, ON_MAPSTATE);
-	//			break;
-	//
-	//		case BC_DEAD:
-	//			memset(&on_name, 0 , sizeof(on_name));
-	//			memcpy(&on_name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
-	//			pDoc->ProcessDead(on_name);
-	//			break;
-	//		case BC_ADDLINE:
-	//			memset(&on_line, 0 , sizeof(on_line));
-	//			memcpy(&on_line, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);	
-	//			Broadcast( &on_line, ON_ADDLINE);
-	//			break;
-	//		case BC_RESTART:
-	//			Broadcast( NULL, RESTART_SIGNAL);
-	//			break;
-	//	}
-	//
-	//}
-	////클라이언트가 받을 메세지(서버도 하나의 클라이언트로 정의)
-	//else{
-
-	switch(header[0])
+	
+	/*switch(msgidx)
 	{
 
 	case PER_NAME:
@@ -293,12 +229,16 @@ void CClientSocket::OnReceive(int nErrorCode)
 	{
 		pDoc->RestartGame();
 	}
+
+	default:
+		;
+
 	break;
 	}
-
+*/
 }
 
-bool CClientSocket::Broadcast(void* strc, int msgidx)
+void CClientSocket::Broadcast(void* strc, int msgidx)
 {
 
 	//POSITION pos = pDoc->Server_UserList.GetHeadPosition();
@@ -522,48 +462,31 @@ bool CClientSocket::Broadcast(void* strc, int msgidx)
 	//}//switch
 	//
 	//
-	return false;
 
 }
 
-bool CClientSocket::Sendname(const char *name, int namelen)
+void CClientSocket::Sendname(const char *name, int namelen)
 {
 
 	mSendName sendname(Header(ON_NAME), namelen, name);
-
-	if(GetSocket()->Send((char *)&sendname, sizeof(sendname)) > 0)
-		return true;
-	else
-		return false;
+	pushMessage(&sendname);
 }
 
-bool CClientSocket::Sendmapstate()
+void CClientSocket::Sendmapstate()
 {
-	if(pDoc == NULL)
-		return false;
-
 	auto h = Header(BC_MAPSTATE);
-	mSendMapstate mapstate(h, pDoc->Name.size(), pDoc->Name.c_str(), pDoc->ME->FixedBoard, pDoc->ME->FG.Figure, pDoc->ME->FG.FgInfo);
+	mSendMapstate mapstate(h, m_me.GetUserName().size() , m_me.GetUserName().c_str() , m_me.FixedBoard, m_me.FG.Figure, m_me.FG.FgInfo);
 
-	if(Send((char *)&mapstate, sizeof(mapstate)) > 0)
-		return true;
-	else
-		return false;
-
-	return false;
+	pushMessage(&mapstate);
 }
 
-bool CClientSocket::Sendready(bool ready)
+void CClientSocket::Sendready(bool ready)
 {
-	mSendReady sendready(Header(PER_READY), pDoc->Name.size(), pDoc->Name.c_str(), pDoc->Ready);
-
-	if(Send((char *)&sendready, sizeof(sendready)) <= 0)
-	{
-		return false;
-	}
+	mSendReady sendready(Header(PER_READY), m_me.GetUserName().size() , m_me.GetUserName().c_str(), m_me.GetReady());
+	pushMessage(&sendready);
 }
 
-bool CClientSocket::ProcessReady(mOnReady rdy)
+void CClientSocket::ProcessReady(mOnReady rdy)
 {
 	//const auto name = string(rdy.fromname);
 	//auto user = pDoc->NameToTUser(name);
@@ -571,10 +494,9 @@ bool CClientSocket::ProcessReady(mOnReady rdy)
 	//	return false;
 	//
 	//user->SetReady(rdy.ready);
-	return true;
 }
 
-bool CClientSocket::ProcessMapsate(mOnMapstate on_map)
+void CClientSocket::ProcessMapsate(mOnMapstate on_map)
 {
 
 	//static CStringArray AsyncSend;
@@ -610,41 +532,30 @@ bool CClientSocket::ProcessMapsate(mOnMapstate on_map)
 	//	AsyncSend.RemoveAll();
 	//}
 	//
-	return false;
+
 }
 
-bool CClientSocket::SendDead()
+void CClientSocket::SendDead()
 {
 	const auto header = Header(Header(BC_DEAD));
-	const mSendName sendname(header, pDoc->Name.size(), pDoc->Name.c_str());
-
-	if(Send((char *)&sendname, sizeof(sendname)) > 0)
-		return true;
-	return false;
+	const mSendName sendname(header, m_me.GetUserName().size(), m_me.GetUserName().c_str());
+	pushMessage(&sendname);
 }
 
-bool CClientSocket::SendRestart()
+void CClientSocket::SendRestart()
 {
 	mSendPermit permit(Header(BC_RESTART), -1);
-
-	if(Send(&permit, sizeof(permit)) > 0)
-		return true;
-	else
-		return false;
-
-	return false;
+	pushMessage(&permit);
 }
 
 //자기 제외하고 두줄 추가하기
 //isSelf에 따라 자기자신도 더할지 판단
-bool CClientSocket::SendLine(int num = 1, bool isSelf = true)
+void CClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{
-		mSendAddline addline(Header(BC_ADDLINE), pDoc->Name.size(), pDoc->Name.c_str(), num);
-
-		if(Send((char *)&addline, sizeof(addline)) > 0)
-			return true;
+		const auto name = m_me.GetUserName();
+		mSendAddline addline(Header(BC_ADDLINE), name.size(), name.c_str(), num);
+		pushMessage(&addline);
 	}
-	return false;
 }
