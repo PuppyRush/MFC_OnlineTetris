@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
-
+#include "MessageHeader.h"
 #include "Server/ServerManager.h"
 
 using namespace std;
@@ -17,6 +17,7 @@ using namespace server_manager;
 
 int main()
 {
+
 
 	pthread_t server_main_thd_th=0;
 	ServerManager sm;

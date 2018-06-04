@@ -4,6 +4,8 @@
 #include "afxdialogex.h"
 #include "OnlineTetris.h"
 #include "../Commons/structs.h"
+#include "../Commons/Validator.h"
+#include "StringManager.h"
 
 #include <regex>
 
@@ -13,35 +15,41 @@ class CMyView;
 class ServerDialog : public CDialogEx
 {
 	DECLARE_DYNAMIC(ServerDialog)
-
 public:
-	ServerDialog(CWnd* pParent = NULL);   
 	virtual ~ServerDialog();
 
-	enum { IDD = _DLG_SERVER };
-
 protected:
+
+	ServerDialog(CWnd* pParent = NULL);
+	
+
+	enum
+	{
+		IDD = _DLG_SERVER
+	};
+
 	virtual void DoDataExchange(CDataExchange* pDX);   
 
 	DECLARE_MESSAGE_MAP()
 public:
-	CButton Edt_Create;
+//	CButton Edt_Create;
 	CEdit Edt_Entername;
 	CIPAddressCtrl Edt_Serverip;
 	CEdit Edt_Servername;
 	CEdit Edt_Serverport;
-	CEdit Edt_Roomname;
-	CEdit Edt_Portnum;
 
 	string username;
-	string roomname;
 	IPString ipstring;
 	size_t portnum;
 
-	bool isValidationMakeRoomInfo;
-	bool isValidationEnterRoomInfo;
+public:
 
-	afx_msg void OnBnClickedBtnCreate();
+	static shared_ptr<ServerDialog> GetDialog()
+	{
+		static auto dlg = shared_ptr<ServerDialog>(new ServerDialog());
+		return dlg;
+	}
+
 	afx_msg void OnBnClickedBtnEnter();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClose();

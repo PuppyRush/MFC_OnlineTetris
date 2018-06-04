@@ -11,13 +11,17 @@
 
 #include "MyDoc.h"
 #include "MyListen.h"
-#include "MySocket.h"
+#include "CliektSocket.h"
 #include "MyButton.h"
 #include <propkey.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
 #endif
+
+using namespace defineinfo;
 
 // CMyDoc
 
@@ -32,8 +36,7 @@ CMyDoc::CMyDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 	srand((unsigned)time(nullptr));
-	End = Ready = Open = Enter = Start = false;
-	m_mySocket = nullptr;
+	End = Ready = Start = false;
 	Map = Level = 1;
 	Bgm = true;
 	LineRemain = 0;
@@ -347,10 +350,8 @@ void CMyDoc::SetReady(mOnReadies rdy)
 			rdynum++;
 	}
 
-	if( (rdynum == Client_EnterUsers.size()) && Open)
+	if( (rdynum == Client_EnterUsers.size()))
 		pView->Btn_Start->EnableWindow(true);
-	else if(Open)
-		pView->Btn_Start->EnableWindow(false);
 
 	pView->VirtualDraw();
 }
@@ -393,14 +394,12 @@ void CMyDoc::SetOrder()
 
 void CMyDoc::ProcessEnter(string name)
 {
-	Open = false;
-	Enter = true;
 	Name = name;
 
 	auto tmp = TetrisUserClient::MakeShared(name);
 	Client_UserList.insert( make_pair(name, tmp));
 
-	if(!m_mySocket->Sendname(name.c_str(), name.size()))
+	if(!CClientSocket::GetSocket()->Sendname(name.c_str(), name.size()))
 		pView->MessageHandler(FAIL_SENDMSG);
 
 	pView->Btn_Start->EnableWindow(false);
@@ -408,7 +407,6 @@ void CMyDoc::ProcessEnter(string name)
 
 void CMyDoc::ProcessClose()
 {
-	Enter = Open = false;
 	pView->MessageHandler(CLOSE_SERVER);
 }
 
@@ -456,7 +454,7 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 	ME->FG.Figure = ME->FG.NextFigure = -1;
 
 	pView->CreateFigure();
-	m_mySocket->Sendmapstate();
+	CClientSocket::GetSocket()->Sendmapstate();
 
 	pView->SetTimer(TIMER_SENDMAPSTATE, SENDTIME, nullptr);
 
@@ -620,13 +618,13 @@ void CMyDoc::Client_ProcessEnd(mOnName on_name)
 			it->second->SetSurvive(true);
 	}
 
-	if(Open)
-	{
-		pView->Btn_Ready->EnableWindow(false);
-		pView->Btn_Start->EnableWindow(true);
-		pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
-	}
-	else if(Enter)
+	//if(Open)
+	//{
+	//	pView->Btn_Ready->EnableWindow(false);
+	//	pView->Btn_Start->EnableWindow(true);
+	//	pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
+	//}
+	if(CClientSocket::GetSocket()->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(false);
@@ -659,13 +657,13 @@ void CMyDoc::RestartGame()
 	Ready = false;
 	End = false;
 
-	if(Open)
-	{
-		pView->Btn_Ready->EnableWindow(true);
-		pView->Btn_Start->EnableWindow(true);
-		pView->Btn_Start->SetWindowTextW(_T("시작하기"));
-	}
-	else if(Enter)
+	//if(Open)
+	//{
+	//	pView->Btn_Ready->EnableWindow(true);
+	//	pView->Btn_Start->EnableWindow(true);
+	//	pView->Btn_Start->SetWindowTextW(_T("시작하기"));
+	//}
+	if(CClientSocket::GetSocket()->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(true);

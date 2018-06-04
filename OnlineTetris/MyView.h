@@ -38,7 +38,6 @@ public:
 	CMyEdit *Edt_InputEdit;
 	CListBox Lst_EnterList;
 	CMyDoc *pDoc;
-	ServerDialog *pServerDlg;
 	OptionDialog *pOptionDlg;
 
 	CBrush DeadBrush;

@@ -2,11 +2,14 @@
 
 #include <cassert>
 #include <algorithm>
+#include <memory.h>
 
 #include "DefineInfo.h"
 #include "structs.h"
 
 #undef GetMessage
+
+using namespace defineinfo;
 
 namespace msg_header
 {
@@ -52,12 +55,14 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 
 typedef struct Header
 {
+public:
 	size_t msg_idx;
 	size_t dataSize;
 
 	explicit Header(const size_t msgIdx)
 		:msg_idx(msgIdx)
 	{}
+
 };
 
 //�޼����� ���� ����ü
@@ -69,6 +74,17 @@ typedef struct mSendPermit : public Header
 		:Header(h), res(res)
 	{
 		dataSize = sizeof(mSendPermit) - sizeof(h);
+	}
+};
+
+typedef struct mSendConnectionInfo : public Header
+{
+	const ull uniqueOrder;
+
+	explicit mSendConnectionInfo(const Header h, const ull _uniqueOrder)
+		:Header(h), uniqueOrder(_uniqueOrder)
+	{
+		dataSize = sizeof(this) - sizeof(h);
 	}
 };
 
@@ -97,6 +113,8 @@ typedef struct mSendNames : public Header
 	{
 		CopyChars<size_t>(this->namelen, size_t(MAX_ENTER), namelen, enternum);
 		CopyChars<char,MAX_ENTER,ID_LEN>(this->name, names, enternum, ID_LEN);
+
+		dataSize = sizeof(mSendNames) - sizeof(h);
 	}
 };
 
@@ -121,7 +139,7 @@ typedef struct mSendMessage :public Header
 		memset(msg, 0, sizeof(char)*MSG_LEN);
 		strcat(msg, _msg);
 			
-		return mSendMessage(Header(ON_MESSAGE), len, _msg);
+		return mSendMessage(Header(defineinfo::ON_MESSAGE), len, _msg);
 	}
 };
 
@@ -132,9 +150,8 @@ typedef struct mSendReady : public Header
 	bool ready;
 
 	explicit mSendReady(const Header h, const size_t namelen, const char* fromname, const bool ready)
-		:Header(h)
+		:Header(h), ready(ready)
 	{
-		this->ready = ready;
 		CopyChars(this->fromname, MSG_LEN, fromname, namelen);
 		dataSize = sizeof(mSendReady) - sizeof(h);
 	}
@@ -154,7 +171,7 @@ typedef struct mSendRadies : public Header
 		CopyChars(this->namelen, MAX_ENTER, namelen, enternum);
 		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, name, enternum, ID_LEN);
 			
-		dataSize = sizeof(mSendRadies) - sizeof(h);
+		dataSize = sizeof(this) - sizeof(h);
 	}
 };
 

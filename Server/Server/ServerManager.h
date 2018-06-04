@@ -49,11 +49,11 @@ private:
 private:
 	void* BeginServer();
 	static void* AcceptAndWaitConnectionClient(void* sock);
+	static unsigned long long GetUniqueOrder();
 
 private:
 
 	const size_t MAX_WAITING_COUNT;
-
 	std::deque<pthread_t> waitingPool;
 };
 

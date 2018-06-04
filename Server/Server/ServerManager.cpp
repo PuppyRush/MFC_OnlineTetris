@@ -82,6 +82,12 @@ void* ServerManager::BeginServer(){
 
 }
 
+unsigned long long ServerManager::GetUniqueOrder()
+{
+	static unsigned long long uniqueOrder=0;
+	return ++uniqueOrder;
+}
+
 void* ServerManager::AcceptAndWaitConnectionClient(void* _sockParam)
 {
 	using namespace msg_header;
@@ -90,30 +96,28 @@ void* ServerManager::AcceptAndWaitConnectionClient(void* _sockParam)
 	const auto sockParam = *reinterpret_cast<connectionThreadParam *>(_sockParam);
 	char buf[buflen];
 	memset(buf,0,buflen);
-	while(1)
+
+	auto readn = read(sockParam.clientSocket, buf, buflen);
+	if(readn <= 0)
 	{
-		auto readn = read(sockParam.clientSocket, buf, buflen);
-		if(readn <= 0)
-		{
-			perror("Read Error");
-			return NULL;
-		}
+		perror("Read Error");
+		return NULL;
+	}
 
-		auto Buffer = new char[readn];
+	int header[HEADER_NUM] = {0};
+	memcpy(header, buf, sizeof(size_t)*HEADER_NUM);
 
-		int header[HEADER_NUM] = {0};
-		memcpy(header, Buffer, sizeof(size_t)*HEADER_NUM);
+	mOnName onName;
+	memset( &onName, 0, sizeof(onName));
+	memcpy(&onName, &buf[sizeof(int)*HEADER_NUM / sizeof(char)], header[1]);
 
-		mOnName onName;
-		memset( &onName, 0, sizeof(onName));
-		memcpy(&onName, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
+	auto name = onName.name;
 
-		/*writen = write(sockfd, buf, readn);
-		if(readn != writen)
-		{
-			printf("write error %d : %d\n", readn, writen);
-			return NULL;
-		}*/
+	const auto writen = write(sockParam.clientSocket, buf, readn);
+	if(readn != writen)
+	{
+		//perror("write error %d : %d\n", readn, writen);
+		return NULL;
 	}
 
 }

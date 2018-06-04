@@ -12,15 +12,20 @@
 #include "MyView.h"
 #include "MyDoc.h"
 #include "MyEdit.h"
-#include "MySocket.h"
-#include "ServerDialog.h"
+#include "CliektSocket.h"
+#include "EnteringDialog.h"
 #include "OptionDialog.h"
+#include "WaitingRoom.h"
 #include "TetrisUserClient.h"
 #include "MyButton.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
 #endif
+
+using namespace defineinfo;
 
 // CMyView
 
@@ -51,10 +56,10 @@ CMyView::CMyView()
 	// TODO: 여기에 생성 코드를 추가합니다.
 	Edt_InputEdit = NULL;
 	pDoc = NULL;
-	pServerDlg = NULL;
 	pOptionDlg = NULL;
 	Btn_Ready = Btn_Start = NULL;
 
+	
 }
 
 CMyView::~CMyView()
@@ -108,11 +113,6 @@ void CMyView::OnInitialUpdate()
 		pDoc = GetDocument();
 		pDoc->pView = this;
 	}
-	if(pServerDlg == NULL)
-	{
-		pServerDlg = new ServerDialog;
-		pServerDlg->Create(_DLG_SERVER);
-	}
 	if(pOptionDlg == NULL)
 	{
 		pOptionDlg = new OptionDialog;
@@ -156,7 +156,6 @@ void CMyView::OnInitialUpdate()
 			, cy + BTN_HEIGHT
 		),
 		this, 1004);
-
 
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }
@@ -847,9 +846,9 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 		VirtualDraw();
 	}
 
-	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->GetSurvive() && (pDoc->Open || pDoc->Enter))
+	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->GetSurvive() && CClientSocket::GetSocket()->isConnected() )
 	{
-		pDoc->m_mySocket->Sendmapstate();
+		CClientSocket::GetSocket()->Sendmapstate();
 		VirtualDraw();
 	}
 
@@ -859,7 +858,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 
 		if(pDoc->LineRemain % 10 == 0)
 		{
-			pDoc->m_mySocket->SendLine(1, true);
+			CClientSocket::GetSocket()->SendLine(1, true);
 		}
 	}
 
@@ -1375,7 +1374,7 @@ void CMyView::MessageHandler(int msg)
 
 void CMyView::ReadyBtnClicked()
 {
-	if(!pDoc->Open && !pDoc->Enter)
+	if(!CClientSocket::GetSocket()->isConnected())
 	{
 		MessageHandler(NOT_OPENNENTER);
 		return;
@@ -1384,12 +1383,12 @@ void CMyView::ReadyBtnClicked()
 	if(pDoc->Ready)
 	{
 		pDoc->Ready = false;
-		pDoc->m_mySocket->Sendready(false);
+		CClientSocket::GetSocket()->Sendready(false);
 	}
 	else
 	{
 		pDoc->Ready = true;
-		pDoc->m_mySocket->Sendready(true);
+		CClientSocket::GetSocket()->Sendready(true);
 	}
 }
 
@@ -1400,11 +1399,11 @@ void CMyView::StartBtnClicked()
 
 	if(pDoc->End)
 	{
-		pDoc->m_mySocket->SendRestart();
+		CClientSocket::GetSocket()->SendRestart();
 		return;
 	}
 
-	if(pDoc->Open == false && pDoc->Enter == false)
+	if(!CClientSocket::GetSocket()->isConnected())
 	{
 		MessageHandler(NOT_ALLREADY);
 		return;
@@ -1425,32 +1424,30 @@ void CMyView::StartBtnClicked()
 void CMyView::OnMenuServer()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if(!pDoc->Enter && !pDoc->Open)
+	if(!CClientSocket::GetSocket()->isConnected())
 	{
-		if(pServerDlg != NULL)
-			pServerDlg->ShowWindow(SW_SHOW);
-		else
+		auto dlg = ServerDialog::GetDialog();
+		dlg->DoModal();
+
+		CClientSocket::GetSocket()->SetIP(dlg->ipstring);
+		CClientSocket::GetSocket()->SetPort(dlg->portnum);
+
+		if (CClientSocket::GetSocket()->ConnectToServer())
 		{
-			pServerDlg = new ServerDialog;
-			pServerDlg->Create(_DLG_SERVER);
-			pServerDlg->ShowWindow(SW_SHOW);
+			auto wdlg = WaitingRoom::GetDialog();
+			wdlg->DoModal();
 		}
 
-		if(pServerDlg->isValidationMakeRoomInfo || pServerDlg->isValidationMakeRoomInfo)
-			CMySocket::GetSocket(pServerDlg->ipstring, pServerDlg->portnum);
-
-		if(pServerDlg->isValidationMakeRoomInfo)
-			pDoc->m_mySocket->ConnectToServer();
 	}
 }
 
 void CMyView::OnUpdateMenuServer(CCmdUI *pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(!pDoc->Open && !pDoc->Enter)
-		pCmdUI->Enable(true);
-	else
+	if(CClientSocket::GetSocket()->isConnected())
 		pCmdUI->Enable(false);
+	else
+		pCmdUI->Enable(true);
 }
 
 void CMyView::SetMap(int i)
@@ -1900,7 +1897,7 @@ void CMyView::SetGameover()
 	pDoc->Start = false;
 	KillTimer(TIMER_TETRIS);
 	KillTimer(TIMER_SENDMAPSTATE);
-	pDoc->m_mySocket->SendDead();
+	CClientSocket::GetSocket()->SendDead();
 }
 
 bool CMyView::CheckLineDestroy()
@@ -1970,7 +1967,7 @@ bool CMyView::CheckLineDestroy()
 
 	if(Combo >= COMBONUM && des)
 	{
-		pDoc->m_mySocket->SendLine(ADDCOMBOLINE, false);
+		CClientSocket::GetSocket()->SendLine(ADDCOMBOLINE, false);
 
 	}
 

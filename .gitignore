@@ -16,8 +16,9 @@ local.properties
 .settings/
 .loadpath
 
-.o
-.d
+*.o
+*.d
+server/default/*
 
 # External tool builders
 .externalToolBuilders/
@@ -219,3 +220,5 @@ pip-log.txt
 .mr.developer.cfg
 OnlineTetris.VC.VC.opendb
 *.db
+
+*.wav
