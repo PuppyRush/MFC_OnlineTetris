@@ -18,7 +18,7 @@ class CMyApp : public CWinAppEx
 {
 public:
 	CMyApp();
-
+	
 
 // 재정의입니다.
 public:

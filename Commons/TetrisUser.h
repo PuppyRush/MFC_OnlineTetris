@@ -11,7 +11,6 @@ class TetrisUser : private uncopyable
 protected:
 
 	int Order;
-	char chName[12];
 	string Name;
 	IPString Ip;
 	
@@ -28,6 +27,7 @@ public:
 
 protected:
 
+	TetrisUser(){}
 	TetrisUser(const string &name);
 	TetrisUser(const string &name, const IPString &ip, const int idx);
 	

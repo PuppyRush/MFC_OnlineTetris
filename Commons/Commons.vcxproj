@@ -112,13 +112,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DefineInfo.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MessageHeader.h" />
     <ClInclude Include="structs.h" />
+    <ClInclude Include="TetrisSocket.h" />
     <ClInclude Include="TetrisUser.h" />
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TetirisUser.cpp" />
+    <ClCompile Include="TetrisSocket.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

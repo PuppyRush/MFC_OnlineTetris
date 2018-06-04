@@ -47,7 +47,6 @@ public:
 	
 	std::map<string, SHR_USRC > Client_UserList;
 	//std::map<string,CMySocket> SocketList;
-	TetrisUser *ME;
 
 	string Name;
 

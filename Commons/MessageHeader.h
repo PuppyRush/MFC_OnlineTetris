@@ -3,6 +3,7 @@
 #include <cassert>
 #include <algorithm>
 #include <memory.h>
+#include <iterator>
 
 #include "DefineInfo.h"
 #include "structs.h"
@@ -18,13 +19,16 @@ namespace msg_header
 //msg_idx//Ŭ���̾�Ʈ Ȥ�� ������ ���� �޼���
 //IsServer//�޼����� ���� ��ü�� �������� Ŭ���̾�Ʈ ����?
 
+struct client{};
+struct server{};
+
 template <class T>
 static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t srclen)
 {
 	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
-	std::copy_n(src, srclen, dest);
+	std::copy(src, srclen, dest);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2>
@@ -49,8 +53,11 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2*SIZE3);
 
 	for (size_t i = 0; i < src_dimension1; i++)
-		for (int l=0 ; l < src_dimension2 ; l++)
-			std::copy_n(src[i][l], src_dimension3, dest[i][l]);
+		for(size_t l = 0; l < src_dimension2; l++)
+		{
+
+			std::copy_n(src[i][l], src_dimension3,dest[i][l] );
+		}
 }
 
 typedef struct Header

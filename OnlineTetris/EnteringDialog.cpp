@@ -67,10 +67,15 @@ void ServerDialog::OnBnClickedBtnEnter()
 	}
 
 	username = str_name;
+
+	TetrisUserClient::GetMe()->SetName(username);
+
 	this->portnum = portnum;
 	this->ipstring = ipstring;
 
-
+	shared_ptr<CClientSocket> socket = CClientSocket::GetSocket();
+	socket->Connect(ipstring, portnum);
+	
 	CDialogEx::OnOK();
 }
 
@@ -78,8 +83,6 @@ void ServerDialog::OnBnClickedBtnEnter()
 BOOL ServerDialog::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-	// TODO:  여기에 추가 초기화 작업을 추가합니다.
 
 	Edt_Serverip.SetAddress( (BYTE)210, (BYTE)179, (BYTE)101, (BYTE)193);
 	Edt_Serverport.SetWindowTextW(_T("5905"));

@@ -12,6 +12,7 @@ private:
 
 public:
 	
+	TetrisUserClient()	{}
 	explicit TetrisUserClient(const string &name);
 	explicit TetrisUserClient(const string &name, const IPString &ip, CClientSocket* soc, const int idx);
 	virtual ~TetrisUserClient(void)	{}
@@ -30,5 +31,12 @@ public:
 	{
 		return Socket;
 	}
+
+	static shared_ptr<TetrisUserClient> GetMe()
+	{
+		static const auto clientofmine = make_shared<TetrisUserClient>();
+		return clientofmine;
+	}
+
 };
 using SHR_USRC = std::shared_ptr<TetrisUserClient>;
