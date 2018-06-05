@@ -1,10 +1,24 @@
 #pragma once
 
 #include <string>
+#include <cassert>
 
 #undef POINT
 
 using namespace std;
+
+class uncopyable
+{
+protected:
+	uncopyable(){}
+	virtual ~uncopyable(){}
+private:
+	void operator=(const uncopyable&) = delete;
+	uncopyable(const uncopyable &) = delete;
+	uncopyable(const uncopyable *) = delete;
+	uncopyable(const uncopyable &&) = delete;
+
+};
 
 class IPString
 {
@@ -12,7 +26,6 @@ private:
 	string ip;
 
 public:
-
 	IPString()
 	{
 		IPString({192,168,0,1});
@@ -20,10 +33,9 @@ public:
 
 	explicit IPString(initializer_list<size_t> fields)
 	{
-		_ASSERT(fields.size() == 4);
+		assert(fields.size() == 4);
 		ip.reserve(16);
-
-		for(auto b : fields)
+		for (size_t b : fields)
 		{
 			ip.append(std::to_string(static_cast<long>(b)));
 			ip.append(".");
@@ -41,13 +53,13 @@ typedef struct tPOINT
 {
 	long x;
 	long y;
-} ;
+};
 
 
 typedef struct FIGURE
 {
-	tPOINT FgInfo[4];		//*************************************DefineInfo.h¿¡ ÀÇÁ¸µÇ¾î¾ßÇÒ ¼ýÀÚ
-	tPOINT end;				//Á¦ÀÏ ¿ÞÂÊ¾Æ·¡ÀÇ ÁÂÇ¥¸¦ ÀúÀåÇÑ´Ù.
+	tPOINT FgInfo[4];		//*************************************DefineInfo.hï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	tPOINT end;				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¾Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	int Figure, NextFigure;
 	int Height;
 	int Width;

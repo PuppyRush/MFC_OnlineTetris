@@ -6,6 +6,20 @@ SocketImpl::SocketImpl(const int domain, const int type, const int protocol)
 {
 }
 
+SocketImpl::~SocketImpl()
+{
+	if(!m_closeSocket)
+		_close(m_socket);
+	m_closeSocket = false;
+
+	while(!m_acceptedSocketQ.empty())
+	{
+		const auto socket = m_acceptedSocketQ.front();
+		m_acceptedSocketQ.pop();
+		_close(socket);
+	}
+}
+
 unsigned SocketImpl::create(const IPString ip, const unsigned port)
 {
 	m_ip = ip;
@@ -34,9 +48,9 @@ unsigned SocketImpl::_connect()
 	return ::connect(m_socket, (sockaddr *)&addr, sizeof(sockaddr_in));
 }
 
-unsigned SocketImpl::_close()
+unsigned SocketImpl::_close(unsigned _socket)
 {
-	return ::closesocket(m_socket);
+	return ::closesocket(_socket);
 }
 
 const size_t SocketImpl::_sendTo(const char *msg, const size_t size)
@@ -51,4 +65,3 @@ pair<const char* , const size_t> SocketImpl::_recvFrom()
 
 	return make_pair(buf, recvLen);
 }
-

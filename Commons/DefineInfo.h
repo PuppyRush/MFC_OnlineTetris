@@ -3,7 +3,6 @@
 
 namespace defineinfo
 {
-
 	typedef enum USER_MSG
 	{
 
@@ -25,7 +24,7 @@ namespace defineinfo
 
 	typedef enum CLIENT_MSG
 	{
-		//Å¬¶óÀÌ¾ðÆ®°¡ ¹ÞÀ» ¸Þ¼¼Áö
+		//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		PER_NAME = 100,
 		SEND_MESSAGE,
 		ADD_USERS,
@@ -44,7 +43,7 @@ namespace defineinfo
 
 	typedef enum SERVER_MSG
 	{
-		//¼­¹ö°¡ ¹ÞÀ» ¸Þ¼¼Áö
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		ON_NAME = 300,
 		ON_CONNECTION_INFO,
 		ON_MESSAGE,
@@ -86,10 +85,10 @@ namespace defineinfo
 	};
 
 	////////////////////////////////////////////////////////////////////////////////
-	//±æÀÌÁ¤ÀÇ
-#define WIN_WIDTH			1250	//À©µµ¿ì È­¸é Å©±â
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define WIN_WIDTH			1250	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ Å©ï¿½ï¿½
 #define	WIN_HEIGHT			1000
-#define MAIN_WIDTH			250		//¸ÞÀÎÅ×Æ®¸®½º È­¸é Å©±â
+#define MAIN_WIDTH			250		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ Å©ï¿½ï¿½
 #define MAIN_HEIGHT			625
 #define	SUB_WIDTH			160
 #define	SUB_HEIGHT			400
@@ -97,38 +96,40 @@ namespace defineinfo
 #define	CHAT_HEIGHT			400
 #define INPUT_WIDTH			250
 #define INPUT_HEIGHT		30
-#define	GAME_SPACE			50		//°ÔÀÓÈ­¸é °£ °£°Ý
-#define ENTERLIST_WIDTH		250		//¸®½ºÆ® ±æÀÌ
+#define	GAME_SPACE			50		//ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+#define ENTERLIST_WIDTH		250		//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 #define ENTERLIST_HEIGHT	150
 #define BTN_WIDTH		200
 #define BTN_HEIGHT		50
-#define MAIN_SIZE		25			//¸ÞÀÎÅ×Æ®¸®½º Á¶°¢Å©±â	
-#define SUB_SIZE		16			//¼­ºêÅ×Æ®¸®½º Á¶°¢Å©±â(´Ù¸¥»ç¶÷²¨)
+#define MAIN_SIZE		25			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å©ï¿½ï¿½
+#define SUB_SIZE		16			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å©ï¿½ï¿½(ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
-//À§Ä¡ Á¤ÀÇ
+//ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
 #define	SX_MAIN	30
 #define	SY_MAIN	30
 
-//Å©±â, °¹¼öÁ¤ÀÇ	
+//Å©ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define MAX_ENTER		6
 #define ID_LEN			12
 #define HEADER_NUM		2
 #define MSG_LEN			1024
-#define FG_KINDNUM		7		//µµÇüÀÇ Á¾·ù´Â 7°³
-#define FG_FIXEDNUM		4		//¸ðµç Á¾·ùÀÇ µµÇü°¹¼ö´Â 4°³
+#define FG_KINDNUM		7		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 7ï¿½ï¿½
+#define FG_FIXEDNUM		4		//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 4ï¿½ï¿½
 #define BGM_NUM			5
-#define ADDCOMBOLINE	1		//ÄÞº¸ÀÏ¶§ »ó´ë¹æ¿¡°Ô Ãß°¡µÉ ¶óÀÎ
-#define COMBONUM		3		//ÄÞº¸ÀÇ ÃÖ¼Ò ÁÙ ¼ö
+#define ADDCOMBOLINE	1		//ï¿½Þºï¿½ï¿½Ï¶ï¿½ ï¿½ï¿½ï¿½æ¿¡ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+#define COMBONUM		3		//ï¿½Þºï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½ ï¿½ï¿½
 
-#define VERNUM	25				//Å×Æ®¸®½º°ÔÀÓÃ¢ÀÇ ¿­°¹¼ö
+#define VERNUM	25				//ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define HORNUM	10
 
-//±âÅ¸Á¤ÀÇ
+//ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½
 #define PACKET_LEN 512	
 #define PORTNUM	5905
 #define TIMER_TETRIS		1
 #define	TIMER_SENDMAPSTATE	2
 #define SENDTIME			50		//timer
 #define TIMER_NEXTLEVEL		3
+
+typedef unsigned long long ull;
 
 }

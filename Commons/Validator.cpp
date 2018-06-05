@@ -6,7 +6,7 @@ bool validator::IdCheck(const string &id, const size_t min, const size_t max)
 {
 	string reg;
 	reg.reserve(50);
-	reg.append("[°¡-ÆR|\\w]{");
+	reg.append("[ï¿½ï¿½-ï¿½R|\\w]{");
 	reg.append(to_string(min));
 	reg.append(",");
 	reg.append(to_string(max));
@@ -14,7 +14,7 @@ bool validator::IdCheck(const string &id, const size_t min, const size_t max)
 
 	if (!std::regex_search(id, std::regex(reg)))
 	{
-		//errmsg = "¾ÆÀÌµð´Â ¿µ¾î 1~10ÀÚ ÇÑ±Û 5~10ÀÚ¸¸ °¡´ÉÇÕ´Ï´Ù.";
+		//errmsg = "ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1~10ï¿½ï¿½ ï¿½Ñ±ï¿½ 5~10ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.";
 		return false;
 	}
 	else

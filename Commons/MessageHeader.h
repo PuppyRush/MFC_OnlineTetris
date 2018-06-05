@@ -1,18 +1,23 @@
 #pragma once
 
 #include <cassert>
+#include <algorithm>
+#include <memory.h>
 #include <iterator>
 
 #include "DefineInfo.h"
 #include "structs.h"
 
 #undef GetMessage
+
+using namespace defineinfo;
+
 namespace msg_header
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-//msg_idx//Å¬¶óÀÌ¾ðÆ® È¤Àº ¼­¹ö°¡ ¹ÞÀ» ¸Þ¼¼Áö
-//IsServer//¸Þ¼¼Áö¸¦ ¹ÞÀ» ÁÖÃ¼°¡ ¼­¹öÀÎÁö Å¬¶óÀÌ¾ðÆ® ÀÎÁö?
+//msg_idx//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
+//IsServer//ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½?
 
 struct client{};
 struct server{};
@@ -23,7 +28,7 @@ static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t 
 	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
-	std::copy_n(src, srclen, stdext::checked_array_iterator<T *>(dest,destlen));
+	std::copy(src, srclen, dest);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2>
@@ -35,7 +40,7 @@ static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
 
 	for (size_t i = 0; i < src_dimension1; i++)
-		std::copy_n(src[i], src_dimension2, stdext::checked_array_iterator<T *>(dest[i], sizeof(dest[i])) );
+		std::copy_n(src[i], src_dimension2, dest[i]);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
@@ -50,8 +55,8 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 	for (size_t i = 0; i < src_dimension1; i++)
 		for(size_t l = 0; l < src_dimension2; l++)
 		{
-			auto destit = stdext::checked_array_iterator<T *>(dest[i][l], sizeof(dest[i][l]));
-			std::copy_n(src[i][l], src_dimension3,destit );
+
+			std::copy_n(src[i][l], src_dimension3,dest[i][l] );
 		}
 }
 
@@ -67,7 +72,7 @@ public:
 
 };
 
-//¸Þ¼¼Áö¸¦ º¸³¾ ±¸Á¶Ã¼
+//ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼
 typedef struct mSendPermit : public Header
 {
 	size_t res;
@@ -76,6 +81,17 @@ typedef struct mSendPermit : public Header
 		:Header(h), res(res)
 	{
 		dataSize = sizeof(mSendPermit) - sizeof(h);
+	}
+};
+
+typedef struct mSendConnectionInfo : public Header
+{
+	const ull uniqueOrder;
+
+	explicit mSendConnectionInfo(const Header h, const ull _uniqueOrder)
+		:Header(h), uniqueOrder(_uniqueOrder)
+	{
+		dataSize = sizeof(this) - sizeof(h);
 	}
 };
 
@@ -128,7 +144,7 @@ typedef struct mSendMessage :public Header
 
 		char *msg = new char[MSG_LEN];
 		memset(msg, 0, sizeof(char)*MSG_LEN);
-		strcat_s(msg, MSG_LEN, _msg);
+		strcat(msg, _msg);
 			
 		return mSendMessage(Header(defineinfo::ON_MESSAGE), len, _msg);
 	}

@@ -16,6 +16,10 @@ local.properties
 .settings/
 .loadpath
 
+*.o
+*.d
+Server/Default/
+
 # External tool builders
 .externalToolBuilders/
 

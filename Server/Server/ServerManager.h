@@ -18,6 +18,8 @@
 #include <pthread.h>
 #include <queue>
 
+#include "DefineInfo.h"
+
 namespace server_manager {
 
 class ServerManager {
@@ -33,13 +35,25 @@ public:
 
 private:
 
+	typedef struct connectionThreadParam
+	{
+		struct sockaddr_in clientaddr;
+		int clientSocket;
+		connectionThreadParam(struct sockaddr_in _clientaddr, int _clientSocket)
+		:clientaddr(_clientaddr), clientSocket(_clientSocket)
+		{	}
+	};
+
+
+
+private:
 	void* BeginServer();
 	static void* AcceptAndWaitConnectionClient(void* sock);
+	static unsigned long long GetUniqueOrder();
 
 private:
 
 	const size_t MAX_WAITING_COUNT;
-
 	std::deque<pthread_t> waitingPool;
 };
 

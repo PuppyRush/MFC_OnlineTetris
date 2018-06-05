@@ -5,7 +5,7 @@
 
 #undef GetUserName
 
-class TetrisUser
+class TetrisUser : private uncopyable
 {
 
 protected:
