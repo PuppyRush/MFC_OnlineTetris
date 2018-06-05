@@ -45,7 +45,7 @@ unsigned TetrisSocket::accept()
 	unsigned err = 0;
 	if(err = _accept() > 0)
 		return err;
-	_run();
+	_runAcception();
 
 	return 0u;
 }
@@ -63,16 +63,22 @@ unsigned TetrisSocket::connect()
 unsigned TetrisSocket::close()
 {
 	_end();
-	return _close();
+	return _close(m_socket);
 }
 
 void TetrisSocket::_run()
 {
-	const auto recvfn = &TetrisSocket::recv;
+	const auto recvfn = &TetrisSocket::_recv;
 	m_recvThread = make_shared<std::thread>(recvfn, this);
 
-	const auto sendfn = &TetrisSocket::send;
+	const auto sendfn = &TetrisSocket::_send;
 	m_sendThread = make_shared<std::thread>(sendfn, this);
+}
+
+void TetrisSocket::_runAcception()
+{
+	const auto acceptFn = &TetrisSocket::_acceptSocket;
+	m_acceptThread = make_shared<std::thread>(acceptFn, this);
 }
 
 void TetrisSocket::_end()
@@ -80,7 +86,7 @@ void TetrisSocket::_end()
 	m_closeSocket = false;
 }
 
-void TetrisSocket::send()
+void TetrisSocket::_send()
 {
 	while(m_closeSocket)
 	{
@@ -89,8 +95,8 @@ void TetrisSocket::send()
 			const auto msg = m_sendQ.front();
 			m_sendQ.pop();
 			
-			const auto writen = _sendTo(msg.first, msg.second);
-			if(writen <= 0)
+			const auto written = _sendTo(msg.first, msg.second);
+			if(written <= 0)
 			{
 				m_closeSocket = false;
 				//writeLog("error sendto");
@@ -101,7 +107,7 @@ void TetrisSocket::send()
 	}
 }
 
-void TetrisSocket::recv()
+void TetrisSocket::_recv()
 {
 	while(m_closeSocket)
 	{
@@ -117,3 +123,17 @@ void TetrisSocket::recv()
 	}
 }
 
+
+void TetrisSocket::_acceptSocket()
+{
+	while(m_closeSocket)
+	{
+		const int socket = _accept();
+		if(socket == -1)
+		{
+			//writeLog("error recvfrom");
+		}
+
+		m_acceptedSocketQ.push(socket);
+	}
+}

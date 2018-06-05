@@ -32,6 +32,8 @@ public:
 	static auto getBuffer()
 	{
 		auto msg = new char[PACKET_LEN]{1};
+		assert(!msg);
+
 		return msg;
 	}
 
@@ -43,10 +45,12 @@ public:
 		auto dest = getBuffer();
 		memcpy(dest, msg, PACKET_LEN);
 
-		m_sendQ.push(make_pair(static_cast<const char*>(dest), sizeof(T)));
+		m_sendQ.emplace(make_pair(static_cast<const char*>(dest), sizeof(T)));
 	}
 	inline auto popMessage()
 	{
+		assert(m_recvQ.empty());
+
 		if(m_recvQ.empty())
 		{
 			auto msg = m_recvQ.front();
@@ -56,6 +60,17 @@ public:
 			return make_pair(msgptr, msg.second);
 		}
 	}
+	inline unsigned popSocket()
+	{
+		assert(m_acceptedSocketQ.empty());
+
+		if(!m_acceptedSocketQ.empty())
+		{
+			const unsigned socket = m_acceptedSocketQ.front();
+			m_acceptedSocketQ.pop();
+		}
+	}
+
 
 	unsigned connect();
 	unsigned accept();
@@ -66,6 +81,8 @@ public:
 
 protected:
 
+	unsigned m_socket;
+
 	const int m_domain;
 	const int m_type;
 	const int m_protocol;
@@ -73,24 +90,31 @@ protected:
 	IPString m_ip;
 	unsigned m_port;
 
-	virtual unsigned _accept() = 0;
+	std::queue<unsigned> m_acceptedSocketQ;
+	bool m_closeSocket;
+
+	//플랫폼마다 사용될 socket의 구현함수들.	
+	virtual int _accept() = 0;
 	virtual unsigned _connect() = 0;
-	virtual unsigned _close() = 0;
+	virtual unsigned _close(unsigned _socket) = 0;
 
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual pair<const char*,const size_t> _recvFrom() = 0;
-	void send();
-	void recv();
+	void _acceptSocket();
+	void _send();
+	void _recv();
 
 private:
 	shared_ptr< std::thread> m_recvThread;
 	shared_ptr< std::thread> m_sendThread;
-	bool m_closeSocket;
+	shared_ptr< std::thread> m_acceptThread;
+	
 
 	std::queue<std::pair<const char*, const size_t>> m_recvQ;
 	std::queue<std::pair<const char*, const size_t>> m_sendQ;
 	
 	void _run();
+	void _runAcception();
 	void _end();
 
 };
