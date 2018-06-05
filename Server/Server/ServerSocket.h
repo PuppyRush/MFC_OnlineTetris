@@ -7,7 +7,7 @@
 
 #pragma once
 
-class ServerSocket
+class ServerSocket : public SocketImpl
 {
 private:
 	int socket;

@@ -28,7 +28,7 @@ static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t 
 	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
-	std::copy(src, srclen, dest);
+	std::copy(src, src+destlen, dest);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2>
@@ -40,7 +40,7 @@ static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
 
 	for (size_t i = 0; i < src_dimension1; i++)
-		std::copy_n(src[i], src_dimension2, dest[i]);
+		std::copy(src[i], src[i] + src_dimension2, dest[i]);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
@@ -56,7 +56,7 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 		for(size_t l = 0; l < src_dimension2; l++)
 		{
 
-			std::copy_n(src[i][l], src_dimension3,dest[i][l] );
+			std::copy(src[i][l], src[i][l] + src_dimension3,dest[i][l] );
 		}
 }
 

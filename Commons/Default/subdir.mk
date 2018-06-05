@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../TetirisUser.cpp \
+../TetrisSocket.cpp \
 ../Validator.cpp 
 
 OBJS += \
 ./TetirisUser.o \
+./TetrisSocket.o \
 ./Validator.o 
 
 CPP_DEPS += \
 ./TetirisUser.d \
+./TetrisSocket.d \
 ./Validator.d 
 
 

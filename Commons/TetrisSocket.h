@@ -27,7 +27,6 @@ public:
 	explicit TetrisSocket(const int domain, const int type, const int protocol);
 
 	virtual unsigned create(const IPString ip, const unsigned port) = 0;
-	virtual unsigned listen() = 0;
 	
 	static auto getBuffer()
 	{
@@ -38,13 +37,16 @@ public:
 	template <class T>
 	inline	void pushMessage(T *msg)
 	{
-		assert(PACKET_LEN > sizeof(msg));
+		const size_t len = sizeof(T);
+		assert(PACKET_LEN > len);
 
-		auto dest = getBuffer();
+		char *dest = getBuffer();
 		memcpy(dest, msg, PACKET_LEN);
 
-		m_sendQ.push(make_pair(static_cast<const char*>(dest), sizeof(T)));
+		const auto val = make_pair(static_cast<const char*>(dest), len);
+		m_sendQ.emplace(val);
 	}
+
 	inline auto popMessage()
 	{
 		if(m_recvQ.empty())
@@ -73,7 +75,7 @@ protected:
 	IPString m_ip;
 	unsigned m_port;
 
-	virtual unsigned _accept() = 0;
+	virtual int _accept() = 0;
 	virtual unsigned _connect() = 0;
 	virtual unsigned _close() = 0;
 
