@@ -1,12 +1,19 @@
-
 #pragma once
+
+#include <cstdint>
+#include <type_traits>
 
 namespace defineinfo
 {
 
-typedef enum USER_MSG
+template<class T>
+std::underlying_type_t<T> toUType(T enuml) noexcept
 {
+	return static_cast<std::underlying_type_t<T> >(enuml);
+}
 
+enum class USER_MSG : std::uint16_t
+{
 	SUCC_SERVEROPEN = 0,
 	FAIL_SERVEROPEN,
 	PREUSE_PORT,
@@ -21,72 +28,73 @@ typedef enum USER_MSG
 	NOT_OPENNENTER,
 	NOT_ALLREADY,
 	CLOSE_SERVER
-	};
+};
 
-	typedef enum CLIENT_MSG
-	{
-		//Ŭ���̾�Ʈ�� ���� �޼���
-		PER_NAME = 100,
-		SEND_MESSAGE,
-		ADD_USERS,
-		ON_READY,
-		EXIT_USER,
-		FAIL_ENTER,
-		START_SIGNAL,
-		END_SIGNAL,
-		RESTART_SIGNAL,
-		ON_MAPSTATES,
-		ON_MAPSTATE,
-		ON_ADDLINE
+enum class CLIENT_MSG : std::uint16_t
+{
+	//Ŭ���̾�Ʈ�� ���� �޼���
+	PER_NAME = 100,
+	SEND_MESSAGE,
+	ADD_USERS,
+	ON_READY,
+	EXIT_USER,
+	FAIL_ENTER,
+	START_SIGNAL,
+	END_SIGNAL,
+	RESTART_SIGNAL,
+	ON_MAPSTATES,
+	ON_MAPSTATE,
+	ON_ADDLINE
 
-	};
+};
+
+enum class SERVER_MSG : std::uint16_t
+{
+	//������ ���� �޼���
+	ON_NAME = 300,
+	ON_CONNECTION_INFO,
+	ON_MESSAGE,
+	PER_READY,
+	BC_MAPSTATES,		//BROADCAST
+	BC_MAPSTATE,
+	BC_DEAD,
+	BC_ADDLINE,
+	BC_RESTART
+};
+
+enum class MAP : std::uint16_t
+{
+	STAIRWAY = 0,
+	PYRAMID,
+	RAIN,
+	LINE,
+	RANDOMFIG,
+	RANDOMSEL,
+};
+
+enum class TETRIS_FIGURE : std::uint16_t
+{
+	JMINO = 2,
+	LMINO,
+	OMINO,
+	TMINO,
+	SMINO,
+	ZMINO,
+	IMINO,
+	GMINO,
+};
+
+enum class ETC : std::uint16_t
+{
+	TOLEFT = 0,
+	TORIGHT
+};
 
 
-	typedef enum SERVER_MSG
-	{
-		//������ ���� �޼���
-		ON_NAME = 300,
-		ON_CONNECTION_INFO,
-		ON_MESSAGE,
-		PER_READY,
-		BC_MAPSTATES,		//BROADCAST
-		BC_MAPSTATE,
-		BC_DEAD,
-		BC_ADDLINE,
-		BC_RESTART
-	};
+}
 
-	typedef enum MAP
-	{
-		STAIRWAY = 0,
-		PYRAMID,
-		RAIN,
-		LINE,
-		RANDOMFIG,
-		RANDOMSEL,
-
-	};
-
-	typedef enum TETRIS_FIGURE
-	{
-		JMINO = 2,
-		LMINO,
-		OMINO,
-		TMINO,
-		SMINO,
-		ZMINO,
-		IMINO,
-		GMINO,
-	};
-
-	typedef enum ETC
-	{
-		TOLEFT = 0,
-		TORIGHT
-	};
-
-	////////////////////////////////////////////////////////////////////////////////
-	//��������
+////////////////////////////////////////////////////////////////////////////////
+//��������
 #define WIN_WIDTH			1250	//������ ȭ�� ũ��
 #define	WIN_HEIGHT			1000
 #define MAIN_WIDTH			250		//������Ʈ���� ȭ�� ũ��
@@ -124,13 +132,10 @@ typedef enum USER_MSG
 #define HORNUM	10
 
 //��Ÿ����
-#define PACKET_LEN 512	
-#define PORTNUM	5905
+
+#define PORTNUM		5905
+#define PACKET_LEN 	512
 #define TIMER_TETRIS		1
 #define	TIMER_SENDMAPSTATE	2
 #define SENDTIME			50		//timer
 #define TIMER_NEXTLEVEL		3
-
-typedef unsigned long long ull;
-
-}

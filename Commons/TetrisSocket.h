@@ -23,14 +23,17 @@ class TetrisSocket
 public:
 
 	TetrisSocket() = delete;
-	~TetrisSocket();
+	virtual ~TetrisSocket();
 	explicit TetrisSocket(const int domain, const int type, const int protocol);
 
 	virtual unsigned create(const IPString ip, const unsigned port) = 0;
+	virtual int listen(unsigned port, int backlog) = 0;
 	
 	static auto getBuffer()
 	{
 		auto msg = new char[PACKET_LEN]{1};
+		assert(!msg);
+
 		return msg;
 	}
 
@@ -46,27 +49,44 @@ public:
 		const auto val = make_pair(static_cast<const char*>(dest), len);
 		m_sendQ.emplace(val);
 	}
-
 	inline auto popMessage()
 	{
-		if(m_recvQ.empty())
+		while(true)
 		{
-			auto msg = m_recvQ.front();
-			m_recvQ.pop();
-			auto msgptr = shared_ptr<const char>(msg.first,
-				[](const char* msg){delete[] msg; });
-			return make_pair(msgptr, msg.second);
+			if(m_recvQ.empty())
+			{
+				auto msg = m_recvQ.front();
+				m_recvQ.pop();
+				auto msgptr = shared_ptr<const char>(msg.first,
+					[](const char* msg){delete[] msg; });
+				return make_pair(msgptr, msg.second);
+			}
+		}
+	}
+	inline unsigned popSocket()
+	{
+		while(true)
+		{
+			if(!m_acceptedSocketQ.empty())
+			{
+				const unsigned socket = m_acceptedSocketQ.front();
+				m_acceptedSocketQ.pop();
+				return socket;
+			}
 		}
 	}
 
 	unsigned connect();
-	unsigned accept();
+	int accept();
+	void readnwrite();
 	unsigned close();
 
 	void SetIP(const IPString &ip);
 	void SetPort(const unsigned port);
 
 protected:
+
+	unsigned m_socket;
 
 	const int m_domain;
 	const int m_type;
@@ -75,24 +95,35 @@ protected:
 	IPString m_ip;
 	unsigned m_port;
 
+	std::queue<unsigned> m_acceptedSocketQ;
+	bool m_closeSocket;
+
+	//�÷������� ���� socket�� �����Լ���.
+
+
+
 	virtual int _accept() = 0;
 	virtual unsigned _connect() = 0;
-	virtual unsigned _close() = 0;
+	virtual unsigned _close(const unsigned _socket) = 0;
 
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual pair<const char*,const size_t> _recvFrom() = 0;
-	void send();
-	void recv();
+	void _acceptSocket();
+	void _send();
+	void _recv();
+
 
 private:
 	shared_ptr< std::thread> m_recvThread;
 	shared_ptr< std::thread> m_sendThread;
-	bool m_closeSocket;
+	shared_ptr< std::thread> m_acceptThread;
+	
 
 	std::queue<std::pair<const char*, const size_t>> m_recvQ;
 	std::queue<std::pair<const char*, const size_t>> m_sendQ;
 	
 	void _run();
+	void _runAcception();
 	void _end();
 
 };

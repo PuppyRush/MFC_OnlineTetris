@@ -1,8 +1,17 @@
 #include "Validator.h"
+#include <regex>
+#include <string>
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+using namespace std;
 using namespace validator;
 
-bool validator::IdCheck(const string &id, const size_t min, const size_t max)
+bool IdCheck(const std::string id, const size_t min, const size_t max)
 {
 	string reg;
 	reg.reserve(50);
@@ -12,7 +21,8 @@ bool validator::IdCheck(const string &id, const size_t min, const size_t max)
 	reg.append(to_string(max));
 	reg.append("}");
 
-	if (!std::regex_search(id, std::regex(reg)))
+	const auto _regex = std::regex(reg);
+	if (!std::regex_search(id, _regex))
 	{
 		//errmsg = "���̵�� ���� 1~10�� �ѱ� 5~10�ڸ� �����մϴ�.";
 		return false;
