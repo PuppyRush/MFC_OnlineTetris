@@ -23,11 +23,11 @@ class TetrisSocket
 public:
 
 	TetrisSocket() = delete;
-	~TetrisSocket();
+	virtual ~TetrisSocket();
 	explicit TetrisSocket(const int domain, const int type, const int protocol);
 
 	virtual unsigned create(const IPString ip, const unsigned port) = 0;
-	virtual unsigned listen() = 0;
+	virtual int listen(unsigned port, int backlog) = 0;
 	
 	static auto getBuffer()
 	{
@@ -40,40 +40,45 @@ public:
 	template <class T>
 	inline	void pushMessage(T *msg)
 	{
-		assert(PACKET_LEN > sizeof(msg));
+		const size_t len = sizeof(T);
+		assert(PACKET_LEN > len);
 
-		auto dest = getBuffer();
+		char *dest = getBuffer();
 		memcpy(dest, msg, PACKET_LEN);
 
-		m_sendQ.emplace(make_pair(static_cast<const char*>(dest), sizeof(T)));
+		const auto val = make_pair(static_cast<const char*>(dest), len);
+		m_sendQ.emplace(val);
 	}
 	inline auto popMessage()
 	{
-		assert(m_recvQ.empty());
-
-		if(m_recvQ.empty())
+		while(true)
 		{
-			auto msg = m_recvQ.front();
-			m_recvQ.pop();
-			auto msgptr = shared_ptr<const char>(msg.first,
-				[](const char* msg){delete[] msg; });
-			return make_pair(msgptr, msg.second);
+			if(m_recvQ.empty())
+			{
+				auto msg = m_recvQ.front();
+				m_recvQ.pop();
+				auto msgptr = shared_ptr<const char>(msg.first,
+					[](const char* msg){delete[] msg; });
+				return make_pair(msgptr, msg.second);
+			}
 		}
 	}
 	inline unsigned popSocket()
 	{
-		assert(m_acceptedSocketQ.empty());
-
-		if(!m_acceptedSocketQ.empty())
+		while(true)
 		{
-			const unsigned socket = m_acceptedSocketQ.front();
-			m_acceptedSocketQ.pop();
+			if(!m_acceptedSocketQ.empty())
+			{
+				const unsigned socket = m_acceptedSocketQ.front();
+				m_acceptedSocketQ.pop();
+				return socket;
+			}
 		}
 	}
 
-
 	unsigned connect();
-	unsigned accept();
+	int accept();
+	void readnwrite();
 	unsigned close();
 
 	void SetIP(const IPString &ip);
@@ -93,16 +98,20 @@ protected:
 	std::queue<unsigned> m_acceptedSocketQ;
 	bool m_closeSocket;
 
-	//ÇÃ·§Æû¸¶´Ù »ç¿ëµÉ socketÀÇ ±¸ÇöÇÔ¼öµé.	
+	//ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ socketï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½.
+
+
+
 	virtual int _accept() = 0;
 	virtual unsigned _connect() = 0;
-	virtual unsigned _close(unsigned _socket) = 0;
+	virtual unsigned _close(const unsigned _socket) = 0;
 
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual pair<const char*,const size_t> _recvFrom() = 0;
 	void _acceptSocket();
 	void _send();
 	void _recv();
+
 
 private:
 	shared_ptr< std::thread> m_recvThread;

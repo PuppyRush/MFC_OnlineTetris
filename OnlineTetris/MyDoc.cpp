@@ -341,7 +341,7 @@ void CMyDoc::SetReady(mOnReadies rdy)
 		const auto user = Client_NameToTUser(name);
 		if(user == nullptr)
 		{
-			pView->MessageHandler(FAIL_FINDNAME);
+			pView->MessageHandler(USER_MSG::FAIL_FINDNAME);
 			continue;
 		}
 		user->SetReady(rdy.ready[i]);
@@ -364,7 +364,7 @@ void CMyDoc::SetOrder()
 		const auto user = Client_NameToTUser(username);
 		if(user == nullptr)
 		{
-			pView->MessageHandler(FAIL_FINDNAME);
+			pView->MessageHandler(USER_MSG::FAIL_FINDNAME);
 			continue;
 		}
 		user->SetOrder(i + 1);
@@ -406,7 +406,7 @@ void CMyDoc::ProcessEnter(string name)
 
 void CMyDoc::ProcessClose()
 {
-	pView->MessageHandler(CLOSE_SERVER);
+	pView->MessageHandler(USER_MSG::CLOSE_SERVER);
 }
 
 //서버가 시작신호를 보내면 클라인트에선 시작을 위한 처리를 한다.

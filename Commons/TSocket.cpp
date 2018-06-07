@@ -1,7 +1,13 @@
-#include "TetrisSocket.h"
+#include "TSocket.h"
 
-using namespace tetris_socket;
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
 using namespace msg_header;
+using namespace tetris_socket;
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol)
 	:m_closeSocket(true), 
@@ -9,7 +15,10 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol)
 	m_sendThread(nullptr),
 	m_domain(domain),
 	m_type(type),
-	m_protocol(protocol)
+	m_protocol(protocol),
+	m_port(9705),
+	m_ip(IPString()),
+	m_socket(0)
 {
 }
 
@@ -40,11 +49,8 @@ void TetrisSocket::SetPort(const unsigned port)
 	m_port = port;
 }
 
-unsigned TetrisSocket::accept()
+int TetrisSocket::accept()
 {
-	unsigned err = 0;
-	if(err = _accept() > 0)
-		return err;
 	_runAcception();
 
 	return 0u;
@@ -53,11 +59,16 @@ unsigned TetrisSocket::accept()
 unsigned TetrisSocket::connect()
 {
 	auto err = 0u;
-	if(err = _connect() > 0)
+	if((err = _connect()) > 0)
 		return err;
 	_run();
 	
 	return 0u;
+}
+
+void TetrisSocket::readnwrite()
+{
+	_run();
 }
 
 unsigned TetrisSocket::close()

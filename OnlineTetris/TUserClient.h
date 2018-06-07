@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Commons/structs.h"
-#include "../Commons/TetrisUser.h"
+#include "../Commons/TUser.h"
 
 class CTClientSocket;
 

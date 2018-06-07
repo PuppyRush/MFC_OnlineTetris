@@ -875,7 +875,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 		if(ME == NULL)
 		{
-			MessageHandler(-1);
+			MessageHandler(USER_MSG::UNKOWN_ERROR);
 			return;
 		}
 		FIGURE *fg = &(ME->FG);
@@ -1322,59 +1322,54 @@ brk:
 }
 
 
-void CMyView::MessageHandler(int msg)
+void CMyView::MessageHandler(const USER_MSG msg)
 {
 
 	switch(msg)
 	{
-
-	case SUCC_SERVEROPEN:
+	case USER_MSG::SUCC_SERVEROPEN:
 		MessageBox(_T("서버개설에 성공하였습니다"));
 		break;
-	case FAIL_SERVEROPEN:
+	case USER_MSG::FAIL_SERVEROPEN:
 		MessageBox(_T("서버개설에 실패하였습니다!"));
 		break;
-	case PREUSE_PORT:
+	case USER_MSG::PREUSE_PORT:
 		MessageBox(_T("포트가 이미 열려있습니다!"));
 		break;
-	case SUCC_SERVERCONN:
+	case USER_MSG::SUCC_SERVERCONN:
 		MessageBox(_T("접속에 성공하였습니다!"));
 		break;
-	case FAIL_SERVERCONN:
+	case USER_MSG::FAIL_SERVERCONN:
 		MessageBox(_T("접속에 실패하였습니다!"));
 		break;
-	case EXCESS_ENTER:
+	case USER_MSG::EXCESS_ENTER:
 		MessageBox(_T("방이 꽉차서 더 이상 참가 할 수 없습니다"));
 		break;
-	case FAIL_ACCEPT:
+	case USER_MSG::FAIL_ACCEPT:
 		MessageBox(_T("클라이언트의 접속요청을 받지 못했습니다"));
 		break;
-	case FAIL_SENDMSG:
+	case USER_MSG::FAIL_SENDMSG:
 		MessageBox(_T("메세지를 보내는데 실패하였습니다"));
 		break;
-	case DUP_ID:
+	case USER_MSG::DUP_ID:
 		MessageBox(_T("아이디가 중복됩니다. 아이디를 바꾸어 다시 접속하세요"));
 		break;
-	case NOT_OPENNENTER:
+	case USER_MSG::NOT_OPENNENTER:
 		MessageBox(_T("서버가 개설되지 않았거나 서버에 입장하지 않았습니다."));
 		break;
-	case CLOSE_SERVER:
+	case USER_MSG::CLOSE_SERVER:
 		MessageBox(_T("서버가 닫혔습니다!"));
 		break;
 	default:
 		MessageBox(_T("알 수 없는 오류 발생!"));
-
-
-
 	}
-
 }
 
 void CMyView::ReadyBtnClicked()
 {
 	if(!CTClientSocket::GetSocket()->isConnected())
 	{
-		MessageHandler(NOT_OPENNENTER);
+		MessageHandler(USER_MSG::NOT_OPENNENTER);
 		return;
 	}
 
@@ -1403,7 +1398,7 @@ void CMyView::StartBtnClicked()
 
 	if(!CTClientSocket::GetSocket()->isConnected())
 	{
-		MessageHandler(NOT_ALLREADY);
+		MessageHandler(USER_MSG::NOT_ALLREADY);
 		return;
 	}
 	else
@@ -1443,7 +1438,7 @@ void CMyView::SetMap(int i)
 {
 	if(ME == NULL)
 	{
-		MessageHandler(FAIL_FINDNAME);
+		MessageHandler(USER_MSG::FAIL_FINDNAME);
 		return;
 	}
 

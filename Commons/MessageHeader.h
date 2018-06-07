@@ -16,7 +16,6 @@
 #undef GetMessage
 
 using namespace defineinfo;
-
 namespace msg_header
 {
 
@@ -95,9 +94,9 @@ typedef struct mSendPermit : public Header
 
 typedef struct mSendConnectionInfo : public Header
 {
-	const ull uniqueOrder;
+	const uint64_t uniqueOrder;
 
-	explicit mSendConnectionInfo(const Header h, const ull _uniqueOrder)
+	explicit mSendConnectionInfo(const Header h, const uint64_t _uniqueOrder)
 		:Header(h), uniqueOrder(_uniqueOrder)
 	{
 		dataSize = sizeof(this) - sizeof(h);
@@ -155,7 +154,8 @@ typedef struct mSendMessage :public Header
 		memset(msg, 0, sizeof(char)*MSG_LEN);
 		strncat(msg, _msg,len);
 			
-		return mSendMessage(Header(defineinfo::ON_MESSAGE), len, _msg);
+		const auto header = Header(toUType(SERVER_MSG::ON_MESSAGE));
+		return mSendMessage(header, len, _msg);
 	}
 };
 

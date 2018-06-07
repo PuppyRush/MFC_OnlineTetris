@@ -55,7 +55,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				return false;
 			else if(!CTClientSocket::GetSocket()->isConnected())
 			{
-				pView->MessageHandler(NOT_OPENNENTER);
+				pView->MessageHandler(USER_MSG::NOT_OPENNENTER);
 				return false;
 			}
 			else if(!CTClientSocket::GetSocket()->isConnected())
@@ -80,7 +80,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, " : ");
 				strcat(chat, temp);
 
-				mSendMessage msg(Header(SEND_MESSAGE), strlen(chat), chat);
+				mSendMessage msg(Header(toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
 				CTClientSocket::GetSocket()->pushMessage(&msg);
 				Sleep(50);
 			}

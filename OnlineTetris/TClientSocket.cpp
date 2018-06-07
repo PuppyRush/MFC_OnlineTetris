@@ -46,7 +46,7 @@ bool CTClientSocket::Connect(const IPString ip, const unsigned port)
 	if(socket->connect() == 0)
 	{
 		const auto me = TUserClient::GetMe();
-		const auto header = Header(ON_CONNECTION_INFO);
+		const auto header = Header(toUType(SERVER_MSG::ON_CONNECTION_INFO));
 		const mSendName sendname(header, me->GetUserName().size(), me->GetUserName().c_str());
 		pushMessage(&sendname);
 		return true;
@@ -471,13 +471,13 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 void CTClientSocket::Sendname(const char *name, int namelen)
 {
 
-	mSendName sendname(Header(ON_NAME), namelen, name);
+	mSendName sendname(Header(toUType(SERVER_MSG::ON_NAME)), namelen, name);
 	pushMessage(&sendname);
 }
 
 void CTClientSocket::Sendmapstate()
 {
-	auto h = Header(BC_MAPSTATE);
+	auto h = Header(toUType(SERVER_MSG::BC_MAPSTATE));
 	mSendMapstate mapstate(h, m_me.GetUserName().size() , m_me.GetUserName().c_str() , m_me.FixedBoard, m_me.FG.Figure, m_me.FG.FgInfo);
 
 	pushMessage(&mapstate);
@@ -485,7 +485,7 @@ void CTClientSocket::Sendmapstate()
 
 void CTClientSocket::Sendready(bool ready)
 {
-	mSendReady sendready(Header(PER_READY), m_me.GetUserName().size() , m_me.GetUserName().c_str(), m_me.GetReady());
+	mSendReady sendready(Header(toUType(SERVER_MSG::PER_READY)), m_me.GetUserName().size() , m_me.GetUserName().c_str(), m_me.GetReady());
 	pushMessage(&sendready);
 }
 
@@ -540,14 +540,14 @@ void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
 
 void CTClientSocket::SendDead()
 {
-	const auto header = Header(Header(BC_DEAD));
+	const auto header = Header(Header(toUType(SERVER_MSG::BC_DEAD)));
 	const mSendName sendname(header, m_me.GetUserName().size(), m_me.GetUserName().c_str());
 	pushMessage(&sendname);
 }
 
 void CTClientSocket::SendRestart()
 {
-	mSendPermit permit(Header(BC_RESTART), -1);
+	mSendPermit permit(Header(toUType(SERVER_MSG::BC_RESTART)), -1);
 	pushMessage(&permit);
 }
 
@@ -558,7 +558,7 @@ void CTClientSocket::SendLine(int num = 1, bool isSelf = true)
 	if(!isSelf)
 	{
 		const auto name = m_me.GetUserName();
-		mSendAddline addline(Header(BC_ADDLINE), name.size(), name.c_str(), num);
+		mSendAddline addline(Header(toUType(SERVER_MSG::BC_ADDLINE)), name.size(), name.c_str(), num);
 		pushMessage(&addline);
 	}
 }

@@ -80,7 +80,7 @@ public:
 
 	void VirtualDraw();
 	void DrawImage(CDC *);
-	void MessageHandler(int msg);
+	void MessageHandler(const USER_MSG msg);
 	
 	bool CreateFigure();
 	void SetGameover();

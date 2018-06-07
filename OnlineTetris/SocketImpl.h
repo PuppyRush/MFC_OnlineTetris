@@ -2,7 +2,7 @@
 
 #include <winsock.h>
 
-#include "../Commons/TetrisSocket.h"
+#include "../Commons/TSocket.h"
 
 using namespace tetris_socket;
 
@@ -15,8 +15,7 @@ public:
 
 	virtual unsigned create(const IPString ip, const unsigned port) override;
 	
-	virtual unsigned listen() {return 0;}
-	virtual unsigned accept() {return 0;}
+	virtual int listen(unsigned port, int backlog) {return 0;}
 
 protected:
 
