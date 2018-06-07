@@ -7,24 +7,25 @@
 
 #include "../Commons/MessageHeader.h"
 #include "SocketImpl.h"
+#include "TUserClient.h"
 
-class CClientSocket : public SocketImpl
+class CTClientSocket : public SocketImpl
 {
 
 public:
 
-	CClientSocket();
-	CClientSocket(const int domain, const int type, const int protohcol);
-	virtual ~CClientSocket();
+	CTClientSocket();
+	CTClientSocket(const int domain, const int type, const int protohcol);
+	virtual ~CTClientSocket();
 
 	template<class... _Types>
-	static shared_ptr<CClientSocket> GetSocket(_Types&&... _Args)
+	static shared_ptr<CTClientSocket> GetSocket(_Types&&... _Args)
 	{
-		static shared_ptr<CClientSocket> mysocket = make_shared<CClientSocket>(forward<_Types>(_Args)...);
+		static shared_ptr<CTClientSocket> mysocket = make_shared<CTClientSocket>(forward<_Types>(_Args)...);
 		return mysocket;
 	}
 
-	void Connect(const IPString, const unsigned port);
+	bool Connect(const IPString, const unsigned port);
 	void recvMsg();
 	void SelfClose();
 	void Broadcast(void* strc, int msgidx);
@@ -41,7 +42,7 @@ public:
 
 private:
 
-	TetrisUserClient m_me;
+	TUserClient m_me;
 	std::thread m_msgThread;
 	std::mutex m_recvMsgMutex;
 	bool m_isConnected;

@@ -4,7 +4,7 @@
 
 // WaitingRoom 대화 상자입니다.
 
-class WaitingRoom : public CDialog
+class WaitingRoom : public CDialogEx
 {
 	DECLARE_DYNAMIC(WaitingRoom)
 
@@ -36,5 +36,5 @@ public:
 		return dlg;
 	}
 
-	CListCtrl roomList;
+	CListCtrl m_roomList;
 };

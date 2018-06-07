@@ -1,5 +1,10 @@
 #pragma once
 
+#pragma warning(push)
+#pragma warning(disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent
+
+#define  _SCL_SECURE_NO_WARNINGS
+
 #include <cassert>
 #include <algorithm>
 #include <memory.h>
@@ -28,7 +33,7 @@ static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t 
 	assert(destlen >= srclen);
 
 	memset(dest, 0, sizeof(T)*destlen);
-	std::copy(src, srclen, dest);
+	memcpy(dest, src, srclen);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2>
@@ -40,7 +45,7 @@ static void CopyChars(T dest[SIZE1][SIZE2],	const T (*src)[SIZE2], const size_t 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
 
 	for (size_t i = 0; i < src_dimension1; i++)
-		std::copy_n(src[i], src_dimension2, dest[i]);
+		memcpy(dest[i], src[i], src_dimension2);
 }
 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
@@ -54,10 +59,7 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 
 	for (size_t i = 0; i < src_dimension1; i++)
 		for(size_t l = 0; l < src_dimension2; l++)
-		{
-
-			std::copy_n(src[i][l], src_dimension3,dest[i][l] );
-		}
+			memcpy(dest[i][l], src[i][l], src_dimension3);
 }
 
 typedef struct Header
@@ -70,6 +72,13 @@ public:
 		:msg_idx(msgIdx)
 	{}
 
+};
+
+typedef struct mEmpty : public Header
+{
+	mEmpty()
+		:Header(Header(0))
+	{}
 };
 
 //�޼����� ���� ����ü
@@ -144,7 +153,7 @@ typedef struct mSendMessage :public Header
 
 		char *msg = new char[MSG_LEN];
 		memset(msg, 0, sizeof(char)*MSG_LEN);
-		strcat(msg, _msg);
+		strncat(msg, _msg,len);
 			
 		return mSendMessage(Header(defineinfo::ON_MESSAGE), len, _msg);
 	}
@@ -323,3 +332,5 @@ typedef struct mOnAddline
 };
 
 }
+
+#pragma warning(pop)

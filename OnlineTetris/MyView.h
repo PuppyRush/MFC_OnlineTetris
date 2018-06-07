@@ -7,7 +7,7 @@
 #include "..\Commons\structs.h"
 
 class CMyDoc;
-class ServerDialog;
+class EnteringDialog;
 class CMyEdit;
 class OptionDialog;
 class CMyButton;

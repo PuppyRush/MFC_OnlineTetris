@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "TetrisUserClient.h"
+#include "TUserClient.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -7,12 +7,12 @@
 static char THIS_FILE[] = __FILE__;
 
 #endif
-TetrisUserClient::TetrisUserClient(const string &name)
+TUserClient::TUserClient(const string &name)
 	:TetrisUser(name)
 {
 }
 
-TetrisUserClient::TetrisUserClient(const string &name, const IPString &ip, CClientSocket* soc, const int idx)
+TUserClient::TUserClient(const string &name, const IPString &ip, CTClientSocket* soc, const int idx)
 	:TetrisUser(name, ip, idx), Socket(soc)
 {
 	Socket = soc;

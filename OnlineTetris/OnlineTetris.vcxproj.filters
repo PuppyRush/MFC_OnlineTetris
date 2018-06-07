@@ -155,16 +155,10 @@
     <ClInclude Include="MyButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TetrisUserClient.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="WaitingRoom.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="EnteringDialog.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CliektSocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="StringManager.h">
@@ -172,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="SocketImpl.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TClientSocket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TUserClient.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -199,22 +199,22 @@
     <ClCompile Include="MyButton.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TetrisUserClient.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="WaitingRoom.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="EnteringDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ClientSocket.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="StringManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SocketImpl.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TClientSocket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TUserClient.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

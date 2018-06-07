@@ -1,8 +1,8 @@
-
 #pragma once
 
 namespace defineinfo
 {
+
 	typedef enum USER_MSG
 	{
 

@@ -11,7 +11,7 @@
 
 #include "MyDoc.h"
 #include "MyListen.h"
-#include "CliektSocket.h"
+#include "TClientSocket.h"
 #include "MyButton.h"
 #include <propkey.h>
 
@@ -322,7 +322,7 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 		//클라이언트에 이미 생성된 유저라면 유저객체를 만들지 않는다.
 		//없는것이 판단되면 새로 생성
 		if(Client_UserList.count(name) == 0)
-			Client_UserList.insert(make_pair(name, TetrisUserClient::MakeShared(name)));
+			Client_UserList.insert(make_pair(name, TUserClient::MakeShared(name)));
 	}
 
 	//ME = Client_NameToTUser(Name).get();
@@ -396,10 +396,10 @@ void CMyDoc::ProcessEnter(string name)
 {
 	Name = name;
 
-	auto tmp = TetrisUserClient::MakeShared(name);
+	auto tmp = TUserClient::MakeShared(name);
 	Client_UserList.insert( make_pair(name, tmp));
 
-	CClientSocket::GetSocket()->Sendname(name.c_str(), name.size());
+	CTClientSocket::GetSocket()->Sendname(name.c_str(), name.size());
 
 	pView->Btn_Start->EnableWindow(false);
 }
@@ -450,11 +450,11 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 		break;
 	}
 
-	auto &FG = TetrisUserClient::GetMe()->FG;
+	auto &FG = TUserClient::GetMe()->FG;
 	FG.Figure = FG.NextFigure = -1;
 
 	pView->CreateFigure();
-	CClientSocket::GetSocket()->Sendmapstate();
+	CTClientSocket::GetSocket()->Sendmapstate();
 
 	pView->SetTimer(TIMER_SENDMAPSTATE, SENDTIME, nullptr);
 
@@ -624,7 +624,7 @@ void CMyDoc::Client_ProcessEnd(mOnName on_name)
 	//	pView->Btn_Start->EnableWindow(true);
 	//	pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
 	//}
-	if(CClientSocket::GetSocket()->isConnected())
+	if(CTClientSocket::GetSocket()->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(false);
@@ -649,7 +649,7 @@ void CMyDoc::RestartGame()
 		memset(board, 0, sizeof(board));
 	}
 
-	auto me = TetrisUserClient::GetMe();
+	auto me = TUserClient::GetMe();
 
 	me->SetReady(false);
 	me->SetSurvive(true);
@@ -665,7 +665,7 @@ void CMyDoc::RestartGame()
 	//	pView->Btn_Start->EnableWindow(true);
 	//	pView->Btn_Start->SetWindowTextW(_T("시작하기"));
 	//}
-	if(CClientSocket::GetSocket()->isConnected())
+	if(CTClientSocket::GetSocket()->isConnected())
 	{
 		pView->Btn_Start->EnableWindow(false);
 		pView->Btn_Ready->EnableWindow(true);

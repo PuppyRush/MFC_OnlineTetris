@@ -7,14 +7,14 @@
 #include <list>
 #include <deque>
 #include <map>
-#include "TetrisUserClient.h"
+#include "TUserClient.h"
 #include "../Commons/MessageHeader.h"
 #include "ServerSocket.h"
 
 using namespace msg_header;
 
 class CMyListen;
-class CClientSocket;
+class CTClientSocket;
 class CMyView;
 
 class CMyDoc : public CDocument

@@ -3,8 +3,8 @@
 
 #include "stdafx.h"
 #include "OnlineTetris.h"
-#include "CliektSocket.h"
-#include "TetrisUserClient.h"
+#include "TClientSocket.h"
+#include "TUserClient.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,39 +17,42 @@ static char THIS_FILE[] = __FILE__;
 using namespace defineinfo;
 using namespace msg_header;
 
-CClientSocket::CClientSocket()
+CTClientSocket::CTClientSocket()
 	:SocketImpl(AF_INET, SOCK_STREAM, 0),
 	m_isConnected(false)
 {
 
 }
 
-CClientSocket::CClientSocket(const int domain, const int type, const int protocol)
+CTClientSocket::CTClientSocket(const int domain, const int type, const int protocol)
 	:SocketImpl(domain, type, protocol),
 	m_isConnected(false)
 {}
 
-CClientSocket::~CClientSocket()
+CTClientSocket::~CTClientSocket()
 {}
 
-void CClientSocket::createThread()
+void CTClientSocket::createThread()
 {
-	const auto recvTh = &CClientSocket::recvMsg;
+	const auto recvTh = &CTClientSocket::recvMsg;
 	m_msgThread = std::thread(recvTh, this);
 	m_msgThread.join();
 }
 
-void CClientSocket::Connect(const IPString ip, const unsigned port)
+bool CTClientSocket::Connect(const IPString ip, const unsigned port)
 {
-	auto socket = CClientSocket::GetSocket();
+	auto socket = CTClientSocket::GetSocket();
 	socket->create(ip, port);
 	if(socket->connect() == 0)
 	{
-		const auto me = TetrisUserClient::GetMe();
+		const auto me = TUserClient::GetMe();
 		const auto header = Header(ON_CONNECTION_INFO);
 		const mSendName sendname(header, me->GetUserName().size(), me->GetUserName().c_str());
 		pushMessage(&sendname);
+		return true;
 	}
+	else	
+		return false;
 }
 
 //void CClientSocket::OnClose(int nErrorCode)
@@ -120,14 +123,14 @@ void CClientSocket::Connect(const IPString ip, const unsigned port)
 //}
 
 
-void CClientSocket::SelfClose()
+void CTClientSocket::SelfClose()
 {
 
 	m_isConnected = false;
 	close();
 }
 
-void CClientSocket::recvMsg()
+void CTClientSocket::recvMsg()
 {
 	while(m_isConnected)
 	{
@@ -238,7 +241,7 @@ void CClientSocket::recvMsg()
 */
 }
 
-void CClientSocket::Broadcast(void* strc, int msgidx)
+void CTClientSocket::Broadcast(void* strc, int msgidx)
 {
 
 	//POSITION pos = pDoc->Server_UserList.GetHeadPosition();
@@ -465,14 +468,14 @@ void CClientSocket::Broadcast(void* strc, int msgidx)
 
 }
 
-void CClientSocket::Sendname(const char *name, int namelen)
+void CTClientSocket::Sendname(const char *name, int namelen)
 {
 
 	mSendName sendname(Header(ON_NAME), namelen, name);
 	pushMessage(&sendname);
 }
 
-void CClientSocket::Sendmapstate()
+void CTClientSocket::Sendmapstate()
 {
 	auto h = Header(BC_MAPSTATE);
 	mSendMapstate mapstate(h, m_me.GetUserName().size() , m_me.GetUserName().c_str() , m_me.FixedBoard, m_me.FG.Figure, m_me.FG.FgInfo);
@@ -480,13 +483,13 @@ void CClientSocket::Sendmapstate()
 	pushMessage(&mapstate);
 }
 
-void CClientSocket::Sendready(bool ready)
+void CTClientSocket::Sendready(bool ready)
 {
 	mSendReady sendready(Header(PER_READY), m_me.GetUserName().size() , m_me.GetUserName().c_str(), m_me.GetReady());
 	pushMessage(&sendready);
 }
 
-void CClientSocket::ProcessReady(mOnReady rdy)
+void CTClientSocket::ProcessReady(mOnReady rdy)
 {
 	//const auto name = string(rdy.fromname);
 	//auto user = pDoc->NameToTUser(name);
@@ -496,7 +499,7 @@ void CClientSocket::ProcessReady(mOnReady rdy)
 	//user->SetReady(rdy.ready);
 }
 
-void CClientSocket::ProcessMapsate(mOnMapstate on_map)
+void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
 {
 
 	//static CStringArray AsyncSend;
@@ -535,14 +538,14 @@ void CClientSocket::ProcessMapsate(mOnMapstate on_map)
 
 }
 
-void CClientSocket::SendDead()
+void CTClientSocket::SendDead()
 {
 	const auto header = Header(Header(BC_DEAD));
 	const mSendName sendname(header, m_me.GetUserName().size(), m_me.GetUserName().c_str());
 	pushMessage(&sendname);
 }
 
-void CClientSocket::SendRestart()
+void CTClientSocket::SendRestart()
 {
 	mSendPermit permit(Header(BC_RESTART), -1);
 	pushMessage(&permit);
@@ -550,7 +553,7 @@ void CClientSocket::SendRestart()
 
 //자기 제외하고 두줄 추가하기
 //isSelf에 따라 자기자신도 더할지 판단
-void CClientSocket::SendLine(int num = 1, bool isSelf = true)
+void CTClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{

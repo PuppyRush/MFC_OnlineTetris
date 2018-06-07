@@ -7,7 +7,7 @@
 #include "MyDoc.h"
 #include "MyView.h"
 #include "MainFrm.h"
-#include "CliektSocket.h"
+#include "TClientSocket.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -53,12 +53,12 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 
 			if(GetWindowTextLengthW() == 0)
 				return false;
-			else if(!CClientSocket::GetSocket()->isConnected())
+			else if(!CTClientSocket::GetSocket()->isConnected())
 			{
 				pView->MessageHandler(NOT_OPENNENTER);
 				return false;
 			}
-			else if(!CClientSocket::GetSocket()->isConnected())
+			else if(!CTClientSocket::GetSocket()->isConnected())
 			{
 				char chat[MSG_LEN];
 				char temp[MSG_LEN];
@@ -81,7 +81,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, temp);
 
 				mSendMessage msg(Header(SEND_MESSAGE), strlen(chat), chat);
-				CClientSocket::GetSocket()->pushMessage(&msg);
+				CTClientSocket::GetSocket()->pushMessage(&msg);
 				Sleep(50);
 			}
 		}
