@@ -61,7 +61,7 @@ const size_t TSocketImpl::_sendTo(const char *msg, const size_t size)
 }
 
 
-pair<const char* , const size_t> TSocketImpl::_recvFrom()
+msgElement TSocketImpl::_recvFrom()
 {
 	auto buf = getBuffer();
 	const size_t recvLen =	::read(m_socket, const_cast<char *>(buf), 512);

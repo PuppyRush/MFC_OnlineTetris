@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "TetrisUser.h"
+#include "TUser.h"
 #include "TServerSocket.h"
 
 class TUserServer : public TetrisUser

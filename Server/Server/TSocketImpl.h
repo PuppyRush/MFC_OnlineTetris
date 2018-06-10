@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DefineInfo.h"
-#include "TetrisSocket.h"
+#include "TSocket.h"
 
 
 class TSocketImpl : public tetris_socket::TetrisSocket
@@ -22,7 +22,7 @@ protected:
 	virtual unsigned _connect() override 	{return 0;};
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
-	virtual pair<const char*, const size_t> _recvFrom() override;
+	virtual msgElement _recvFrom() override;
 
 
 };

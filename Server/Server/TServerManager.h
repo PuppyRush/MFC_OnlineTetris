@@ -26,14 +26,16 @@ public:
 	virtual ~TServerManager();
 
 	void run();
-	void BeginServer();
+	void beginServer();
+	void closeServer();
+
 
 private:
+
+	bool m_closeServerSocket;
 
 	shared_ptr<std::thread> m_severManagerThread;
 	shared_ptr<TServerSocket> m_mainServerSocket;
-
-private:
 
 	std::deque<shared_ptr<TUserServer>> m_connectionPool;
 };
