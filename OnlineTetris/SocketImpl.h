@@ -3,17 +3,18 @@
 #include <winsock.h>
 
 #include "../Commons/TSocket.h"
+#include "../Commons/TType.h"
 
-using namespace tetris_socket;
+using namespace tetris;
+using namespace tetris_type;
 
 class SocketImpl : public TetrisSocket
 {
-
 public:
-	explicit SocketImpl(const int domain, const int type, const int protocol);
+	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const portType port);
 	~SocketImpl();
 
-	virtual unsigned create(const IPString ip, const unsigned port) override;
+	virtual unsigned create(IPString ip, portType port) override;
 	
 	virtual int listen(unsigned port, int backlog) {return 0;}
 
@@ -29,6 +30,6 @@ protected:
 
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
-	virtual pair<const char*, const size_t> _recvFrom() override;
+	virtual msgElement _recvFrom() override;
 
 };

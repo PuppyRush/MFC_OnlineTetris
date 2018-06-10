@@ -5,6 +5,8 @@
 #include "OnlineTetris.h"
 #include "TClientSocket.h"
 #include "TUserClient.h"
+#include "../Commons/TSocket.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,46 +16,22 @@ static char THIS_FILE[] = __FILE__;
 
 // CMySocket
 
-using namespace defineinfo;
-using namespace msg_header;
+using namespace tetris;
 
 CTClientSocket::CTClientSocket()
-	:SocketImpl(AF_INET, SOCK_STREAM, 0),
-	m_isConnected(false)
+	:SocketImpl(AF_INET, SOCK_STREAM, 0, IPString{192,168,0,1}, 5905),
+	m_isConnected(false),m_me(TUserClient::GetMe())
 {
 
 }
 
-CTClientSocket::CTClientSocket(const int domain, const int type, const int protocol)
-	:SocketImpl(domain, type, protocol),
+CTClientSocket::CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const portType port)
+	:SocketImpl(domain, type, protocol, ip, port),
 	m_isConnected(false)
 {}
 
 CTClientSocket::~CTClientSocket()
 {}
-
-void CTClientSocket::createThread()
-{
-	const auto recvTh = &CTClientSocket::recvMsg;
-	m_msgThread = std::thread(recvTh, this);
-	m_msgThread.join();
-}
-
-bool CTClientSocket::Connect(const IPString ip, const unsigned port)
-{
-	auto socket = CTClientSocket::GetSocket();
-	socket->create(ip, port);
-	if(socket->connect() == 0)
-	{
-		const auto me = TUserClient::GetMe();
-		const auto header = Header(toUType(SERVER_MSG::ON_CONNECTION_INFO));
-		const mSendName sendname(header, me->GetUserName().size(), me->GetUserName().c_str());
-		pushMessage(&sendname);
-		return true;
-	}
-	else	
-		return false;
-}
 
 //void CClientSocket::OnClose(int nErrorCode)
 //{
@@ -130,20 +108,8 @@ void CTClientSocket::SelfClose()
 	close();
 }
 
-void CTClientSocket::recvMsg()
+void CTClientSocket::switchingMessage(const msgElement &msg)
 {
-	while(m_isConnected)
-	{
-		const auto msg = popMessage();
-
-		int header[2] = {0,0};
-		memcpy(header, msg.first.get() , sizeof(int) * 2);
-
-		const size_t msgidx = header[0];
-
-	}
-
-	
 	/*switch(msgidx)
 	{
 
@@ -237,8 +203,8 @@ void CTClientSocket::recvMsg()
 		;
 
 	break;
-	}
-*/
+	}*/
+
 }
 
 void CTClientSocket::Broadcast(void* strc, int msgidx)
@@ -478,14 +444,14 @@ void CTClientSocket::Sendname(const char *name, int namelen)
 void CTClientSocket::Sendmapstate()
 {
 	auto h = Header(toUType(SERVER_MSG::BC_MAPSTATE));
-	mSendMapstate mapstate(h, m_me.GetUserName().size() , m_me.GetUserName().c_str() , m_me.FixedBoard, m_me.FG.Figure, m_me.FG.FgInfo);
+	mSendMapstate mapstate(h, m_me->GetUserName().size() , m_me->GetUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
 
 	pushMessage(&mapstate);
 }
 
 void CTClientSocket::Sendready(bool ready)
 {
-	mSendReady sendready(Header(toUType(SERVER_MSG::PER_READY)), m_me.GetUserName().size() , m_me.GetUserName().c_str(), m_me.GetReady());
+	mSendReady sendready(Header(toUType(SERVER_MSG::PER_READY)), m_me->GetUserName().size() , m_me->GetUserName().c_str(), m_me->GetReady());
 	pushMessage(&sendready);
 }
 
@@ -541,7 +507,7 @@ void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
 void CTClientSocket::SendDead()
 {
 	const auto header = Header(Header(toUType(SERVER_MSG::BC_DEAD)));
-	const mSendName sendname(header, m_me.GetUserName().size(), m_me.GetUserName().c_str());
+	const mSendName sendname(header, m_me->GetUserName().size(), m_me->GetUserName().c_str());
 	pushMessage(&sendname);
 }
 
@@ -557,7 +523,7 @@ void CTClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{
-		const auto name = m_me.GetUserName();
+		const auto name = m_me->GetUserName();
 		mSendAddline addline(Header(toUType(SERVER_MSG::BC_ADDLINE)), name.size(), name.c_str(), num);
 		pushMessage(&addline);
 	}

@@ -36,6 +36,9 @@
     <ClInclude Include="TUser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Validator.cpp">

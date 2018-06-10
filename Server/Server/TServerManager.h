@@ -10,15 +10,20 @@
 
 #include <thread>
 #include <queue>
+#include <atomic>
+#include <mutex>
 
 #include "DefineInfo.h"
 #include "TServerSocket.h"
 #include "TUserServer.h"
+#include "TType.h"
 
-using namespace std;
+
 
 class TServerManager
 {
+	using namespace std;
+	using namespace tetris_type;
 
 public:
 
@@ -33,7 +38,13 @@ private:
 	shared_ptr<std::thread> m_severManagerThread;
 	shared_ptr<TServerSocket> m_mainServerSocket;
 
-private:
-
 	std::deque<shared_ptr<TUserServer>> m_connectionPool;
+	
+	std::mutex m_mutex;
+
+	static tUnique getUnique() noexcept
+	{
+		static tUnique tetrisUnique(0);
+		return tetrisUnique++;
+	}
 };
