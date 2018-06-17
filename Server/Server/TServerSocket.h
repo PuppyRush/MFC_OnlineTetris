@@ -7,26 +7,31 @@
 #pragma once
 
 #include "TSocketImpl.h"
-#include "TType.h"
+#include "../../Commons/TType.h"
+
+namespace tetris
+{
 
 class TServerSocket : public TSocketImpl
 {
-	using namespace tetris_socket;
-	using namespace tetris_type;
 public:
 	TServerSocket();
 	explicit TServerSocket(const unsigned socket);
 	virtual ~TServerSocket();
 
-	static shared_ptr<TServerSocket> makeShared(const unsigned socket, const tUnique unique)
+	static shared_ptr<TServerSocket> makeShared(const unsigned socket)
 	{
-		auto serversocket = make_shared<TServerSocket>(socket,unique);
+		auto serversocket = make_shared<TServerSocket>(socket);
 		serversocket->readnwrite();
 		return serversocket;
 	}
 
-protected:
-	virtual unsigned _close(const unsigned _socket) override;
+	virtual void switchingMessage(const msgElement &msg);
 
+private:
+	std::shared_ptr<std::thread> m_popThread;
+
+	void recvConnectionInfo(msgElement &msg);
 };
 
+}

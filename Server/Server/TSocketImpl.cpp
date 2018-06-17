@@ -15,9 +15,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-TSocketImpl::TSocketImpl(const int domain, const int type, const int protocol)
-	:TetrisSocket(domain, type, protocol)
-{
+TSocketImpl::TSocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
+	:TetrisSocket(domain, type, protocol, ip, port)
+{ 
 }
 
 int TSocketImpl::listen(const unsigned port, int backlog)
@@ -50,7 +50,7 @@ int TSocketImpl::_accept()
 	return accepted_socket;
 }
 
-unsigned TSocketImpl::_close(const unsigned _socket)
+int TSocketImpl::_close(const unsigned _socket)
 {
 	return ::close(_socket);
 }
@@ -61,11 +61,12 @@ const size_t TSocketImpl::_sendTo(const char *msg, const size_t size)
 }
 
 
-pair<const char* , const size_t> TSocketImpl::_recvFrom()
+msgElement TSocketImpl::_recvFrom()
 {
 	auto buf = getBuffer();
-	const size_t recvLen =	::read(m_socket, const_cast<char *>(buf), 512);
+	const size_t recvLen = ::recv(m_socket, const_cast<char *>(buf), PACKET_LEN, 0);
+	auto prio = Header::getPriorty(buf);
 
-	return make_pair(static_cast<const char*>(buf), recvLen);
+	return msgHelper::getMsgElement(prio, buf, recvLen);
 }
 

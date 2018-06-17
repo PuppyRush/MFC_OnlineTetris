@@ -9,34 +9,31 @@
 
 #include <atomic>
 
-#include "TetrisUser.h"
+#include "../../Commons/TUser.h"
+#include "../../Commons/TType.h"
 #include "TServerSocket.h"
-#include "TType.h"
+
+using namespace std;
+
 class TUserServer : public TetrisUser
 {
-	using namespace tetris_Type;
-
 public:
-
-	TUserServer(const std::shared_ptr<TServerSocket> &socket, const tetris_Type::tUnique unique);
+	TUserServer(const std::shared_ptr<TServerSocket> &socket, const t_unique unique);
 	virtual ~TUserServer();
 
-	static std::shared_ptr<TUserServer> makeShared(const std::shared_ptr<TServerSocket> &socket)
+	static std::shared_ptr<TUserServer> makeShared(const std::shared_ptr<TServerSocket> &socket, 
+		const t_unique unique)
 	{
-		return std::make_shared<TUserServer>(socket);
+		return std::make_shared<TUserServer>(socket,unique);
 	}
 
 	shared_ptr<TServerSocket> m_socket;
 	
-	virtual void switchingMessage(const msg_element &msg);
-
 protected:
 
 
 private:
-	const tUnique m_unique;
-	
-	void recvmsg(msg_element &msg);
+	const t_unique m_unique;
 };
 
 

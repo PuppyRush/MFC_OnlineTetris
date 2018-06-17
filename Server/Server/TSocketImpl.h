@@ -1,29 +1,31 @@
 #pragma once
 
-#include "DefineInfo.h"
-#include "TetrisSocket.h"
+#include "../../Commons/DefineInfo.h"
+#include "../../Commons/TSocket.h"
+#include "../../Commons/TType.h"
 
+using namespace tetris;
+using namespace std;
 
-class TSocketImpl : public tetris_socket::TetrisSocket
+class TSocketImpl : public TetrisSocket
 {
-
 public:
-	TSocketImpl() = delete;
-	explicit TSocketImpl(const int domain, const int type, const int protocol);
-	virtual ~TSocketImpl(){}
+	virtual ~TSocketImpl() {}
 
-	virtual unsigned create(const IPString ip, const unsigned port) override {}
+	virtual unsigned create(IPString ip, tetris::t_port port) { return 0; }
 	virtual int listen(const unsigned port, int backlog) override;
 
 protected:
 
+	TSocketImpl() = delete;
+	explicit TSocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
+	
+
 	virtual int _accept() override;
-	virtual unsigned _close(const unsigned _socket) override;
+	virtual int _close(const unsigned _socket) override;
 	virtual unsigned _connect() override 	{return 0;};
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
-	virtual pair<const char*, const size_t> _recvFrom() override;
-
-
+	virtual msgElement _recvFrom() override;
 };
 

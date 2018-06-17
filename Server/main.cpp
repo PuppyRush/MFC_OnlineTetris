@@ -24,7 +24,7 @@ int main()
 		if(serverSocket->accept()==0)
 		{
 			TServerManager servermanager(serverSocket);
-			servermanager.BeginServer();
+			servermanager.beginServer();
 		}
 
 	}
