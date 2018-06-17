@@ -13,14 +13,13 @@
 #include "MessageHeader.h"
 #include "TType.h"
 
-#undef min;
-#undef max;
+#undef min
+#undef max
+
+using namespace std;
 
 namespace tetris
 {
-
-using namespace std;
-using namespace tetris_type;
 
 enum class eElementvalue : std::uint8_t
 {
@@ -31,23 +30,22 @@ enum class eElementvalue : std::uint8_t
 
 struct msgHelper
 {
-
-	static constexpr msgElement getMsgElement(const priorityType prio, const char* msg, const size_t size)
+	static constexpr msgElement getMsgElement(const t_priority prio, const char* msg, const size_t size)
 	{
 		return make_tuple(prio, msg, size);
 	}
 
-	static constexpr auto getPriorty(msgElement &msg)
+	static constexpr auto getPriorty(const msgElement &msg)
 	{
 		return get<toUType(eElementvalue::priority)>(msg);
 	}
 
-	static constexpr auto getMessage(msgElement &msg)
+	static constexpr auto getMessage(const msgElement &msg)
 	{
 		return get<toUType(eElementvalue::message)>(msg);
 	}
 	
-	static constexpr auto getSize(msgElement &msg)
+	static constexpr auto getSize(const msgElement &msg)
 	{
 		return get<toUType(eElementvalue::size)>(msg);
 	}
@@ -65,16 +63,13 @@ struct msgComp
 class TetrisSocket
 {
 public:
-
-	TetrisSocket() = delete;
 	virtual ~TetrisSocket();
-	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const portType port);
 
-	virtual unsigned create(IPString ip, portType port) = 0;
+	virtual unsigned create(IPString ip, t_port port) = 0;
 	virtual int listen(unsigned port, int backlog) = 0;
 	virtual void switchingMessage(const msgElement &msg) = 0;
 
-	static auto getBuffer()
+	static char* getBuffer()
 	{
 		auto msg = new char[PACKET_LEN]{1};
 		assert(!msg);
@@ -91,8 +86,8 @@ public:
 		char *dest = getBuffer();
 		memcpy(dest, msg, PACKET_LEN);
 
-		priorityType priority = std::numeric_limits<priorityType>::max();
-		memcpy(&priority, msg, sizeof(priorityType));
+		t_priority priority = std::numeric_limits<t_priority>::max();
+		memcpy(&priority, msg, sizeof(t_priority));
 
 		const auto val = make_tuple(priority, static_cast<const char*>(dest), len);
 		m_sendQ->emplace(val);
@@ -117,22 +112,22 @@ public:
 	unsigned close();
 
 	void SetIP(IPString &ip);
-	void SetPort(portType port);
+	void SetPort(t_port port);
 
 protected:
-
-	unsigned m_socket;
+	t_socket m_socket;
 
 	const int m_domain;
 	const int m_type;
 	const int m_protocol;
 	IPString m_ip;
-	portType m_port;
+	t_port m_port;
 
 	std::queue<unsigned> m_acceptedSocketQ;
 	bool m_closeSocket;
 
-	//�÷������� ���� socket�� �����Լ���.
+	TetrisSocket() = delete;
+	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
 
 	virtual int _accept() = 0;
 	virtual unsigned _connect() = 0;

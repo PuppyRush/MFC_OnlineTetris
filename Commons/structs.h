@@ -22,8 +22,6 @@ private:
 
 class IPString
 {
-private:
-	string ip;
 
 public:
 	IPString()
@@ -47,13 +45,16 @@ public:
 	{
 		return ip.c_str();
 	}
+
+private:
+	string ip;
 };
 
 typedef struct tPOINT
 {
 	long x;
 	long y;
-};
+}tPOINT;
 
 
 typedef struct FIGURE
@@ -64,4 +65,4 @@ typedef struct FIGURE
 	int Height;
 	int Width;
 	int dir;
-};
+}FIGURE;

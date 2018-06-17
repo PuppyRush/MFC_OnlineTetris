@@ -2,6 +2,7 @@
 
 #pragma warning(push)
 #pragma warning(disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent
+#pragma warning(disable:4091)
 
 #define  _SCL_SECURE_NO_WARNINGS
 
@@ -20,8 +21,6 @@
 
 namespace tetris
 {
-
-using namespace tetris_type;
 
 ///////////////////////////////////////////////////////////////////////////////
 //msg_idx//Ŭ���̾�Ʈ Ȥ�� ������ ���� �޼���
@@ -68,37 +67,37 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 typedef struct Header
 {
 public:
-	priorityType priority;
-	msgidxType msgIdx;
-	msgsizeType size;
+	t_priority priority;
+	t_msgidx msgIdx;
+	t_msgsize size;
 
 	explicit Header(const size_t msgIdx)
 		:msgIdx(msgIdx)
 	{}
 
-	explicit Header(const priorityType prio, const msgidxType msgIdx, const msgsizeType size)
+	explicit Header(const t_priority prio, const t_msgidx msgIdx, const t_msgsize size)
 		:priority(prio), msgIdx(msgIdx), size(size)
 	{}
 
-	static const msgidxType getMsgidx(const char *msg)
+	static const t_msgidx getMsgidx(const char *msg)
 	{
-		msgidxType msgidx = std::numeric_limits<msgidxType>::max();
-		memcpy(&msgidx, msg + sizeof(priorityType), sizeof(msgidxType));
+		t_msgidx msgidx = std::numeric_limits<t_msgidx>::max();
+		memcpy(&msgidx, msg + sizeof(t_priority), sizeof(t_msgidx));
 		return msgidx;
 	}
 
-	static const msgidxType getMsgsize(const char *msg)
+	static const t_msgidx getMsgsize(const char *msg)
 	{
-		msgsizeType msgsize = std::numeric_limits<msgsizeType>::min();
-		memcpy(&msgsize, msg + sizeof(priorityType) + sizeof(msgidxType), sizeof(msgsizeType));
+		t_msgsize msgsize = std::numeric_limits<t_msgsize>::min();
+		memcpy(&msgsize, msg + sizeof(t_priority) + sizeof(t_msgidx), sizeof(t_msgsize));
 		return msgsize;
 	}
 
 
-	static priorityType getPriorty(const char *msg)
+	static t_priority getPriorty(const char *msg)
 	{
-		priorityType priority = std::numeric_limits<priorityType>::max();
-		memcpy(&priority, msg, sizeof(priorityType));
+		t_priority priority = std::numeric_limits<t_priority>::max();
+		memcpy(&priority, msg, sizeof(t_priority));
 		return priority;
 	}
 
@@ -313,7 +312,8 @@ typedef struct mOnNames
 	char name[MAX_ENTER][ID_LEN];
 };
 
-typedef struct mOnMessage {
+typedef struct mOnMessage 
+{
 	size_t msglen;
 	char msg[MSG_LEN];
 };

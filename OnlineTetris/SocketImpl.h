@@ -6,15 +6,14 @@
 #include "../Commons/TType.h"
 
 using namespace tetris;
-using namespace tetris_type;
 
 class SocketImpl : public TetrisSocket
 {
 public:
-	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const portType port);
+	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
 	~SocketImpl();
 
-	virtual unsigned create(IPString ip, portType port) override;
+	virtual unsigned create(IPString ip, t_port port) override;
 	
 	virtual int listen(unsigned port, int backlog) {return 0;}
 

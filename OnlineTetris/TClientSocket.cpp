@@ -1,11 +1,15 @@
 // MySocket.cpp : 구현 파일입니다.
 //
 
+#include "../Commons/TType.h"
+#include "../Commons/TSocket.h"
+
 #include "stdafx.h"
 #include "OnlineTetris.h"
 #include "TClientSocket.h"
 #include "TUserClient.h"
-#include "../Commons/TSocket.h"
+
+
 
 
 #ifdef _DEBUG
@@ -25,7 +29,7 @@ CTClientSocket::CTClientSocket()
 
 }
 
-CTClientSocket::CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const portType port)
+CTClientSocket::CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
 	:SocketImpl(domain, type, protocol, ip, port),
 	m_isConnected(false)
 {}

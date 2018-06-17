@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SocketImpl.h"
 
-SocketImpl::SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const portType port)
+SocketImpl::SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
 	:TetrisSocket(domain, type, protocol,ip,port)
 {
 }
@@ -20,7 +20,7 @@ SocketImpl::~SocketImpl()
 	}
 }
 
-unsigned SocketImpl::create(IPString ip, portType port)
+unsigned SocketImpl::create(IPString ip, t_port port)
 {
 	m_ip = ip;
 	m_port = port;

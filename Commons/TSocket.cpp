@@ -8,7 +8,7 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace tetris;
 
-TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const portType port)
+TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
 	:m_closeSocket(true), 
 	m_recvThread(nullptr),
 	m_sendThread(nullptr),
@@ -45,7 +45,7 @@ void TetrisSocket::SetIP(IPString &ip)
 	m_ip = ip;
 }
 
-void TetrisSocket::SetPort(portType port)
+void TetrisSocket::SetPort(t_port port)
 {
 	m_port = port;
 }

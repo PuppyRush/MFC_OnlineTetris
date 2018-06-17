@@ -3,13 +3,15 @@
 #include <cstdint>
 #include <type_traits>
 
+using namespace std;
+
 namespace tetris
 {
 
 template<class T>
-constexpr std::underlying_type_t<T> toUType(T enuml) noexcept
+constexpr const auto toUType(T enuml) noexcept
 {
-	return static_cast<std::underlying_type_t<T> >(enuml);
+	return static_cast<std::underlying_type_t<T>>(enuml);
 }
 
 enum class USER_MSG : std::uint16_t

@@ -7,6 +7,7 @@
 
 #include "../Commons/MessageHeader.h"
 #include "../Commons/structs.h"
+#include "../Commons/TType.h"
 
 #include "SocketImpl.h"
 #include "TUserClient.h"
@@ -18,7 +19,7 @@ class CTClientSocket : public SocketImpl
 public:
 
 	CTClientSocket();
-	explicit CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const portType port);
+	explicit CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
 	virtual ~CTClientSocket();
 
 	virtual void switchingMessage(const msgElement &msg);
@@ -38,13 +39,13 @@ public:
 
 	inline static shared_ptr<CTClientSocket> GetSocket()
 	{
-		return m_clientSocket;
+		static shared_ptr<CTClientSocket> clientSocket = make_shared<CTClientSocket>();
+		return clientSocket;
 	}
 
 private:
 	shared_ptr<TUserClient> m_me;
 	bool m_isConnected;
-	static shared_ptr<CTClientSocket> m_clientSocket;
 };
 
 
