@@ -7,12 +7,13 @@
 #pragma once
 
 #include "TSocketImpl.h"
+#include "../../Commons/TType.h"
 
-using namespace tetris_socket;
+namespace tetris
+{
 
 class TServerSocket : public TSocketImpl
 {
-
 public:
 	TServerSocket();
 	explicit TServerSocket(const unsigned socket);
@@ -23,11 +24,14 @@ public:
 		auto serversocket = make_shared<TServerSocket>(socket);
 		serversocket->readnwrite();
 		return serversocket;
-
 	}
 
-protected:
-	virtual unsigned _close(const unsigned _socket) override;
+	virtual void switchingMessage(const msgElement &msg);
 
+private:
+	std::shared_ptr<std::thread> m_popThread;
+
+	void recvConnectionInfo(msgElement &msg);
 };
 
+}

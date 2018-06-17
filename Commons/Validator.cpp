@@ -1,4 +1,5 @@
 #include "Validator.h"
+
 #include <regex>
 #include <string>
 
@@ -9,9 +10,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 using namespace std;
-using namespace validator;
 
-bool IdCheck(const std::string id, const size_t min, const size_t max)
+bool tetris::IdCheck(const string &id, const size_t min, const size_t max)
 {
 	string reg;
 	reg.reserve(50);

@@ -11,7 +11,7 @@
 #include "../Commons/MessageHeader.h"
 #include "ServerSocket.h"
 
-using namespace msg_header;
+using namespace tetris;
 
 class CMyListen;
 class CTClientSocket;

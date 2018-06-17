@@ -3,6 +3,7 @@
 
 #include "StdAfx.h"
 #include "EnteringDialog.h"
+#include "../Commons/Validator.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -49,7 +50,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	Edt_Entername.GetWindowTextW(name);
 	string str_name = StringManager::ToStringFrom(name);
 
-	if (!validator::IdCheck(str_name,5,10))
+	if (!tetris::IdCheck(str_name,5,10))
 		return;
 
 	BYTE a1,a2,a3,a4;
@@ -74,7 +75,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	this->ipstring = ipstring;
 
 	shared_ptr<CTClientSocket> socket = CTClientSocket::GetSocket();
-	if(socket->Connect(ipstring, portnum))
+	if(socket->create(ipstring,portnum))
 		WaitingRoom::GetDialog()->DoModal();
 	
 	CDialogEx::OnOK();

@@ -15,9 +15,10 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <memory>
+#include <thread>
 
 #include "TServerManager.h"
-#include "MessageHeader.h"
+#include "../../Commons/MessageHeader.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,9 +28,9 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace std;
 
-TServerManager::TServerManager(const shared_ptr<TServerSocket> &socket)
+TServerManager::TServerManager(shared_ptr<TServerSocket> &socket)
 :m_mainServerSocket(socket),
- m_closeServerSocket(true)
+m_closedServer(true)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -45,20 +46,16 @@ void TServerManager::beginServer()
 	m_severManagerThread->join();
 }
 
-void TServerManager::closeServer()
-{
-	m_closeServerSocket = false;
-	m_mainServerSocket->close();
-}
-
 void TServerManager::run()
 {
-	while(m_closeServerSocket)
+	while(m_closedServer)
 	{
 		auto newClientSocket = m_mainServerSocket->popSocket();
 
+		std::lock_guard<std::mutex> lck (m_mutex);
+
 		auto serverSocket = TServerSocket::makeShared(newClientSocket);
-		auto newUser = TUserServer::makeShared(serverSocket);
+		auto newUser = TUserServer::makeShared(serverSocket, getUnique());
 
 		m_connectionPool.emplace_back(newUser);
 	}

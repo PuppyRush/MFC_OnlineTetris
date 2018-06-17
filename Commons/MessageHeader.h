@@ -12,12 +12,16 @@
 
 #include "DefineInfo.h"
 #include "structs.h"
+#include "TType.h"
 
 #undef GetMessage
+#undef min
+#undef max
 
-using namespace defineinfo;
-namespace msg_header
+namespace tetris
 {
+
+using namespace tetris_type;
 
 ///////////////////////////////////////////////////////////////////////////////
 //msg_idx//Ŭ���̾�Ʈ Ȥ�� ������ ���� �޼���
@@ -64,13 +68,44 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 typedef struct Header
 {
 public:
-	size_t msg_idx;
-	size_t dataSize;
+	priorityType priority;
+	msgidxType msgIdx;
+	msgsizeType size;
 
 	explicit Header(const size_t msgIdx)
-		:msg_idx(msgIdx)
+		:msgIdx(msgIdx)
 	{}
 
+	explicit Header(const priorityType prio, const msgidxType msgIdx, const msgsizeType size)
+		:priority(prio), msgIdx(msgIdx), size(size)
+	{}
+
+	static const msgidxType getMsgidx(const char *msg)
+	{
+		msgidxType msgidx = std::numeric_limits<msgidxType>::max();
+		memcpy(&msgidx, msg + sizeof(priorityType), sizeof(msgidxType));
+		return msgidx;
+	}
+
+	static const msgidxType getMsgsize(const char *msg)
+	{
+		msgsizeType msgsize = std::numeric_limits<msgsizeType>::min();
+		memcpy(&msgsize, msg + sizeof(priorityType) + sizeof(msgidxType), sizeof(msgsizeType));
+		return msgsize;
+	}
+
+
+	static priorityType getPriorty(const char *msg)
+	{
+		priorityType priority = std::numeric_limits<priorityType>::max();
+		memcpy(&priority, msg, sizeof(priorityType));
+		return priority;
+	}
+
+	static Header get(const char *msg)
+	{
+		return Header(Header::getPriorty(msg), Header::getMsgidx(msg), Header::getMsgsize(msg));
+	}
 };
 
 typedef struct mEmpty : public Header
@@ -88,7 +123,7 @@ typedef struct mSendPermit : public Header
 	explicit mSendPermit(const Header h, const int res)
 		:Header(h), res(res)
 	{
-		dataSize = sizeof(mSendPermit) - sizeof(h);
+		size = sizeof(mSendPermit) - sizeof(h);
 	}
 };
 
@@ -99,7 +134,7 @@ typedef struct mSendConnectionInfo : public Header
 	explicit mSendConnectionInfo(const Header h, const uint64_t _uniqueOrder)
 		:Header(h), uniqueOrder(_uniqueOrder)
 	{
-		dataSize = sizeof(this) - sizeof(h);
+		size = sizeof(this) - sizeof(h);
 	}
 };
 
@@ -113,7 +148,7 @@ typedef struct mSendName : public Header
 	{
 		CopyChars(this->name, ID_LEN, name, namelen);
 
-		dataSize = sizeof(mSendName) - sizeof(h);
+		size = sizeof(mSendName) - sizeof(h);
 	}
 };
 
@@ -129,7 +164,7 @@ typedef struct mSendNames : public Header
 		CopyChars<size_t>(this->namelen, size_t(MAX_ENTER), namelen, enternum);
 		CopyChars<char,MAX_ENTER,ID_LEN>(this->name, names, enternum, ID_LEN);
 
-		dataSize = sizeof(mSendNames) - sizeof(h);
+		size = sizeof(mSendNames) - sizeof(h);
 	}
 };
 
@@ -142,7 +177,7 @@ typedef struct mSendMessage :public Header
 		:Header(h)
 	{
 		CopyChars(this->msg, MSG_LEN, msg, msglen);
-		dataSize = sizeof(mSendMessage) - sizeof(h);
+		size = sizeof(mSendMessage) - sizeof(h);
 	}
 		
 	static mSendMessage GetMessage(const char* _msg)
@@ -169,7 +204,7 @@ typedef struct mSendReady : public Header
 		:Header(h), ready(ready)
 	{
 		CopyChars(this->fromname, MSG_LEN, fromname, namelen);
-		dataSize = sizeof(mSendReady) - sizeof(h);
+		size = sizeof(mSendReady) - sizeof(h);
 	}
 };
 
@@ -187,7 +222,7 @@ typedef struct mSendRadies : public Header
 		CopyChars(this->namelen, MAX_ENTER, namelen, enternum);
 		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, name, enternum, ID_LEN);
 			
-		dataSize = sizeof(this) - sizeof(h);
+		size = sizeof(this) - sizeof(h);
 	}
 };
 
@@ -201,7 +236,7 @@ typedef struct mSendStartsignal : public Header
 	explicit mSendStartsignal(const Header h, const int map, const int level, const bool ghost, const bool gravity)
 		:Header(h), map(map), level(level), ghost(ghost), gravity(gravity)
 	{
-		dataSize = sizeof(mSendStartsignal) - sizeof(h);
+		size = sizeof(mSendStartsignal) - sizeof(h);
 	}
 };
 
@@ -219,7 +254,7 @@ typedef struct mSendMapstates : public Header
 		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, name, enternum, ID_LEN);
 		CopyChars<int, MAX_ENTER, VERNUM, HORNUM>(this->board, board, enternum, VERNUM, HORNUM);
 
-		dataSize = sizeof(mSendMapstates) - sizeof(h);
+		size = sizeof(mSendMapstates) - sizeof(h);
 	}
 };
 
@@ -238,7 +273,7 @@ typedef struct mSendMapstate : public Header
 		CopyChars<int, VERNUM, HORNUM>(this->board, board, VERNUM, HORNUM);
 		CopyChars(this->figure, FG_FIXEDNUM, figure, FG_FIXEDNUM);
 
-		dataSize = sizeof(mSendMapstate) - sizeof(h);
+		size = sizeof(mSendMapstate) - sizeof(h);
 	}
 };
 
@@ -254,7 +289,7 @@ typedef struct mSendAddline : public Header
 	{
 		CopyChars(this->name, ID_LEN, name, namelen);
 
-		dataSize = sizeof(mSendAddline) - sizeof(h);
+		size = sizeof(mSendAddline) - sizeof(h);
 	}
 };
 

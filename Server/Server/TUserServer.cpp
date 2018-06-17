@@ -17,8 +17,9 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace std;
 
-TUserServer::TUserServer(const shared_ptr<TServerSocket> &socket)
-	:m_socket(socket)
+TUserServer::TUserServer(const std::shared_ptr<TServerSocket> &socket, const t_unique unique)
+	:m_socket(socket),
+	m_unique(unique)
 {
 }
 
@@ -26,4 +27,3 @@ TUserServer::~TUserServer()
 {
 	// TODO Auto-generated destructor stub
 }
-

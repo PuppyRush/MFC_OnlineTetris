@@ -6,27 +6,23 @@
 #include <memory>
 
 #include "../Commons/MessageHeader.h"
+#include "../Commons/structs.h"
+
 #include "SocketImpl.h"
 #include "TUserClient.h"
 
+using namespace tetris;
+
 class CTClientSocket : public SocketImpl
 {
-
 public:
 
 	CTClientSocket();
-	CTClientSocket(const int domain, const int type, const int protohcol);
+	explicit CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const portType port);
 	virtual ~CTClientSocket();
 
-	template<class... _Types>
-	static shared_ptr<CTClientSocket> GetSocket(_Types&&... _Args)
-	{
-		static shared_ptr<CTClientSocket> mysocket = make_shared<CTClientSocket>(forward<_Types>(_Args)...);
-		return mysocket;
-	}
+	virtual void switchingMessage(const msgElement &msg);
 
-	bool Connect(const IPString, const unsigned port);
-	void recvMsg();
 	void SelfClose();
 	void Broadcast(void* strc, int msgidx);
 	void Sendname(const char* name, int namelen);
@@ -40,17 +36,15 @@ public:
 
 	inline bool isConnected() { return m_isConnected; }
 
-private:
+	inline static shared_ptr<CTClientSocket> GetSocket()
+	{
+		return m_clientSocket;
+	}
 
-	TUserClient m_me;
-	std::thread m_msgThread;
-	std::mutex m_recvMsgMutex;
+private:
+	shared_ptr<TUserClient> m_me;
 	bool m_isConnected;
-
-private:
-
-	void createThread();
-
+	static shared_ptr<CTClientSocket> m_clientSocket;
 };
 
 

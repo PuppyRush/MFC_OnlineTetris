@@ -3,11 +3,11 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace defineinfo
+namespace tetris
 {
 
 template<class T>
-std::underlying_type_t<T> toUType(T enuml) noexcept
+constexpr std::underlying_type_t<T> toUType(T enuml) noexcept
 {
 	return static_cast<std::underlying_type_t<T> >(enuml);
 }
