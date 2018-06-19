@@ -10,11 +10,9 @@
 #include <thread>
 #include <unistd.h>
 
-#include "MessageHeader.h"
-
+#include "../Commons/MessageHeader.h"
 #include "Server/TServerManager.h"
-
-using namespace std;
+#include "Server/TServerSocket.h"
 
 int main()
 {
@@ -26,8 +24,15 @@ int main()
 			TServerManager servermanager(serverSocket);
 			servermanager.beginServer();
 		}
-
+	
 	}
 
+	cout << "choice menu\n";
+
+	while (1)
+	{
+		
+
+	}
 }
 

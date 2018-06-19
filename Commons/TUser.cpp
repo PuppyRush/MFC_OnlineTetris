@@ -7,11 +7,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using namespace std;
+
 TetrisUser::TetrisUser()
 {}
 
 TetrisUser::TetrisUser(const string &name, const IPString &ip, const int idx)
-	:Name(name),Ip(ip),isReady(false),Order(idx)
+	:m_name(name), m_ip(ip), m_isReady(false), m_order(idx)
 {
 	memset(StateBoard, 0, sizeof(StateBoard));
 	memset(GameBoard, 0, sizeof(GameBoard));
@@ -22,7 +24,7 @@ TetrisUser::TetrisUser(const string &name, const IPString &ip, const int idx)
 
 
 TetrisUser::TetrisUser(const string &name)
-	:isReady(false), isSurvive(true),Name(name)
+	:m_isReady(false), m_isSurvive(true), m_name(name)
 {
 	memset(StateBoard, 0, sizeof(StateBoard));
 	memset(GameBoard, 0, sizeof(GameBoard));
@@ -30,5 +32,3 @@ TetrisUser::TetrisUser(const string &name)
 
 	GhostFG.end = tPOINT();
 }
-
-

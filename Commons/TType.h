@@ -1,20 +1,23 @@
 #pragma once
 
+#include <atomic>
 #include <tuple>
-#include <atomic>>
+#include <memory>
 
-namespace tetris_type
+namespace tetris
 {
-	using namespace std;
+	using t_port = unsigned short;
+	using t_socket = unsigned int;
 
-	using portType = unsigned short;
+	using t_priority = unsigned short;
+	using t_msgidx = unsigned short;
+	using t_msgsize = unsigned int;
+	using t_header  = unsigned short;
 
-	using priorityType = unsigned short;
-	using msgidxType = unsigned short;
-	using msgsizeType = unsigned int;
-	using headerType  = unsigned short;
+	using msgElement = std::tuple<t_priority, const char*, size_t>;
 
-	using msgElement = std::tuple<priorityType, const char*, size_t>;
-
-	using tUnique = std::atomic_uint_fast16_t;
+	using t_unique = uint_fast16_t;
+	using t_roomUniqueAtomic = std::atomic<t_unique>;
+	using t_roomUnique = uint_fast16_t;
+	using t_uniqueAtomic = std::atomic<t_unique>;
 }

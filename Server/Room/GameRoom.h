@@ -13,7 +13,7 @@ class GameRoom : public Room
 {
 private:
 
-	GameRoom();
+	explicit GameRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ);
 	virtual ~GameRoom();
 
 public:

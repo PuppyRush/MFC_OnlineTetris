@@ -4,9 +4,6 @@
 #include "../../Commons/TSocket.h"
 #include "../../Commons/TType.h"
 
-using namespace tetris;
-using namespace std;
-
 class TSocketImpl : public TetrisSocket
 {
 public:
@@ -18,14 +15,13 @@ public:
 protected:
 
 	TSocketImpl() = delete;
-	explicit TSocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
-	
+	explicit TSocketImpl(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
+	explicit TSocketImpl(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
 	virtual int _accept() override;
 	virtual int _close(const unsigned _socket) override;
-	virtual unsigned _connect() override 	{return 0;};
+	virtual unsigned _connect() override { return 0; };
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
-	virtual msgElement _recvFrom() override;
+	virtual tetris::msgElement _recvFrom() override;
 };
-

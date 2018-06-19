@@ -18,6 +18,7 @@
 #include <thread>
 
 #include "TServerManager.h"
+#include "TServerUser.h"
 #include "../../Commons/MessageHeader.h"
 
 #ifdef _DEBUG
@@ -26,11 +27,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace std;
-
 TServerManager::TServerManager(shared_ptr<TServerSocket> &socket)
-:m_mainServerSocket(socket),
-m_closedServer(true)
+	:m_mainServerSocket(socket),
+	m_closedServer(true)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -42,21 +41,19 @@ TServerManager::~TServerManager() {
 void TServerManager::beginServer()
 {
 	const auto runfn = &TServerManager::run;
-	m_severManagerThread = std::make_shared<std::thread>(runfn, this);
+	m_severManagerThread = make_shared<thread>(runfn, this);
 	m_severManagerThread->join();
 }
 
 void TServerManager::run()
 {
-	while(m_closedServer)
+	while (m_closedServer)
 	{
 		auto newClientSocket = m_mainServerSocket->popSocket();
 
-		std::lock_guard<std::mutex> lck (m_mutex);
+		lock_guard<mutex> lck(m_mutex);
 
-		auto serverSocket = TServerSocket::makeShared(newClientSocket);
-		auto newUser = TUserServer::makeShared(serverSocket, getUnique());
-
+		auto newUser = TServerUser::makeShared(newClientSocket, getUnique());
 		m_connectionPool.emplace_back(newUser);
 	}
 }
