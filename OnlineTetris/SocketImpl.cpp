@@ -35,13 +35,7 @@ unsigned SocketImpl::create(IPString ip, t_port port)
 	::bind(m_socket, (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in));
 
 	if(connect() == 0)
-	{
-		const auto me = TUserClient::GetMe();
-		const auto header = Header(toUType(SERVER_MSG::ON_CONNECTION_INFO));
-		const mSendName sendname(header, me->GetUserName().size(), me->GetUserName().c_str());
-		pushMessage(&sendname);
 		return true;
-	}
 	else
 		return false;
 }

@@ -7,7 +7,6 @@ using namespace std;
 
 namespace tetris
 {
-	;;
 	using t_port = unsigned short;
 	using t_socket = unsigned int;
 

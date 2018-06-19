@@ -75,9 +75,15 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	this->ipstring = ipstring;
 
 	shared_ptr<CTClientSocket> socket = CTClientSocket::GetSocket();
-	if(socket->create(ipstring,portnum))
-		WaitingRoom::GetDialog()->DoModal();
-	
+	if (socket->create(ipstring, portnum))
+	{
+		const auto me = TUserClient::GetMe();
+		const auto header = Header(toUType(SERVER_MSG::ON_CONNECTION_INFO));
+		const mSendName sendname(header, me->GetUserName().size(), me->GetUserName().c_str());
+		socket->pushMessage(&sendname);
+
+		WaitingRoomDlg::GetDialog()->DoModal();
+	}
 	CDialogEx::OnOK();
 }
 
