@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "TSocket.h"
 #include "TType.h"
+#include "TAtomic.h"
 
 #undef GetUserName
 
@@ -25,23 +26,22 @@ public:
 	inline const bool getReady() const { return m_isReady; }
 	inline const int getOrder() const { return m_order; }
 	inline const bool getSurvive() const { return m_isSurvive; }
-	inline const tetris::t_unique getUnique() const { return m_unique; }
+	inline const tetris::t_userUnique getUnique() const noexcept { return m_unique; }
 
 	inline void setSurvive(const bool n) { m_isSurvive = n; }
 	inline void setOrder(const int idx) { m_order = idx; }
 	inline void setName(const string name) { m_name = name; }
 	inline void setReady(const bool rdy) { m_isReady = rdy; }
-	inline void setUnique(tetris::t_unique unique) { m_unique = unique; }
 
 protected:
-	TetrisUser(const string &name);
-	TetrisUser(const string &name, const IPString &ip, const int idx);
+	explicit TetrisUser(const tetris::t_userUnique unique, const string &name);
+	explicit TetrisUser(const tetris::t_userUnique unique, const string &name, const IPString &ip, const int idx);
 
-	explicit TetrisUser();
+	TetrisUser();
 	virtual ~TetrisUser() { }
 
 private:
-	tetris::t_unique m_unique;
+	tetris::t_userUnique m_unique;
 	int m_order;
 	string m_name;
 	IPString m_ip;

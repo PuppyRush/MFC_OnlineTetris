@@ -7,6 +7,7 @@
 #include <thread>
 #include <mutex>
 #include <limits>
+//#include <assert.h>
 
 #include "DefineInfo.h"
 #include "Logger.h"
@@ -34,15 +35,9 @@ public:
 
 	virtual unsigned create(IPString ip, tetris::t_port port) = 0;
 	virtual int listen(unsigned port, int backlog) = 0;
-	virtual void switchingMessage(const tetris::msgElement &msg) = 0;
+	
 
-	static char* getBuffer()
-	{
-		auto msg = new char[PACKET_LEN]{1};
-		assert(!msg);
-
-		return msg;
-	}
+	static char* getBuffer();
 
 	template <class T>
 	inline	void pushMessage(T *msg)
@@ -98,14 +93,15 @@ protected:
 	virtual int _accept() = 0;
 	virtual unsigned _connect() = 0;
 	virtual int _close(const unsigned _socket) = 0;
-
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual tetris::msgElement _recvFrom() = 0;
+	virtual void switchingMessage(const tetris::msgElement &msg) = 0;
+
 	void _acceptSocket();
 	void _send();
 	void _recv();
 
-	inline void setSocket(tetris::t_socket socket) {	m_socket = socket;	}
+	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
 	inline const tetris::t_socket getSocket() {	return m_socket;}
 
 private:

@@ -3,6 +3,8 @@
 #include <string>
 #include <cassert>
 
+#include "TType.h"
+
 #undef POINT
 
 class uncopyable
@@ -64,3 +66,26 @@ typedef struct FIGURE
 	int Width;
 	int dir;
 }FIGURE;
+
+typedef struct userInfo
+{
+	tetris::t_userUnique userUnique;
+	std::string name;
+
+	userInfo() {}
+	explicit userInfo(const tetris::t_userUnique userUnique, const std::string name)
+		:userUnique(userUnique),
+		name(name)
+	{}
+}UserInfo;
+
+typedef struct roomInfo
+{
+	const tetris::t_roomUnique unique;
+	const time_t makeTime;
+	const std::string roomName;
+
+	explicit roomInfo(const tetris::t_roomUnique unique, const time_t makeTime, const std::string roomName)
+		:unique(unique), makeTime(makeTime), roomName(roomName)
+	{}
+}roomInfo;

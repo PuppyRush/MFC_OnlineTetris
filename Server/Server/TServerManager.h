@@ -14,6 +14,7 @@
 
 #include "../../Commons/DefineInfo.h"
 #include "../../Commons/TType.h"
+#include "../../Commons/TAtomic.h"
 #include "TServerSocket.h"
 
 class TServerUser;
@@ -36,13 +37,6 @@ private:
 
 	deque<shared_ptr<TServerUser>> m_connectionPool;
 	mutex m_mutex;
-
-	static const tetris::t_unique getUnique() noexcept
-	{
-		static tetris::t_uniqueAtomic tetrisUnique(0);
-		tetrisUnique.fetch_add(1);
-		return tetrisUnique.load();
-	}
-
+	TAtomic<tetris::t_userUnique> m_unique;
 	bool m_closedServer;
 };

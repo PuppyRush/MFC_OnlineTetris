@@ -1,5 +1,5 @@
 /*
- * WaitingRoom.h
+ * TWaitingRoom.h
  *
  *  Created on: May 8, 2018
  *      Author: pi
@@ -7,25 +7,46 @@
 
 #pragma once
 
+#include <unordered_map>
+#include <mutex>
+
 #include "Room.h"
+
+#include "../../Commons/TType.h"
+#include "../../Commons/TAtomic.h"
 #include "../Server/TServerUser.h"
 
 
-class WaitingRoom : public Room
+class TWaitingRoom : public TRoom
 {
 public:
-	explicit WaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ);
-
-	inline  static shared_ptr<WaitingRoom> getWaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ)
+	
+	enum class errorCode : std::uint16_t
 	{
-		return m_waitingRoom;
+		Ok,
+		Duplicated=0,
+		NameLength,
+		PassedTime,
+		Nobody
+	};
+
+	TWaitingRoom() {}
+	explicit TWaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ);
+	virtual ~TWaitingRoom();
+
+	inline static shared_ptr<TWaitingRoom> getWaitingRoom() noexcept
+	{
+		auto waitingRoom = make_shared<TWaitingRoom>();
+		return waitingRoom;
 	}
 
-protected:
+	const errorCode insertRoom(const TRoom &room);
 
-	WaitingRoom();
-	virtual ~WaitingRoom();
+protected:
+	std::unordered_map< tetris::t_roomUnique, shared_ptr<TWaitingRoom>> m_roomMap;
 
 private:
-	static shared_ptr<WaitingRoom> m_waitingRoom;
+	TAtomic<tetris::t_roomUnique> m_unique;
+
+	const errorCode validator(const TRoom &room) const;
 };

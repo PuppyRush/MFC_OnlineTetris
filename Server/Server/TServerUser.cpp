@@ -8,6 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 
+#include "../Room/TWaitingRoom.h"
 #include "../../Commons/MessageHeader.h"
 #include "TServerUser.h"
 
@@ -17,10 +18,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TServerUser::TServerUser(tetris::t_socket socket, const tetris::t_unique unique)
-	:TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 }, 5905)
+TServerUser::TServerUser(tetris::t_socket socket, const tetris::t_userUnique unique)
+	:TServerSocket(),
+	m_sharedPtr(make_shared<TServerUser>(this))
 {
-	setUnique(unique);
+}
+
+TServerUser::TServerUser(TServerUser* user)
+	:TServerSocket()
+{
 }
 
 TServerUser::~TServerUser()
@@ -35,6 +41,7 @@ void TServerUser::switchingMessage(const tetris::msgElement &msg)
 	{
 	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
 		recvConnectionInfo(msg);
+		sendConnectionInfo();
 		break;
 	}
 }
@@ -43,11 +50,22 @@ void TServerUser::recvConnectionInfo(const tetris::msgElement &msg)
 {
 	const auto message = toMessage<mOnName>(msg);
 	setName(string(message.name));
+
+	TWaitingRoom::getWaitingRoom()->add(m_sharedPtr);
 }
 
 void TServerUser::sendConnectionInfo()
 {
-	const auto header = Header(toUType(CLIENT_MSG::ON_CONNECTION_INFO));
-	//mSendConnectionInfo msg(header, getUnique());
-	//pushMessage(&msg);
+	const auto userinfo = TWaitingRoom::getWaitingRoom()->getUserInfo();
+	const size_t size = userinfo.size();
+	UserInfo* userinfoAry = new UserInfo[size];
+	
+	for (int i = 0; i < size ; i++)
+		userinfoAry[i] = UserInfo(userinfo.at(i).userUnique, userinfo.at(i).name);
+
+	const auto header = Header(Priority::High, toUType(CLIENT_MSG::ON_CONNECTION_INFO));
+	mSendConnectionInfo msg(header, getUnique(), userinfoAry,size);
+	pushMessage(&msg);
+
+	delete[] userinfoAry;
 }

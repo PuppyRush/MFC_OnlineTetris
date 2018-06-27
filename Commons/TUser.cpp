@@ -12,8 +12,12 @@ using namespace std;
 TetrisUser::TetrisUser()
 {}
 
-TetrisUser::TetrisUser(const string &name, const IPString &ip, const int idx)
-	:m_name(name), m_ip(ip), m_isReady(false), m_order(idx)
+TetrisUser::TetrisUser(const tetris::t_userUnique unique, const string &name, const IPString &ip, const int idx)
+	:m_name(name), 
+	m_ip(ip), 
+	m_isReady(false), 
+	m_order(idx),
+	m_unique(unique)
 {
 	memset(StateBoard, 0, sizeof(StateBoard));
 	memset(GameBoard, 0, sizeof(GameBoard));
@@ -22,9 +26,11 @@ TetrisUser::TetrisUser(const string &name, const IPString &ip, const int idx)
 	GhostFG.end = tPOINT();
 }
 
-
-TetrisUser::TetrisUser(const string &name)
-	:m_isReady(false), m_isSurvive(true), m_name(name)
+TetrisUser::TetrisUser(const tetris::t_userUnique unique, const string &name)
+	:m_isReady(false), 
+	m_isSurvive(true), 
+	m_name(name),
+	m_unique(unique)
 {
 	memset(StateBoard, 0, sizeof(StateBoard));
 	memset(GameBoard, 0, sizeof(GameBoard));

@@ -31,7 +31,6 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
 	m_sendThread(nullptr),
 	m_socket(socket)
 {
-	readnwrite();
 }
 
 TetrisSocket::~TetrisSocket()
@@ -126,7 +125,6 @@ void TetrisSocket::_send()
 			const auto written = _sendTo(realMsg, size);
 			if (written <= 0)
 			{
-				m_closeSocket = false;
 				//writeLog("error sendto");
 			}
 
@@ -142,11 +140,11 @@ void TetrisSocket::_recv()
 		auto msg = _recvFrom();
 		if (msgHelper::getSize(msg) <= 0)
 		{
-			m_closeSocket = false;
 			//writeLog("error recvfrom");
-			break;
+			continue;
 		}
-		m_recvQ->push(msg);
+		else
+			m_recvQ->push(msg);
 	}
 }
 
@@ -176,10 +174,24 @@ void TetrisSocket::_popMessage()
 
 			const auto message = msgHelper::getMessage(msg);
 
-			auto msgptr = shared_ptr<const char>(message,
-				[](const char* msg) {delete[] msg; });
-
 			switchingMessage(msg);
+			delete[] msgHelper::getMessage(msg);
 		}
+	}
+}
+
+char* TetrisSocket::getBuffer()
+{
+	try
+	{
+		char* msg = new char[PACKET_LEN];
+		//assert(msg != NULL);
+		memset(msg, 0, PACKET_LEN);
+		return msg;
+	}
+	catch (exception e)
+	{
+		static char* emptyMsg = new char[0];
+		return emptyMsg;
 	}
 }

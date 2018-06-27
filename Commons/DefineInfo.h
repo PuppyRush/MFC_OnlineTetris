@@ -2,8 +2,9 @@
 
 #include <cstdint>
 #include <type_traits>
+#include "../Commons/TType.h"
 
-enum class Priority : uint16_t
+enum class Priority : tetris::t_priority
 {
 	VeryHigh=1000,
 	High=800,
@@ -12,9 +13,30 @@ enum class Priority : uint16_t
 	VeryLow=200
 };
 
+constexpr const Priority toProperty(const tetris::t_priority priority) noexcept
+{
+	switch (priority)
+	{
+	case 1000:
+		return Priority::VeryHigh;
+	case 800:
+		return Priority::High;
+	case 600:
+		return Priority::Normal;
+	case 400:
+		return Priority::Low;
+	case 200:
+		return Priority::VeryLow;
+	default:
+		return Priority::VeryLow;
+	}
+}
+
+
 enum class USER_MSG : uint16_t
 {
-	SUCC_SERVEROPEN = 0,
+	EMPTY_MESSAGE = 0,
+	SUCC_SERVEROPEN,
 	FAIL_SERVEROPEN,
 	PREUSE_PORT,
 	SUCC_SERVERCONN,
@@ -33,8 +55,8 @@ enum class USER_MSG : uint16_t
 
 enum class CLIENT_MSG : uint16_t
 {
-	//Ŭ���̾�Ʈ�� ���� �޼���
-	PER_NAME = 0,
+	EMPTY_MESSAGE = 0,
+	PER_NAME,
 	ON_CONNECTION_INFO,
 	SEND_MESSAGE,
 	ADD_USERS,
@@ -52,8 +74,8 @@ enum class CLIENT_MSG : uint16_t
 
 enum class SERVER_MSG : uint16_t
 {
-	//������ ���� �޼���
-	ON_NAME = 0,
+	EMPTY_MESSAGE = 0,
+	ON_NAME,
 	ON_CONNECTION_INFO,
 	ON_MESSAGE,
 	PER_READY,
@@ -72,7 +94,7 @@ typedef enum MAP
 	LINE,
 	RANDOMFIG,
 	RANDOMSEL,
-};
+}MAP;
 
 typedef enum TETRIS_FIGURE
 {
@@ -84,7 +106,7 @@ typedef enum TETRIS_FIGURE
 	ZMINO,
 	IMINO,
 	GMINO,
-};
+}TETRIS_FIGURE;
 
 enum class ETC : uint16_t
 {
@@ -133,7 +155,7 @@ enum class ETC : uint16_t
 //��Ÿ����
 
 #define PORTNUM		5905
-#define PACKET_LEN 	512
+#define PACKET_LEN 	256
 #define TIMER_TETRIS		1
 #define	TIMER_SENDMAPSTATE	2
 #define SENDTIME			50		//timer
