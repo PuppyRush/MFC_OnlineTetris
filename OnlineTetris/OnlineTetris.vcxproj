@@ -59,6 +59,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>TSocket;TUser;Validator</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\PuppyRush_NB\Documents\GitHub\OnlineTetris\Commons\Debug\</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -137,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Messenger.h" />
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="MyDoc.h" />
     <ClInclude Include="MyEdit.h" />
@@ -155,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="MyButton.cpp" />
     <ClCompile Include="MyDoc.cpp" />
     <ClCompile Include="MyEdit.cpp" />
@@ -174,11 +178,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OnlineTetris.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Commons\Commons.vcxproj">
-      <Project>{5e3a0ad1-8d47-46de-af6a-c8abd7f404a9}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

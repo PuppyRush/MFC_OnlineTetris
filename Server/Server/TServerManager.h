@@ -8,36 +8,38 @@
 #pragma once
 
 #include <thread>
-#include <queue>
+#include <deque>
 #include <atomic>
 #include <mutex>
 
 #include "../../Commons/DefineInfo.h"
 #include "../../Commons/TType.h"
 #include "TServerSocket.h"
-#include "TUserServer.h"
+
+class TServerUser;
+class TServerSocket;
 
 using namespace std;
 
 class TServerManager
 {
 public:
-	TServerManager(shared_ptr<TServerSocket> &socket);
+	TServerManager(std::shared_ptr<TServerSocket> &socket);
 	virtual ~TServerManager();
 
 	void run();
 	void beginServer();
 
 private:
-	shared_ptr<std::thread> m_severManagerThread;
+	shared_ptr<thread> m_severManagerThread;
 	shared_ptr<TServerSocket> m_mainServerSocket;
 
-	std::deque<shared_ptr<TUserServer>> m_connectionPool;
-	std::mutex m_mutex;
+	deque<shared_ptr<TServerUser>> m_connectionPool;
+	mutex m_mutex;
 
-	static const t_unique getUnique() noexcept
+	static const tetris::t_unique getUnique() noexcept
 	{
-		static t_uniqueAtomic tetrisUnique(0);
+		static tetris::t_uniqueAtomic tetrisUnique(0);
 		tetrisUnique.fetch_add(1);
 		return tetrisUnique.load();
 	}

@@ -3,18 +3,16 @@
 #include <cstdint>
 #include <type_traits>
 
-using namespace std;
-
-namespace tetris
+enum class Priority : uint16_t
 {
+	VeryHigh=1000,
+	High=800,
+	Normal=600,
+	Low=400,
+	VeryLow=200
+};
 
-template<class T>
-constexpr const auto toUType(T enuml) noexcept
-{
-	return static_cast<std::underlying_type_t<T>>(enuml);
-}
-
-enum class USER_MSG : std::uint16_t
+enum class USER_MSG : uint16_t
 {
 	SUCC_SERVEROPEN = 0,
 	FAIL_SERVEROPEN,
@@ -33,10 +31,11 @@ enum class USER_MSG : std::uint16_t
 	UNKOWN_ERROR
 };
 
-enum class CLIENT_MSG : std::uint16_t
+enum class CLIENT_MSG : uint16_t
 {
 	//Ŭ���̾�Ʈ�� ���� �޼���
-	PER_NAME = 100,
+	PER_NAME = 0,
+	ON_CONNECTION_INFO,
 	SEND_MESSAGE,
 	ADD_USERS,
 	ON_READY,
@@ -51,10 +50,10 @@ enum class CLIENT_MSG : std::uint16_t
 
 };
 
-enum class SERVER_MSG : std::uint16_t
+enum class SERVER_MSG : uint16_t
 {
 	//������ ���� �޼���
-	ON_NAME = 300,
+	ON_NAME = 0,
 	ON_CONNECTION_INFO,
 	ON_MESSAGE,
 	PER_READY,
@@ -87,14 +86,11 @@ typedef enum TETRIS_FIGURE
 	GMINO,
 };
 
-enum class ETC : std::uint16_t
+enum class ETC : uint16_t
 {
 	TOLEFT = 0,
 	TORIGHT
 };
-
-
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 //��������
@@ -142,3 +138,4 @@ enum class ETC : std::uint16_t
 #define	TIMER_SENDMAPSTATE	2
 #define SENDTIME			50		//timer
 #define TIMER_NEXTLEVEL		3
+

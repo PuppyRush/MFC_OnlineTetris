@@ -7,7 +7,8 @@
 
 #include "WaitingRoom.h"
 
-WaitingRoom::WaitingRoom()
+WaitingRoom::WaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ)
+	:Room(roomname,userQ)
 {
 	// TODO Auto-generated constructor stub
 

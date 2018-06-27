@@ -1,9 +1,9 @@
+
 #pragma once
 
-#include <tuple>
 #include <atomic>
-
-using namespace std;
+#include <tuple>
+#include <memory>
 
 namespace tetris
 {
@@ -17,9 +17,8 @@ namespace tetris
 
 	using msgElement = std::tuple<t_priority, const char*, size_t>;
 
-	using t_unique = std::uint_fast16_t;
+	using t_unique = uint_fast16_t;
+	using t_roomUniqueAtomic = std::atomic<t_unique>;
+	using t_roomUnique = uint_fast16_t;
 	using t_uniqueAtomic = std::atomic<t_unique>;
-
-	template <class T>
-	using t_sptr = std::shared_ptr<T>;
 }

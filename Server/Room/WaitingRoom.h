@@ -8,16 +8,24 @@
 #pragma once
 
 #include "Room.h"
+#include "../Server/TServerUser.h"
+
 
 class WaitingRoom : public Room
 {
-private:
+public:
+	explicit WaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ);
+
+	inline  static shared_ptr<WaitingRoom> getWaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ)
+	{
+		return m_waitingRoom;
+	}
+
+protected:
 
 	WaitingRoom();
 	virtual ~WaitingRoom();
 
-public:
-
-
+private:
+	static shared_ptr<WaitingRoom> m_waitingRoom;
 };
-

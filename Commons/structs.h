@@ -5,31 +5,28 @@
 
 #undef POINT
 
-using namespace std;
-
 class uncopyable
 {
 protected:
 	uncopyable(){}
 	virtual ~uncopyable(){}
+
 private:
 	void operator=(const uncopyable&) = delete;
 	uncopyable(const uncopyable &) = delete;
 	uncopyable(const uncopyable *) = delete;
 	uncopyable(const uncopyable &&) = delete;
-
 };
 
 class IPString
 {
-
 public:
 	IPString()
 	{
 		IPString({192,168,0,1});
 	}
 
-	explicit IPString(initializer_list<size_t> fields)
+	explicit IPString(std::initializer_list<size_t> fields)
 	{
 		assert(fields.size() == 4);
 		ip.reserve(16);
@@ -47,7 +44,7 @@ public:
 	}
 
 private:
-	string ip;
+	std::string ip;
 };
 
 typedef struct tPOINT

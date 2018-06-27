@@ -90,14 +90,14 @@ void OptionDialog::OnBnClickedOk()
 	int iiii=-1;
 	iiii = Cmb_map.GetCurSel();
 
-	pDoc->Map = iiii;
+	pDoc->m_map = iiii;
 
 	iiii = Cmb_level.GetCurSel();
 
-	pDoc->Level = iiii;
+	pDoc->m_level = iiii;
 
-	pDoc->Ghost = CHK_Ghost.GetCheck();
-	pDoc->Gravity = Chk_Gravity.GetCheck();
+	pDoc->m_ghost = CHK_Ghost.GetCheck();
+	pDoc->m_gravity = Chk_Gravity.GetCheck();
 
 	CDialogEx::OnOK();
 }

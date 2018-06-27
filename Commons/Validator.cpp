@@ -9,16 +9,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace std;
-
-bool tetris::IdCheck(const string &id, const size_t min, const size_t max)
+bool IdCheck(const std::string &id, const size_t min, const size_t max)
 {
-	string reg;
+	std::string reg;
 	reg.reserve(50);
 	reg.append("[��-�R|\\w]{");
-	reg.append(to_string(min));
+	reg.append(std::to_string(min));
 	reg.append(",");
-	reg.append(to_string(max));
+	reg.append(std::to_string(max));
 	reg.append("}");
 
 	const auto _regex = std::regex(reg);

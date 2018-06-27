@@ -73,7 +73,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 					pView->ReadyBtnClicked();
 
 				//이름을 chat에 가져온다
-				str = CString(pDoc->Name.c_str());
+				str = CString(pDoc->m_name.c_str());
 				len = WideCharToMultiByte(CP_ACP, 0, str, -1, NULL, 0, NULL, NULL);
 				WideCharToMultiByte(CP_ACP, 0, str, -1, chat, len, NULL, NULL);
 

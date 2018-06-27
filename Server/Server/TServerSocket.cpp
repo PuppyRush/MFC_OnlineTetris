@@ -15,10 +15,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace tetris;
-
 TServerSocket::TServerSocket()
-	:TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 },5905)
+	:TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 }, 5905)
 {}
 
 TServerSocket::~TServerSocket()
@@ -29,20 +27,10 @@ TServerSocket::~TServerSocket()
 TServerSocket::TServerSocket(const unsigned socket)
 	:TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 }, 5905)
 {
-	m_socket = socket;
+	setSocket(socket);
 	m_closeSocket = true;
 }
 
-void TServerSocket::switchingMessage(const msgElement &msg)
+void TServerSocket::switchingMessage(const tetris::msgElement &msg)
 {
-	const auto header = Header::get(msgHelper::getMessage(msg));
-	switch (header.msgIdx)
-	{
-		
-	}
-}
-
-void TServerSocket::recvConnectionInfo(msgElement &msg)
-{
-
 }

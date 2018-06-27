@@ -1,15 +1,17 @@
 #pragma once
 
 #include <memory>
-#include "../Commons/structs.h"
+
+#include "structs.h"
 #include "TSocket.h"
+#include "TType.h"
 
 #undef GetUserName
 
 class TetrisUser : private uncopyable
 {
-
 public:
+	virtual ~TetrisUser() { }
 
 	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];
 	int StateBoard[25][10];
@@ -18,37 +20,32 @@ public:
 
 	inline bool operator< (const TetrisUser &user)
 	{
-		return this->Order < user.GetOrder();
+		return this->m_order < user.getOrder();
 	}
 
-	inline const string GetUserName() const { return Name;}
-	inline const bool GetReady() const { return isReady;}
-	inline const int GetOrder() const { return Order;}
-	inline const bool GetSurvive() const { return isSurvive;}
+	inline const string getUserName() const { return m_name; }
+	inline const bool getReady() const { return m_isReady; }
+	inline const int getOrder() const { return m_order; }
+	inline const bool getSurvive() const { return m_isSurvive; }
+	inline const tetris::t_unique getUnique() const { return m_unique; }
 
-	inline void SetSurvive(const bool n) { isSurvive = n;}
-	inline void SetOrder  (const int idx){ Order = idx;}
-	inline void SetName   (const string name){ Name = name;}
-	inline void SetReady  (const bool rdy){ isReady = rdy;}
+	inline void setSurvive(const bool n) { m_isSurvive = n; }
+	inline void setOrder(const int idx) { m_order = idx; }
+	inline void setName(const string name) { m_name = name; }
+	inline void setReady(const bool rdy) { m_isReady = rdy; }
+	inline void setUnique(tetris::t_unique unique) { m_unique = unique; }
 
 protected:
-
-	int Order;
-	string Name;
-	IPString Ip;
-
-	bool isReady;
-	bool isServer;
-	bool isSurvive;
-
 	TetrisUser(const string &name);
 	TetrisUser(const string &name, const IPString &ip, const int idx);
 
 	explicit TetrisUser();
-	virtual ~TetrisUser(void){ }
 
 private:
-
+	tetris::t_unique m_unique;
+	int m_order;
+	string m_name;
+	IPString m_ip;
+	bool m_isReady;
+	bool m_isSurvive;
 };
-
-using SHR_USR = std::shared_ptr<TetrisUser>;

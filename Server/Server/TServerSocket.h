@@ -9,9 +9,6 @@
 #include "TSocketImpl.h"
 #include "../../Commons/TType.h"
 
-namespace tetris
-{
-
 class TServerSocket : public TSocketImpl
 {
 public:
@@ -26,12 +23,9 @@ public:
 		return serversocket;
 	}
 
-	virtual void switchingMessage(const msgElement &msg);
+	virtual void switchingMessage(const tetris::msgElement &msg);
 
 private:
-	std::shared_ptr<std::thread> m_popThread;
 
-	void recvConnectionInfo(msgElement &msg);
+	void recvConnectionInfo(const tetris::msgElement &msg);
 };
-
-}

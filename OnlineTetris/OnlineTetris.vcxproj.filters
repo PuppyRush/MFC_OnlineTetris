@@ -173,6 +173,9 @@
     <ClInclude Include="SocketImpl.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Messenger.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OnlineTetris.cpp">
@@ -215,6 +218,9 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="TUserClient.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Messenger.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

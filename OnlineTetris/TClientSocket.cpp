@@ -47,7 +47,7 @@ CTClientSocket::~CTClientSocket()
 	//	this->Close();
 	//	pDoc->ProcessClose();
 	//
-	//	pDoc->Server_EnterUsers.RemoveAll();
+	//	pDoc->m_serverEnterUsers.RemoveAll();
 	//		
 	//	POSITION pos = NULL;
 	//	pos = pDoc->Server_UserList.GetHeadPosition();
@@ -66,16 +66,16 @@ CTClientSocket::~CTClientSocket()
 	//
 	////클라이언트가 닫기를 시도하면 서버에서 onclose가 수행됨
 	//
-	//CString name = user->GetUserName();
+	//CString name = user->getUserName();
 	//char chname[ID_LEN];
 	//
 	//int len = WideCharToMultiByte(CP_ACP, 0, name, -1, NULL, 0, NULL, NULL);
 	//WideCharToMultiByte(CP_ACP, 0, name, -1, chname, len, NULL, NULL);
 	//
 	////서버에 저장된 접속자이름배열에서 접속을 끊은사람을 지운다.
-	//for(int i=0 ; i < pDoc->Server_EnterUsers.GetCount() ; i++)
-	//	if(pDoc->Server_EnterUsers[i] == name){
-	//		pDoc->Server_EnterUsers.RemoveAt(i);
+	//for(int i=0 ; i < pDoc->m_serverEnterUsers.GetCount() ; i++)
+	//	if(pDoc->m_serverEnterUsers[i] == name){
+	//		pDoc->m_serverEnterUsers.RemoveAt(i);
 	//	}
 	//
 	////서버에 저장된 유저리스트에서 접속을 끊은사람을 지운다.
@@ -94,14 +94,14 @@ CTClientSocket::~CTClientSocket()
 	//mSendName msg(Header(EXIT_USER), strlen(chname), chname);
 	//
 	//if(!Broadcast( &msg, EXIT_USER))
-	//	pView->MessageHandler(FAIL_SENDMSG);
+	//	m_view->MessageHandler(FAIL_SENDMSG);
 	//
 	//auto sendmsg = mSendMessage::GetMessage("님이 도중에 나갔습니다");
 	//
 	//if(!Broadcast( &sendmsg, ON_MESSAGE))
-	//	pView->MessageHandler(FAIL_SENDMSG);
+	//	m_view->MessageHandler(FAIL_SENDMSG);
 
-	//pView->VirtualDraw();
+	//m_view->VirtualDraw();
 //}
 
 
@@ -119,7 +119,7 @@ void CTClientSocket::switchingMessage(const msgElement &msg)
 
 	case PER_NAME:
 	{
-		auto msg = mSendMessage::GetMessage(pDoc->Name.c_str());
+		auto msg = mSendMessage::GetMessage(pDoc->m_name.c_str());
 		Send((char *)&msg, sizeof(msg));
 	}
 	break;
@@ -161,7 +161,7 @@ void CTClientSocket::switchingMessage(const msgElement &msg)
 	{
 		mOnPermit permit;
 		memcpy(&permit, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-		pView->MessageHandler(permit.res);
+		m_view->MessageHandler(permit.res);
 		SelfClose();
 	}
 	break;
@@ -186,7 +186,7 @@ void CTClientSocket::switchingMessage(const msgElement &msg)
 	{
 		mOnMapstate mapstate;
 		memcpy(&mapstate, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-		pView->ProcessMapState(&mapstate);
+		m_view->ProcessMapState(&mapstate);
 	}
 	break;
 
@@ -194,7 +194,7 @@ void CTClientSocket::switchingMessage(const msgElement &msg)
 	{
 		mOnAddline addline;
 		memcpy(&addline, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
-		pView->AddLine(addline.linenum);
+		m_view->AddLine(addline.linenum);
 	}
 	break;
 
@@ -247,15 +247,15 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 	//		
 	//		memset(&send_names, 0, sizeof(send_names));
 	//
-	//		for(int i=0 ; i < pDoc->Server_EnterUsers.GetCount() ; i++){
+	//		for(int i=0 ; i < pDoc->m_serverEnterUsers.GetCount() ; i++){
 	//
-	//			int len = WideCharToMultiByte(CP_ACP, 0, pDoc->Server_EnterUsers[i], -1, NULL, 0, NULL, NULL);
-	//			WideCharToMultiByte(CP_ACP, 0, pDoc->Server_EnterUsers[i], -1, send_names.name[i] , len, NULL, NULL);
+	//			int len = WideCharToMultiByte(CP_ACP, 0, pDoc->m_serverEnterUsers[i], -1, NULL, 0, NULL, NULL);
+	//			WideCharToMultiByte(CP_ACP, 0, pDoc->m_serverEnterUsers[i], -1, send_names.name[i] , len, NULL, NULL);
 	//			send_names.namelen[i] = len;
 	//
 	//		}
 	//
-	//		send_names.enternum = pDoc->Server_EnterUsers.GetCount();
+	//		send_names.enternum = pDoc->m_serverEnterUsers.GetCount();
 	//		send_names.IsServer = false;
 	//		send_names.msg_idx = msgidx;
 	//		send_names.struct_size = sizeof( send_names) - sizeof(int)*HEADER_NUM;
@@ -291,17 +291,17 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 	//	case ON_READY:
 	//
 	//		memset(&send_readies, 0, sizeof(send_readies));
-	//		for(int i=0 ; i < pDoc->Server_EnterUsers.GetCount() ; i++){
+	//		for(int i=0 ; i < pDoc->m_serverEnterUsers.GetCount() ; i++){
 	//			
-	//			send_readies.ready[i] = pDoc->NameToTUser(pDoc->Server_EnterUsers[i])->GetReady();
+	//			send_readies.ready[i] = pDoc->NameToTUser(pDoc->m_serverEnterUsers[i])->GetReady();
 	//
-	//			int len = WideCharToMultiByte(CP_ACP, 0, pDoc->Server_EnterUsers[i], -1, NULL, 0, NULL, NULL);
-	//			WideCharToMultiByte(CP_ACP, 0, pDoc->Server_EnterUsers[i], -1, send_readies.name[i] , len, NULL, NULL);
+	//			int len = WideCharToMultiByte(CP_ACP, 0, pDoc->m_serverEnterUsers[i], -1, NULL, 0, NULL, NULL);
+	//			WideCharToMultiByte(CP_ACP, 0, pDoc->m_serverEnterUsers[i], -1, send_readies.name[i] , len, NULL, NULL);
 	//			send_readies.namelen[i] = len;
 	//
 	//		}
 	//
-	//		send_readies.enternum = pDoc->Server_EnterUsers.GetCount();
+	//		send_readies.enternum = pDoc->m_serverEnterUsers.GetCount();
 	//		send_readies.IsServer = false;
 	//		send_readies.msg_idx = msgidx;
 	//		send_readies.struct_size = sizeof(send_readies) - sizeof(int)*HEADER_NUM;
@@ -321,10 +321,10 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 	//	case START_SIGNAL:
 	//
 	//		memset( &send_start, 0, sizeof(send_start));
-	//		send_start.level = pDoc->Level;
-	//		send_start.map = pDoc->Map;
-	//		send_start.ghost = pDoc->Ghost;
-	//		send_start.gravity = pDoc->Gravity;
+	//		send_start.level = pDoc->m_level;
+	//		send_start.map = pDoc->m_map;
+	//		send_start.ghost = pDoc->m_ghost;
+	//		send_start.gravity = pDoc->m_gravity;
 	//		send_start.IsServer = false;
 	//		send_start.msg_idx = msgidx;
 	//		send_start.struct_size = sizeof(send_start) - sizeof(int)*HEADER_NUM;
@@ -398,7 +398,7 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 	//			if(user == NULL || user->GetSocket() == NULL  )
 	//				continue;
 	//			//자기자신은 줄을 추가하지 않는다.
-	//			if(user->GetUserName().Compare(name) == 0)
+	//			if(user->getUserName().Compare(name) == 0)
 	//				continue;
 	//			if(user->GetSocket()->Send( (char *)&send_per, sizeof( send_per)) <=0)
 	//				return false;				
@@ -448,14 +448,14 @@ void CTClientSocket::Sendname(const char *name, int namelen)
 void CTClientSocket::Sendmapstate()
 {
 	auto h = Header(toUType(SERVER_MSG::BC_MAPSTATE));
-	mSendMapstate mapstate(h, m_me->GetUserName().size() , m_me->GetUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
+	mSendMapstate mapstate(h, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
 
 	pushMessage(&mapstate);
 }
 
 void CTClientSocket::Sendready(bool ready)
 {
-	mSendReady sendready(Header(toUType(SERVER_MSG::PER_READY)), m_me->GetUserName().size() , m_me->GetUserName().c_str(), m_me->GetReady());
+	mSendReady sendready(Header(toUType(SERVER_MSG::PER_READY)), m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
 	pushMessage(&sendready);
 }
 
@@ -511,7 +511,7 @@ void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
 void CTClientSocket::SendDead()
 {
 	const auto header = Header(Header(toUType(SERVER_MSG::BC_DEAD)));
-	const mSendName sendname(header, m_me->GetUserName().size(), m_me->GetUserName().c_str());
+	const mSendName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
 	pushMessage(&sendname);
 }
 
@@ -527,7 +527,7 @@ void CTClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{
-		const auto name = m_me->GetUserName();
+		const auto name = m_me->getUserName();
 		mSendAddline addline(Header(toUType(SERVER_MSG::BC_ADDLINE)), name.size(), name.c_str(), num);
 		pushMessage(&addline);
 	}
