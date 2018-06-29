@@ -7,14 +7,16 @@
 #include <list>
 #include <deque>
 #include <map>
-#include "TetrisUserClient.h"
+
 #include "../Commons/MessageHeader.h"
+#include "../Commons/structs.h"
+#include "TClientUser.h"
 #include "ServerSocket.h"
 
-using namespace msg_header;
+using namespace tetris;
 
 class CMyListen;
-class CClientSocket;
+class CTClientSocket;
 class CMyView;
 
 class CMyDoc : public CDocument
@@ -31,29 +33,29 @@ public:
 
 public:
 	
-	bool Start;			//모든 접속자가 ready를 누르면 서버가 시작할 수 있다.
-	bool Ready;			//클라이언트의 레디 상태
-	bool End;			//게임이 끝나면 End로
-	bool Ghost;			//낙하예상지점 옵션
-	bool Bgm;
-	bool Gravity;		//중력모드
-	CMyView *pView;
+	bool m_isStart;			//모든 접속자가 ready를 누르면 서버가 시작할 수 있다.
+	bool m_ready;			//클라이언트의 레디 상태
+	bool m_end;			//게임이 끝나면 m_end로
+	bool m_ghost;			//낙하예상지점 옵션
+	bool m_bgm;
+	bool m_gravity;		//중력모드
+	CMyView *m_view;
 
-	std::list<string> Client_EnterUsers;
-	std::list<string> Server_EnterUsers;		//접속자의 이름을 위한 변수
+	std::list<string> m_clientEnterUsers;
+	std::list<string> m_serverEnterUsers;		//접속자의 이름을 위한 변수
 
-	string ServerIp;
-	string ChatLog;
+	IPString m_serverIp;
+	string m_chatLog;
 	
-	std::map<string, SHR_USRC > Client_UserList;
+	std::map<string, SHR_USRC > m_clientUserList;
 	//std::map<string,CMySocket> SocketList;
 
-	string Name;
+	string m_name;
 
-	int Map;
-	int Level;
+	int m_map;
+	int m_level;
 	
-	int LineRemain;
+	int m_lineRemain;
 
 // 재정의입니다.
 public:

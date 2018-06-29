@@ -12,11 +12,11 @@
 #include "MyView.h"
 #include "MyDoc.h"
 #include "MyEdit.h"
-#include "CliektSocket.h"
+#include "TClientSocket.h"
 #include "EnteringDialog.h"
 #include "OptionDialog.h"
 #include "WaitingRoom.h"
-#include "TetrisUserClient.h"
+#include "TClientUser.h"
 #include "MyButton.h"
 
 #ifdef _DEBUG
@@ -25,7 +25,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace defineinfo;
+using namespace tetris;
 
 // CMyView
 
@@ -58,8 +58,6 @@ CMyView::CMyView()
 	pDoc = NULL;
 	pOptionDlg = NULL;
 	Btn_Ready = Btn_Start = NULL;
-
-	
 }
 
 CMyView::~CMyView()
@@ -111,7 +109,7 @@ void CMyView::OnInitialUpdate()
 	if(pDoc == NULL)
 	{
 		pDoc = GetDocument();
-		pDoc->pView = this;
+		pDoc->m_view = this;
 	}
 	if(pOptionDlg == NULL)
 	{
@@ -270,25 +268,25 @@ void CMyView::DrawImage(CDC *pDC)
 	if(pDoc == nullptr)
 		return;
 
-	if(!pDoc->Start && !pDoc->End)
+	if(!pDoc->m_isStart && !pDoc->m_end)
 	{
-		for each(const auto pair in pDoc->Client_UserList)
+		for each(const auto pair in pDoc->m_clientUserList)
 		{
 			const auto user = pair.second;
-			const CString username(user->GetUserName().c_str());
-			const size_t userorder = user->GetOrder();
+			const CString username(user->getUserName().c_str());
+			const size_t userorder = user->getOrder();
 			switch(userorder)
 			{
 
 			case 1:
-				if(user->GetReady())
+				if(user->getReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2, ReadyImg.GetWidth(), ReadyImg.GetHeight(), RGB(0, 255, 255));
 
 				pDC->TextOutW(SX_MAIN + MAIN_WIDTH / 2 - 10, SY_MAIN - 20, username);
 				break;
 
 			case 2:
-				if(user->GetReady())
+				if(user->getReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -297,7 +295,7 @@ void CMyView::DrawImage(CDC *pDC)
 				break;
 
 			case 3:
-				if(user->GetReady())
+				if(user->getReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -305,7 +303,7 @@ void CMyView::DrawImage(CDC *pDC)
 				pDC->TextOutW(SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH*1.5 - 10, SY_MAIN - 20, username);
 				break;
 			case 4:
-				if(user->GetReady())
+				if(user->getReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH * 2 + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -313,7 +311,7 @@ void CMyView::DrawImage(CDC *pDC)
 				pDC->TextOutW(SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH*2.5 - 10, SY_MAIN - 20, username);
 				break;
 			case 5:
-				if(user->GetReady())
+				if(user->getReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE + ReadyImg.GetWidth() / 10, MAIN_HEIGHT + (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -325,13 +323,13 @@ void CMyView::DrawImage(CDC *pDC)
 	}//before start 
 
 
-	if(pDoc->Start || pDoc->End)
+	if(pDoc->m_isStart || pDoc->m_end)
 	{
 		CImage MainFigure;
 		CImage GhostFigure;
 
 		//main에 이름출력
-		pDC->TextOutW(SX_MAIN + MAIN_WIDTH / 2 - 10, SY_MAIN - 20, CString(pDoc->Name.c_str()));
+		pDC->TextOutW(SX_MAIN + MAIN_WIDTH / 2 - 10, SY_MAIN - 20, CString(pDoc->m_name.c_str()));
 
 		switch(ME->FG.NextFigure)
 		{
@@ -419,7 +417,7 @@ void CMyView::DrawImage(CDC *pDC)
 		MainFigure.Destroy();
 
 		//예측도형 그리기
-		if(pDoc->Ghost)
+		if(pDoc->m_ghost)
 		{
 			for(int i = 0; i < FG_FIXEDNUM; i++)
 			{
@@ -471,7 +469,7 @@ void CMyView::DrawImage(CDC *pDC)
 		}//for	
 
 
-		if(!ME->GetSurvive())
+		if(!ME->getSurvive())
 			MainDeadBg.AlphaBlend(pDC->m_hDC, SX_MAIN, SY_MAIN, 90, AC_SRC_OVER);
 
 
@@ -481,13 +479,13 @@ void CMyView::DrawImage(CDC *pDC)
 		CImage SubFigure;
 		CImage SubMoveFigure;
 
-		for each(const auto pair in pDoc->Client_UserList)
+		for each(const auto pair in pDoc->m_clientUserList)
 		{
 			const auto user = pair.second;
-			const CString username(user->GetUserName().c_str());
-			const size_t userorder = user->GetOrder();
+			const CString username(user->getUserName().c_str());
+			const size_t userorder = user->getOrder();
 
-			if(user->GetUserName().compare(pDoc->Name.c_str()) == 0)
+			if(user->getUserName().compare(pDoc->m_name.c_str()) == 0)
 				continue;
 
 			//이름 출력
@@ -551,7 +549,7 @@ void CMyView::DrawImage(CDC *pDC)
 			for(int i = 0; i < FG_FIXEDNUM; i++)
 			{
 				const auto c = user->FG.FgInfo[i];
-				switch(user->GetOrder())
+				switch(user->getOrder())
 				{
 				case 2:
 					SubMoveFigure.BitBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE + SubMoveFigure.GetWidth()*c.x, SY_MAIN + SubMoveFigure.GetHeight()*c.y);//
@@ -649,7 +647,7 @@ void CMyView::DrawImage(CDC *pDC)
 			}//for
 
 			//클라이언트가 끝나면 반투명처리
-			if(!user->GetSurvive())
+			if(!user->getSurvive())
 			{
 				switch(userorder)
 				{
@@ -679,15 +677,15 @@ void CMyView::DrawImage(CDC *pDC)
 			}
 		}
 
-		for each(const auto pair in pDoc->Client_UserList)
+		for each(const auto pair in pDoc->m_clientUserList)
 		{
 			const auto user = pair.second;
-			const CString username(user->GetUserName().c_str());
-			const size_t userorder = user->GetOrder();
+			const CString username(user->getUserName().c_str());
+			const size_t userorder = user->getOrder();
 
-			if(user->GetSurvive())
+			if(user->getSurvive())
 			{
-				switch(user->GetOrder())
+				switch(user->getOrder())
 				{
 				case 1:
 					WinImg.TransparentBlt(pDC->m_hDC, SX_MAIN + WinImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2, WinImg.GetWidth(), WinImg.GetHeight(), RGB(0, 255, 255));
@@ -716,7 +714,7 @@ void CMyView::DrawImage(CDC *pDC)
 			 //게임이 끝나고 승리유저 외에는 모두 반투명처리
 			else
 			{
-				switch(user->GetOrder())
+				switch(user->getOrder())
 				{
 
 				case 1:
@@ -846,19 +844,19 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 		VirtualDraw();
 	}
 
-	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->GetSurvive() && CClientSocket::GetSocket()->isConnected() )
+	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->getSurvive() && CTClientSocket::GetSocket()->isConnected() )
 	{
-		CClientSocket::GetSocket()->Sendmapstate();
+		CTClientSocket::GetSocket()->Sendmapstate();
 		VirtualDraw();
 	}
 
 	else if(nIDEvent == TIMER_NEXTLEVEL)
 	{
-		pDoc->LineRemain++;
+		pDoc->m_lineRemain++;
 
-		if(pDoc->LineRemain % 10 == 0)
+		if(pDoc->m_lineRemain % 10 == 0)
 		{
-			CClientSocket::GetSocket()->SendLine(1, true);
+			CTClientSocket::GetSocket()->SendLine(1, true);
 		}
 	}
 
@@ -872,12 +870,12 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 
 
-	if(pDoc->Start && ME->GetSurvive())
+	if(pDoc->m_isStart && ME->getSurvive())
 	{
 
 		if(ME == NULL)
 		{
-			MessageHandler(-1);
+			MessageHandler(USER_MSG::UNKOWN_ERROR);
 			return;
 		}
 		FIGURE *fg = &(ME->FG);
@@ -945,7 +943,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			if(i == FG_FIXEDNUM)
 				MoveToRight();
 
-			if(pDoc->Ghost)
+			if(pDoc->m_ghost)
 			{
 				ME->GhostFG = ME->FG;
 				SetGhostFigure();
@@ -970,7 +968,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			if(i == FG_FIXEDNUM)
 				MoveToDown();
 
-			if(pDoc->Ghost)
+			if(pDoc->m_ghost)
 			{
 				ME->GhostFG = ME->FG;
 				SetGhostFigure();
@@ -1305,7 +1303,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				fg->Width = backup.Width;
 			}
 
-			if(pDoc->Ghost)
+			if(pDoc->m_ghost)
 			{
 				ME->GhostFG = ME->FG;
 				SetGhostFigure();
@@ -1324,71 +1322,66 @@ brk:
 }
 
 
-void CMyView::MessageHandler(int msg)
+void CMyView::MessageHandler(const USER_MSG msg)
 {
 
 	switch(msg)
 	{
-
-	case SUCC_SERVEROPEN:
+	case USER_MSG::SUCC_SERVEROPEN:
 		MessageBox(_T("서버개설에 성공하였습니다"));
 		break;
-	case FAIL_SERVEROPEN:
+	case USER_MSG::FAIL_SERVEROPEN:
 		MessageBox(_T("서버개설에 실패하였습니다!"));
 		break;
-	case PREUSE_PORT:
+	case USER_MSG::PREUSE_PORT:
 		MessageBox(_T("포트가 이미 열려있습니다!"));
 		break;
-	case SUCC_SERVERCONN:
+	case USER_MSG::SUCC_SERVERCONN:
 		MessageBox(_T("접속에 성공하였습니다!"));
 		break;
-	case FAIL_SERVERCONN:
+	case USER_MSG::FAIL_SERVERCONN:
 		MessageBox(_T("접속에 실패하였습니다!"));
 		break;
-	case EXCESS_ENTER:
+	case USER_MSG::EXCESS_ENTER:
 		MessageBox(_T("방이 꽉차서 더 이상 참가 할 수 없습니다"));
 		break;
-	case FAIL_ACCEPT:
+	case USER_MSG::FAIL_ACCEPT:
 		MessageBox(_T("클라이언트의 접속요청을 받지 못했습니다"));
 		break;
-	case FAIL_SENDMSG:
+	case USER_MSG::FAIL_SENDMSG:
 		MessageBox(_T("메세지를 보내는데 실패하였습니다"));
 		break;
-	case DUP_ID:
+	case USER_MSG::DUP_ID:
 		MessageBox(_T("아이디가 중복됩니다. 아이디를 바꾸어 다시 접속하세요"));
 		break;
-	case NOT_OPENNENTER:
+	case USER_MSG::NOT_OPENNENTER:
 		MessageBox(_T("서버가 개설되지 않았거나 서버에 입장하지 않았습니다."));
 		break;
-	case CLOSE_SERVER:
+	case USER_MSG::CLOSE_SERVER:
 		MessageBox(_T("서버가 닫혔습니다!"));
 		break;
 	default:
 		MessageBox(_T("알 수 없는 오류 발생!"));
-
-
-
 	}
-
 }
 
 void CMyView::ReadyBtnClicked()
 {
-	if(!CClientSocket::GetSocket()->isConnected())
+	if(!CTClientSocket::GetSocket()->isConnected())
 	{
-		MessageHandler(NOT_OPENNENTER);
+		MessageHandler(USER_MSG::NOT_OPENNENTER);
 		return;
 	}
 
-	if(pDoc->Ready)
+	if(pDoc->m_ready)
 	{
-		pDoc->Ready = false;
-		CClientSocket::GetSocket()->Sendready(false);
+		pDoc->m_ready = false;
+		CTClientSocket::GetSocket()->Sendready(false);
 	}
 	else
 	{
-		pDoc->Ready = true;
-		CClientSocket::GetSocket()->Sendready(true);
+		pDoc->m_ready = true;
+		CTClientSocket::GetSocket()->Sendready(true);
 	}
 }
 
@@ -1397,15 +1390,15 @@ void CMyView::ReadyBtnClicked()
 void CMyView::StartBtnClicked()
 {
 
-	if(pDoc->End)
+	if(pDoc->m_end)
 	{
-		CClientSocket::GetSocket()->SendRestart();
+		CTClientSocket::GetSocket()->SendRestart();
 		return;
 	}
 
-	if(!CClientSocket::GetSocket()->isConnected())
+	if(!CTClientSocket::GetSocket()->isConnected())
 	{
-		MessageHandler(NOT_ALLREADY);
+		MessageHandler(USER_MSG::NOT_ALLREADY);
 		return;
 	}
 	else
@@ -1424,9 +1417,9 @@ void CMyView::StartBtnClicked()
 void CMyView::OnMenuServer()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if(!CClientSocket::GetSocket()->isConnected())
+	if(!CTClientSocket::GetSocket()->isConnected())
 	{
-		auto dlg = ServerDialog::GetDialog();
+		auto dlg = EnteringDialog::GetDialog();
 		dlg->DoModal();
 
 	}
@@ -1435,7 +1428,7 @@ void CMyView::OnMenuServer()
 void CMyView::OnUpdateMenuServer(CCmdUI *pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(CClientSocket::GetSocket()->isConnected())
+	if(CTClientSocket::GetSocket()->isConnected())
 		pCmdUI->Enable(false);
 	else
 		pCmdUI->Enable(true);
@@ -1443,11 +1436,9 @@ void CMyView::OnUpdateMenuServer(CCmdUI *pCmdUI)
 
 void CMyView::SetMap(int i)
 {
-
-
 	if(ME == NULL)
 	{
-		MessageHandler(FAIL_FINDNAME);
+		MessageHandler(USER_MSG::FAIL_FINDNAME);
 		return;
 	}
 
@@ -1586,7 +1577,7 @@ void CMyView::SetMap(int i)
 void CMyView::ProcessMapState(mOnMapstate *map)
 {
 	const auto name = string(map->name);
-	if(name.compare(pDoc->Name)!=0)
+	if(name.compare(pDoc->m_name)!=0)
 	{
 		const auto user = pDoc->Client_NameToTUser(name);
 		memcpy(user->StateBoard, map->board, sizeof(map->board));
@@ -1835,7 +1826,7 @@ bool CMyView::CreateFigure(void)
 		}
 	}
 
-	if(pDoc->Ghost)
+	if(pDoc->m_ghost)
 	{
 		ME->GhostFG = ME->FG;
 		SetGhostFigure();
@@ -1883,12 +1874,12 @@ void CMyView::SetGhostFigure()
 //서버에게 끝났음을 통보
 void CMyView::SetGameover()
 {
-	ME->SetSurvive(false);
-	pDoc->End = true;
-	pDoc->Start = false;
+	ME->setSurvive(false);
+	pDoc->m_end = true;
+	pDoc->m_isStart = false;
 	KillTimer(TIMER_TETRIS);
 	KillTimer(TIMER_SENDMAPSTATE);
-	CClientSocket::GetSocket()->SendDead();
+	CTClientSocket::GetSocket()->SendDead();
 }
 
 bool CMyView::CheckLineDestroy()
@@ -1958,7 +1949,7 @@ bool CMyView::CheckLineDestroy()
 
 	if(Combo >= COMBONUM && des)
 	{
-		CClientSocket::GetSocket()->SendLine(ADDCOMBOLINE, false);
+		CTClientSocket::GetSocket()->SendLine(ADDCOMBOLINE, false);
 
 	}
 
@@ -2137,7 +2128,7 @@ void CMyView::AddLine(int num)
 
 	}
 
-	if(pDoc->Ghost)
+	if(pDoc->m_ghost)
 	{
 		ME->GhostFG = ME->FG;
 		SetGhostFigure();
@@ -2149,7 +2140,7 @@ void CMyView::AddLine(int num)
 void CMyView::OnBgm()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if(pDoc->Bgm)
+	if(pDoc->m_bgm)
 	{
 		PlaySound(NULL, AfxGetInstanceHandle(), NULL);
 	}
@@ -2183,13 +2174,13 @@ void CMyView::OnBgm()
 
 	}
 
-	pDoc->Bgm = !pDoc->Bgm;
+	pDoc->m_bgm = !pDoc->m_bgm;
 }
 
 void CMyView::OnUpdateBgm(CCmdUI *pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(pDoc->Bgm)
+	if(pDoc->m_bgm)
 	{
 		pCmdUI->SetText(_T("끄기"));
 	}

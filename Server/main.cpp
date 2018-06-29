@@ -7,22 +7,32 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <pthread.h>
+#include <thread>
 #include <unistd.h>
-#include "MessageHeader.h"
-#include "Server/ServerManager.h"
 
-using namespace std;
-using namespace server_manager;
+#include "../Commons/MessageHeader.h"
+#include "Server/TServerManager.h"
+#include "Server/TServerSocket.h"
 
 int main()
 {
+	auto serverSocket = make_shared<TServerSocket>();
+	if(serverSocket->listen(5905u, 100))
+	{
+		if(serverSocket->accept()==0)
+		{
+			TServerManager servermanager(serverSocket);
+			servermanager.beginServer();
+		}
+	
+	}
 
+	cout << "choice menu\n";
 
-	pthread_t server_main_thd_th=0;
-	ServerManager sm;
-	pthread_create(&server_main_thd_th, nullptr, &ServerManager::run,&sm);
+	while (1)
+	{
+		
 
-	pthread_join(server_main_thd_th, nullptr);
+	}
 }
 

@@ -3,9 +3,9 @@
 #include <string>
 #include <cassert>
 
-#undef POINT
+#include "TType.h"
 
-using namespace std;
+#undef POINT
 
 class uncopyable
 {
@@ -22,8 +22,6 @@ private:
 
 class IPString
 {
-private:
-	string ip;
 
 public:
 	IPString()
@@ -31,7 +29,7 @@ public:
 		IPString({192,168,0,1});
 	}
 
-	explicit IPString(initializer_list<size_t> fields)
+	explicit IPString(std::initializer_list<size_t> fields)
 	{
 		assert(fields.size() == 4);
 		ip.reserve(16);
@@ -47,13 +45,16 @@ public:
 	{
 		return ip.c_str();
 	}
+
+private:
+	std::string ip;
 };
 
 typedef struct tPOINT
 {
 	long x;
 	long y;
-};
+}tPOINT;
 
 
 typedef struct FIGURE
@@ -64,4 +65,27 @@ typedef struct FIGURE
 	int Height;
 	int Width;
 	int dir;
-};
+}FIGURE;
+
+typedef struct userInfo
+{
+	tetris::t_userUnique userUnique;
+	std::string name;
+
+	userInfo() {}
+	explicit userInfo(const tetris::t_userUnique userUnique, const std::string name)
+		:userUnique(userUnique),
+		name(name)
+	{}
+}UserInfo;
+
+typedef struct roomInfo
+{
+	const tetris::t_roomUnique unique;
+	const time_t makeTime;
+	const std::string roomName;
+
+	explicit roomInfo(const tetris::t_roomUnique unique, const time_t makeTime, const std::string roomName)
+		:unique(unique), makeTime(makeTime), roomName(roomName)
+	{}
+}roomInfo;

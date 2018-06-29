@@ -3,6 +3,7 @@
 
 #include "StdAfx.h"
 #include "EnteringDialog.h"
+#include "../Commons/Validator.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -10,20 +11,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-IMPLEMENT_DYNAMIC(ServerDialog, CDialogEx)
+IMPLEMENT_DYNAMIC(EnteringDialog, CDialogEx)
 
-ServerDialog::ServerDialog(CWnd* pParent /*=NULL*/)
-	:CDialogEx(ServerDialog::IDD, pParent)
+EnteringDialog::EnteringDialog(CWnd* pParent /*=NULL*/)
+	:CDialogEx(EnteringDialog::IDD, pParent)
 	, ipstring({ 0,0,0,0 })
 {
 
 }
 
-ServerDialog::~ServerDialog()
+EnteringDialog::~EnteringDialog()
 {
 }
 
-void ServerDialog::DoDataExchange(CDataExchange* pDX)
+void EnteringDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, _EDT_ENTERNAME, Edt_Entername);
@@ -32,8 +33,8 @@ void ServerDialog::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(ServerDialog, CDialogEx)
-	ON_BN_CLICKED(_BTN_ENTER, &ServerDialog::OnBnClickedBtnEnter)
+BEGIN_MESSAGE_MAP(EnteringDialog, CDialogEx)
+	ON_BN_CLICKED(_BTN_ENTER, &EnteringDialog::OnBnClickedBtnEnter)
 	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
@@ -42,14 +43,14 @@ END_MESSAGE_MAP()
 
 
 //입장하기
-void ServerDialog::OnBnClickedBtnEnter()
+void EnteringDialog::OnBnClickedBtnEnter()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CString name;
 	Edt_Entername.GetWindowTextW(name);
 	string str_name = StringManager::ToStringFrom(name);
 
-	if (!validator::IdCheck(str_name,5,10))
+	if (!idCheck(str_name,5,10))
 		return;
 
 	BYTE a1,a2,a3,a4;
@@ -68,19 +69,27 @@ void ServerDialog::OnBnClickedBtnEnter()
 
 	username = str_name;
 
-	TetrisUserClient::GetMe()->SetName(username);
+	TClientUser::GetMe()->setName(username);
 
 	this->portnum = portnum;
 	this->ipstring = ipstring;
 
-	shared_ptr<CClientSocket> socket = CClientSocket::GetSocket();
-	socket->Connect(ipstring, portnum);
-	
+	shared_ptr<CTClientSocket> socket = CTClientSocket::GetSocket();
+	if (socket->create(ipstring, portnum))
+	{
+		const auto me = TClientUser::GetMe();
+		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
+		const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
+		
+		socket->pushMessage(&sendname);
+
+		WaitingRoomDlg::GetDialog()->DoModal();
+	}
 	CDialogEx::OnOK();
 }
 
 
-BOOL ServerDialog::OnInitDialog()
+BOOL EnteringDialog::OnInitDialog()  
 {
 	CDialogEx::OnInitDialog();
 
@@ -92,7 +101,7 @@ BOOL ServerDialog::OnInitDialog()
 }
 
 
-void ServerDialog::OnClose()
+void EnteringDialog::OnClose()
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
@@ -100,7 +109,7 @@ void ServerDialog::OnClose()
 }
 
 
-void ServerDialog::PostNcDestroy()
+void EnteringDialog::PostNcDestroy()
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	this->DestroyWindow();

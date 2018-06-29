@@ -7,7 +7,7 @@
 #include "MyDoc.h"
 #include "MyView.h"
 #include "MainFrm.h"
-#include "CliektSocket.h"
+#include "TClientSocket.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,7 +15,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace defineinfo;
+using namespace tetris;
 
 // CMyEdit
 
@@ -53,12 +53,12 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 
 			if(GetWindowTextLengthW() == 0)
 				return false;
-			else if(!CClientSocket::GetSocket()->isConnected())
+			else if(!CTClientSocket::GetSocket()->isConnected())
 			{
-				pView->MessageHandler(NOT_OPENNENTER);
+				pView->MessageHandler(USER_MSG::NOT_OPENNENTER);
 				return false;
 			}
-			else if(!CClientSocket::GetSocket()->isConnected())
+			else if(!CTClientSocket::GetSocket()->isConnected())
 			{
 				char chat[MSG_LEN];
 				char temp[MSG_LEN];
@@ -73,15 +73,15 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 					pView->ReadyBtnClicked();
 
 				//이름을 chat에 가져온다
-				str = CString(pDoc->Name.c_str());
+				str = CString(pDoc->m_name.c_str());
 				len = WideCharToMultiByte(CP_ACP, 0, str, -1, NULL, 0, NULL, NULL);
 				WideCharToMultiByte(CP_ACP, 0, str, -1, chat, len, NULL, NULL);
 
 				strcat(chat, " : ");
 				strcat(chat, temp);
 
-				mSendMessage msg(Header(SEND_MESSAGE), strlen(chat), chat);
-				CClientSocket::GetSocket()->pushMessage(&msg);
+				mSendMessage msg(Header(Priority::Normal, toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
+				CTClientSocket::GetSocket()->pushMessage(&msg);
 				Sleep(50);
 			}
 		}

@@ -5,23 +5,24 @@
 #include "OnlineTetris.h"
 #include "../Commons/structs.h"
 #include "../Commons/Validator.h"
-#include "CliektSocket.h"
+#include "TClientSocket.h"
 #include "StringManager.h"
+#include "WaitingRoom.h"
 
 #include <regex>
 
 class CMyDoc;
 class CMyView;
 
-class ServerDialog : public CDialogEx
+class EnteringDialog : public CDialogEx
 {
-	DECLARE_DYNAMIC(ServerDialog)
+	DECLARE_DYNAMIC(EnteringDialog)
 public:
-	virtual ~ServerDialog();
+	virtual ~EnteringDialog();
 
 protected:
 
-	ServerDialog(CWnd* pParent = NULL);
+	EnteringDialog(CWnd* pParent = NULL);
 	
 
 	enum
@@ -45,9 +46,9 @@ public:
 
 public:
 
-	static shared_ptr<ServerDialog> GetDialog()
+	static shared_ptr<EnteringDialog> GetDialog()
 	{
-		static auto dlg = shared_ptr<ServerDialog>(new ServerDialog());
+		static auto dlg = shared_ptr<EnteringDialog>(new EnteringDialog());
 		return dlg;
 	}
 

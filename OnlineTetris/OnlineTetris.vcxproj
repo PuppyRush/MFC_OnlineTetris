@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -15,6 +15,7 @@
     <RootNamespace>OnlineTetris</RootNamespace>
     <Keyword>MFCProj</Keyword>
     <ProjectName>ClientTetris</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -22,7 +23,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -30,7 +31,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -58,6 +59,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>TSocket;TUser;Validator</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\PuppyRush_NB\Documents\GitHub\OnlineTetris\Commons\Debug\</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -136,10 +139,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Messenger.h" />
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="MyDoc.h" />
     <ClInclude Include="MyEdit.h" />
-    <ClInclude Include="CliektSocket.h" />
+    <ClInclude Include="TClientSocket.h" />
     <ClInclude Include="MyView.h" />
     <ClInclude Include="OnlineTetris.h" />
     <ClInclude Include="OptionDialog.h" />
@@ -149,15 +153,16 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringManager.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TetrisUserClient.h" />
+    <ClInclude Include="TClientUser.h" />
     <ClInclude Include="WaitingRoom.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="MyButton.cpp" />
     <ClCompile Include="MyDoc.cpp" />
     <ClCompile Include="MyEdit.cpp" />
-    <ClCompile Include="ClientSocket.cpp" />
+    <ClCompile Include="TClientSocket.cpp" />
     <ClCompile Include="MyView.cpp" />
     <ClCompile Include="OnlineTetris.cpp" />
     <ClCompile Include="OptionDialog.cpp" />
@@ -168,16 +173,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StringManager.cpp" />
-    <ClCompile Include="TetrisUserClient.cpp" />
+    <ClCompile Include="TClientUser.cpp" />
     <ClCompile Include="WaitingRoom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OnlineTetris.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Commons\Commons.vcxproj">
-      <Project>{5e3a0ad1-8d47-46de-af6a-c8abd7f404a9}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

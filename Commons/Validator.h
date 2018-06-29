@@ -1,13 +1,6 @@
 #pragma once
 
-#include <regex>
 #include <string>
 
-using namespace std;
-
-namespace validator
-{
-	bool IdCheck(const string &id, const size_t min, const size_t max);
-}
-
-
+const bool idCheck(const std::string &id, const size_t min, const size_t max);
+const bool stringLengthCheck(const std::string str, const size_t min, const size_t max);

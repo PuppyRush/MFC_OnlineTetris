@@ -222,3 +222,6 @@ OnlineTetris.VC.VC.opendb
 *.db
 
 *.wav
+*.json
+.vs/OnlineTetris/v15/Solution.VC.db-wal
+*.db-shm
