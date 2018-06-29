@@ -8,7 +8,7 @@
 #include "GameRoom.h"
 
 GameRoom::GameRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ)
-	:Room(roomname,userQ)
+	:TRoom(roomname,userQ)
 {
 	// TODO Auto-generated constructor stub
 

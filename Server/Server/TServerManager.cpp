@@ -5,7 +5,6 @@
  *      Author: cmk
  */
 
-#include <functional>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,7 +52,9 @@ void TServerManager::run()
 
 		lock_guard<mutex> lck(m_mutex);
 
-		auto newUser = TServerUser::makeShared(newClientSocket, getUnique());
+		auto newUser = TServerUser::makeShared(newClientSocket, m_unique.newUnique());
+		newUser->readnwrite();
+
 		m_connectionPool.emplace_back(newUser);
 	}
 }

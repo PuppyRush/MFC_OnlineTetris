@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include "OnlineTetris.h"
 #include "TClientSocket.h"
-#include "TUserClient.h"
+#include "TClientUser.h"
 
 
 
@@ -24,7 +24,7 @@ using namespace tetris;
 
 CTClientSocket::CTClientSocket()
 	:SocketImpl(AF_INET, SOCK_STREAM, 0, IPString{192,168,0,1}, 5905),
-	m_isConnected(false),m_me(TUserClient::GetMe())
+	m_isConnected(false),m_me(TClientUser::GetMe())
 {
 
 }
@@ -440,22 +440,23 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 
 void CTClientSocket::Sendname(const char *name, int namelen)
 {
-
-	mSendName sendname(Header(toUType(SERVER_MSG::ON_NAME)), namelen, name);
+	const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_NAME));
+	mSendName sendname(header , namelen, name);
 	pushMessage(&sendname);
 }
 
 void CTClientSocket::Sendmapstate()
 {
-	auto h = Header(toUType(SERVER_MSG::BC_MAPSTATE));
-	mSendMapstate mapstate(h, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
+	auto header = Header(Priority::High, toUType(SERVER_MSG::BC_MAPSTATE));
+	mSendMapstate mapstate(header, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
 
 	pushMessage(&mapstate);
 }
 
 void CTClientSocket::Sendready(bool ready)
 {
-	mSendReady sendready(Header(toUType(SERVER_MSG::PER_READY)), m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
+	const auto header = Header(Priority::High, toUType(SERVER_MSG::PER_READY));
+	mSendReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
 	pushMessage(&sendready);
 }
 
@@ -510,14 +511,15 @@ void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
 
 void CTClientSocket::SendDead()
 {
-	const auto header = Header(Header(toUType(SERVER_MSG::BC_DEAD)));
+	const auto header = Header(Priority::High, toUType(SERVER_MSG::BC_DEAD));
 	const mSendName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
 	pushMessage(&sendname);
 }
 
 void CTClientSocket::SendRestart()
 {
-	mSendPermit permit(Header(toUType(SERVER_MSG::BC_RESTART)), -1);
+	const auto header = Header(Priority::Normal, toUType(SERVER_MSG::BC_RESTART));
+	mSendPermit permit(header, -1);
 	pushMessage(&permit);
 }
 
@@ -527,8 +529,9 @@ void CTClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{
+		const auto header = Header(Priority::High, toUType(SERVER_MSG::BC_ADDLINE));
 		const auto name = m_me->getUserName();
-		mSendAddline addline(Header(toUType(SERVER_MSG::BC_ADDLINE)), name.size(), name.c_str(), num);
+		mSendAddline addline(header, name.size(), name.c_str(), num);
 		pushMessage(&addline);
 	}
 }

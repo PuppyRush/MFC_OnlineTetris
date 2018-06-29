@@ -1,11 +1,10 @@
-
 #include "TSocket.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#undef THIS_FILE
+//static char THIS_FILE[] = __FILE__;
+//#endif
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:m_closeSocket(true),
@@ -126,7 +125,6 @@ void TetrisSocket::_send()
 			const auto written = _sendTo(realMsg, size);
 			if (written <= 0)
 			{
-				m_closeSocket = false;
 				//writeLog("error sendto");
 			}
 
@@ -176,12 +174,24 @@ void TetrisSocket::_popMessage()
 
 			const auto message = msgHelper::getMessage(msg);
 
-			//auto msgptr = shared_ptr<const char>(message,
-			//	[](const char* msg) {delete[] msg; });
-
 			switchingMessage(msg);
 			delete[] msgHelper::getMessage(msg);
 		}
 	}
 }
 
+char* TetrisSocket::getBuffer()
+{
+	try
+	{
+		char* msg = new char[PACKET_LEN];
+		//assert(msg != NULL);
+		memset(msg, 0, PACKET_LEN);
+		return msg;
+	}
+	catch (exception e)
+	{
+		static char* emptyMsg = new char[0];
+		return emptyMsg;
+	}
+}

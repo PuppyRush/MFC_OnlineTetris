@@ -50,7 +50,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	Edt_Entername.GetWindowTextW(name);
 	string str_name = StringManager::ToStringFrom(name);
 
-	if (!IdCheck(str_name,5,10))
+	if (!idCheck(str_name,5,10))
 		return;
 
 	BYTE a1,a2,a3,a4;
@@ -69,7 +69,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 
 	username = str_name;
 
-	TUserClient::GetMe()->setName(username);
+	TClientUser::GetMe()->setName(username);
 
 	this->portnum = portnum;
 	this->ipstring = ipstring;
@@ -77,9 +77,10 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	shared_ptr<CTClientSocket> socket = CTClientSocket::GetSocket();
 	if (socket->create(ipstring, portnum))
 	{
-		const auto me = TUserClient::GetMe();
-		const auto header = Header(toUType(SERVER_MSG::ON_CONNECTION_INFO));
+		const auto me = TClientUser::GetMe();
+		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
 		const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
+		
 		socket->pushMessage(&sendname);
 
 		WaitingRoomDlg::GetDialog()->DoModal();

@@ -321,8 +321,8 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 
 		//클라이언트에 이미 생성된 유저라면 유저객체를 만들지 않는다.
 		//없는것이 판단되면 새로 생성
-		if(m_clientUserList.count(name) == 0)
-			m_clientUserList.insert(make_pair(name, TUserClient::MakeShared(name)));
+		//if(m_clientUserList.count(name) == 0)
+		//	m_clientUserList.insert(make_pair(name, TClientUser::MakeShared(name)));
 	}
 
 	//ME = Client_NameToTUser(m_name).get();
@@ -396,8 +396,8 @@ void CMyDoc::ProcessEnter(string name)
 {
 	m_name = name;
 
-	auto tmp = TUserClient::MakeShared(name);
-	m_clientUserList.insert( make_pair(name, tmp));
+	//auto tmp = TClientUser::MakeShared(name);
+	//m_clientUserList.insert( make_pair(name, tmp));
 
 	CTClientSocket::GetSocket()->Sendname(name.c_str(), name.size());
 
@@ -450,7 +450,7 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 		break;
 	}
 
-	auto &FG = TUserClient::GetMe()->FG;
+	auto &FG = TClientUser::GetMe()->FG;
 	FG.Figure = FG.NextFigure = -1;
 
 	m_view->CreateFigure();
@@ -649,7 +649,7 @@ void CMyDoc::RestartGame()
 		memset(board, 0, sizeof(board));
 	}
 
-	auto me = TUserClient::GetMe();
+	auto me = TClientUser::GetMe();
 
 	me->setReady(false);
 	me->setSurvive(true);

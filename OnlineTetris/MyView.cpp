@@ -16,7 +16,7 @@
 #include "EnteringDialog.h"
 #include "OptionDialog.h"
 #include "WaitingRoom.h"
-#include "TUserClient.h"
+#include "TClientUser.h"
 #include "MyButton.h"
 
 #ifdef _DEBUG

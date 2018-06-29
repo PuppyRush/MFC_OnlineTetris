@@ -10,7 +10,7 @@
 #include "../Commons/TType.h"
 
 #include "SocketImpl.h"
-#include "TUserClient.h"
+#include "TClientUser.h"
 
 using namespace tetris;
 
@@ -44,7 +44,7 @@ public:
 	}
 
 private:
-	shared_ptr<TUserClient> m_me;
+	shared_ptr<TClientUser> m_me;
 	bool m_isConnected;
 };
 

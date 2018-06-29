@@ -9,7 +9,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-bool IdCheck(const std::string &id, const size_t min, const size_t max)
+const bool idCheck(const std::string &id, const size_t min, const size_t max)
 {
 	std::string reg;
 	reg.reserve(50);
@@ -27,4 +27,10 @@ bool IdCheck(const std::string &id, const size_t min, const size_t max)
 	}
 	else
 		return true;
+}
+
+const bool stringLengthCheck(const std::string str, const size_t min, const size_t max)
+{
+	const size_t size = str.size();
+	return (min <= size && size <= max);
 }

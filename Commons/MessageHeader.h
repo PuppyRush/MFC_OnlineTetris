@@ -10,6 +10,7 @@
 #include <numeric>
 #include <limits>
 
+
 #include "DefineInfo.h"
 #include "structs.h"
 #include "TType.h"
@@ -18,10 +19,6 @@
 #undef GetMessage
 #undef min
 #undef max
-
-///////////////////////////////////////////////////////////////////////////////
-//msg_idx//Ŭ���̾�Ʈ Ȥ�� ������ ���� �޼���
-//IsServer//�޼����� ���� ��ü�� �������� Ŭ���̾�Ʈ ����?
 
 struct client {};
 struct server {};
@@ -68,12 +65,12 @@ public:
 	tetris::t_msgidx msgIdx;
 	tetris::t_msgsize size;
 
-	explicit Header(const size_t msgIdx)
-		:msgIdx(msgIdx)
+	explicit Header(const Priority prio, const tetris::t_msgidx msgIdx)
+		:priority(toUType(prio)), msgIdx(msgIdx)
 	{}
 
-	explicit Header(const tetris::t_priority prio, const tetris::t_msgidx msgIdx, const tetris::t_msgsize size)
-		:priority(prio), msgIdx(msgIdx), size(size)
+	explicit Header(const Priority prio, const tetris::t_msgidx msgIdx, const tetris::t_msgsize size)
+		:priority(toUType(prio)), msgIdx(msgIdx), size(size)
 	{}
 
 	static const tetris::t_msgidx getMsgidx(const char *msg)
@@ -100,16 +97,18 @@ public:
 
 	static Header getHeader(const char *msg)
 	{
-		return Header(Header::getPriority(msg), Header::getMsgidx(msg), Header::getMsgsize(msg));
+		return Header(toProperty( Header::getPriority(msg)), Header::getMsgidx(msg), Header::getMsgsize(msg));
 	}
 }Header;
 
 typedef struct mEmpty : public Header
 {
 	mEmpty()
-		:Header(Header(0))
+		:Header(Priority::VeryLow, toUType(SERVER_MSG::EMPTY_MESSAGE))
 	{}
 }mEmpty;
+
+
 
 //�޼����� ���� ����ü
 typedef struct mSendPermit : public Header
@@ -117,33 +116,44 @@ typedef struct mSendPermit : public Header
 	size_t res;
 
 	explicit mSendPermit(const Header h, const int res)
-		:Header(h), res(res)
+		:Header(h), 
+		res(res)
 	{
 		size = sizeof(mSendPermit) - sizeof(h);
 	}
 }mSendPermit;
 
-#include "../Server/Room/Room.h"
+typedef struct mOnPermit
+{
+	int res;
+}mOnPermit;
+
 typedef struct mSendConnectionInfo : public Header
 {
-	const tetris::t_unique userUniqueOrder;
-	const size_t thisRoomInfoSize;
-	const size_t remainRoomInfoSize;
-
-	explicit mSendConnectionInfo(
+	const tetris::t_userUnique userUnique;
+	UserInfo userinfo[128];
+	
+	explicit mSendConnectionInfo
+	(
 		const Header h,
-		const tetris::t_unique _uniqueOrder,
-		const size_t _thisRoomInfoSize,
-		const size_t _remainRoominfoSize)
+		const tetris::t_userUnique userUnique,
+		const UserInfo* _userinfo,
+		const size_t userInfoSize
+	)
 		:Header(h),
-		userUniqueOrder(_uniqueOrder),
-		thisRoomInfoSize(_thisRoomInfoSize),
-		remainRoomInfoSize(_remainRoominfoSize)
+		userUnique(userUnique)
 	{
-		//memcpy(roominfo, _roominfo, _thisRoomInfoSize);
 		size = sizeof(*this) - sizeof(h);
+		memcpy(&userinfo, _userinfo, userInfoSize);
 	}
 }mSendConnectionInfo;
+
+typedef struct mOnConnectionInfo : public Header
+{
+	const tetris::t_userUnique userUnique;
+	UserInfo userinfo[128];
+}mOnConnectionInfo;
+
 
 typedef struct mSendName : public Header
 {
@@ -151,13 +161,20 @@ typedef struct mSendName : public Header
 	char name[ID_LEN];
 
 	explicit mSendName(const Header h, const size_t namelen, const char *name)
-		:Header(h), namelen(namelen)
+		:Header(h), 
+		namelen(namelen)
 	{
 		CopyChars(this->name, ID_LEN, name, namelen);
-
 		size = sizeof(mSendName) - sizeof(h);
 	}
 }mSendName;
+
+typedef struct mOnName
+{
+	size_t namelen;
+	char name[ID_LEN];
+}mOnName;
+
 
 typedef struct mSendNames : public Header
 {
@@ -166,7 +183,8 @@ typedef struct mSendNames : public Header
 	char name[MAX_ENTER][ID_LEN];
 
 	explicit mSendNames(const Header h, const size_t enternum, const size_t *namelen, const char(*names)[ID_LEN])
-		:Header(h), enternum(enternum)
+		:Header(h), 
+		enternum(enternum)
 	{
 		CopyChars<size_t>(this->namelen, size_t(MAX_ENTER), namelen, enternum);
 		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, names, enternum, ID_LEN);
@@ -174,6 +192,14 @@ typedef struct mSendNames : public Header
 		size = sizeof(mSendNames) - sizeof(h);
 	}
 }mSendNames;
+
+typedef struct mOnNames
+{
+	size_t enternum;
+	size_t namelen[MAX_ENTER];
+	char name[MAX_ENTER][ID_LEN];
+}mOnNames;
+
 
 typedef struct mSendMessage :public Header
 {
@@ -196,10 +222,17 @@ typedef struct mSendMessage :public Header
 		memset(msg, 0, sizeof(char)*MSG_LEN);
 		strncat(msg, _msg, len);
 
-		const auto header = Header(toUType(SERVER_MSG::ON_MESSAGE));
+		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_MESSAGE));
 		return mSendMessage(header, len, _msg);
 	}
 }mSendMessage;
+
+typedef struct mOnMessage
+{
+	size_t msglen;
+	char msg[MSG_LEN];
+}mOnMessage;
+
 
 typedef struct mSendReady : public Header
 {
@@ -208,12 +241,21 @@ typedef struct mSendReady : public Header
 	bool ready;
 
 	explicit mSendReady(const Header h, const size_t namelen, const char* fromname, const bool ready)
-		:Header(h), ready(ready)
+		:Header(h),
+		ready(ready)
 	{
 		CopyChars(this->fromname, MSG_LEN, fromname, namelen);
 		size = sizeof(*this) - sizeof(h);
 	}
 }mSendReady;
+
+typedef struct mOnReady
+{
+	size_t namelen;
+	char fromname[ID_LEN];
+	bool ready;
+}mOnReady;
+
 
 typedef struct mSendRadies : public Header
 {
@@ -222,8 +264,10 @@ typedef struct mSendRadies : public Header
 	char name[MAX_ENTER][ID_LEN];
 	bool ready[MAX_ENTER];
 
-	explicit mSendRadies(const Header h, const bool *ready, const int enternum, const size_t *namelen, const char(*name)[ID_LEN])
-		:Header(h), enternum(enternum)
+	explicit mSendRadies(const Header h, const bool *ready, const int enternum, const size_t *namelen, 
+		const char(*name)[ID_LEN])
+		:Header(h), 
+		enternum(enternum)
 	{
 		CopyChars(this->ready, MAX_ENTER, ready, enternum);
 		CopyChars(this->namelen, MAX_ENTER, namelen, enternum);
@@ -233,6 +277,15 @@ typedef struct mSendRadies : public Header
 	}
 }mSendRadies;
 
+typedef struct mOnReadies
+{
+	size_t enternum;
+	size_t namelen[MAX_ENTER];
+	char name[MAX_ENTER][ID_LEN];
+	bool ready[MAX_ENTER];
+}mOnReadies;
+
+
 typedef struct mSendStartsignal : public Header
 {
 	const int map;
@@ -241,105 +294,15 @@ typedef struct mSendStartsignal : public Header
 	const bool gravity;
 
 	explicit mSendStartsignal(const Header h, const int map, const int level, const bool ghost, const bool gravity)
-		:Header(h), map(map), level(level), ghost(ghost), gravity(gravity)
+		:Header(h), 
+		map(map), 
+		level(level), 
+		ghost(ghost), 
+		gravity(gravity)
 	{
 		size = sizeof(mSendStartsignal) - sizeof(h);
 	}
 }mSendStartsignal;
-
-typedef struct mSendMapstates : public Header
-{
-	const size_t enternum;
-	int namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
-	int board[MAX_ENTER][VERNUM][HORNUM];
-
-	mSendMapstates(const Header h, const size_t enuternum, const int *namelen, char(*name)[ID_LEN], int(*board)[VERNUM][HORNUM])
-		:Header(h), enternum(enternum)
-	{
-		CopyChars(this->namelen, MAX_ENTER, namelen, enuternum);
-		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, name, enternum, ID_LEN);
-		CopyChars<int, MAX_ENTER, VERNUM, HORNUM>(this->board, board, enternum, VERNUM, HORNUM);
-
-		size = sizeof(mSendMapstates) - sizeof(h);
-	}
-}mSendMapstates;
-
-typedef struct mSendMapstate : public Header
-{
-	const size_t namelen;
-	char name[ID_LEN];
-	int board[VERNUM][HORNUM];
-	int kindfigure;
-	tPOINT figure[FG_FIXEDNUM];
-
-	mSendMapstate(const Header h, const size_t namelen, const char *name, const int board[VERNUM][HORNUM], const size_t kindfigure, const tPOINT figure[FG_FIXEDNUM])
-		:Header(h), namelen(namelen), kindfigure(kindfigure)
-	{
-		CopyChars(this->name, ID_LEN, name, namelen);
-		CopyChars<int, VERNUM, HORNUM>(this->board, board, VERNUM, HORNUM);
-		CopyChars(this->figure, FG_FIXEDNUM, figure, FG_FIXEDNUM);
-
-		size = sizeof(mSendMapstate) - sizeof(h);
-	}
-}mSendMapstate;
-
-
-typedef struct mSendAddline : public Header
-{
-	size_t namelen;
-	size_t linenum;
-	char name[ID_LEN];
-
-	mSendAddline(const Header h, const size_t namelen, const char *name, const size_t linenum)
-		:Header(h), namelen(namelen), linenum(linenum)
-	{
-		CopyChars(this->name, ID_LEN, name, namelen);
-
-		size = sizeof(mSendAddline) - sizeof(h);
-	}
-}mSendAddline;
-
-////////////////////////////////////////////////////////////////////////////////
-
-typedef struct mOnPermit
-{
-	int res;
-}mOnPermit;
-
-typedef struct mOnName
-{
-	size_t namelen;
-	char name[ID_LEN];
-}mOnName;
-
-typedef struct mOnNames
-{
-	size_t enternum;
-	size_t namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
-}mOnNames;
-
-typedef struct mOnMessage
-{
-	size_t msglen;
-	char msg[MSG_LEN];
-}mOnMessage;
-
-typedef struct mOnReady
-{
-	size_t namelen;
-	char fromname[ID_LEN];
-	bool ready;
-}mOnReady;
-
-typedef struct mOnReadies
-{
-	size_t enternum;
-	size_t namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
-	bool ready[MAX_ENTER];
-}mOnReadies;
 
 typedef struct mOnStartsignal
 {
@@ -350,6 +313,55 @@ typedef struct mOnStartsignal
 }mOnStartsignal;
 
 
+typedef struct mSendMapstates : public Header
+{
+	const size_t enternum;
+	int namelen[MAX_ENTER];
+	char name[MAX_ENTER][ID_LEN];
+	int board[MAX_ENTER][VERNUM][HORNUM];
+
+	mSendMapstates(const Header h, const size_t enuternum, const int *namelen, char(*name)[ID_LEN], int(*board)[VERNUM][HORNUM])
+		:Header(h), 
+		enternum(enternum)
+	{
+		CopyChars(this->namelen, MAX_ENTER, namelen, enuternum);
+		CopyChars<char, MAX_ENTER, ID_LEN>(this->name, name, enternum, ID_LEN);
+		CopyChars<int, MAX_ENTER, VERNUM, HORNUM>(this->board, board, enternum, VERNUM, HORNUM);
+
+		size = sizeof(mSendMapstates) - sizeof(h);
+	}
+}mSendMapstates;
+
+typedef struct mOnMapstates
+{
+	size_t enternum;
+	size_t namelen[MAX_ENTER];
+	char name[MAX_ENTER][ID_LEN];
+	int board[MAX_ENTER][VERNUM][HORNUM];
+}mOnMapstates;
+
+
+typedef struct mSendMapstate : public Header
+{
+	const size_t namelen;
+	char name[ID_LEN];
+	int board[VERNUM][HORNUM];
+	int kindfigure;
+	tPOINT figure[FG_FIXEDNUM];
+
+	mSendMapstate(const Header h, const size_t namelen, const char *name, const int board[VERNUM][HORNUM], const size_t kindfigure, const tPOINT figure[FG_FIXEDNUM])
+		:Header(h), 
+		namelen(namelen), 
+		kindfigure(kindfigure)
+	{
+		CopyChars(this->name, ID_LEN, name, namelen);
+		CopyChars<int, VERNUM, HORNUM>(this->board, board, VERNUM, HORNUM);
+		CopyChars(this->figure, FG_FIXEDNUM, figure, FG_FIXEDNUM);
+
+		size = sizeof(mSendMapstate) - sizeof(h);
+	}
+}mSendMapstate;
+
 typedef struct mOnMapstate
 {
 	size_t namelen;
@@ -359,13 +371,23 @@ typedef struct mOnMapstate
 	tPOINT figure[FG_FIXEDNUM];
 }mOnMapstate;
 
-typedef struct mOnMapstates
+
+typedef struct mSendAddline : public Header
 {
-	size_t enternum;
-	size_t namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
-	int board[MAX_ENTER][VERNUM][HORNUM];
-}mOnMapstates;
+	size_t namelen;
+	size_t linenum;
+	char name[ID_LEN];
+
+	mSendAddline(const Header h, const size_t namelen, const char *name, const size_t linenum)
+		:Header(h), 
+		namelen(namelen), 
+		linenum(linenum)
+	{
+		CopyChars(this->name, ID_LEN, name, namelen);
+
+		size = sizeof(mSendAddline) - sizeof(h);
+	}
+}mSendAddline;
 
 typedef struct mOnAddline
 {

@@ -9,7 +9,7 @@
 
 #include "Room.h"
 
-class GameRoom : public Room
+class GameRoom : public TRoom
 {
 private:
 

@@ -13,6 +13,15 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{858c8e0e-be66-4b80-ac46-ffb7e8f1c76c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog\Headers">
+      <UniqueIdentifier>{b4208960-11b6-4b6d-a4df-6716d551d330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog\Sources">
+      <UniqueIdentifier>{55491600-563d-4159-b318-f79d652d8d4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="UserImages.bmp">
@@ -149,16 +158,7 @@
     <ClInclude Include="MyEdit.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="OptionDialog.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="MyButton.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="WaitingRoom.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="EnteringDialog.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="StringManager.h">
@@ -167,14 +167,23 @@
     <ClInclude Include="TClientSocket.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TUserClient.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="SocketImpl.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Messenger.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TClientUser.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitingRoom.h">
+      <Filter>Dialog\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnteringDialog.h">
+      <Filter>Dialog\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionDialog.h">
+      <Filter>Dialog\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -196,16 +205,7 @@
     <ClCompile Include="MyEdit.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="OptionDialog.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="MyButton.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="WaitingRoom.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="EnteringDialog.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="StringManager.cpp">
@@ -217,11 +217,20 @@
     <ClCompile Include="TClientSocket.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="TUserClient.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Messenger.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TClientUser.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnteringDialog.cpp">
+      <Filter>Dialog\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionDialog.cpp">
+      <Filter>Dialog\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitingRoom.cpp">
+      <Filter>Dialog\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

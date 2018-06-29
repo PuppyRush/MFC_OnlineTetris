@@ -10,7 +10,7 @@
 
 #include "../Commons/MessageHeader.h"
 #include "../Commons/structs.h"
-#include "TUserClient.h"
+#include "TClientUser.h"
 #include "ServerSocket.h"
 
 using namespace tetris;
