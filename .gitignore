@@ -16,10 +16,15 @@ local.properties
 .settings/
 .loadpath
 
+*.gch
 *.o
 *.d
+*.a
 Server/Default/
-
+Server/obj/
+Server/bin/
+Commons/obj/
+Commons/bin/
 # External tool builders
 .externalToolBuilders/
 

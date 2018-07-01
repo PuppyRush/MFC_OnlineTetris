@@ -23,14 +23,14 @@ class TRoom
 public:
 	virtual ~TRoom();
 
-	enum class errorCode : std::uint16_t
+	enum class errorCode : tetris::t_error
 	{
 		Exist,
 		Empty,
 		Ok
 	};
 
-	enum class property : std::uint16_t
+	enum class property : tetris::t_error
 	{
 		LengthMin = 5,
 		LengthMax = 20

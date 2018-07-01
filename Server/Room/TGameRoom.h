@@ -13,12 +13,13 @@
 #include "TRoom.h"
 #include "../../Commons/TType.h"
 #include "../../Commons/TAtomic.h"
+#include "../../Commons/TSwitchingMessage.h"
 
-class TGameRoom : public TRoom
+class TGameRoom : public TRoom, public TSwitchingMessage
 {
 public:
 
-	enum class errorCode : std::uint16_t
+	enum class errorCode : tetris::t_error
 	{
 		Ok,
 		Duplicated = 0,
@@ -27,7 +28,7 @@ public:
 		Nobody
 	};
 
-	enum class property : std::uint16_t
+	enum class property : tetris::t_error
 	{
 		Size = 8
 	};

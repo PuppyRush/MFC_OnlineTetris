@@ -48,12 +48,11 @@ void TServerManager::run()
 {
 	while (m_closedServer)
 	{
-		auto newClientSocket = m_mainServerSocket->popSocket();
-
 		lock_guard<mutex> lck(m_mutex);
 
-		auto newUser = TServerUser::makeShared(newClientSocket, m_unique.newUnique());
-		newUser->readnwrite();
+		auto newClientSocketUnique = m_mainServerSocket->popSocket();
+		auto newUser = TServerUser::makeShared();
+
 
 		m_connectionPool.emplace_back(newUser);
 	}

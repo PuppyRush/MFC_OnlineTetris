@@ -15,27 +15,23 @@
 
 using namespace std;
 
-class TServerUser : public TetrisUser, public TServerSocket
+class TServerUser : public TetrisUser
 {
 public:
-	TServerUser() {}
-	TServerUser(TServerUser* user);
-	TServerUser(tetris::t_socket socekt, const tetris::t_userUnique unique);
+
+	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
 	virtual ~TServerUser() override;
 
-	static shared_ptr<TServerUser> makeShared(const tetris::t_socket newsocket, const tetris::t_userUnique unique)
+	static shared_ptr<TServerUser> makeShared()
 	{
-		return make_shared<TServerUser>(newsocket, unique);
+		const auto unique = TetrisUser::newUnique();
+		return shared_ptr<TServerUser>(new TServerUser(unique));
 	}
 
-protected:
-	
-	virtual void switchingMessage(const tetris::msgElement &msg);
-	
-
 private:
-	shared_ptr<TServerUser> m_sharedPtr;
+	TServerUser() {}
+	TServerUser(TServerUser* user);
+	TServerUser(const tetris::t_userUnique unique);
 
-	void recvConnectionInfo(const tetris::msgElement &msg);
-	void sendConnectionInfo();
+	shared_ptr<TServerUser> m_sharedPtr;
 };

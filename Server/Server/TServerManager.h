@@ -22,7 +22,7 @@ class TServerSocket;
 
 using namespace std;
 
-class TServerManager
+class TServerManager 
 {
 public:
 	TServerManager(std::shared_ptr<TServerSocket> &socket);
@@ -32,11 +32,11 @@ public:
 	void beginServer();
 
 private:
-	shared_ptr<thread> m_severManagerThread;
+	shared_ptr<std::thread> m_severManagerThread;
 	shared_ptr<TServerSocket> m_mainServerSocket;
 
 	deque<shared_ptr<TServerUser>> m_connectionPool;
 	mutex m_mutex;
-	TAtomic<tetris::t_userUnique> m_unique;
+	
 	bool m_closedServer;
 };

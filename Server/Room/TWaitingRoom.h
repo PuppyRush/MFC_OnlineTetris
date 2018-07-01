@@ -8,25 +8,26 @@
 #pragma once
 
 #include "TRoom.h"
+#include "../../Commons/TSwitchingMessage.h"
 #include "../Server/TServerUser.h"
 
-class TWaitingRoom : public TRoom
+class TWaitingRoom : public TRoom, public TSwitchingMessage
 {
 public:
+	virtual const tetris::t_error TWaitingRoom::switchingMessage(const tetris::msgElement &msg) override;
+	virtual ~TWaitingRoom();
 
-	enum class property : std::uint16_t
+	enum class property : tetris::t_error
 	{
 		Size = 200
 	};
 
-	TWaitingRoom() {}
-	explicit TWaitingRoom(const string roomname, const std::vector<shared_ptr<TServerUser>> userQ);
-	virtual ~TWaitingRoom();
-
 	inline static shared_ptr<TWaitingRoom> getWaitingRoom()
 	{
-		static auto waitingRoom = make_shared<TWaitingRoom>();
+		static auto waitingRoom = shared_ptr<TWaitingRoom>(new TWaitingRoom());
 		return waitingRoom;
 	}
-
+private:
+	TWaitingRoom() {}
+	
 };
