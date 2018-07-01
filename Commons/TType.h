@@ -13,6 +13,7 @@ namespace tetris
 	using t_msgidx = unsigned short;
 	using t_msgsize = unsigned int;
 	using t_header  = unsigned short;
+	using t_error = unsigned short;
 
 	using msgElement = std::tuple<t_priority, const char*, size_t>;
 

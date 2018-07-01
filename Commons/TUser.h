@@ -6,10 +6,11 @@
 #include "TSocket.h"
 #include "TType.h"
 #include "TAtomic.h"
+#include "TSwitchingMessage.h"
 
 #undef GetUserName
 
-class TetrisUser : private uncopyable
+class TetrisUser : private uncopyable, public TSwitchingMessage
 {
 public:
 	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];
@@ -33,10 +34,15 @@ public:
 	inline void setName(const string name) { m_name = name; }
 	inline void setReady(const bool rdy) { m_isReady = rdy; }
 
-protected:
+	inline static const tetris::t_userUnique newUnique() noexcept
+	{
+		static TAtomic<tetris::t_userUnique> m_unique;
+		return m_unique.newUnique();
+	}
 
+protected:
+	explicit TetrisUser(const tetris::t_userUnique unique);
 	TetrisUser();
-	virtual ~TetrisUser() { }
 
 private:
 	tetris::t_userUnique m_unique;

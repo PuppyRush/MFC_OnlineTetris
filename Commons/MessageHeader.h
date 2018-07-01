@@ -20,8 +20,8 @@
 #undef min
 #undef max
 
-struct client {};
-struct server {};
+struct sender {};
+struct receiver {};
 
 template <class T>
 static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t srclen)
@@ -58,7 +58,7 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 			memcpy(dest[i][l], src[i][l], src_dimension3);
 }
 
-typedef struct Header
+typedef struct Header : private sender
 {
 public:
 	tetris::t_priority priority;
@@ -123,7 +123,7 @@ typedef struct mSendPermit : public Header
 	}
 }mSendPermit;
 
-typedef struct mOnPermit
+typedef struct mOnPermit : private receiver
 {
 	int res;
 }mOnPermit;
@@ -169,7 +169,7 @@ typedef struct mSendName : public Header
 	}
 }mSendName;
 
-typedef struct mOnName
+typedef struct mOnName : private receiver
 {
 	size_t namelen;
 	char name[ID_LEN];
@@ -193,7 +193,7 @@ typedef struct mSendNames : public Header
 	}
 }mSendNames;
 
-typedef struct mOnNames
+typedef struct mOnNames : private receiver
 {
 	size_t enternum;
 	size_t namelen[MAX_ENTER];
@@ -227,7 +227,7 @@ typedef struct mSendMessage :public Header
 	}
 }mSendMessage;
 
-typedef struct mOnMessage
+typedef struct mOnMessage : private receiver
 {
 	size_t msglen;
 	char msg[MSG_LEN];
@@ -249,7 +249,7 @@ typedef struct mSendReady : public Header
 	}
 }mSendReady;
 
-typedef struct mOnReady
+typedef struct mOnReady : private receiver
 {
 	size_t namelen;
 	char fromname[ID_LEN];
@@ -277,7 +277,7 @@ typedef struct mSendRadies : public Header
 	}
 }mSendRadies;
 
-typedef struct mOnReadies
+typedef struct mOnReadies : private receiver
 {
 	size_t enternum;
 	size_t namelen[MAX_ENTER];
@@ -304,7 +304,7 @@ typedef struct mSendStartsignal : public Header
 	}
 }mSendStartsignal;
 
-typedef struct mOnStartsignal
+typedef struct mOnStartsignal : private receiver
 {
 	int map;
 	int level;
@@ -332,7 +332,7 @@ typedef struct mSendMapstates : public Header
 	}
 }mSendMapstates;
 
-typedef struct mOnMapstates
+typedef struct mOnMapstates : private receiver
 {
 	size_t enternum;
 	size_t namelen[MAX_ENTER];
@@ -362,7 +362,7 @@ typedef struct mSendMapstate : public Header
 	}
 }mSendMapstate;
 
-typedef struct mOnMapstate
+typedef struct mOnMapstate : private receiver
 {
 	size_t namelen;
 	char name[ID_LEN];
@@ -389,7 +389,7 @@ typedef struct mSendAddline : public Header
 	}
 }mSendAddline;
 
-typedef struct mOnAddline
+typedef struct mOnAddline : private receiver
 {
 	size_t namelen;
 	char name[ID_LEN];

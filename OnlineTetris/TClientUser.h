@@ -3,24 +3,24 @@
 #include "../Commons/structs.h"
 #include "../Commons/TUser.h"
 
-class CTClientSocket;
+class TClientSocket;
 
 class TClientUser : public TetrisUser
 {
 private:
-	CTClientSocket *Socket;
+	TClientSocket *Socket;
 
 public:
 
 	TClientUser() {}
 	virtual ~TClientUser(void)	{}
 
-	inline CTClientSocket* GetSocket()
+	inline TClientSocket* GetSocket()
 	{
 		return Socket;
 	}
 
-	static shared_ptr<TClientUser> GetMe()
+	static shared_ptr<TClientUser> get()
 	{
 		static const auto clientofmine = make_shared<TClientUser>();
 		return clientofmine;

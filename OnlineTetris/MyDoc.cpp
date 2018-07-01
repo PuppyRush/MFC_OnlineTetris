@@ -399,7 +399,7 @@ void CMyDoc::ProcessEnter(string name)
 	//auto tmp = TClientUser::MakeShared(name);
 	//m_clientUserList.insert( make_pair(name, tmp));
 
-	CTClientSocket::GetSocket()->Sendname(name.c_str(), name.size());
+	TClientSocket::get()->Sendname(name.c_str(), name.size());
 
 	m_view->Btn_Start->EnableWindow(false);
 }
@@ -450,11 +450,11 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 		break;
 	}
 
-	auto &FG = TClientUser::GetMe()->FG;
+	auto &FG = TClientUser::get()->FG;
 	FG.Figure = FG.NextFigure = -1;
 
 	m_view->CreateFigure();
-	CTClientSocket::GetSocket()->Sendmapstate();
+	TClientSocket::get()->Sendmapstate();
 
 	m_view->SetTimer(TIMER_SENDMAPSTATE, SENDTIME, nullptr);
 
@@ -624,7 +624,7 @@ void CMyDoc::Client_ProcessEnd(mOnName on_name)
 	//	m_view->Btn_Start->EnableWindow(true);
 	//	m_view->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
 	//}
-	if(CTClientSocket::GetSocket()->isConnected())
+	if(TClientSocket::get()->isConnected())
 	{
 		m_view->Btn_Start->EnableWindow(false);
 		m_view->Btn_Ready->EnableWindow(false);
@@ -649,7 +649,7 @@ void CMyDoc::RestartGame()
 		memset(board, 0, sizeof(board));
 	}
 
-	auto me = TClientUser::GetMe();
+	auto me = TClientUser::get();
 
 	me->setReady(false);
 	me->setSurvive(true);
@@ -665,7 +665,7 @@ void CMyDoc::RestartGame()
 	//	m_view->Btn_Start->EnableWindow(true);
 	//	m_view->Btn_Start->SetWindowTextW(_T("시작하기"));
 	//}
-	if(CTClientSocket::GetSocket()->isConnected())
+	if(TClientSocket::get()->isConnected())
 	{
 		m_view->Btn_Start->EnableWindow(false);
 		m_view->Btn_Ready->EnableWindow(true);

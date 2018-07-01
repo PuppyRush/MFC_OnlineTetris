@@ -14,13 +14,11 @@
 
 using namespace tetris;
 
-class CTClientSocket : public SocketImpl
+class TClientSocket : public SocketImpl
 {
 public:
-
-	CTClientSocket();
-	explicit CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
-	virtual ~CTClientSocket();
+	//explicit TClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
+	virtual ~TClientSocket();
 
 	virtual void switchingMessage(const msgElement &msg);
 
@@ -37,13 +35,15 @@ public:
 
 	inline bool isConnected() { return m_isConnected; }
 
-	inline static shared_ptr<CTClientSocket> GetSocket()
+	inline static shared_ptr<TClientSocket> get()
 	{
-		static shared_ptr<CTClientSocket> clientSocket = make_shared<CTClientSocket>();
+		static shared_ptr<TClientSocket> clientSocket = shared_ptr<TClientSocket>(new TClientSocket());
 		return clientSocket;
 	}
 
 private:
+	TClientSocket();
+
 	shared_ptr<TClientUser> m_me;
 	bool m_isConnected;
 };

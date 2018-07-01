@@ -69,15 +69,15 @@ void EnteringDialog::OnBnClickedBtnEnter()
 
 	username = str_name;
 
-	TClientUser::GetMe()->setName(username);
+	TClientUser::get()->setName(username);
 
 	this->portnum = portnum;
 	this->ipstring = ipstring;
 
-	shared_ptr<CTClientSocket> socket = CTClientSocket::GetSocket();
+	shared_ptr<TClientSocket> socket = TClientSocket::get();
 	if (socket->create(ipstring, portnum))
 	{
-		const auto me = TClientUser::GetMe();
+		const auto me = TClientUser::get();
 		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
 		const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
 		

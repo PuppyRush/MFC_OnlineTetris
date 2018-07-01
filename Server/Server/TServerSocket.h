@@ -6,14 +6,17 @@
  */
 #pragma once
 
-#include "TSocketImpl.h"
 #include "../../Commons/TType.h"
+
+#include "../Room/TWaitingRoom.h"
+#include "TSocketImpl.h"
+
 
 class TServerSocket : public TSocketImpl
 {
 public:
 	TServerSocket();
-	explicit TServerSocket(const unsigned socket);
+	explicit TServerSocket(tetris::t_socket socekt);
 	virtual ~TServerSocket();
 
 	static shared_ptr<TServerSocket> makeShared(const unsigned socket)
@@ -28,4 +31,5 @@ public:
 private:
 
 	void recvConnectionInfo(const tetris::msgElement &msg);
+	void sendConnectionInfo();
 };
