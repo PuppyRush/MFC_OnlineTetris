@@ -36,10 +36,10 @@ CMyDoc::CMyDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 	srand((unsigned)time(nullptr));
-	End = Ready = Start = false;
-	Map = Level = 1;
-	Bgm = true;
-	LineRemain = 0;
+	m_end = m_ready = m_isStart = false;
+	m_map = m_level = 1;
+	m_bgm = true;
+	m_lineRemain = 0;
 }
 
 CMyDoc::~CMyDoc()
@@ -231,7 +231,7 @@ string CMyDoc::GetServerIP()
 
 bool CMyDoc::ExistUser(string name)
 {
-	if(Client_UserList.count(name) == 0)
+	if(m_clientUserList.count(name) == 0)
 		return true;
 	else
 		return false;
@@ -244,17 +244,17 @@ void CMyDoc::CreateRoot()
 	//if(m_mySocket == nullptr)
 	//	m_mySocket = new CMySocket();
 	//
-	//m_mySocket->pView = pView;
+	//m_mySocket->m_view = m_view;
 	//m_mySocket->pDoc = this;
 	//m_mySocket->Create();
-	//m_mySocket->Connect( ServerIp, PORTNUM);
+	//m_mySocket->Connect( m_serverIp, PORTNUM);
 	//
-	//TUser *tmp = new TUser(Name);
-	//Client_UserList.AddTail(tmp);
-	//pView->ME = tmp;
+	//TUser *tmp = new TUser(m_name);
+	//m_clientUserList.AddTail(tmp);
+	//m_view->ME = tmp;
 	//
 	//if(!m_mySocket->Sendname(chName, strlen(chName)))
-	//	pView->MessageHandler(FAIL_SENDMSG);
+	//	m_view->MessageHandler(FAIL_SENDMSG);
 	//
 	//Enter = false;
 	//Open = true;
@@ -265,7 +265,7 @@ void CMyDoc::CreateRoot()
 //{
 //	int num = 0;
 //
-//	for each(auto userstr in Server_EnterUsers)
+//	for each(auto userstr in m_serverEnterUsers)
 //	{
 //		if(userstr.compare(name) == 0)
 //		{
@@ -280,10 +280,10 @@ void CMyDoc::CreateRoot()
 //	{
 //		const string strname(name);
 //		usr->SetName(strname);
-//		Server_EnterUsers.push_back(strname);
+//		m_serverEnterUsers.push_back(strname);
 //	}
 //	else
-//		pView->MessageHandler(-1);
+//		m_view->MessageHandler(-1);
 //
 //	return true;
 //}
@@ -293,8 +293,8 @@ void CMyDoc::CreateRoot()
 
 SHR_USRC CMyDoc::Client_NameToTUser(string name)
 {
-	if(Client_UserList.count(name) > 0)
-		return Client_UserList.at(name);
+	if(m_clientUserList.count(name) > 0)
+		return m_clientUserList.at(name);
 	else
 		return nullptr;
 }
@@ -302,8 +302,8 @@ SHR_USRC CMyDoc::Client_NameToTUser(string name)
 void CMyDoc::AddChat(const char *msg, const int msglen)
 {
 	CString str(msg, msglen);
-	ChatLog.append(string("\r\n")).append(msg);
-	pView->Edt_ChatEdit.SetWindowTextW(CString(ChatLog.c_str()));
+	m_chatLog.append(string("\r\n")).append(msg);
+	m_view->Edt_ChatEdit.SetWindowTextW(CString(m_chatLog.c_str()));
 }
 
 //방에 접속하면 서버에서 이름들을 보냄.
@@ -312,8 +312,8 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 {
 	bool nothing = true;
 
-	Client_EnterUsers.clear();
-	pView->Lst_EnterList.ResetContent();
+	m_clientEnterUsers.clear();
+	m_view->Lst_EnterList.ResetContent();
 
 	for(int i = 0; i < names.enternum; i++)
 	{
@@ -321,14 +321,14 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 
 		//클라이언트에 이미 생성된 유저라면 유저객체를 만들지 않는다.
 		//없는것이 판단되면 새로 생성
-		if(Client_UserList.count(name) == 0)
-			Client_UserList.insert(make_pair(name, TUserClient::MakeShared(name)));
+		//if(m_clientUserList.count(name) == 0)
+		//	m_clientUserList.insert(make_pair(name, TClientUser::MakeShared(name)));
 	}
 
-	//ME = Client_NameToTUser(Name).get();
-	//pView->ME = ME;
+	//ME = Client_NameToTUser(m_name).get();
+	//m_view->ME = ME;
 	//if(ME == nullptr)
-	//	pView->MessageHandler(FAIL_FINDNAME);
+	//	m_view->MessageHandler(FAIL_FINDNAME);
 }
 
 void CMyDoc::SetReady(mOnReadies rdy)
@@ -341,122 +341,122 @@ void CMyDoc::SetReady(mOnReadies rdy)
 		const auto user = Client_NameToTUser(name);
 		if(user == nullptr)
 		{
-			pView->MessageHandler(USER_MSG::FAIL_FINDNAME);
+			m_view->MessageHandler(USER_MSG::FAIL_FINDNAME);
 			continue;
 		}
-		user->SetReady(rdy.ready[i]);
+		user->setReady(rdy.ready[i]);
 
-		if(user->GetReady())
+		if(user->getReady())
 			rdynum++;
 	}
 
-	if( (rdynum == Client_EnterUsers.size()))
-		pView->Btn_Start->EnableWindow(true);
+	if( (rdynum == m_clientEnterUsers.size()))
+		m_view->Btn_Start->EnableWindow(true);
 
-	pView->VirtualDraw();
+	m_view->VirtualDraw();
 }
 
 void CMyDoc::SetOrder()
 {
 	size_t i = 0;
-	for each(const auto username in Client_EnterUsers)
+	for each(const auto username in m_clientEnterUsers)
 	{
 		const auto user = Client_NameToTUser(username);
 		if(user == nullptr)
 		{
-			pView->MessageHandler(USER_MSG::FAIL_FINDNAME);
+			m_view->MessageHandler(USER_MSG::FAIL_FINDNAME);
 			continue;
 		}
-		user->SetOrder(i + 1);
-		pView->Lst_EnterList.AddString(CString(username.c_str()));
+		user->setOrder(i + 1);
+		m_view->Lst_EnterList.AddString(CString(username.c_str()));
 		i++;
 	}
 
 	//클라이언트(서버포함) 자신을 순서를 1로 변경한다.
-	if(Client_NameToTUser(Name)->GetOrder() != 1)
+	if(Client_NameToTUser(m_name)->getOrder() != 1)
 	{
-		int idx = Client_NameToTUser(Name)->GetOrder();
-		Client_NameToTUser(Name)->SetOrder(1);
+		int idx = Client_NameToTUser(m_name)->getOrder();
+		Client_NameToTUser(m_name)->setOrder(1);
 
-		for each(const auto username in Client_EnterUsers)
+		for each(const auto username in m_clientEnterUsers)
 		{
-			if(Client_NameToTUser(username)->GetOrder() == 1)
+			if(Client_NameToTUser(username)->getOrder() == 1)
 			{
-				Client_NameToTUser(username)->SetOrder(idx);
+				Client_NameToTUser(username)->setOrder(idx);
 				break;
 			}
 		}
 	}
 
-	pView->VirtualDraw();
+	m_view->VirtualDraw();
 
 }
 
 void CMyDoc::ProcessEnter(string name)
 {
-	Name = name;
+	m_name = name;
 
-	auto tmp = TUserClient::MakeShared(name);
-	Client_UserList.insert( make_pair(name, tmp));
+	//auto tmp = TClientUser::MakeShared(name);
+	//m_clientUserList.insert( make_pair(name, tmp));
 
 	CTClientSocket::GetSocket()->Sendname(name.c_str(), name.size());
 
-	pView->Btn_Start->EnableWindow(false);
+	m_view->Btn_Start->EnableWindow(false);
 }
 
 void CMyDoc::ProcessClose()
 {
-	pView->MessageHandler(USER_MSG::CLOSE_SERVER);
+	m_view->MessageHandler(USER_MSG::CLOSE_SERVER);
 }
 
 //서버가 시작신호를 보내면 클라인트에선 시작을 위한 처리를 한다.
 void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 {
-	Ghost = on_start.ghost;
-	pView->SetMap(on_start.map);
-	Start = true;
+	m_ghost = on_start.ghost;
+	m_view->SetMap(on_start.map);
+	m_isStart = true;
 	switch(on_start.level)
 	{
 	case 0:
-		pView->SetTimer(TIMER_TETRIS, 1700, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 1700, nullptr);
 		break;
 	case 2:
-		pView->SetTimer(TIMER_TETRIS, 1300, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 1300, nullptr);
 		break;
 	case 3:
-		pView->SetTimer(TIMER_TETRIS, 1000, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 1000, nullptr);
 		break;
 	case 4:
-		pView->SetTimer(TIMER_TETRIS, 800, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 800, nullptr);
 		break;
 	case 5:
-		pView->SetTimer(TIMER_TETRIS, 600, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 600, nullptr);
 		break;
 	case 6:
-		pView->SetTimer(TIMER_TETRIS, 400, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 400, nullptr);
 		break;
 	case 7:
-		pView->SetTimer(TIMER_TETRIS, 200, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 200, nullptr);
 		break;
 	case 8:
-		pView->SetTimer(TIMER_TETRIS, 100, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 100, nullptr);
 		break;
 	case 9:
-		pView->SetTimer(TIMER_TETRIS, 50, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 50, nullptr);
 		break;
 
 	default:
-		pView->SetTimer(TIMER_TETRIS, 1700, nullptr);
+		m_view->SetTimer(TIMER_TETRIS, 1700, nullptr);
 		break;
 	}
 
-	auto &FG = TUserClient::GetMe()->FG;
+	auto &FG = TClientUser::GetMe()->FG;
 	FG.Figure = FG.NextFigure = -1;
 
-	pView->CreateFigure();
+	m_view->CreateFigure();
 	CTClientSocket::GetSocket()->Sendmapstate();
 
-	pView->SetTimer(TIMER_SENDMAPSTATE, SENDTIME, nullptr);
+	m_view->SetTimer(TIMER_SENDMAPSTATE, SENDTIME, nullptr);
 
 	int bgm = rand() % BGM_NUM;
 	if(bgm)
@@ -488,7 +488,7 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 		}
 	}
 
-	pView->VirtualDraw();
+	m_view->VirtualDraw();
 }
 
 //void CMyDoc::Server_ProceeStart()
@@ -506,13 +506,13 @@ void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
 //		if(user == nullptr)
 //			continue;
 //
-//		user->SetSurvive(true);
+//		user->setSurvive(true);
 //
 //	}
 //
-//	Start = true;
-//	pView->SetTimer(TIMER_NEXTLEVEL, 1000, nullptr);
-//	pView->Btn_Start->SetWindowTextW(_T("다시시작"));
+//	m_isStart = true;
+//	m_view->SetTimer(TIMER_NEXTLEVEL, 1000, nullptr);
+//	m_view->Btn_Start->SetWindowTextW(_T("다시시작"));
 //}
 
 bool CMyDoc::ExitUser(const string name)
@@ -521,25 +521,25 @@ bool CMyDoc::ExitUser(const string name)
 	//if(user == nullptr)
 	//	return false;
 	//
-	//Client_UserList.RemoveAt(Client_UserList.Find(user));
-	//auto it = Client_UserList.GetHead();
-	//while(it != Client_UserList.GetTail())
+	//m_clientUserList.RemoveAt(m_clientUserList.Find(user));
+	//auto it = m_clientUserList.GetHead();
+	//while(it != m_clientUserList.GetTail())
 	//{
 	//	if(username.compare(name) == 0)
 	//	{
-	//		Client_EnterUsers.erase
+	//		m_clientEnterUsers.erase
 	//		break;
 	//	}
 	//
 	//}
 	//
-	//POSITION pos = Client_UserList.GetHeadPosition();
+	//POSITION pos = m_clientUserList.GetHeadPosition();
 	//user = nullptr;
 	//
 	//while(pos != nullptr)
 	//{
 	//
-	//	user = (TUser *)Client_UserList.GetNext(pos);
+	//	user = (TUser *)m_clientUserList.GetNext(pos);
 	//	if(user != nullptr)
 	//	{
 	//		continue;
@@ -547,9 +547,9 @@ bool CMyDoc::ExitUser(const string name)
 	//
 	//}
 	//
-	//pView->Lst_EnterList.ResetContent();
-	//for(int i = 0; i < Client_EnterUsers.GetCount(); i++)
-	//	pView->Lst_EnterList.AddString(Client_EnterUsers[i]);
+	//m_view->Lst_EnterList.ResetContent();
+	//for(int i = 0; i < m_clientEnterUsers.GetCount(); i++)
+	//	m_view->Lst_EnterList.AddString(m_clientEnterUsers[i]);
 	//
 	//
 	return true;
@@ -565,7 +565,7 @@ void CMyDoc::ProcessDead(mOnName on_name)
 	//if(user == nullptr)
 	//	return;
 	//
-	//user->SetSurvive(false);
+	//user->setSurvive(false);
 
 	//죽은 사람이 유저수-1 이면 살아남은 사람이 승리하고 게임을 끝낸다.
 	//int deadnum = 0;
@@ -607,67 +607,67 @@ void CMyDoc::Client_ProcessEnd(mOnName on_name)
 
 	str.append(string(on_name.name));
 	str.append("님이 승리하셨습니다!");
-	ChatLog.append( string("\r\n")).append(str);
+	m_chatLog.append( string("\r\n")).append(str);
 
-	for(auto it = Client_UserList.begin(); it != Client_UserList.end(); it++)
+	for(auto it = m_clientUserList.begin(); it != m_clientUserList.end(); it++)
 	{
 		const auto username = it->first;
 		if(username.compare(username) != 0)
-			it->second->SetSurvive(false);
+			it->second->setSurvive(false);
 		else
-			it->second->SetSurvive(true);
+			it->second->setSurvive(true);
 	}
 
 	//if(Open)
 	//{
-	//	pView->Btn_Ready->EnableWindow(false);
-	//	pView->Btn_Start->EnableWindow(true);
-	//	pView->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
+	//	m_view->Btn_Ready->EnableWindow(false);
+	//	m_view->Btn_Start->EnableWindow(true);
+	//	m_view->Btn_Start->SetWindowTextW(_T("다시 시작하기"));
 	//}
 	if(CTClientSocket::GetSocket()->isConnected())
 	{
-		pView->Btn_Start->EnableWindow(false);
-		pView->Btn_Ready->EnableWindow(false);
+		m_view->Btn_Start->EnableWindow(false);
+		m_view->Btn_Ready->EnableWindow(false);
 	}
 
-	pView->KillTimer(TIMER_TETRIS);
-	pView->KillTimer(TIMER_SENDMAPSTATE);
-	End = true;
-	Start = false;
+	m_view->KillTimer(TIMER_TETRIS);
+	m_view->KillTimer(TIMER_SENDMAPSTATE);
+	m_end = true;
+	m_isStart = false;
 
-	pView->VirtualDraw();
+	m_view->VirtualDraw();
 }
 
 void CMyDoc::RestartGame()
 {
 
-	for(auto it = Client_UserList.begin(); it != Client_UserList.end(); it++)
+	for(auto it = m_clientUserList.begin(); it != m_clientUserList.end(); it++)
 	{
-		it->second->SetReady(false);
-		it->second->SetSurvive(true);
+		it->second->setReady(false);
+		it->second->setSurvive(true);
 		auto &board = it->second->StateBoard;
 		memset(board, 0, sizeof(board));
 	}
 
-	auto me = TUserClient::GetMe();
+	auto me = TClientUser::GetMe();
 
-	me->SetReady(false);
-	me->SetSurvive(true);
+	me->setReady(false);
+	me->setSurvive(true);
 	memset(me->GameBoard, 0, sizeof(me->GameBoard));
 	memset(me->FixedBoard, 0, sizeof(me->FixedBoard));
 	memset(me->NextFigureBoard, 0, sizeof(me->NextFigureBoard));
-	Ready = false;
-	End = false;
+	m_ready = false;
+	m_end = false;
 
 	//if(Open)
 	//{
-	//	pView->Btn_Ready->EnableWindow(true);
-	//	pView->Btn_Start->EnableWindow(true);
-	//	pView->Btn_Start->SetWindowTextW(_T("시작하기"));
+	//	m_view->Btn_Ready->EnableWindow(true);
+	//	m_view->Btn_Start->EnableWindow(true);
+	//	m_view->Btn_Start->SetWindowTextW(_T("시작하기"));
 	//}
 	if(CTClientSocket::GetSocket()->isConnected())
 	{
-		pView->Btn_Start->EnableWindow(false);
-		pView->Btn_Ready->EnableWindow(true);
+		m_view->Btn_Start->EnableWindow(false);
+		m_view->Btn_Ready->EnableWindow(true);
 	}
 }

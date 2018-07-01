@@ -1,17 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{858c8e0e-be66-4b80-ac46-ffb7e8f1c76c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog\Headers">
+      <UniqueIdentifier>{b4208960-11b6-4b6d-a4df-6716d551d330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog\Sources">
+      <UniqueIdentifier>{55491600-563d-4159-b318-f79d652d8d4d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,96 +135,102 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OnlineTetris.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="MainFrm.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="MyDoc.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="MyView.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="MyEdit.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OptionDialog.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="MyButton.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="WaitingRoom.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="EnteringDialog.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="StringManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="TClientSocket.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TUserClient.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="SocketImpl.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Messenger.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TClientUser.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitingRoom.h">
+      <Filter>Dialog\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnteringDialog.h">
+      <Filter>Dialog\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionDialog.h">
+      <Filter>Dialog\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OnlineTetris.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="MainFrm.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="MyDoc.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="MyView.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="MyEdit.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OptionDialog.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="MyButton.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WaitingRoom.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="EnteringDialog.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="StringManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="SocketImpl.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="TClientSocket.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="TUserClient.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Messenger.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TClientUser.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="EnteringDialog.cpp">
+      <Filter>Dialog\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionDialog.cpp">
+      <Filter>Dialog\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitingRoom.cpp">
+      <Filter>Dialog\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

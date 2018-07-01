@@ -1,4 +1,4 @@
-// WaitingRoom.cpp : 구현 파일입니다.
+// WaitingRoomDlg.cpp : 구현 파일입니다.
 //
 
 #include "stdafx.h"
@@ -12,34 +12,34 @@
 static char THIS_FILE[] = __FILE__;
 
 #endif
-// WaitingRoom 대화 상자입니다.
+// WaitingRoomDlg 대화 상자입니다.
 
-IMPLEMENT_DYNAMIC(WaitingRoom, CDialogEx)
+IMPLEMENT_DYNAMIC(WaitingRoomDlg, CDialogEx)
 
-WaitingRoom::WaitingRoom(CWnd* pParent /*=NULL*/)
+WaitingRoomDlg::WaitingRoomDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(_DLG_WAITINGROOM, pParent)
 {
 
 }
 
-WaitingRoom::~WaitingRoom()
+WaitingRoomDlg::~WaitingRoomDlg()
 {
 }
 
-void WaitingRoom::DoDataExchange(CDataExchange* pDX)
+void WaitingRoomDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, _LST_WAITING, m_roomList);
 }
 
 
-BEGIN_MESSAGE_MAP(WaitingRoom, CDialogEx)
+BEGIN_MESSAGE_MAP(WaitingRoomDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// WaitingRoom 메시지 처리기입니다.
+// WaitingRoomDlg 메시지 처리기입니다.
 
-BOOL WaitingRoom::OnInitDialog()
+BOOL WaitingRoomDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -52,4 +52,11 @@ BOOL WaitingRoom::OnInitDialog()
 	m_roomList.InsertColumn(3, _T("방 생성시간"), NULL, 50);
 
 	return true;
+}
+
+
+void WaitingRoomDlg::getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom)
+{
+
+
 }

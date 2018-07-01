@@ -2,15 +2,20 @@
 #include "afxcmn.h"
 
 
-// WaitingRoom 대화 상자입니다.
+// WaitingRoomDlg 대화 상자입니다.
 
-class WaitingRoom : public CDialogEx
+
+using namespace tetris;
+
+class WaitingRoom;
+
+class WaitingRoomDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(WaitingRoom)
+	DECLARE_DYNAMIC(WaitingRoomDlg)
 
 protected:
 	
-	WaitingRoom(CWnd* pParent = NULL);   // 표준 생성자입니다.
+	WaitingRoomDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	
 
 	// 대화 상자 데이터입니다.
@@ -27,14 +32,16 @@ protected:
 
 public:
 
-	virtual ~WaitingRoom();
+	virtual ~WaitingRoomDlg();
 	virtual BOOL OnInitDialog();
 
-	static shared_ptr<WaitingRoom> GetDialog()
+	static shared_ptr<WaitingRoomDlg> GetDialog()
 	{
-		static auto dlg = shared_ptr<WaitingRoom>(new WaitingRoom());
+		static auto dlg = shared_ptr<WaitingRoomDlg>(new WaitingRoomDlg());
 		return dlg;
 	}
+
+	void getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom);
 
 	CListCtrl m_roomList;
 };

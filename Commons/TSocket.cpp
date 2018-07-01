@@ -1,10 +1,10 @@
 #include "TSocket.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#undef THIS_FILE
+//static char THIS_FILE[] = __FILE__;
+//#endif
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:m_closeSocket(true),

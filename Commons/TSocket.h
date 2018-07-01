@@ -48,8 +48,7 @@ public:
 		char *dest = getBuffer();
 		memcpy(dest, msg, PACKET_LEN);
 
-		tetris::t_priority priority = std::numeric_limits<tetris::t_priority>::max();
-		memcpy(&priority, msg, sizeof(tetris::t_priority));
+		tetris::t_priority priority = msg->priority;
 
 		const auto val = make_tuple(priority, static_cast<const char*>(dest), len);
 		m_sendQ->emplace(val);

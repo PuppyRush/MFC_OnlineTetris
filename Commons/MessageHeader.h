@@ -396,5 +396,4 @@ typedef struct mOnAddline : private receiver
 	size_t linenum;
 }mOnAddline;
 
-
 #pragma warning(pop)
