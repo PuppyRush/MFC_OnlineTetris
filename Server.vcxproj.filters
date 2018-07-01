@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Server\TServerManager.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\TServerSocket.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\TSocketImpl.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Server\TServerUser.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\TRoom.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\TWaitingRoom.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\TGameRoom.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Server\TServerManager.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\TServerSocket.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\TSocketImpl.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\TServerUser.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\TRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\TWaitingRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\TGameRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Server">
+      <UniqueIdentifier>{3156c116-07a8-4f84-a184-7bd1f67143cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Room">
+      <UniqueIdentifier>{b15d41a9-fd68-4cf8-a9c6-34486dc8444e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

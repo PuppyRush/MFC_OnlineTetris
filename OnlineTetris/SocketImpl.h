@@ -10,7 +10,7 @@ using namespace tetris;
 class SocketImpl : public TetrisSocket
 {
 public:
-	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
+	
 	virtual ~SocketImpl();
 
 	virtual unsigned create(IPString ip, t_port port) override;
@@ -18,6 +18,8 @@ public:
 	virtual int listen(unsigned port, int backlog) {return 0;}
 
 protected:
+	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
+
 	virtual int _accept() override
 	{
 		return 0;

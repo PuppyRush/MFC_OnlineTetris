@@ -844,9 +844,9 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 		VirtualDraw();
 	}
 
-	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->getSurvive() && CTClientSocket::GetSocket()->isConnected() )
+	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->getSurvive() && TClientSocket::get()->isConnected() )
 	{
-		CTClientSocket::GetSocket()->Sendmapstate();
+		TClientSocket::get()->Sendmapstate();
 		VirtualDraw();
 	}
 
@@ -856,7 +856,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 
 		if(pDoc->m_lineRemain % 10 == 0)
 		{
-			CTClientSocket::GetSocket()->SendLine(1, true);
+			TClientSocket::get()->SendLine(1, true);
 		}
 	}
 
@@ -1367,7 +1367,7 @@ void CMyView::MessageHandler(const USER_MSG msg)
 
 void CMyView::ReadyBtnClicked()
 {
-	if(!CTClientSocket::GetSocket()->isConnected())
+	if(!TClientSocket::get()->isConnected())
 	{
 		MessageHandler(USER_MSG::NOT_OPENNENTER);
 		return;
@@ -1376,12 +1376,12 @@ void CMyView::ReadyBtnClicked()
 	if(pDoc->m_ready)
 	{
 		pDoc->m_ready = false;
-		CTClientSocket::GetSocket()->Sendready(false);
+		TClientSocket::get()->Sendready(false);
 	}
 	else
 	{
 		pDoc->m_ready = true;
-		CTClientSocket::GetSocket()->Sendready(true);
+		TClientSocket::get()->Sendready(true);
 	}
 }
 
@@ -1392,11 +1392,11 @@ void CMyView::StartBtnClicked()
 
 	if(pDoc->m_end)
 	{
-		CTClientSocket::GetSocket()->SendRestart();
+		TClientSocket::get()->SendRestart();
 		return;
 	}
 
-	if(!CTClientSocket::GetSocket()->isConnected())
+	if(!TClientSocket::get()->isConnected())
 	{
 		MessageHandler(USER_MSG::NOT_ALLREADY);
 		return;
@@ -1417,7 +1417,7 @@ void CMyView::StartBtnClicked()
 void CMyView::OnMenuServer()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	if(!CTClientSocket::GetSocket()->isConnected())
+	if(!TClientSocket::get()->isConnected())
 	{
 		auto dlg = EnteringDialog::GetDialog();
 		dlg->DoModal();
@@ -1428,7 +1428,7 @@ void CMyView::OnMenuServer()
 void CMyView::OnUpdateMenuServer(CCmdUI *pCmdUI)
 {
 	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
-	if(CTClientSocket::GetSocket()->isConnected())
+	if(TClientSocket::get()->isConnected())
 		pCmdUI->Enable(false);
 	else
 		pCmdUI->Enable(true);
@@ -1879,7 +1879,7 @@ void CMyView::SetGameover()
 	pDoc->m_isStart = false;
 	KillTimer(TIMER_TETRIS);
 	KillTimer(TIMER_SENDMAPSTATE);
-	CTClientSocket::GetSocket()->SendDead();
+	TClientSocket::get()->SendDead();
 }
 
 bool CMyView::CheckLineDestroy()
@@ -1949,7 +1949,7 @@ bool CMyView::CheckLineDestroy()
 
 	if(Combo >= COMBONUM && des)
 	{
-		CTClientSocket::GetSocket()->SendLine(ADDCOMBOLINE, false);
+		TClientSocket::get()->SendLine(ADDCOMBOLINE, false);
 
 	}
 

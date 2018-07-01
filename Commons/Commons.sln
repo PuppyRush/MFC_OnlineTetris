@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Commons", "Commons.vcxproj", "{A1538559-B74F-4EF5-91BA-C4314481C519}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Debug|ARM.Build.0 = Debug|ARM
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Debug|x64.ActiveCfg = Debug|x64
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Debug|x64.Build.0 = Debug|x64
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Debug|x86.ActiveCfg = Debug|x86
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Debug|x86.Build.0 = Debug|x86
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Release|ARM.ActiveCfg = Release|ARM
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Release|ARM.Build.0 = Release|ARM
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Release|x64.ActiveCfg = Release|x64
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Release|x64.Build.0 = Release|x64
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Release|x86.ActiveCfg = Release|x86
+		{A1538559-B74F-4EF5-91BA-C4314481C519}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DDB1B07-6289-42A8-8C13-9D5A687AEB36}
+	EndGlobalSection
+EndGlobal

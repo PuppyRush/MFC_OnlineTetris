@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="DefineInfo.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageHeader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="structs.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TType.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSocket.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TUser.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeTraits.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Validator.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TAtomic.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Property.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSwitchingMessage.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSocketThread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TSocket.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TUser.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Validator.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TSocketThread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{22635e57-4301-44f3-8304-64084732c02d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{a024ba98-51ff-4768-9765-77b17dbab869}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -22,19 +22,19 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace tetris;
 
-CTClientSocket::CTClientSocket()
+TClientSocket::TClientSocket()
 	:SocketImpl(AF_INET, SOCK_STREAM, 0, IPString{192,168,0,1}, 5905),
-	m_isConnected(false),m_me(TClientUser::GetMe())
+	m_isConnected(false),m_me(TClientUser::get())
 {
 
 }
 
-CTClientSocket::CTClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
-	:SocketImpl(domain, type, protocol, ip, port),
-	m_isConnected(false)
-{}
+//TClientSocket::TClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
+//	:SocketImpl(domain, type, protocol, ip, port),
+//	m_isConnected(false)
+//{}
 
-CTClientSocket::~CTClientSocket()
+TClientSocket::~TClientSocket()
 {}
 
 //void CClientSocket::OnClose(int nErrorCode)
@@ -105,14 +105,14 @@ CTClientSocket::~CTClientSocket()
 //}
 
 
-void CTClientSocket::SelfClose()
+void TClientSocket::SelfClose()
 {
 
 	m_isConnected = false;
 	close();
 }
 
-void CTClientSocket::switchingMessage(const msgElement &msg)
+void TClientSocket::switchingMessage(const msgElement &msg)
 {
 	/*switch(msgidx)
 	{
@@ -211,7 +211,7 @@ void CTClientSocket::switchingMessage(const msgElement &msg)
 
 }
 
-void CTClientSocket::Broadcast(void* strc, int msgidx)
+void TClientSocket::Broadcast(void* strc, int msgidx)
 {
 
 	//POSITION pos = pDoc->Server_UserList.GetHeadPosition();
@@ -438,14 +438,14 @@ void CTClientSocket::Broadcast(void* strc, int msgidx)
 
 }
 
-void CTClientSocket::Sendname(const char *name, int namelen)
+void TClientSocket::Sendname(const char *name, int namelen)
 {
 	const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_NAME));
 	mSendName sendname(header , namelen, name);
 	pushMessage(&sendname);
 }
 
-void CTClientSocket::Sendmapstate()
+void TClientSocket::Sendmapstate()
 {
 	auto header = Header(Priority::High, toUType(SERVER_MSG::BC_MAPSTATE));
 	mSendMapstate mapstate(header, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
@@ -453,14 +453,14 @@ void CTClientSocket::Sendmapstate()
 	pushMessage(&mapstate);
 }
 
-void CTClientSocket::Sendready(bool ready)
+void TClientSocket::Sendready(bool ready)
 {
 	const auto header = Header(Priority::High, toUType(SERVER_MSG::PER_READY));
 	mSendReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
 	pushMessage(&sendready);
 }
 
-void CTClientSocket::ProcessReady(mOnReady rdy)
+void TClientSocket::ProcessReady(mOnReady rdy)
 {
 	//const auto name = string(rdy.fromname);
 	//auto user = pDoc->NameToTUser(name);
@@ -470,7 +470,7 @@ void CTClientSocket::ProcessReady(mOnReady rdy)
 	//user->SetReady(rdy.ready);
 }
 
-void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
+void TClientSocket::ProcessMapsate(mOnMapstate on_map)
 {
 
 	//static CStringArray AsyncSend;
@@ -509,14 +509,14 @@ void CTClientSocket::ProcessMapsate(mOnMapstate on_map)
 
 }
 
-void CTClientSocket::SendDead()
+void TClientSocket::SendDead()
 {
 	const auto header = Header(Priority::High, toUType(SERVER_MSG::BC_DEAD));
 	const mSendName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
 	pushMessage(&sendname);
 }
 
-void CTClientSocket::SendRestart()
+void TClientSocket::SendRestart()
 {
 	const auto header = Header(Priority::Normal, toUType(SERVER_MSG::BC_RESTART));
 	mSendPermit permit(header, -1);
@@ -525,7 +525,7 @@ void CTClientSocket::SendRestart()
 
 //자기 제외하고 두줄 추가하기
 //isSelf에 따라 자기자신도 더할지 판단
-void CTClientSocket::SendLine(int num = 1, bool isSelf = true)
+void TClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{

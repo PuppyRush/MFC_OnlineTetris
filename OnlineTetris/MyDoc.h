@@ -16,7 +16,7 @@
 using namespace tetris;
 
 class CMyListen;
-class CTClientSocket;
+class TClientSocket;
 class CMyView;
 
 class CMyDoc : public CDocument
