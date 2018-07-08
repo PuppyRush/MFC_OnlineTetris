@@ -22,14 +22,10 @@ public:
 	static shared_ptr<TServerSocket> makeShared(const unsigned socket)
 	{
 		auto serversocket = make_shared<TServerSocket>(socket);
-		serversocket->readnwrite();
 		return serversocket;
 	}
 
-	virtual void switchingMessage(const tetris::msgElement &msg);
-
 private:
-
 	void recvConnectionInfo(const tetris::msgElement &msg);
 	void sendConnectionInfo();
 };

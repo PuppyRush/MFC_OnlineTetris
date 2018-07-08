@@ -2,15 +2,15 @@
 
 #include <memory>
 
-#include "structs.h"
+#include "Uncopyable.h"
 #include "TSocket.h"
 #include "TType.h"
 #include "TAtomic.h"
-#include "TSwitchingMessage.h"
+#include "TObject.h"
 
 #undef GetUserName
 
-class TetrisUser : private uncopyable, public TSwitchingMessage
+class TetrisUser : public TObject, private Uncopyable
 {
 public:
 	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];

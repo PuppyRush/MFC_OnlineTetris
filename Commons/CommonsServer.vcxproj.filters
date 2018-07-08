@@ -1,6 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="TAtomic.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TSocket.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TSocketThread.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Validator.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TUser.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TSwitchingMessage.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="DefineInfo.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -10,16 +30,25 @@
     <ClInclude Include="MessageHeader.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Property.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <ClInclude Include="structs.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TType.h">
+    <ClInclude Include="TAtomic.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="TSocket.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TUser.h">
+    <ClInclude Include="TSocketThread.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSwitchingMessage.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TType.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="TypeTraits.h">
@@ -28,35 +57,28 @@
     <ClInclude Include="Validator.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TAtomic.h">
+    <ClInclude Include="ITObjectContainer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Property.h">
+    <ClInclude Include="TObjectContainer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TSwitchingMessage.h">
+    <ClInclude Include="TUser.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TSocketThread.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="TSocket.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="TUser.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Validator.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="TSocketThread.cpp" />
+    <ClInclude Include="TObject.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Uncopyable.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
-      <UniqueIdentifier>{22635e57-4301-44f3-8304-64084732c02d}</UniqueIdentifier>
+      <UniqueIdentifier>{f5057fe6-c461-4a73-b716-e04d6c42b325}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources">
-      <UniqueIdentifier>{a024ba98-51ff-4768-9765-77b17dbab869}</UniqueIdentifier>
+      <UniqueIdentifier>{d3566325-f4b3-471a-9211-1dafced9a783}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

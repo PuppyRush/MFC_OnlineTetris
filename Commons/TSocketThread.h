@@ -1,30 +1,31 @@
 #pragma once
 
 #include <unordered_set>
+#include <thread>
+#include <mutex>
 
+#include "Uncopyable.h"
 #include "TType.h"
 #include "TSocket.h"
 
-class TSocketThread
+class TSocketThread : private Uncopyable
 {
 public:
 	~TSocketThread();
 	void run();
+	const tetris::msgElement pop();
 	void end();
-	void add(shared_ptr<TetrisSocket> socket);
-	void remove(shared_ptr<TetrisSocket> socket);
 
 private:
 	TSocketThread();
-	TSocketThread(const shared_ptr<TetrisSocket> socket);
-	TSocketThread(const unordered_set<shared_ptr<TetrisSocket>>& sockets);
 
 	void _send();
 	void _recv();
 
-	std::unordered_set<shared_ptr<TetrisSocket>> m_sockets;
-	bool m_closeSocket;
+	bool m_continue;
+	std::mutex	m_recvMutex;
 	shared_ptr<thread> m_recvThread;
 	shared_ptr<thread> m_sendThread;
+	shared_ptr<thread> m_popThread;
 };
 

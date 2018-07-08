@@ -7,14 +7,14 @@
 
 #pragma once
 
+#include <unordered_set>
+
 #include "TRoom.h"
-#include "../../Commons/TSwitchingMessage.h"
 #include "../Server/TServerUser.h"
 
-class TWaitingRoom : public TRoom, public TSwitchingMessage
+class TWaitingRoom : public TRoom
 {
 public:
-	virtual const tetris::t_error TWaitingRoom::switchingMessage(const tetris::msgElement &msg) override;
 	virtual ~TWaitingRoom();
 
 	enum class property : tetris::t_error
@@ -27,7 +27,12 @@ public:
 		static auto waitingRoom = shared_ptr<TWaitingRoom>(new TWaitingRoom());
 		return waitingRoom;
 	}
+
+	const errorCode insertRoom(const TRoom &room);
+	const errorCode validator(const TRoom &room) const;
+
+protected:
+
 private:
-	TWaitingRoom() {}
 	
 };

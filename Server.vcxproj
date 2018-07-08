@@ -27,23 +27,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Room\TGameRoom.cpp" />
-    <ClCompile Include="Room\TRoom.cpp" />
-    <ClCompile Include="Room\TWaitingRoom.cpp" />
-    <ClCompile Include="Server\TServerManager.cpp" />
-    <ClCompile Include="Server\TServerSocket.cpp" />
-    <ClCompile Include="Server\TSocketImpl.cpp" />
-    <ClCompile Include="Server\TServerUser.cpp" />
+    <ClCompile Include="Server\main.cpp" />
+    <ClCompile Include="Server\Messenger\TUserMessenger.cpp" />
+    <ClCompile Include="Server\Room\TGameRoom.cpp" />
+    <ClCompile Include="Server\Room\TRoom.cpp" />
+    <ClCompile Include="Server\Room\TWaitingRoom.cpp" />
+    <ClCompile Include="Server\Server\TServerManager.cpp" />
+    <ClCompile Include="Server\Server\TServerSocket.cpp" />
+    <ClCompile Include="Server\Server\TServerUser.cpp" />
+    <ClCompile Include="Server\Server\TSocketImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Room\TGameRoom.h" />
-    <ClInclude Include="Room\TRoom.h" />
-    <ClInclude Include="Room\TWaitingRoom.h" />
-    <ClInclude Include="Server\TServerManager.h" />
-    <ClInclude Include="Server\TServerSocket.h" />
-    <ClInclude Include="Server\TSocketImpl.h" />
-    <ClInclude Include="Server\TServerUser.h" />
+    <ClInclude Include="Server\Messenger\Messenger.h" />
+    <ClInclude Include="Server\Messenger\TUserMessenger.h" />
+    <ClInclude Include="Server\Room\TGameRoom.h" />
+    <ClInclude Include="Server\Room\TRoom.h" />
+    <ClInclude Include="Server\Room\TWaitingRoom.h" />
+    <ClInclude Include="Server\Server\TServerManager.h" />
+    <ClInclude Include="Server\Server\TServerSocket.h" />
+    <ClInclude Include="Server\Server\TServerUser.h" />
+    <ClInclude Include="Server\Server\TSocketImpl.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{d6168e04-20f8-42b9-be3e-3dffdb276b1a}</ProjectGuid>
@@ -119,7 +122,7 @@
     <Link>
       <ShowProgress>false</ShowProgress>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions> -lCommons -L/home/pi/workspace/OnlineTetris/Commons/bin/ARM/Debug -lpthread %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-lCommons -L/home/pi/workspace/OnlineTetris/CommonsServer/bin/ARM/Debug  -lpthread %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <ClCompile>
       <CppLanguageStandard>c++17</CppLanguageStandard>

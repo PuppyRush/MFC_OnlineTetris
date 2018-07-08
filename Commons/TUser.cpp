@@ -9,5 +9,11 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace std;
 
+TetrisUser::TetrisUser(const tetris::t_userUnique unique)
+	:m_unique(unique)
+{
+	
+}
+
 TetrisUser::TetrisUser()
 {}

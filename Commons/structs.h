@@ -7,18 +7,7 @@
 
 #undef POINT
 
-class uncopyable
-{
-protected:
-	uncopyable(){}
-	virtual ~uncopyable(){}
-private:
-	void operator=(const uncopyable&) = delete;
-	uncopyable(const uncopyable &) = delete;
-	uncopyable(const uncopyable *) = delete;
-	uncopyable(const uncopyable &&) = delete;
 
-};
 
 class IPString
 {

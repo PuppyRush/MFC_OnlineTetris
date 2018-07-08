@@ -22,7 +22,35 @@ TWaitingRoom::~TWaitingRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TWaitingRoom::switchingMessage(const tetris::msgElement &msg)
-{
 
-}
+//const TWaitingRoom::errorCode TWaitingRoom::insertRoom(const TRoom &room)
+//{
+//	const auto errCode = validator(room);
+//	if (errCode == errorCode::Ok)
+//		getWaitingRoom()->m_roomMap.insert.make_pair(m_unique.newUnique(), room);
+//	else
+//		return errCode;
+//}
+//
+//const TWaitingRoom::errorCode TWaitingRoom::validator(const TRoom &room) const
+//{
+//	const auto roominfo = room.getRoomInfo();
+//	const auto roomname = roominfo->roomName;
+//	if (!stringLengthCheck(roominfo->roomName, toUType(property::LengthMin), toUType(property::LengthMin)))
+//		return errorCode::NameLength;
+//
+//	for (const auto _room : m_roomMap)
+//	{
+//		if (_room.second->getRoomInfo()->roomName.compare(roomname) == 0)
+//			return errorCode::NameLength;
+//	}
+//
+//	const auto currentTime = time(NULL);
+//	if (std::difftime(currentTime, roominfo->makeTime) < 0)
+//		return errorCode::PassedTime;
+//
+//	//if(roominfo->users.empty())
+//	//	return errorCode::Nobody;
+//
+//	return errorCode::Ok;
+//}

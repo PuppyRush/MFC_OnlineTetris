@@ -1,50 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Server\TServerManager.cpp">
+    <ClCompile Include="Server\Server\TServerManager.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="Server\TServerSocket.cpp">
+    <ClCompile Include="Server\Server\TServerSocket.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="Server\TSocketImpl.cpp">
+    <ClCompile Include="Server\Server\TServerUser.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Server\TServerUser.cpp">
+    <ClCompile Include="Server\Server\TSocketImpl.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="Room\TRoom.cpp">
+    <ClCompile Include="Server\Room\TGameRoom.cpp">
       <Filter>Room</Filter>
     </ClCompile>
-    <ClCompile Include="Room\TWaitingRoom.cpp">
+    <ClCompile Include="Server\Room\TRoom.cpp">
       <Filter>Room</Filter>
     </ClCompile>
-    <ClCompile Include="Room\TGameRoom.cpp">
+    <ClCompile Include="Server\Room\TWaitingRoom.cpp">
       <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\main.cpp" />
+    <ClCompile Include="Server\Messenger\TUserMessenger.cpp">
+      <Filter>Messenger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server\TServerManager.h">
+    <ClInclude Include="Server\Server\TServerManager.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="Server\TServerSocket.h">
+    <ClInclude Include="Server\Server\TServerSocket.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="Server\TSocketImpl.h">
+    <ClInclude Include="Server\Server\TServerUser.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="Server\TServerUser.h">
+    <ClInclude Include="Server\Server\TSocketImpl.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="Room\TRoom.h">
+    <ClInclude Include="Server\Room\TGameRoom.h">
       <Filter>Room</Filter>
     </ClInclude>
-    <ClInclude Include="Room\TWaitingRoom.h">
+    <ClInclude Include="Server\Room\TRoom.h">
       <Filter>Room</Filter>
     </ClInclude>
-    <ClInclude Include="Room\TGameRoom.h">
+    <ClInclude Include="Server\Room\TWaitingRoom.h">
       <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\Messenger\TUserMessenger.h">
+      <Filter>Messenger</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\Messenger\Messenger.h">
+      <Filter>Messenger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +62,9 @@
     </Filter>
     <Filter Include="Room">
       <UniqueIdentifier>{b15d41a9-fd68-4cf8-a9c6-34486dc8444e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Messenger">
+      <UniqueIdentifier>{7e531cee-70ac-4e14-a6b7-5e912d6450a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

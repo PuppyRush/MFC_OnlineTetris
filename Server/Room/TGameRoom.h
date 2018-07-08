@@ -15,7 +15,7 @@
 #include "../../Commons/TAtomic.h"
 #include "../../Commons/TSwitchingMessage.h"
 
-class TGameRoom : public TRoom, public TSwitchingMessage
+class TGameRoom : public TRoom
 {
 public:
 

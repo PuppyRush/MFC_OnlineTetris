@@ -8,10 +8,9 @@
 #include <ctime>
 
 #include "../../Commons/Validator.h"
-#include "Room.h"
 #include "WaitingRoom.h"
 
-TWaitingRoom::TWaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ)
+TWaitingRoom::TWaitingRoom(const string roomname, const vector<shared_ptr<TServerUser>> userQ)
 	:TRoom(roomname,userQ)
 {
 	// TODO Auto-generated constructor stub
@@ -49,8 +48,8 @@ const TWaitingRoom::errorCode TWaitingRoom::validator(const TRoom &room) const
 	if (std::difftime(currentTime, roominfo->makeTime) < 0)
 		return errorCode::PassedTime;
 
-	if(roominfo->users.empty())
-		return errorCode::Nobody;
+	//if(roominfo->users.empty())
+	//	return errorCode::Nobody;
 	
 	return errorCode::Ok;
 }

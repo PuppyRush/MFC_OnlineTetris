@@ -16,9 +16,10 @@
 #include "../../Commons/structs.h"
 #include "../../Commons/TType.h"
 #include "../../Commons/TAtomic.h"
+#include "../../Commons/TObject.h"
 
 class TServerUser;
-class TRoom
+class TRoom : public TObject
 {
 public:
 	virtual ~TRoom();

@@ -9,9 +9,9 @@
 
 #include <unordered_map>
 #include <mutex>
+#include <vector>
 
-#include "Room.h"
-
+#include "TRoom.h"
 #include "../../Commons/TType.h"
 #include "../../Commons/TAtomic.h"
 #include "../Server/TServerUser.h"
@@ -31,7 +31,7 @@ public:
 	};
 
 	TWaitingRoom() {}
-	explicit TWaitingRoom(const string roomname, const list<shared_ptr<TServerUser>> userQ);
+	explicit TWaitingRoom(const string roomname, const std::vector<shared_ptr<TServerUser>> userQ);
 	virtual ~TWaitingRoom();
 
 	inline static shared_ptr<TWaitingRoom> getWaitingRoom() noexcept

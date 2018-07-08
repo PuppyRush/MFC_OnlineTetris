@@ -20,22 +20,23 @@
 
 using namespace std;
 
-struct msgComp
-{
-	bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
-	{
-		return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
-	}
-};
 
 class TetrisSocket
 {
 public:
+
+	struct msgComp
+	{
+		bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
+		{
+			return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
+		}
+	};
+
 	virtual ~TetrisSocket();
 
 	virtual unsigned create(IPString ip, tetris::t_port port) = 0;
 	virtual int listen(unsigned port, int backlog) = 0;
-	
 
 	static char* getBuffer();
 
@@ -51,9 +52,8 @@ public:
 		tetris::t_priority priority = msg->priority;
 
 		const auto val = make_tuple(priority, static_cast<const char*>(dest), len);
-		m_sendQ->emplace(val);
+		m_sendQ.emplace(val);
 	}
-	
 	inline unsigned popSocket()
 	{
 		while(true)
@@ -69,7 +69,8 @@ public:
 
 	unsigned connect();
 	int accept();
-	void readnwrite();
+	void send();
+	void recv();
 	unsigned close();
 
 	void SetIP(IPString &ip);
@@ -94,11 +95,9 @@ protected:
 	virtual int _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual tetris::msgElement _recvFrom() = 0;
-	virtual void switchingMessage(const tetris::msgElement &msg) = 0;
 
 	void _acceptSocket();
-	void _send();
-	void _recv();
+
 
 	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
 	inline const tetris::t_socket getSocket() {	return m_socket;}
@@ -106,16 +105,11 @@ protected:
 private:
 	tetris::t_socket m_socket;
 
-	shared_ptr<thread> m_recvThread;
-	shared_ptr<thread> m_sendThread;
 	shared_ptr<thread> m_acceptThread;
-	shared_ptr<thread> m_popThread;
 
-	shared_ptr<priority_queue<tetris::msgElement,vector<tetris::msgElement>,msgComp>> m_recvQ;
-	shared_ptr<priority_queue<tetris::msgElement,vector<tetris::msgElement>,msgComp>> m_sendQ;
+	priority_queue<tetris::msgElement,vector<tetris::msgElement>,msgComp> m_recvQ;
+	priority_queue<tetris::msgElement,vector<tetris::msgElement>,msgComp> m_sendQ;
 	
-	void _run();
 	void _runAcception();
 	void _end();
-	void _popMessage();
 };
