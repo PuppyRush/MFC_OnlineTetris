@@ -32,3 +32,8 @@ TServerUser::~TServerUser()
 {
 	// TODO Auto-generated destructor stub
 }
+
+const tetris::t_error TServerUser::switchingMessage(const tetris::msgElement &msg)
+{
+
+}

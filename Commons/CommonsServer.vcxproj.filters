@@ -16,8 +16,8 @@
     <ClCompile Include="TUser.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="TSwitchingMessage.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="Room\TIRoom.cpp">
+      <Filter>Room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,9 +57,6 @@
     <ClInclude Include="Validator.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ITObjectContainer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="TObjectContainer.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -72,6 +69,21 @@
     <ClInclude Include="Uncopyable.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="TMessage.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TObjectContainerFactory.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\TIGameRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\TIWaitingRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\TIRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -79,6 +91,9 @@
     </Filter>
     <Filter Include="Sources">
       <UniqueIdentifier>{d3566325-f4b3-471a-9211-1dafced9a783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Room">
+      <UniqueIdentifier>{a24a2206-3f42-494e-acca-936669f6fa2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

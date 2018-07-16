@@ -16,27 +16,30 @@
 #include "../../Commons/TType.h"
 #include "../../Commons/TAtomic.h"
 #include "TServerSocket.h"
-
-class TServerUser;
-class TServerSocket;
-
-using namespace std;
+#include "TServerUser.h"
 
 class TServerManager 
 {
 public:
-	TServerManager(std::shared_ptr<TServerSocket> &socket);
+	
 	virtual ~TServerManager();
 
 	void run();
 	void beginServer();
 
-private:
-	shared_ptr<std::thread> m_severManagerThread;
-	shared_ptr<TServerSocket> m_mainServerSocket;
+	inline static std::shared_ptr<TServerManager> get()
+	{
+		static std::shared_ptr<TServerManager> socket = std::shared_ptr<TServerManager>(new TServerManager());
+		return socket;
+	}
 
-	deque<shared_ptr<TServerUser>> m_connectionPool;
-	mutex m_mutex;
+private:
+	TServerManager();
+
+	std::shared_ptr<std::thread> m_severManagerThread;
+	std::shared_ptr<TServerSocket> m_mainServerSocket;
+
+	std::mutex m_mutex;
 	
 	bool m_closedServer;
 };

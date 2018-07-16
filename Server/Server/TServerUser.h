@@ -20,6 +20,8 @@ class TServerUser : public TetrisUser
 public:
 	virtual ~TServerUser();
 
+	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
+
 	static shared_ptr<TServerUser> makeShared()
 	{
 		const auto unique = TetrisUser::newUnique();

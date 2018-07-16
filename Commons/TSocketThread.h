@@ -7,25 +7,34 @@
 #include "Uncopyable.h"
 #include "TType.h"
 #include "TSocket.h"
+#include "TObjectContainer.h"
+#include "TSwitchingMessage.h"
+#include "TUser.h"
 
 class TSocketThread : private Uncopyable
 {
 public:
-	~TSocketThread();
+	virtual ~TSocketThread();
 	void run();
-	const tetris::msgElement pop();
 	void end();
+
+	inline static std::shared_ptr<TSocketThread> get()
+	{
+		static std::shared_ptr<TSocketThread> th = std::shared_ptr<TSocketThread>(new TSocketThread());
+		return th;
+	}
 
 private:
 	TSocketThread();
 
 	void _send();
 	void _recv();
+	const void _switchingMessage();
+
+	std::queue<tetris::msgElement> m_messageQ;
 
 	bool m_continue;
-	std::mutex	m_recvMutex;
-	shared_ptr<thread> m_recvThread;
-	shared_ptr<thread> m_sendThread;
-	shared_ptr<thread> m_popThread;
+	std::shared_ptr<std::thread> m_recvThread;
+	std::shared_ptr<std::thread> m_sendThread;
+	std::shared_ptr<std::thread> m_popThread;
 };
-

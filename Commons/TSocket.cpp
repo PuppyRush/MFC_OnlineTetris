@@ -1,10 +1,12 @@
 #include "TSocket.h"
 
-//#ifdef _DEBUG
-//#define new DEBUG_NEW
-//#undef THIS_FILE
-//static char THIS_FILE[] = __FILE__;
-//#endif
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+using namespace std;
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:m_closeSocket(true),
@@ -55,6 +57,19 @@ void TetrisSocket::SetPort(tetris::t_port port)
 	m_port = port;
 }
 
+tetris::t_socket TetrisSocket::popSocket()
+{
+	while (true)
+	{
+		if (!m_acceptedSocketQ.empty())
+		{
+			const unsigned socket = m_acceptedSocketQ.front();
+			m_acceptedSocketQ.pop();
+			return socket;
+		}
+	}
+}
+
 int TetrisSocket::accept()
 {
 	_runAcception();
@@ -62,9 +77,9 @@ int TetrisSocket::accept()
 	return 0u;
 }
 
-unsigned TetrisSocket::connect()
+tetris::t_error TetrisSocket::connect()
 {
-	auto err = 0u;
+	tetris::t_error err = tetris::t_error(0);
 	if ((err = _connect()) > 0)
 		return err;
 
@@ -108,7 +123,7 @@ void TetrisSocket::send()
 	}
 }
 
-void TetrisSocket::recv()
+const tetris::msgElement TetrisSocket::recv()
 {
 	auto msg = _recvFrom();
 	if (msgHelper::getSize(msg) <= 0)
@@ -116,7 +131,7 @@ void TetrisSocket::recv()
 		//writeLog("error recvfrom");
 	}
 	else
-		m_recvQ.push(msg);
+		return msg;
 }
 
 

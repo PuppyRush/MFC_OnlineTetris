@@ -1,4 +1,9 @@
 #include "TSocketThread.h"
+#include "TypeTraits.h"
+#include "TSocket.h"
+#include "TObjectContainerFactory.h"
+
+using namespace std;
 
 TSocketThread::TSocketThread()
 	:m_continue(true),
@@ -6,7 +11,6 @@ TSocketThread::TSocketThread()
 	m_sendThread(nullptr)
 {
 }
-
 
 TSocketThread::~TSocketThread()
 {
@@ -17,11 +21,13 @@ void TSocketThread::run()
 {
 	const auto recvfn = &TSocketThread::_recv;
 	m_recvThread = make_shared<thread>(recvfn, this);
-
+	
 	const auto sendfn = &TSocketThread::_send;
 	m_sendThread = make_shared<thread>(sendfn, this);
+	
+	const auto popfn = &TSocketThread::_switchingMessage;
+	m_popThread = make_shared<thread>(popfn, this);
 }
-
 
 void TSocketThread::end()
 {
@@ -30,26 +36,58 @@ void TSocketThread::end()
 
 void TSocketThread::_send()
 {
-	//while (m_continue)
-	//{
-	//	for(const auto socket : m_sockets)
-	//		socket->send();
-	//}
+	auto container = TObjectContainerFactory::get()->getSocketContainer();
+	while (m_continue)
+	{
+		if (container->isRefreshing())
+			continue;
+
+		for (const auto user : *container)
+			user->send();
+		container->refresh();
+	}
 }
 
 void TSocketThread::_recv()
 {
-	//while (m_continue)
-	//{
-	//	for (const auto socket : m_sockets)
-	//	{
-	//		lock_guard<mutex> lck(m_recvMutex);
-	//		socket->recv();
-	//	}
-	//}
+	auto container = TObjectContainerFactory::get()->getSocketContainer();
+	while (m_continue)
+	{
+		if (container->isRefreshing())
+			continue;
+		
+		for (const auto user : *container)
+		{
+			const auto msg = user->recv();
+			m_messageQ.push(msg);
+		}
+		container->refresh();
+	}
 }
 
-const tetris::msgElement TSocketThread::pop()
+const void TSocketThread::_switchingMessage()
 {
+	auto factory = TObjectContainerFactory::get();
 
+	auto gameroomCon = factory->getGameRoomContainer();
+	auto waitroomCon = factory->getWaitingRoomContainer();
+	auto userCon = factory->getUserContainer();
+
+	while (m_continue)
+	{
+		if (m_messageQ.empty())
+			continue;
+		
+		const auto msg = m_messageQ.front();
+		m_messageQ.pop();
+		
+		for (const auto obj : *gameroomCon)
+			obj->switchingMessage(msg);
+		
+		for (const auto obj : *waitroomCon)
+			obj->switchingMessage(msg);
+		
+		for (const auto obj : *userCon)
+			obj->switchingMessage(msg);
+	}
 }

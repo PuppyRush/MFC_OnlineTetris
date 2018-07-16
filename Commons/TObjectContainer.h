@@ -2,25 +2,39 @@
 
 #include <queue>
 #include <memory>
-#include <vector>
+#include <list>
 #include <unordered_map>
 #include <thread>
 #include <mutex>
 
 #include "Uncopyable.h"
-#include "ITObjectContainer.h"
 
 template <class UniqueType, class T>
-class TObjectContainer : public ITObjectContainer, public std::iterator<std::bidirectional_iterator_tag, T>, public Uncopyable
+class TObjectContainer : public Uncopyable
 {
 public:
 	using PtrType = std::shared_ptr<T>;
 	using MyUniqueType = UniqueType;
+	
+	class ContainerIterator
+	{
+	public:
+		T* ptrValue;
+		size_t position;
 
-	TObjectContainer()
-		:m_canAdded(true),
-		m_canRemoved(true)
-	{}
+		explicit ContainerIterator(T* value, const size_t pos) noexcept
+			: ptrValue(value), position(pos)
+		{
+		}
+
+		T* operator*() { return ptrValue; }
+		bool operator!=(const ContainerIterator &other)
+		{
+			return *ptrValue != *(other.ptrValue);
+		}
+		ContainerIterator operator++() { ++position; return *this; }
+
+	};
 
 	~TObjectContainer() {}
 
@@ -28,7 +42,7 @@ public:
 	{
 		if (m_ptrMap.count(unique) == 0)
 		{
-			m_ptrMap.insert(make_pair(unique, newObj));
+			m_addedQ.push(make_pair(unique, newObj));
 			return true;
 		}
 		else
@@ -40,7 +54,7 @@ public:
 		for (const std::pair<UniqueType, PtrType> obj : objAry)
 		{
 			if (m_ptrMap.count(obj.first) == 0)
-				m_ptrMap.insert(obj);
+				m_addedQ.push(obj);
 		}
 	}
 
@@ -48,7 +62,7 @@ public:
 	{
 		if (m_ptrMap.count(unique) > 0)
 		{
-			m_ptrMap.erase(unique);
+			m_removedQ.push(unique);
 			return true;
 		}
 		else
@@ -67,7 +81,7 @@ public:
 			add(unique.newObj);
 	}
 	
-	bool exist(const UniqueType unique)
+	bool exist(const UniqueType unique) const
 	{
 		if (m_ptrMap.count(unique) > 0)
 			return true;
@@ -75,64 +89,76 @@ public:
 			return false;
 	}
 
-	void clear()
+	void clear() noexcept
 	{
 		m_ptrMap.clear();
 	}
 
-	PtrType begin()
+	ContainerIterator begin() const
 	{
-		return *m_ptrMap.begin();
+		if (m_ptrMap.empty())
+			return ContainerIterator(0, 0);
+		T* begin = m_ptrMap.begin()->second.get();
+		return ContainerIterator(begin, m_ptrMap.size());
 	}
-
-	PtrType end()
+	
+	ContainerIterator end() const
 	{
-		return *m_ptrMap.cend();
+		T* end = m_ptrMap.end()->second.get();
+		return ContainerIterator(end, m_ptrMap.size());
 	}
-
-	const PtrType cbegin()
+	
+	const ContainerIterator cbegin() const noexcept
 	{
-		return *m_ptrMap.cbegin();
+		T* begin = m_ptrMap.begin()->second.get();
+		return ContainerIterator(begin, m_ptrMap.size());
 	}
-
-	const PtrType cend()
+	
+	const ContainerIterator cend() const noexcept
 	{
-		return *m_ptrMap.cend();
+		T* end = m_ptrMap.end()->second.get();
+		return ContainerIterator(end, m_ptrMap.size());
 	}
 
 	inline static std::shared_ptr<TObjectContainer> get()
 	{
-		static std::shared_ptr<TObjectContainer> container = std::make_shared<TObjectContainer>();
+		static std::shared_ptr<TObjectContainer> container = std::shared_ptr<TObjectContainer>(new TObjectContainer());
 		return container;
 	}
 
-protected:
-	
+	void refresh()
+	{
+		std::lock_guard<std::mutex> lock(m_refreshMutex);
+
+		m_isRefreshing = true;
+
+		while (!m_addedQ.empty())
+		{
+			std::pair<UniqueType, PtrType> obj = m_addedQ.front();
+			m_addedQ.pop();
+			m_ptrMap.insert(obj);
+		}
+
+		while (!m_removedQ.empty())
+		{
+			UniqueType unique = m_removedQ.front();
+			m_removedQ.pop();
+			m_ptrMap.erase(unique);
+		}
+
+		m_isRefreshing = false;
+	}
+
+	const bool isRefreshing() const
+	{	return m_isRefreshing;	}
+
 private:
-	std::vector<PtrType> m_ptrAry;
+	TObjectContainer() {}
+
 	std::unordered_map<UniqueType, PtrType> m_ptrMap;
-
-	//std::queue<pair<UniqueType, PtrType> > m_addQ;
-	//std::queue<pair<UniqueType, PtrType> > m_removeQ;
-	//bool	m_
-	std::mutex	m_mutex;
-	std::shared_ptr<std::thread>	m_thread;
-
-	volatile bool m_canAdded;
-	volatile bool m_canRemoved;
-
-private:
-
-	void _runContainer()
-	{
-		const auto runfn = &TObjectContainer::_run;
-		m_thread = std::make_shared<std::thread>(runfn, this);
-		m_thread->join();
-	}
-
-	void _run()
-	{
-	}
-
+	std::mutex	m_refreshMutex;
+	bool m_isRefreshing;
+	std::queue<std::pair<UniqueType, PtrType>> m_addedQ;
+	std::queue<UniqueType> m_removedQ;
 };
 

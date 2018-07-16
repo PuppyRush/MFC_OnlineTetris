@@ -1,6 +1,10 @@
 #pragma once
 
-class ITObjectContainer
+class ITObjectContainer : public Uncopyable
 {
+public:
 
+
+protected:
+	
 };

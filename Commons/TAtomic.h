@@ -9,7 +9,7 @@ class TAtomic
 {
 public:
 	TAtomic()
-		:m_unique(0)
+		:m_unique(1)
 	{
 	}
 

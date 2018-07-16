@@ -30,7 +30,6 @@
     <ClCompile Include="Server\main.cpp" />
     <ClCompile Include="Server\Messenger\TUserMessenger.cpp" />
     <ClCompile Include="Server\Room\TGameRoom.cpp" />
-    <ClCompile Include="Server\Room\TRoom.cpp" />
     <ClCompile Include="Server\Room\TWaitingRoom.cpp" />
     <ClCompile Include="Server\Server\TServerManager.cpp" />
     <ClCompile Include="Server\Server\TServerSocket.cpp" />
@@ -41,7 +40,6 @@
     <ClInclude Include="Server\Messenger\Messenger.h" />
     <ClInclude Include="Server\Messenger\TUserMessenger.h" />
     <ClInclude Include="Server\Room\TGameRoom.h" />
-    <ClInclude Include="Server\Room\TRoom.h" />
     <ClInclude Include="Server\Room\TWaitingRoom.h" />
     <ClInclude Include="Server\Server\TServerManager.h" />
     <ClInclude Include="Server\Server\TServerSocket.h" />
@@ -61,11 +59,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <RemoteRootDir>~/workspace/OnlineTetris</RemoteRootDir>
+    <RemoteRootDir>/home/pi</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <RemoteRootDir>~/workspace/OnlineTetris</RemoteRootDir>
+    <RemoteRootDir>/home/pi</RemoteRootDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -92,7 +90,8 @@
     <SourcePath>
     </SourcePath>
     <RemoteCompileLocalCopyObjectFiles>true</RemoteCompileLocalCopyObjectFiles>
-    <TargetExt />
+    <TargetExt>.out</TargetExt>
+    <RemoteProjectDir>projects/OnlineTetris/Server</RemoteProjectDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <LibraryPath>
@@ -101,6 +100,7 @@
     </IncludePath>
     <SourcePath>
     </SourcePath>
+    <RemoteProjectDir>projects/OnlineTetris/Server</RemoteProjectDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
@@ -123,9 +123,11 @@
       <ShowProgress>false</ShowProgress>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>-lCommons -L/home/pi/workspace/OnlineTetris/CommonsServer/bin/ARM/Debug  -lpthread %(AdditionalOptions)</AdditionalOptions>
+      <LibraryDependencies>Commons</LibraryDependencies>
     </Link>
     <ClCompile>
       <CppLanguageStandard>c++17</CppLanguageStandard>
+      <DebugInformationFormat>FullDebug</DebugInformationFormat>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

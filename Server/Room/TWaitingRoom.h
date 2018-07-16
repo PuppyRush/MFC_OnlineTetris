@@ -8,11 +8,13 @@
 #pragma once
 
 #include <unordered_set>
+#include <memory>
 
-#include "TRoom.h"
-#include "../Server/TServerUser.h"
+#include "../../Commons/Room/TIWaitingRoom.h"
+#include "../../Commons/TSwitchingMessage.h"
+#include "../../Commons/TUser.h"
 
-class TWaitingRoom : public TRoom
+class TWaitingRoom : public TIWaitingRoom
 {
 public:
 	virtual ~TWaitingRoom();
@@ -22,17 +24,20 @@ public:
 		Size = 200
 	};
 
-	inline static shared_ptr<TWaitingRoom> getWaitingRoom()
+	virtual const TIRoom::errorCode add(const std::shared_ptr<TetrisUser> room) override;
+	virtual const TIRoom::errorCode exit(const std::shared_ptr<TetrisUser> room) override;
+	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
+
+	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{
-		static auto waitingRoom = shared_ptr<TWaitingRoom>(new TWaitingRoom());
+		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom());
 		return waitingRoom;
 	}
 
-	const errorCode insertRoom(const TRoom &room);
-	const errorCode validator(const TRoom &room) const;
+	virtual const tetris::t_error _validator(const TIRoom &room) const override;
 
 protected:
 
 private:
-	
+	TWaitingRoom() {}
 };

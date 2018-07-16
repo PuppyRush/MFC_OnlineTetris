@@ -20,7 +20,7 @@ protected:
 
 	virtual int _accept() override;
 	virtual int _close(const unsigned _socket) override;
-	virtual unsigned _connect() override { return 0; };
+	virtual tetris::t_error _connect() override { return 0; };
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
 	virtual tetris::msgElement _recvFrom() override;

@@ -4,8 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server.vcxproj", "{D6168E04-20F8-42B9-BE3E-3DFFDB276B1A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED5837AC-F038-42EA-AD2C-05010D13956B} = {ED5837AC-F038-42EA-AD2C-05010D13956B}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonsServer.vcxproj", "Commons\CommonsServer.vcxproj", "{ED5837AC-F038-42EA-AD2C-05010D13956B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonsServer", "Commons\CommonsServer.vcxproj", "{ED5837AC-F038-42EA-AD2C-05010D13956B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

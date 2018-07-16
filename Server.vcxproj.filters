@@ -13,18 +13,15 @@
     <ClCompile Include="Server\Server\TSocketImpl.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="Server\Room\TGameRoom.cpp">
-      <Filter>Room</Filter>
+    <ClCompile Include="Server\main.cpp" />
+    <ClCompile Include="Server\Messenger\TUserMessenger.cpp">
+      <Filter>Messenger</Filter>
     </ClCompile>
-    <ClCompile Include="Server\Room\TRoom.cpp">
+    <ClCompile Include="Server\Room\TGameRoom.cpp">
       <Filter>Room</Filter>
     </ClCompile>
     <ClCompile Include="Server\Room\TWaitingRoom.cpp">
       <Filter>Room</Filter>
-    </ClCompile>
-    <ClCompile Include="Server\main.cpp" />
-    <ClCompile Include="Server\Messenger\TUserMessenger.cpp">
-      <Filter>Messenger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,31 +37,28 @@
     <ClInclude Include="Server\Server\TSocketImpl.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="Server\Room\TGameRoom.h">
-      <Filter>Room</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\Room\TRoom.h">
-      <Filter>Room</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\Room\TWaitingRoom.h">
-      <Filter>Room</Filter>
-    </ClInclude>
     <ClInclude Include="Server\Messenger\TUserMessenger.h">
       <Filter>Messenger</Filter>
     </ClInclude>
     <ClInclude Include="Server\Messenger\Messenger.h">
       <Filter>Messenger</Filter>
     </ClInclude>
+    <ClInclude Include="Server\Room\TGameRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\Room\TWaitingRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Server">
       <UniqueIdentifier>{3156c116-07a8-4f84-a184-7bd1f67143cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Room">
-      <UniqueIdentifier>{b15d41a9-fd68-4cf8-a9c6-34486dc8444e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Messenger">
       <UniqueIdentifier>{7e531cee-70ac-4e14-a6b7-5e912d6450a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Room">
+      <UniqueIdentifier>{0992ec64-05c0-477a-b174-18a48d248fb0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

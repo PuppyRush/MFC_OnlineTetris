@@ -4,7 +4,7 @@
 
 #include "../../Commons/TSwitchingMessage.h"
 
-class MessengerImpl : public Messenger
+class MessengerImpl : public TMessenger
 {
 public:
 

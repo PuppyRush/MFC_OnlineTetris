@@ -10,32 +10,36 @@
 #include <unordered_map>
 #include <mutex>
 
-#include "TRoom.h"
+#include "../../Commons/Room/TIGameRoom.h"
 #include "../../Commons/TType.h"
 #include "../../Commons/TAtomic.h"
-#include "../../Commons/TSwitchingMessage.h"
 
-class TGameRoom : public TRoom
+class TGameRoom : public TIGameRoom
 {
 public:
 
 	enum class errorCode : tetris::t_error
 	{
 		Ok,
-		Duplicated = 0,
-		NameLength,
+		DuplicatedRoomName = 0,
+		OverNameLength,
 		PassedTime,
 		Nobody
 	};
 
-	enum class property : tetris::t_error
+	enum class property : tetris::t_property
 	{
 		Size = 8
 	};
 
 	TGameRoom() {}
-	explicit TGameRoom(const std::string roomname, const std::vector<std::shared_ptr<TServerUser>> userQ);
+	explicit TGameRoom(const std::string roomname);
 	virtual ~TGameRoom();
+
+	virtual const TIRoom::errorCode add(const std::shared_ptr<TetrisUser> user) override;
+	virtual const TIRoom::errorCode exit(const std::shared_ptr<TetrisUser> user) override;
+	virtual const tetris::t_error insertRoom(std::shared_ptr<TIGameRoom> room) override;
+	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
 
 	inline static std::shared_ptr<TGameRoom> getRameRoom()
 	{
@@ -43,11 +47,8 @@ public:
 		return waitingRoom;
 	}
 
-	const errorCode insertRoom(std::shared_ptr<TGameRoom> room);
-
 private:
 	TAtomic<tetris::t_roomUnique> m_unique;
-	std::unordered_map< tetris::t_roomUnique, std::shared_ptr<TGameRoom>> m_roomMap;
-	const errorCode _validator(const TRoom &room) const;
-
+	std::unordered_map< tetris::t_roomUnique, std::shared_ptr<TIGameRoom>> m_roomMap;
+	const tetris::t_error _validator(const TIRoom &room) const override;
 };

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include <type_traits>
-#include "../Commons/TType.h"
+#include "TType.h"
 
 enum class Priority : tetris::t_priority
 {

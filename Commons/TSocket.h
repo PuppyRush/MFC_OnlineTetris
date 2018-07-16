@@ -18,9 +18,6 @@
 #undef min
 #undef max
 
-using namespace std;
-
-
 class TetrisSocket
 {
 public:
@@ -38,8 +35,6 @@ public:
 	virtual unsigned create(IPString ip, tetris::t_port port) = 0;
 	virtual int listen(unsigned port, int backlog) = 0;
 
-	static char* getBuffer();
-
 	template <class T>
 	inline	void pushMessage(T *msg)
 	{
@@ -51,30 +46,26 @@ public:
 
 		tetris::t_priority priority = msg->priority;
 
-		const auto val = make_tuple(priority, static_cast<const char*>(dest), len);
+		const auto val = std::make_tuple(priority, static_cast<const char*>(dest), len);
 		m_sendQ.emplace(val);
 	}
-	inline unsigned popSocket()
+
+	bool operator!=(const TetrisSocket &socket)
 	{
-		while(true)
-		{
-			if(!m_acceptedSocketQ.empty())
-			{
-				const unsigned socket = m_acceptedSocketQ.front();
-				m_acceptedSocketQ.pop();
-				return socket;
-			}
-		}
+		return this->m_socket != socket.m_socket;
 	}
 
-	unsigned connect();
+	static char* getBuffer();
+	tetris::t_socket popSocket();
+	tetris::t_error connect();
 	int accept();
 	void send();
-	void recv();
+	const tetris::msgElement recv();
 	unsigned close();
 
 	void SetIP(IPString &ip);
 	void SetPort(tetris::t_port port);
+	inline const tetris::t_socket getSocket() { return m_socket; }
 
 protected:
 	const int m_domain;
@@ -83,7 +74,7 @@ protected:
 	IPString m_ip;
 	tetris::t_port m_port;
 
-	queue<unsigned> m_acceptedSocketQ;
+	std::queue<tetris::t_socket> m_acceptedSocketQ;
 	bool m_closeSocket;
 
 	TetrisSocket() = delete;
@@ -91,24 +82,23 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
 	virtual int _accept() = 0;
-	virtual unsigned _connect() = 0;
+	virtual tetris::t_error _connect() = 0;
 	virtual int _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual tetris::msgElement _recvFrom() = 0;
 
 	void _acceptSocket();
 
-
 	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
-	inline const tetris::t_socket getSocket() {	return m_socket;}
+	
 
 private:
 	tetris::t_socket m_socket;
 
-	shared_ptr<thread> m_acceptThread;
+	std::shared_ptr<std::thread> m_acceptThread;
 
-	priority_queue<tetris::msgElement,vector<tetris::msgElement>,msgComp> m_recvQ;
-	priority_queue<tetris::msgElement,vector<tetris::msgElement>,msgComp> m_sendQ;
+	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_recvQ;
+	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_sendQ;
 	
 	void _runAcception();
 	void _end();
