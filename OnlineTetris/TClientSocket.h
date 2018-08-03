@@ -20,8 +20,6 @@ public:
 	//explicit TClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
 	virtual ~TClientSocket();
 
-	virtual void switchingMessage(const msgElement &msg);
-
 	void SelfClose();
 	void Broadcast(void* strc, int msgidx);
 	void Sendname(const char* name, int namelen);

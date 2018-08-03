@@ -112,8 +112,8 @@ void TClientSocket::SelfClose()
 	close();
 }
 
-void TClientSocket::switchingMessage(const msgElement &msg)
-{
+//const tetris::t_error TClientSocket::switchingMessage(const tetris::msgElement &msg)
+//{
 	/*switch(msgidx)
 	{
 
@@ -208,8 +208,7 @@ void TClientSocket::switchingMessage(const msgElement &msg)
 
 	break;
 	}*/
-
-}
+//}
 
 void TClientSocket::Broadcast(void* strc, int msgidx)
 {

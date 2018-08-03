@@ -18,7 +18,7 @@ protected:
 	explicit TSocketImpl(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TSocketImpl(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
-	virtual int _accept() override;
+	virtual volatile int _accept() override;
 	virtual int _close(const unsigned _socket) override;
 	virtual tetris::t_error _connect() override { return 0; };
 

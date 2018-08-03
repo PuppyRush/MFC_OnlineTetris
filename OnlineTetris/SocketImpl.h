@@ -20,12 +20,12 @@ public:
 protected:
 	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
 
-	virtual int _accept() override
+	virtual volatile int _accept() override
 	{
 		return 0;
 	}
 
-	virtual unsigned _connect() override;
+	virtual tetris::t_error _connect() override;
 	virtual int _close(unsigned _socket) override;
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;

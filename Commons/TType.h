@@ -26,4 +26,7 @@ namespace tetris
 	using t_userUniqueAtomic = t_uniqueAtomic<t_userUnique>;
 	using t_roomUnique = uint_fast16_t;
 	using t_roomUniqueAtomic = t_uniqueAtomic<t_roomUnique>;
+
+	template <class T>
+	using t_ptr = std::shared_ptr<T>;
 }

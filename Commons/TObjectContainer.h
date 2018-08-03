@@ -15,22 +15,27 @@ class TObjectContainer : public Uncopyable
 public:
 	using PtrType = std::shared_ptr<T>;
 	using MyUniqueType = UniqueType;
-	
+
 	class ContainerIterator
 	{
 	public:
-		T* ptrValue;
+		T * ptrValue;
 		size_t position;
 
 		explicit ContainerIterator(T* value, const size_t pos) noexcept
-			: ptrValue(value), position(pos)
+			:ptrValue(value), position(pos)
 		{
 		}
 
+
 		T* operator*() { return ptrValue; }
+		T* operator->() { return ptrValue; }
 		bool operator!=(const ContainerIterator &other)
 		{
-			return *ptrValue != *(other.ptrValue);
+			if (position == 0 || other.position == 0)
+				return false;
+			else
+				return *ptrValue != *(other.ptrValue);
 		}
 		ContainerIterator operator++() { ++position; return *this; }
 
@@ -69,7 +74,7 @@ public:
 			return false;
 	}
 
-	PtrType get(const UniqueType unique)
+	PtrType at(const UniqueType unique)
 	{
 		if (exist(unique))
 			return m_ptrMap.at(unique);
@@ -80,7 +85,7 @@ public:
 		if (remove(unique))
 			add(unique.newObj);
 	}
-	
+
 	bool exist(const UniqueType unique) const
 	{
 		if (m_ptrMap.count(unique) > 0)
@@ -96,28 +101,32 @@ public:
 
 	ContainerIterator begin() const
 	{
+
 		if (m_ptrMap.empty())
 			return ContainerIterator(0, 0);
 		T* begin = m_ptrMap.begin()->second.get();
 		return ContainerIterator(begin, m_ptrMap.size());
 	}
-	
+
 	ContainerIterator end() const
 	{
-		T* end = m_ptrMap.end()->second.get();
-		return ContainerIterator(end, m_ptrMap.size());
+		return ContainerIterator(0, m_ptrMap.size());
 	}
-	
+
 	const ContainerIterator cbegin() const noexcept
 	{
 		T* begin = m_ptrMap.begin()->second.get();
 		return ContainerIterator(begin, m_ptrMap.size());
 	}
-	
+
 	const ContainerIterator cend() const noexcept
 	{
-		T* end = m_ptrMap.end()->second.get();
-		return ContainerIterator(end, m_ptrMap.size());
+		return ContainerIterator(0, m_ptrMap.size());
+	}
+
+	std::unordered_map<UniqueType, PtrType> getMap()
+	{
+		return m_ptrMap;
 	}
 
 	inline static std::shared_ptr<TObjectContainer> get()
@@ -128,7 +137,7 @@ public:
 
 	void refresh()
 	{
-		std::lock_guard<std::mutex> lock(m_refreshMutex);
+		/*std::lock_guard<std::mutex> lock(m_refreshMutex);
 
 		m_isRefreshing = true;
 
@@ -146,11 +155,13 @@ public:
 			m_ptrMap.erase(unique);
 		}
 
-		m_isRefreshing = false;
+		m_isRefreshing = false;*/
 	}
 
 	const bool isRefreshing() const
-	{	return m_isRefreshing;	}
+	{
+		return m_isRefreshing;
+	}
 
 private:
 	TObjectContainer() {}

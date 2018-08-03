@@ -27,9 +27,9 @@ public:
 private:
 	TSocketThread();
 
-	void _send();
-	void _recv();
-	const void _switchingMessage();
+	void _send() ;
+	void _recv() ;
+	void _switchingMessage();
 
 	std::queue<tetris::msgElement> m_messageQ;
 

@@ -21,10 +21,10 @@ void TSocketThread::run()
 {
 	const auto recvfn = &TSocketThread::_recv;
 	m_recvThread = make_shared<thread>(recvfn, this);
-	
+
 	const auto sendfn = &TSocketThread::_send;
 	m_sendThread = make_shared<thread>(sendfn, this);
-	
+
 	const auto popfn = &TSocketThread::_switchingMessage;
 	m_popThread = make_shared<thread>(popfn, this);
 }
@@ -55,7 +55,7 @@ void TSocketThread::_recv()
 	{
 		if (container->isRefreshing())
 			continue;
-		
+
 		for (const auto user : *container)
 		{
 			const auto msg = user->recv();
@@ -65,7 +65,7 @@ void TSocketThread::_recv()
 	}
 }
 
-const void TSocketThread::_switchingMessage()
+void TSocketThread::_switchingMessage()
 {
 	auto factory = TObjectContainerFactory::get();
 
@@ -77,17 +77,17 @@ const void TSocketThread::_switchingMessage()
 	{
 		if (m_messageQ.empty())
 			continue;
-		
+
 		const auto msg = m_messageQ.front();
 		m_messageQ.pop();
-		
+
 		for (const auto obj : *gameroomCon)
-			obj->switchingMessage(msg);
-		
+		obj->switchingMessage(msg);
+
 		for (const auto obj : *waitroomCon)
-			obj->switchingMessage(msg);
-		
+		obj->switchingMessage(msg);
+
 		for (const auto obj : *userCon)
-			obj->switchingMessage(msg);
+		obj->switchingMessage(msg);
 	}
 }

@@ -1,10 +1,10 @@
 #include "TSocket.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#undef THIS_FILE
+//static char THIS_FILE[] = __FILE__;
+//#endif
 
 using namespace std;
 
@@ -139,13 +139,15 @@ void TetrisSocket::_acceptSocket()
 {
 	while (m_closeSocket)
 	{
-		const int socket = _accept();
+		volatile const int socket = _accept();
 		if (socket == -1)
 		{
-			//writeLog("error recvfrom");
+			;//writeLog("error recvfrom");
 		}
-
-		m_acceptedSocketQ.push(socket);
+		else
+		{
+			m_acceptedSocketQ.push(socket);
+		}
 	}
 }
 

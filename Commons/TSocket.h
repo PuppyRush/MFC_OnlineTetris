@@ -81,7 +81,7 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
-	virtual int _accept() = 0;
+	virtual volatile int _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
 	virtual int _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;

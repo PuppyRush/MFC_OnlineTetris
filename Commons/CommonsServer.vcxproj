@@ -113,8 +113,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <CppLanguageStandard>c++17</CppLanguageStandard>
-      <AdditionalOptions>-lpthread -lstdc++ %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-gstabs</AdditionalOptions>
       <PreprocessorDefinitions>_Debug</PreprocessorDefinitions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <PositionIndependentCode>true</PositionIndependentCode>
     </ClCompile>
     <Lib>
       <AdditionalOptions>-lptrhead %(AdditionalOptions)</AdditionalOptions>
@@ -123,8 +125,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
       <CppLanguageStandard>c++17</CppLanguageStandard>
-      <AdditionalOptions>-lptrhead %(AdditionalOptions)</AdditionalOptions>
-      <DebugInformationFormat>FullDebug</DebugInformationFormat>
+      <AdditionalOptions>-gstabs</AdditionalOptions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <PositionIndependentCode>true</PositionIndependentCode>
     </ClCompile>
     <Lib>
       <AdditionalOptions>-lptrhead %(AdditionalOptions)</AdditionalOptions>

@@ -40,7 +40,7 @@ unsigned SocketImpl::create(IPString ip, t_port port)
 		return false;
 }
 
-unsigned SocketImpl::_connect()
+tetris::t_error SocketImpl::_connect()
 {
 	sockaddr_in addr;
 

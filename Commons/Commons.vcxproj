@@ -167,15 +167,29 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DefineInfo.h" />
+    <ClInclude Include="ITObjectContainer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MessageHeader.h" />
+    <ClInclude Include="Property.h" />
     <ClInclude Include="structs.h" />
+    <ClInclude Include="TAtomic.h" />
+    <ClInclude Include="TMessage.h" />
+    <ClInclude Include="TObject.h" />
+    <ClInclude Include="TObjectContainer.h" />
+    <ClInclude Include="TObjectContainerFactory.h" />
     <ClInclude Include="TSocket.h" />
+    <ClInclude Include="TSocketThread.h" />
+    <ClInclude Include="TSwitchingMessage.h" />
     <ClInclude Include="TType.h" />
     <ClInclude Include="TUser.h" />
+    <ClInclude Include="TypeTraits.h" />
+    <ClInclude Include="Uncopyable.h" />
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TAtomic.cpp" />
+    <ClCompile Include="TSocketThread.cpp" />
+    <ClCompile Include="TSwitchingMessage.cpp" />
     <ClCompile Include="TUser.cpp" />
     <ClCompile Include="TSocket.cpp" />
     <ClCompile Include="Validator.cpp" />

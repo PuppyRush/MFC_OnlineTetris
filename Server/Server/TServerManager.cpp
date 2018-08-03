@@ -35,16 +35,16 @@ TServerManager::TServerManager()
 	m_mainServerSocket = TServerSocket::makeShared();
 }
 
-TServerManager::~TServerManager() {
+TServerManager::~TServerManager()
+{
 	// TODO Auto-generated destructor stub
 }
 
 void TServerManager::beginServer()
 {
-	auto serverSocket = make_shared<TServerSocket>();
-	if (serverSocket->listen(5905u, 100))
+	if (m_mainServerSocket->listen(5905u, 100))
 	{
-		if (serverSocket->accept() == 0)
+		if (m_mainServerSocket->accept() == 0)
 		{
 			auto socketThread = TSocketThread::get();
 			socketThread->run();
