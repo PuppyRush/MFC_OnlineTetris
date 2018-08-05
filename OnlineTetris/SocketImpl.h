@@ -5,8 +5,6 @@
 #include "../Commons/TSocket.h"
 #include "../Commons/TType.h"
 
-using namespace tetris;
-
 class SocketImpl : public TetrisSocket
 {
 public:

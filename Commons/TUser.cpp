@@ -7,7 +7,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace std;
 
 TetrisUser::TetrisUser(const tetris::t_userUnique unique)
 	:m_unique(unique)

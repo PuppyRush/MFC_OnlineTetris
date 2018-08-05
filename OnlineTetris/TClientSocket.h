@@ -12,8 +12,6 @@
 #include "SocketImpl.h"
 #include "TClientUser.h"
 
-using namespace tetris;
-
 class TClientSocket : public SocketImpl
 {
 public:

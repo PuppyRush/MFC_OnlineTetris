@@ -3,8 +3,6 @@
 #include "TSocket.h"
 #include "TObjectContainerFactory.h"
 
-using namespace std;
-
 TSocketThread::TSocketThread()
 	:m_continue(true),
 	m_recvThread(nullptr),
@@ -20,13 +18,13 @@ TSocketThread::~TSocketThread()
 void TSocketThread::run()
 {
 	const auto recvfn = &TSocketThread::_recv;
-	m_recvThread = make_shared<thread>(recvfn, this);
+	m_recvThread = std::make_shared<std::thread>(recvfn, this);
 
 	const auto sendfn = &TSocketThread::_send;
-	m_sendThread = make_shared<thread>(sendfn, this);
+	m_sendThread = std::make_shared<std::thread>(sendfn, this);
 
 	const auto popfn = &TSocketThread::_switchingMessage;
-	m_popThread = make_shared<thread>(popfn, this);
+	m_popThread = std::make_shared<std::thread>(popfn, this);
 }
 
 void TSocketThread::end()

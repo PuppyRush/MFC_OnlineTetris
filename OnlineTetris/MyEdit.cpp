@@ -15,8 +15,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace tetris;
-
 // CMyEdit
 
 IMPLEMENT_DYNAMIC(CMyEdit, CEdit)

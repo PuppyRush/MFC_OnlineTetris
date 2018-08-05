@@ -66,7 +66,5 @@ void WaitingRoomDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 
-
-
 	CDialogEx::OnOK();
 }

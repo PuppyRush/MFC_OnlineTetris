@@ -6,8 +6,6 @@
 //static char THIS_FILE[] = __FILE__;
 //#endif
 
-using namespace std;
-
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:m_closeSocket(true),
 	m_domain(domain),
@@ -18,8 +16,8 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
 	m_socket(0)
 {
 	msgComp comp;
-	m_sendQ = priority_queue<tetris::msgElement, vector<tetris::msgElement>, msgComp>(comp);
-	m_recvQ = priority_queue<tetris::msgElement, vector<tetris::msgElement>, msgComp>(comp);
+	m_sendQ = std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp>(comp);
+	m_recvQ = std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp>(comp);
 }
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket)
@@ -95,7 +93,7 @@ unsigned TetrisSocket::close()
 void TetrisSocket::_runAcception()
 {
 	const auto acceptFn = &TetrisSocket::_acceptSocket;
-	m_acceptThread = make_shared<thread>(acceptFn, this);
+	m_acceptThread = std::make_shared<std::thread>(acceptFn, this);
 }
 
 void TetrisSocket::_end()
@@ -174,7 +172,7 @@ char* TetrisSocket::getBuffer()
 		memset(msg, 0, PACKET_LEN);
 		return msg;
 	}
-	catch (exception e)
+	catch(std::exception e)
 	{
 		static char* emptyMsg = new char[0];
 		return emptyMsg;

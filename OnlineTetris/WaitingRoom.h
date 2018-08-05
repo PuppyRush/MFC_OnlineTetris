@@ -5,8 +5,6 @@
 // WaitingRoomDlg 대화 상자입니다.
 
 
-using namespace tetris;
-
 class WaitingRoom;
 
 class WaitingRoomDlg : public CDialogEx

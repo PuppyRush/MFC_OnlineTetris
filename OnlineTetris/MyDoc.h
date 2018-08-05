@@ -13,8 +13,6 @@
 #include "TClientUser.h"
 #include "ServerSocket.h"
 
-using namespace tetris;
-
 class CMyListen;
 class TClientSocket;
 class CMyView;

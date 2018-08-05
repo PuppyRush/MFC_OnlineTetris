@@ -25,8 +25,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace tetris;
-
 // CMyView
 
 IMPLEMENT_DYNCREATE(CMyView, CView)
