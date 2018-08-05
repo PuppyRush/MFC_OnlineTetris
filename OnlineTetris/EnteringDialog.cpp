@@ -80,10 +80,18 @@ void EnteringDialog::OnBnClickedBtnEnter()
 		const auto me = TClientUser::get();
 		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
 		const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
-		
+
 		socket->pushMessage(&sendname);
 
-		WaitingRoomDlg::GetDialog()->DoModal();
+		if (WaitingRoomDlg::GetDialog()->DoModal() == IDOK)
+		{
+			socket->SelfClose();
+		}
+	}
+	else
+	{
+		AfxMessageBox(_T("Cant Connect to server. check written your ip and port"));
+		socket->SelfClose();
 	}
 	CDialogEx::OnOK();
 }

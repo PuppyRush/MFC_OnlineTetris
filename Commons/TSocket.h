@@ -61,7 +61,7 @@ public:
 	int accept();
 	void send();
 	const tetris::msgElement recv();
-	unsigned close();
+	
 
 	void SetIP(IPString &ip);
 	void SetPort(tetris::t_port port);
@@ -81,6 +81,7 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
+	unsigned close();
 	virtual volatile int _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
 	virtual int _close(const unsigned _socket) = 0;

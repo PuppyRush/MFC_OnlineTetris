@@ -232,3 +232,4 @@ OnlineTetris.VC.VC.opendb
 *.db-shm
 *.opendb
 .vs/Server/v15/Solution.VC.db-wal
+*.db-wal

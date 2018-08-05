@@ -34,6 +34,7 @@ void WaitingRoomDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(WaitingRoomDlg, CDialogEx)
+	ON_BN_CLICKED(IDOK, &WaitingRoomDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -59,4 +60,13 @@ void WaitingRoomDlg::getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom)
 {
 
 
+}
+
+void WaitingRoomDlg::OnBnClickedOk()
+{
+	// TODO: Add your control notification handler code here
+
+
+
+	CDialogEx::OnOK();
 }

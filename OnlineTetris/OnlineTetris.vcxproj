@@ -59,8 +59,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>TSocket;TUser;Validator</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\PuppyRush_NB\Documents\GitHub\OnlineTetris\Commons\Debug\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Commons.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\goodd\Documents\GitHub\OnlineTetris\Debug</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

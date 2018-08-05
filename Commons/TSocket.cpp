@@ -42,7 +42,7 @@ TetrisSocket::~TetrisSocket()
 	while (!m_sendQ.empty())
 	{
 		auto msg = m_sendQ.top();
-		m_recvQ.pop();
+		m_sendQ.pop();
 		delete[] msgHelper::getMessage(msg);
 	}
 }

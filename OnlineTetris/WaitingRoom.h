@@ -44,4 +44,5 @@ public:
 	void getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom);
 
 	CListCtrl m_roomList;
+	afx_msg void OnBnClickedOk();
 };

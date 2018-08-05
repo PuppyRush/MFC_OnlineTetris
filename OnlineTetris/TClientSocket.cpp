@@ -107,7 +107,6 @@ TClientSocket::~TClientSocket()
 
 void TClientSocket::SelfClose()
 {
-
 	m_isConnected = false;
 	close();
 }

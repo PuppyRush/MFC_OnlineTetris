@@ -1960,8 +1960,6 @@ bool CMyView::CheckLineDestroy()
 bool CMyView::CheckDup(FIGURE backup)
 {
 
-	POINT c;
-
 	//벽에 붙은체로 돌릴 때 도형을 조정 해준다
 	switch(backup.Figure)
 	{
