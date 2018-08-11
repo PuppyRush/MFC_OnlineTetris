@@ -82,6 +82,7 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
 	unsigned close();
+	
 	virtual volatile int _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
 	virtual int _close(const unsigned _socket) = 0;
@@ -101,6 +102,7 @@ private:
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_recvQ;
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_sendQ;
 	
+	void _run();
 	void _runAcception();
 	void _end();
 };

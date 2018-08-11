@@ -137,7 +137,7 @@ public:
 
 	void refresh()
 	{
-		/*std::lock_guard<std::mutex> lock(m_refreshMutex);
+		std::lock_guard<std::mutex> lock(m_refreshMutex);
 
 		m_isRefreshing = true;
 
@@ -155,7 +155,7 @@ public:
 			m_ptrMap.erase(unique);
 		}
 
-		m_isRefreshing = false;*/
+		m_isRefreshing = false;
 	}
 
 	const bool isRefreshing() const
