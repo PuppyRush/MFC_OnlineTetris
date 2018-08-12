@@ -52,7 +52,7 @@ public:
 
 	bool operator!=(const TetrisSocket &socket)
 	{
-		return this->m_socket != socket.m_socket;
+		return this->m_socket == socket.m_socket;
 	}
 
 	static char* getBuffer();
@@ -61,7 +61,7 @@ public:
 	int accept();
 	void send();
 	const tetris::msgElement recv();
-	
+	unsigned close();
 
 	void SetIP(IPString &ip);
 	void SetPort(tetris::t_port port);
@@ -81,8 +81,6 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
-	unsigned close();
-	
 	virtual volatile int _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
 	virtual int _close(const unsigned _socket) = 0;
@@ -102,7 +100,6 @@ private:
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_recvQ;
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_sendQ;
 	
-	void _run();
 	void _runAcception();
 	void _end();
 };
