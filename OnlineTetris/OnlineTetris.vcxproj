@@ -60,7 +60,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Commons.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\PuppyRush_NB\Documents\GitHub\OnlineTetris\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\goodd\Documents\GitHub\OnlineTetris\Debug</AdditionalLibraryDirectories>
       <PerUserRedirection>true</PerUserRedirection>
     </Link>
     <Midl>

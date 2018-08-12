@@ -13,7 +13,14 @@ using namespace std;
 TIRoom::TIRoom(const std::string roomname)
 	:m_unique(TIRoom::getAtomic())
 {
-	gmtime(&m_roominfo->makeTime);
+
+	__int64 ltime;
+	char buf[26];
+	errno_t err;
+
+	_time64(&ltime);
+
+	gmtime_s(&m_roominfo->makeTime, &ltime);
 }
 
 TIRoom::~TIRoom()
