@@ -1,9 +1,11 @@
 #pragma once
 
+#include <iostream>
+
 #include <queue>
 #include <memory>
 #include <list>
-#include <unordered_map>
+#include <map>
 #include <thread>
 #include <mutex>
 
@@ -15,24 +17,29 @@ class TObjectContainer : public Uncopyable
 public:
 	using PtrType = std::shared_ptr<T>;
 	using MyUniqueType = UniqueType;
+	using ContainerType = std::map<UniqueType, PtrType>;
 
 	class ContainerIterator
 	{
 	public:
-		T * ptrValue;
+		T* ptrValue;
 		size_t position;
 
+		ContainerIterator()
+			:ptrValue(nullptr), position(0)
+		{}
+
 		explicit ContainerIterator(T* value, const size_t pos) noexcept
-			:ptrValue(value), position(pos)
+				:ptrValue(value),position(pos)
 		{
 		}
 
 
 		T* operator*() { return ptrValue; }
-		T* operator->() { return ptrValue; }
+		T* operator->() { return ptrValue;}
 		bool operator!=(const ContainerIterator &other)
 		{
-			if (position == 0 || other.position == 0)
+			if(position==0 || other.position==0 || other.ptrValue == nullptr)
 				return false;
 			else
 				return *ptrValue != *(other.ptrValue);
@@ -83,7 +90,7 @@ public:
 	void change(const UniqueType unique, const std::shared_ptr<T> &newObj)
 	{
 		if (remove(unique))
-			add(unique.newObj);
+			add(unique, unique.newObj);
 	}
 
 	bool exist(const UniqueType unique) const
@@ -104,13 +111,22 @@ public:
 
 		if (m_ptrMap.empty())
 			return ContainerIterator(0, 0);
-		T* begin = m_ptrMap.begin()->second.get();
-		return ContainerIterator(begin, m_ptrMap.size());
+		else
+		{
+			T* begin = m_ptrMap.begin()->second.get();
+			return ContainerIterator(begin, m_ptrMap.size());
+		}
 	}
 
 	ContainerIterator end() const
 	{
-		return ContainerIterator(0, m_ptrMap.size());
+		if(m_ptrMap.empty())
+			return ContainerIterator(0, 0);
+		else
+		{
+			T* end = (--m_ptrMap.begin())->second.get();
+			return ContainerIterator(end, m_ptrMap.size());
+		}
 	}
 
 	const ContainerIterator cbegin() const noexcept
@@ -124,7 +140,7 @@ public:
 		return ContainerIterator(0, m_ptrMap.size());
 	}
 
-	std::unordered_map<UniqueType, PtrType> getMap()
+	ContainerType getMap()
 	{
 		return m_ptrMap;
 	}
@@ -159,14 +175,12 @@ public:
 	}
 
 	const bool isRefreshing() const
-	{
-		return m_isRefreshing;
-	}
+	{	return m_isRefreshing;	}
 
 private:
 	TObjectContainer() {}
 
-	std::unordered_map<UniqueType, PtrType> m_ptrMap;
+	ContainerType m_ptrMap;
 	std::mutex	m_refreshMutex;
 	bool m_isRefreshing;
 	std::queue<std::pair<UniqueType, PtrType>> m_addedQ;
