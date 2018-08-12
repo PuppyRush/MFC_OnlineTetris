@@ -5,8 +5,6 @@
 // WaitingRoomDlg 대화 상자입니다.
 
 
-using namespace tetris;
-
 class WaitingRoom;
 
 class WaitingRoomDlg : public CDialogEx
@@ -44,4 +42,5 @@ public:
 	void getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom);
 
 	CListCtrl m_roomList;
+	afx_msg void OnBnClickedOk();
 };

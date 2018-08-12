@@ -6,30 +6,32 @@
  */
 #pragma once
 
-#include "../../Commons/TType.h"
+#include <memory>
 
+#include "../../Commons/TType.h"
 #include "../Room/TWaitingRoom.h"
 #include "TSocketImpl.h"
-
 
 class TServerSocket : public TSocketImpl
 {
 public:
 	TServerSocket();
-	explicit TServerSocket(tetris::t_socket socekt);
 	virtual ~TServerSocket();
 
-	static shared_ptr<TServerSocket> makeShared(const unsigned socket)
+	inline static std::shared_ptr<TServerSocket> makeShared()
 	{
-		auto serversocket = make_shared<TServerSocket>(socket);
-		serversocket->readnwrite();
-		return serversocket;
+		return std::shared_ptr<TServerSocket>(new TServerSocket());
 	}
 
-	virtual void switchingMessage(const tetris::msgElement &msg);
+	inline static std::shared_ptr<TServerSocket> makeShared(const unsigned socket)
+	{
+		return std::shared_ptr<TServerSocket>(new TServerSocket(socket));
+	}
+
 
 private:
-
+	
+	explicit TServerSocket(tetris::t_socket socekt);
 	void recvConnectionInfo(const tetris::msgElement &msg);
 	void sendConnectionInfo();
 };

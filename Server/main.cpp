@@ -16,19 +16,9 @@
 
 int main()
 {
-	auto serverSocket = make_shared<TServerSocket>();
-	if(serverSocket->listen(5905u, 100))
-	{
-		if(serverSocket->accept()==0)
-		{
-			TServerManager servermanager(serverSocket);
-			servermanager.beginServer();
-		}
-	
-	}
+	TServerManager::get()->beginServer();
 
 	cout << "choice menu\n";
-
 	while (1)
 	{
 		

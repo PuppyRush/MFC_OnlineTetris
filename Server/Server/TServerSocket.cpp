@@ -19,32 +19,34 @@ TServerSocket::TServerSocket()
 	:TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 }, 5905)
 {}
 
-TServerSocket::~TServerSocket()
-{
-	// TODO Auto-generated destructor stub
-}
-
 TServerSocket::TServerSocket(tetris::t_socket socket)
-	:TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 }, 5905)
+	: TSocketImpl(AF_INET, SOCK_STREAM, 0, IPString{ 192,168,0,1 }, 5905)
 {
 	setSocket(socket);
 	m_closeSocket = true;
 }
 
-void TServerSocket::switchingMessage(const tetris::msgElement &msg)
+
+TServerSocket::~TServerSocket()
 {
-	const auto header = Header::getHeader(msgHelper::getMessage(msg));
-	switch (header.msgIdx)
-	{
-	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
-		recvConnectionInfo(msg);
-		sendConnectionInfo();
-		break;
-	default:
-		assert(false);
-		//logger
-	}
+	// TODO Auto-generated destructor stub
 }
+
+
+//void TServerSocket::switchingMessage(const tetris::msgElement &msg)
+//{
+//	const auto header = Header::getHeader(msgHelper::getMessage(msg));
+//	switch (header.msgIdx)
+//	{
+//	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
+//		recvConnectionInfo(msg);
+//		sendConnectionInfo();
+//		break;
+//	default:
+//		assert(false);
+//		//logger
+//	}
+//}
 
 void TServerSocket::recvConnectionInfo(const tetris::msgElement &msg)
 {

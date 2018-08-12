@@ -8,7 +8,6 @@
 #include <string>
 #include <sys/socket.h>
 
-#include "../Room/TWaitingRoom.h"
 #include "../../Commons/MessageHeader.h"
 #include "TServerUser.h"
 
@@ -20,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 
 TServerUser::TServerUser(const tetris::t_userUnique unique)
 	:TetrisUser(unique),
-	m_sharedPtr(shared_ptr<TServerUser>(new TServerUser()))
+	m_sharedPtr(shared_ptr<TServerUser>(this))
 {
 }
 

@@ -39,7 +39,7 @@ int TSocketImpl::listen(const unsigned port, int backlog)
 		return -1;
 }
 
-int TSocketImpl::_accept()
+volatile int TSocketImpl::_accept()
 {
 	struct sockaddr_in cliaddr;
 	unsigned addrlen = sizeof(cliaddr);

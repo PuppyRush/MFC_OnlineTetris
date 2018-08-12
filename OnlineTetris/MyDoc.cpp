@@ -21,8 +21,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace tetris;
-
 // CMyDoc
 
 IMPLEMENT_DYNCREATE(CMyDoc, CDocument)
@@ -291,7 +289,7 @@ void CMyDoc::CreateRoot()
 
 //클라이언트함수
 
-SHR_USRC CMyDoc::Client_NameToTUser(string name)
+std::shared_ptr<TClientUser> CMyDoc::Client_NameToTUser(string name)
 {
 	if(m_clientUserList.count(name) > 0)
 		return m_clientUserList.at(name);

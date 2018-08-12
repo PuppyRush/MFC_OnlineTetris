@@ -25,8 +25,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-using namespace tetris;
-
 // CMyView
 
 IMPLEMENT_DYNCREATE(CMyView, CView)
@@ -1959,8 +1957,6 @@ bool CMyView::CheckLineDestroy()
 //이미 고정된 도형(fixed board)와 겹치는지 조사
 bool CMyView::CheckDup(FIGURE backup)
 {
-
-	POINT c;
 
 	//벽에 붙은체로 돌릴 때 도형을 조정 해준다
 	switch(backup.Figure)

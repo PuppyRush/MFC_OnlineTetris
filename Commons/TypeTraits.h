@@ -43,7 +43,6 @@ struct msgHelper
 	{
 		return std::get<toUType(eElementvalue::size)>(msg);
 	}
-
 	
 };
 
@@ -51,6 +50,6 @@ template <class T>
 const T toMessage(const tetris::msgElement &msg)
 {
 	T message;
-	memcpy(&message, msgHelper::getMessage(msg), msgHelper::getSize(size));
+	memcpy(&message, msgHelper::getMessage(msg), msgHelper::getSize(msg));
 	return message;
 }

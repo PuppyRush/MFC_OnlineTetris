@@ -7,3 +7,9 @@
 static char THIS_FILE[] = __FILE__;
 
 #endif
+
+const tetris::t_error TClientUser::switchingMessage(const tetris::msgElement &msg)
+{
+
+	return 0u;
+}

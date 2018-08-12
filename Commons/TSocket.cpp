@@ -8,8 +8,6 @@
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:m_closeSocket(true),
-	m_recvThread(nullptr),
-	m_sendThread(nullptr),
 	m_domain(domain),
 	m_type(type),
 	m_protocol(protocol),
@@ -18,8 +16,8 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
 	m_socket(0)
 {
 	msgComp comp;
-	m_sendQ = make_shared<priority_queue<tetris::msgElement, vector<tetris::msgElement>, msgComp>>(comp);
-	m_recvQ = make_shared<priority_queue<tetris::msgElement, vector<tetris::msgElement>, msgComp>>(comp);
+	m_sendQ = std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp>(comp);
+	m_recvQ = std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp>(comp);
 }
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket)
@@ -27,24 +25,22 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
 	m_domain(domain),
 	m_type(type),
 	m_protocol(protocol),
-	m_recvThread(nullptr),
-	m_sendThread(nullptr),
 	m_socket(socket)
 {
 }
 
 TetrisSocket::~TetrisSocket()
 {
-	while (!m_recvQ->empty())
+	while (!m_recvQ.empty())
 	{
-		auto msg = m_recvQ->top();
-		m_recvQ->pop();
+		auto msg = m_recvQ.top();
+		m_recvQ.pop();
 		delete[] msgHelper::getMessage(msg);
 	}
-	while (!m_sendQ->empty())
+	while (!m_sendQ.empty())
 	{
-		auto msg = m_sendQ->top();
-		m_recvQ->pop();
+		auto msg = m_sendQ.top();
+		m_sendQ.pop();
 		delete[] msgHelper::getMessage(msg);
 	}
 }
@@ -59,6 +55,19 @@ void TetrisSocket::SetPort(tetris::t_port port)
 	m_port = port;
 }
 
+tetris::t_socket TetrisSocket::popSocket()
+{
+	while (true)
+	{
+		if (!m_acceptedSocketQ.empty())
+		{
+			const unsigned socket = m_acceptedSocketQ.front();
+			m_acceptedSocketQ.pop();
+			return socket;
+		}
+	}
+}
+
 int TetrisSocket::accept()
 {
 	_runAcception();
@@ -66,19 +75,13 @@ int TetrisSocket::accept()
 	return 0u;
 }
 
-unsigned TetrisSocket::connect()
+tetris::t_error TetrisSocket::connect()
 {
-	auto err = 0u;
+	tetris::t_error err = tetris::t_error(0);
 	if ((err = _connect()) > 0)
 		return err;
-	_run();
 
 	return 0u;
-}
-
-void TetrisSocket::readnwrite()
-{
-	_run();
 }
 
 unsigned TetrisSocket::close()
@@ -87,22 +90,10 @@ unsigned TetrisSocket::close()
 	return _close(m_socket);
 }
 
-void TetrisSocket::_run()
-{
-	const auto recvfn = &TetrisSocket::_recv;
-	m_recvThread = make_shared<thread>(recvfn, this);
-
-	const auto sendfn = &TetrisSocket::_send;
-	m_sendThread = make_shared<thread>(sendfn, this);
-
-	const auto popfn = &TetrisSocket::_popMessage;
-	m_popThread = make_shared<thread>(popfn, this);
-}
-
 void TetrisSocket::_runAcception()
 {
 	const auto acceptFn = &TetrisSocket::_acceptSocket;
-	m_acceptThread = make_shared<thread>(acceptFn, this);
+	m_acceptThread = std::make_shared<std::thread>(acceptFn, this);
 }
 
 void TetrisSocket::_end()
@@ -110,42 +101,35 @@ void TetrisSocket::_end()
 	m_closeSocket = false;
 }
 
-void TetrisSocket::_send()
+void TetrisSocket::send()
 {
-	while (m_closeSocket)
+	if (!m_sendQ.empty())
 	{
-		if (!m_sendQ->empty())
+		auto msg = m_sendQ.top();
+		m_sendQ.pop();
+
+		const auto realMsg = msgHelper::getMessage(msg);
+		const auto size = msgHelper::getSize(msg);
+
+		const auto written = _sendTo(realMsg, size);
+		if (written <= 0)
 		{
-			auto msg = m_sendQ->top();
-			m_sendQ->pop();
-
-			const auto realMsg = msgHelper::getMessage(msg);
-			const auto size = msgHelper::getSize(msg);
-
-			const auto written = _sendTo(realMsg, size);
-			if (written <= 0)
-			{
-				//writeLog("error sendto");
-			}
-
-			delete[] realMsg;
+			//writeLog("error sendto");
 		}
+
+		delete[] realMsg;
 	}
 }
 
-void TetrisSocket::_recv()
+const tetris::msgElement TetrisSocket::recv()
 {
-	while (m_closeSocket)
+	auto msg = _recvFrom();
+	if (msgHelper::getSize(msg) <= 0)
 	{
-		auto msg = _recvFrom();
-		if (msgHelper::getSize(msg) <= 0)
-		{
-			//writeLog("error recvfrom");
-			continue;
-		}
-		else
-			m_recvQ->push(msg);
+		//writeLog("error recvfrom");
 	}
+	else
+		return msg;
 }
 
 
@@ -153,32 +137,31 @@ void TetrisSocket::_acceptSocket()
 {
 	while (m_closeSocket)
 	{
-		const int socket = _accept();
+		volatile const int socket = _accept();
 		if (socket == -1)
 		{
-			//writeLog("error recvfrom");
+			;//writeLog("error recvfrom");
 		}
-
-		m_acceptedSocketQ.push(socket);
-	}
-}
-
-void TetrisSocket::_popMessage()
-{
-	while (true)
-	{
-		if (!m_recvQ->empty())
+		else
 		{
-			auto msg = m_recvQ->top();
-			m_recvQ->pop();
-
-			const auto message = msgHelper::getMessage(msg);
-
-			switchingMessage(msg);
-			delete[] msgHelper::getMessage(msg);
+			m_acceptedSocketQ.push(socket);
 		}
 	}
 }
+
+//void TetrisSocket::_popMessage()
+//{
+//	if (!m_recvQ.empty())
+//	{
+//		auto msg = m_recvQ->top();
+//		m_recvQ->pop();
+//
+//		const auto message = msgHelper::getMessage(msg);
+//
+//		switchingMessage(msg);
+//		delete[] msgHelper::getMessage(msg);
+//	}
+//}
 
 char* TetrisSocket::getBuffer()
 {
@@ -189,7 +172,7 @@ char* TetrisSocket::getBuffer()
 		memset(msg, 0, PACKET_LEN);
 		return msg;
 	}
-	catch (exception e)
+	catch(std::exception e)
 	{
 		static char* emptyMsg = new char[0];
 		return emptyMsg;

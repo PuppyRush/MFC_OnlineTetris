@@ -3,6 +3,10 @@
 
 #include "StdAfx.h"
 #include "EnteringDialog.h"
+#include "ConnectingDialog.h"
+
+#include "../Commons/TSocketThread.h"
+#include "../Commons/TObjectContainerFactory.h"
 #include "../Commons/Validator.h"
 
 #ifdef _DEBUG
@@ -75,16 +79,40 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	this->ipstring = ipstring;
 
 	shared_ptr<TClientSocket> socket = TClientSocket::get();
-	if (socket->create(ipstring, portnum))
-	{
-		const auto me = TClientUser::get();
-		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
-		const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
-		
-		socket->pushMessage(&sendname);
+	//ConnectingDialog conDlg;
+	//conDlg.Create(IDD_CONNECTING);
 
-		WaitingRoomDlg::GetDialog()->DoModal();
-	}
+	//while (!socket->isConnected())
+	//{
+		if (socket->create(ipstring, portnum))
+		{
+			auto socketThread = TSocketThread::get();
+			socketThread->run();
+
+			const auto me = TClientUser::get();
+
+			TObjectContainerFactory::get()->getSocketContainer()->add(socket->getSocket(), socket);
+			TObjectContainerFactory::get()->getUserContainer()->add(me->getUnique(), me);
+			
+			const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
+			const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
+
+			socket->pushMessage(&sendname);
+
+			if (WaitingRoomDlg::GetDialog()->DoModal() == IDOK)
+			{
+				socket->SelfClose();
+			}
+
+			//conDlg.CloseWindow();
+		}
+		else
+		{
+			//conDlg.ShowWindow(SW_SHOW);
+			//AfxMessageBox(_T("Cant Connect to server. check written your ip and port"));
+			socket->SelfClose();
+		}
+	//}
 	CDialogEx::OnOK();
 }
 

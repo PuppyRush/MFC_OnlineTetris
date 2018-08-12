@@ -13,8 +13,6 @@
 #include "TClientUser.h"
 #include "ServerSocket.h"
 
-using namespace tetris;
-
 class CMyListen;
 class TClientSocket;
 class CMyView;
@@ -47,7 +45,7 @@ public:
 	IPString m_serverIp;
 	string m_chatLog;
 	
-	std::map<string, SHR_USRC > m_clientUserList;
+	std::map<string, std::shared_ptr<TClientUser> > m_clientUserList;
 	//std::map<string,CMySocket> SocketList;
 
 	string m_name;
@@ -70,7 +68,7 @@ public:
 public:
 	virtual ~CMyDoc();
 
-	SHR_USRC Client_NameToTUser(string name);
+	std::shared_ptr<TClientUser> Client_NameToTUser(string name);
 	void CreateRoot();
 	string GetServerIP();
 	void AddChat(const char *msg,const int msglen);

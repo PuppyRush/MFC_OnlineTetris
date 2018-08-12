@@ -59,8 +59,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>TSocket;TUser;Validator</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\PuppyRush_NB\Documents\GitHub\OnlineTetris\Commons\Debug\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Commons.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\goodd\Documents\GitHub\OnlineTetris\Debug</AdditionalLibraryDirectories>
+      <PerUserRedirection>true</PerUserRedirection>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -87,6 +88,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <PerUserRedirection>true</PerUserRedirection>
+      <AdditionalLibraryDirectories>C:\Users\PuppyRush_NB\Documents\GitHub\OnlineTetris\Debug</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -138,6 +141,7 @@
     <None Include="UserImages.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConnectingDialog.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Messenger.h" />
     <ClInclude Include="MyButton.h" />
@@ -157,6 +161,7 @@
     <ClInclude Include="WaitingRoom.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConnectingDialog.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="MyButton.cpp" />

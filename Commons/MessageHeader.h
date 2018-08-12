@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #pragma warning(push)
 #pragma warning(disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#

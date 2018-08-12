@@ -65,3 +65,4 @@
 #include "../Commons/MessageHeader.h"
 #include "../Commons/structs.h"
 #include "../Commons/Validator.h"
+#include <afxcontrolbars.h>

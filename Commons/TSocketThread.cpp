@@ -1,19 +1,12 @@
 #include "TSocketThread.h"
+#include "TypeTraits.h"
+#include "TSocket.h"
+#include "TObjectContainerFactory.h"
 
 TSocketThread::TSocketThread()
-	:m_closeSocket(true),
+	:m_continue(true),
 	m_recvThread(nullptr),
 	m_sendThread(nullptr)
-{
-}
-
-TSocketThread::TSocketThread(const tetris::t_socket socket)
-	:TSocketThread()
-{
-}
-
-TSocketThread::TSocketThread(const unordered_set<tetris::t_socket>& sockets)
-	:TSocketThread()
 {
 }
 
@@ -25,64 +18,74 @@ TSocketThread::~TSocketThread()
 void TSocketThread::run()
 {
 	const auto recvfn = &TSocketThread::_recv;
-	m_recvThread = make_shared<thread>(recvfn, this);
+	m_recvThread = std::make_shared<std::thread>(recvfn, this);
 
 	const auto sendfn = &TSocketThread::_send;
-	m_sendThread = make_shared<thread>(sendfn, this);
-}
+	m_sendThread = std::make_shared<std::thread>(sendfn, this);
 
+	const auto popfn = &TSocketThread::_switchingMessage;
+	m_popThread = std::make_shared<std::thread>(popfn, this);
+}
 
 void TSocketThread::end()
 {
-	m_closeSocket = false;
+	m_continue = false;
 }
 
 void TSocketThread::_send()
 {
-	while (m_closeSocket)
+	auto container = TObjectContainerFactory::get()->getSocketContainer();
+	while (m_continue)
 	{
-		for(const auto socket : m_sockets)
-		{
-			auto msgpair = socket->
-			if (!msgpair.first)
-				continue;
-			const auto msg = msgpair.second;
-			const auto realMsg = msgHelper::getMessage(msg);
-			const auto size = msgHelper::getSize(msg);
+		if (container->isRefreshing())
+			continue;
 
-			const auto written = socket->_sendTo(realMsg, size);
-			if (written <= 0)
-			{
-				//writeLog("error sendto");
-			}
-
-			delete[] realMsg;
-		}
+		for (const auto user : *container)
+			user->send();
+		container->refresh();
 	}
 }
 
 void TSocketThread::_recv()
 {
-	while (m_closeSocket)
+	auto container = TObjectContainerFactory::get()->getSocketContainer();
+	while (m_continue)
 	{
-		auto msg = _recvFrom();
-		if (msgHelper::getSize(msg) <= 0)
-		{
-			//writeLog("error recvfrom");
+		if (container->isRefreshing())
 			continue;
+
+		for (const auto user : *container)
+		{
+			const auto msg = user->recv();
+			m_messageQ.push(msg);
 		}
-		else
-			m_recvQ->push(msg);
+		container->refresh();
 	}
 }
 
-void add(shared_ptr<TetrisSocket> socket)
+void TSocketThread::_switchingMessage()
 {
+	auto factory = TObjectContainerFactory::get();
 
+	auto gameroomCon = factory->getGameRoomContainer();
+	auto waitroomCon = factory->getWaitingRoomContainer();
+	auto userCon = factory->getUserContainer();
+
+	while (m_continue)
+	{
+		if (m_messageQ.empty())
+			continue;
+
+		const auto msg = m_messageQ.front();
+		m_messageQ.pop();
+
+		for (const auto obj : *gameroomCon)
+		obj->switchingMessage(msg);
+
+		for (const auto obj : *waitroomCon)
+		obj->switchingMessage(msg);
+
+		for (const auto obj : *userCon)
+		obj->switchingMessage(msg);
+	}
 }
-
-void remove(shared_ptr<TetrisSocket> socket)
-{
-
-}
-

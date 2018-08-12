@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SocketImpl.h"
 
-SocketImpl::SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
+SocketImpl::SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:TetrisSocket(domain, type, protocol,ip,port)
 {
 }
@@ -20,7 +20,7 @@ SocketImpl::~SocketImpl()
 	}
 }
 
-unsigned SocketImpl::create(IPString ip, t_port port)
+unsigned SocketImpl::create(IPString ip, tetris::t_port port)
 {
 	m_ip = ip;
 	m_port = port;
@@ -40,7 +40,7 @@ unsigned SocketImpl::create(IPString ip, t_port port)
 		return false;
 }
 
-unsigned SocketImpl::_connect()
+tetris::t_error SocketImpl::_connect()
 {
 	sockaddr_in addr;
 
@@ -62,7 +62,7 @@ const size_t SocketImpl::_sendTo(const char *msg, const size_t size)
 	return ::send(getSocket(), msg, size,0);
 }
 
-msgElement SocketImpl::_recvFrom()
+tetris::msgElement SocketImpl::_recvFrom()
 {
 	auto buf = getBuffer();
 	int recved = ::recv(getSocket(), const_cast<char *>(buf), PACKET_LEN, 0);

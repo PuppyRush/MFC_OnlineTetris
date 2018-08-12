@@ -230,3 +230,6 @@ OnlineTetris.VC.VC.opendb
 *.json
 .vs/OnlineTetris/v15/Solution.VC.db-wal
 *.db-shm
+*.opendb
+.vs/Server/v15/Solution.VC.db-wal
+*.db-wal

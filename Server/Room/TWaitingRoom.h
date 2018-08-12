@@ -7,14 +7,16 @@
 
 #pragma once
 
-#include "TRoom.h"
-#include "../../Commons/TSwitchingMessage.h"
-#include "../Server/TServerUser.h"
+#include <unordered_set>
+#include <memory>
 
-class TWaitingRoom : public TRoom, public TSwitchingMessage
+#include "../../Commons/Room/TIWaitingRoom.h"
+#include "../../Commons/TSwitchingMessage.h"
+#include "../../Commons/TUser.h"
+
+class TWaitingRoom : public TIWaitingRoom
 {
 public:
-	virtual const tetris::t_error TWaitingRoom::switchingMessage(const tetris::msgElement &msg) override;
 	virtual ~TWaitingRoom();
 
 	enum class property : tetris::t_error
@@ -22,12 +24,20 @@ public:
 		Size = 200
 	};
 
-	inline static shared_ptr<TWaitingRoom> getWaitingRoom()
+	virtual const TIRoom::errorCode add(const std::shared_ptr<TetrisUser> room) override;
+	virtual const TIRoom::errorCode exit(const std::shared_ptr<TetrisUser> room) override;
+	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
+
+	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{
-		static auto waitingRoom = shared_ptr<TWaitingRoom>(new TWaitingRoom());
+		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom());
 		return waitingRoom;
 	}
+
+	virtual const tetris::t_error _validator(const TIRoom &room) const override;
+
+protected:
+
 private:
 	TWaitingRoom() {}
-	
 };

@@ -18,9 +18,9 @@ using namespace std;
 class TServerUser : public TetrisUser
 {
 public:
+	virtual ~TServerUser();
 
 	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
-	virtual ~TServerUser() override;
 
 	static shared_ptr<TServerUser> makeShared()
 	{
@@ -28,10 +28,11 @@ public:
 		return shared_ptr<TServerUser>(new TServerUser(unique));
 	}
 
-private:
-	TServerUser() {}
+protected:
 	TServerUser(TServerUser* user);
 	TServerUser(const tetris::t_userUnique unique);
 
+private:
+	TServerUser() = delete;
 	shared_ptr<TServerUser> m_sharedPtr;
 };
