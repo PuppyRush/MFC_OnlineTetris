@@ -70,7 +70,7 @@ tetris::t_socket TetrisSocket::popSocket()
 	}
 }
 
-int TetrisSocket::accept()
+tetris::t_error TetrisSocket::accept()
 {
 	_runAcception();
 
@@ -79,14 +79,10 @@ int TetrisSocket::accept()
 
 tetris::t_error TetrisSocket::connect()
 {
-	tetris::t_error err = tetris::t_error(0);
-	if ((err = _connect()) > 0)
-		return err;
-
-	return 0u;
+	return _connect();
 }
 
-unsigned TetrisSocket::close()
+tetris::t_error TetrisSocket::close()
 {
 	_end();
 	return _close(m_socket);

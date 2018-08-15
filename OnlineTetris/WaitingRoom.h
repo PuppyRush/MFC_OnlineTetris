@@ -13,7 +13,7 @@ class WaitingRoomDlg : public CDialogEx
 
 protected:
 	
-	WaitingRoomDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
+	
 	
 
 	// 대화 상자 데이터입니다.
@@ -29,13 +29,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-
+	WaitingRoomDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~WaitingRoomDlg();
 	virtual BOOL OnInitDialog();
 
 	static shared_ptr<WaitingRoomDlg> GetDialog()
 	{
-		static auto dlg = shared_ptr<WaitingRoomDlg>(new WaitingRoomDlg());
+		static auto dlg = std::make_shared<WaitingRoomDlg>();
 		return dlg;
 	}
 

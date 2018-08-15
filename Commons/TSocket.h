@@ -32,8 +32,8 @@ public:
 
 	virtual ~TetrisSocket();
 
-	virtual unsigned create(IPString ip, tetris::t_port port) = 0;
-	virtual int listen(unsigned port, int backlog) = 0;
+	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
+	virtual tetris::t_error listen(unsigned port, int backlog) = 0;
 
 	template <class T>
 	inline	void pushMessage(T *msg)
@@ -58,10 +58,10 @@ public:
 	static char* getBuffer();
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
-	int accept();
+	tetris::t_error accept();
 	void send();
 	const tetris::msgElement recv();
-	unsigned close();
+	tetris::t_error close();
 
 	void SetIP(IPString &ip);
 	void SetPort(tetris::t_port port);
@@ -81,9 +81,9 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
-	virtual volatile int _accept() = 0;
+	virtual volatile tetris::t_error _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
-	virtual int _close(const unsigned _socket) = 0;
+	virtual tetris::t_error _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual tetris::msgElement _recvFrom() = 0;
 

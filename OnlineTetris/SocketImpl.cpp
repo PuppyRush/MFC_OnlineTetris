@@ -20,7 +20,7 @@ SocketImpl::~SocketImpl()
 	}
 }
 
-unsigned SocketImpl::create(IPString ip, tetris::t_port port)
+tetris::t_error SocketImpl::create(IPString ip, tetris::t_port port)
 {
 	m_ip = ip;
 	m_port = port;
@@ -32,12 +32,14 @@ unsigned SocketImpl::create(IPString ip, tetris::t_port port)
 	SockInfo.sin_port = htons(m_port);
 	SockInfo.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	::bind(getSocket(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in));
-
-	if(connect() == 0)
-		return true;
+	tetris::t_error err = 0;
+	err = ::bind(getSocket(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in));
+	if (err == 0)
+	{
+		return this->connect();
+	}
 	else
-		return false;
+		return err;
 }
 
 tetris::t_error SocketImpl::_connect()
@@ -52,7 +54,7 @@ tetris::t_error SocketImpl::_connect()
 	return ::connect(getSocket(), (sockaddr *)&addr, sizeof(sockaddr_in));
 }
 
-int SocketImpl::_close(unsigned _socket)
+tetris::t_error SocketImpl::_close(unsigned _socket)
 {
 	return ::closesocket(_socket);
 }

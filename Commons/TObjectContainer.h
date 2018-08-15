@@ -39,7 +39,7 @@ public:
 		T* operator->() { return ptrValue;}
 		bool operator!=(const ContainerIterator &other)
 		{
-			if(position==0 || other.position==0 || other.ptrValue == nullptr)
+			if(ptrValue==nullptr || position==0 || other.position==0 || other.ptrValue == nullptr)
 				return false;
 			else
 				return *ptrValue != *(other.ptrValue);
@@ -124,7 +124,7 @@ public:
 			return ContainerIterator(0, 0);
 		else
 		{
-			T* end = (--m_ptrMap.begin())->second.get();
+			T* end = (--m_ptrMap.end())->second.get();
 			return ContainerIterator(end, m_ptrMap.size());
 		}
 	}

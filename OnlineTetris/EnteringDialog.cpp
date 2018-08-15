@@ -84,7 +84,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 
 	//while (!socket->isConnected())
 	//{
-		if (socket->create(ipstring, portnum))
+		if (socket->create(ipstring, portnum) == 0)
 		{
 			auto socketThread = TSocketThread::get();
 			socketThread->run();
