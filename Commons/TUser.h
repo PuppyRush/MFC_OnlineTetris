@@ -26,7 +26,7 @@ public:
 	}
 	inline bool operator!=(const TetrisUser &user)
 	{
-		return m_unique != user.getUnique();
+		return m_unique == user.getUnique();
 	}
 
 	inline const std::string getUserName() const noexcept  { return m_name; }
@@ -52,6 +52,7 @@ protected:
 
 private:
 	tetris::t_userUnique m_unique;
+	tetris::t_socketUnique m_socketUnique;
 	int m_order;
 	std::string m_name;
 	IPString m_ip;

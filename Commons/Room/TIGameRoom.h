@@ -22,7 +22,10 @@ public:
 	virtual ~TIGameRoom() {}
 
 	virtual const tetris::t_error insertRoom(std::shared_ptr<TIGameRoom> room) = 0;
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) = 0;
+	virtual const tetris::t_error exit(const std::shared_ptr<TetrisUser> user) override = 0;
+	virtual const tetris::t_error add(const std::shared_ptr<TetrisUser> user) override = 0;
+	virtual const tetris::t_error regsiteMessage() override = 0;
+
 
 	inline bool operator!=(const TIGameRoom& room)
 	{	return	getUnique() != room.getUnique();	}

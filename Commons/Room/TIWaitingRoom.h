@@ -17,7 +17,6 @@
 class TIWaitingRoom : public TIRoom
 {
 public:
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) = 0;
 
 	inline bool operator!=(const TIWaitingRoom& room)
 	{

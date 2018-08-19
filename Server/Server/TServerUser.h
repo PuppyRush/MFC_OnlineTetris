@@ -20,7 +20,7 @@ class TServerUser : public TetrisUser
 public:
 	virtual ~TServerUser();
 
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
+	virtual const tetris::t_error regsiteMessage() override;
 
 	static shared_ptr<TServerUser> makeShared()
 	{

@@ -67,8 +67,13 @@ void TServerManager::run()
 		
 		auto newUser = TServerUser::makeShared();
 
-		TObjectContainerFactory::get()->getSocketContainer()->add(socketUnique,socket);
 		TObjectContainerFactory::get()->getUserContainer()->add(newUser->getUnique(), newUser);
+		TObjectContainerFactory::get()->getSocketContainer()->add(socketUnique,socket);
+
+
+#ifdef _DEBUG
+		printf("hello new socket : %d\n",socketUnique);
+#endif
 
 	}
 }

@@ -8,19 +8,19 @@
 #include "TIRoom.h"
 #include "../TUser.h"
 
+#include <stdint.h>
+#include <ctime>
+
 using namespace std;
 
 TIRoom::TIRoom(const std::string roomname)
 	:m_unique(TIRoom::getAtomic())
 {
 
-	__int64 ltime;
-	char buf[26];
-	errno_t err;
+	time_t ltime;
+	std::time(&ltime);
 
-	_time64(&ltime);
-
-	gmtime_s(&m_roominfo->makeTime, &ltime);
+	m_roominfo->makeTime = ltime;
 }
 
 TIRoom::~TIRoom()

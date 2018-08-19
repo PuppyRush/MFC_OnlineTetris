@@ -14,24 +14,15 @@
 #include "MessageHeader.h"
 #include "TType.h"
 #include "TypeTraits.h"
-
+#include "TSwitchingMessage.h"
 #undef min
 #undef max
 
-class TetrisSocket
+class TetrisSocket : public TMessenger
 {
 public:
 
-	struct msgComp
-	{
-		bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
-		{
-			return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
-		}
-	};
-
 	virtual ~TetrisSocket();
-
 	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
 	virtual tetris::t_error listen(unsigned port, int backlog) = 0;
 
@@ -63,9 +54,17 @@ public:
 	const tetris::msgElement recv();
 	tetris::t_error close();
 
-	void SetIP(IPString &ip);
-	void SetPort(tetris::t_port port);
+	void setIP(IPString &ip);
+	void setPort(tetris::t_port port);
 	inline const tetris::t_socket getSocket() { return m_socket; }
+
+	struct msgComp
+	{
+		bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
+		{
+			return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
+		}
+	};
 
 protected:
 	const int m_domain;

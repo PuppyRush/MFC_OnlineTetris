@@ -33,7 +33,23 @@ TServerUser::~TServerUser()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TServerUser::switchingMessage(const tetris::msgElement &msg)
+const tetris::t_error TServerUser::regsiteMessage()
 {
 
 }
+
+/*
+const tetris::t_error TServerUser::switchingMessage(const tetris::msgElement &msg)
+{
+	auto realMsg = msgHelper::getMessage(msg);
+	auto msgidx = Header::getMsgidx(realMsg)
+	switch(msgidx)
+	{
+	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
+
+		break;
+
+	}
+
+}
+*/

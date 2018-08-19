@@ -9,6 +9,7 @@
 
 #include "../../Commons/Validator.h"
 #include "TWaitingRoom.h"
+#include "../../Commons/TypeTraits.h"
 
 //TWaitingRoom::TWaitingRoom(const string roomname, const vector<shared_ptr<TServerUser>> userQ)
 //	:TRoom(roomname,userQ)
@@ -22,32 +23,31 @@ TWaitingRoom::~TWaitingRoom()
 	// TODO Auto-generated destructor stub
 }
 
-
-const tetris::t_error TWaitingRoom::switchingMessage(const tetris::msgElement &msg)
+const tetris::t_error TWaitingRoom::regsiteMessage()
 {
 
 }
 
-const TIRoom::errorCode TWaitingRoom::add(const std::shared_ptr<TetrisUser> user)
+const tetris::t_error TWaitingRoom::add(const std::shared_ptr<TetrisUser> user)
 {
 	if (m_userSet.count(user) == 0)
 	{
 		m_userSet.insert(user);
-		return TIRoom::errorCode::Ok;
+		return toUType(TIRoom::errorCode::Ok);
 	}
 	else
-		return TIRoom::errorCode::Exist;
+		return toUType( TIRoom::errorCode::Exist);
 }
 
-const TIRoom::errorCode TWaitingRoom::exit(const std::shared_ptr<TetrisUser> user)
+const tetris::t_error TWaitingRoom::exit(const std::shared_ptr<TetrisUser> user)
 {
 	if (m_userSet.count(user) > 0)
 	{
 		m_userSet.erase(user);
-		return TIRoom::errorCode::Ok;
+		return toUType(TIRoom::errorCode::Ok);
 	}
 	else
-		return TIRoom::errorCode::Empty;
+		return toUType(TIRoom::errorCode::Empty);
 }
 
 const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const

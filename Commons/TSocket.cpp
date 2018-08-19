@@ -47,12 +47,12 @@ TetrisSocket::~TetrisSocket()
 	}
 }
 
-void TetrisSocket::SetIP(IPString &ip)
+void TetrisSocket::setIP(IPString &ip)
 {
 	m_ip = ip;
 }
 
-void TetrisSocket::SetPort(tetris::t_port port)
+void TetrisSocket::setPort(tetris::t_port port)
 {
 	m_port = port;
 }

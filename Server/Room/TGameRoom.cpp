@@ -25,31 +25,31 @@ TGameRoom::~TGameRoom()
 	m_roomMap.clear();
 }
 
-const tetris::t_error TGameRoom::switchingMessage(const tetris::msgElement &msg)
+const tetris::t_error TGameRoom::regsiteMessage()
 {
 
 }
 
-const TIRoom::errorCode TGameRoom::add(const shared_ptr<TetrisUser> user)
+const tetris::t_error TGameRoom::add(const shared_ptr<TetrisUser> user)
 {
 	if (m_userSet.count(user) == 0)
 	{
 		m_userSet.insert(user);
-		return TIRoom::errorCode::Ok;
+		return toUType( TIRoom::errorCode::Ok);
 	}
 	else
-		return TIRoom::errorCode::Exist;
+		return toUType(TIRoom::errorCode::Exist);
 }
 
-const TIRoom::errorCode TGameRoom::exit(const shared_ptr<TetrisUser> user)
+const tetris::t_error TGameRoom::exit(const shared_ptr<TetrisUser> user)
 {
 	if (m_userSet.count(user) > 0)
 	{
 		m_userSet.erase(user);
-		return TIRoom::errorCode::Ok;
+		return toUType(TIRoom::errorCode::Ok);
 	}
 	else
-		return TIRoom::errorCode::Empty;
+		return toUType(TIRoom::errorCode::Empty);
 }
 
 

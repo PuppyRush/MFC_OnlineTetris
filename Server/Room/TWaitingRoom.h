@@ -24,9 +24,9 @@ public:
 		Size = 200
 	};
 
-	virtual const TIRoom::errorCode add(const std::shared_ptr<TetrisUser> room) override;
-	virtual const TIRoom::errorCode exit(const std::shared_ptr<TetrisUser> room) override;
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
+	virtual const tetris::t_error add(const std::shared_ptr<TetrisUser> user) override;
+	virtual const tetris::t_error exit(const std::shared_ptr<TetrisUser> user) override;
+	virtual const tetris::t_error regsiteMessage() override;
 
 	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{

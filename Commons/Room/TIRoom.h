@@ -27,9 +27,9 @@ public:
 
 	enum class errorCode : tetris::t_error;
 
-	virtual const TIRoom::errorCode add(const std::shared_ptr<TetrisUser> room) = 0;
-	virtual const TIRoom::errorCode exit(const std::shared_ptr<TetrisUser> room) = 0;
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) = 0;
+	virtual const tetris::t_error add(const std::shared_ptr<TetrisUser> user) = 0;
+	virtual const tetris::t_error exit(const std::shared_ptr<TetrisUser> user) = 0;
+	virtual const tetris::t_error regsiteMessage() override = 0;
 
 	const std::vector<UserInfo> getUserInfo() const;
 	inline const std::shared_ptr<roomInfo> getRoomInfo() const noexcept {return m_roominfo;	}

@@ -18,6 +18,8 @@ public:
 	TServerSocket();
 	virtual ~TServerSocket();
 
+	virtual const tetris::t_error regsiteMessage() override;
+
 	inline static std::shared_ptr<TServerSocket> makeShared()
 	{
 		return std::shared_ptr<TServerSocket>(new TServerSocket());
@@ -27,7 +29,6 @@ public:
 	{
 		return std::shared_ptr<TServerSocket>(new TServerSocket(socket));
 	}
-
 
 private:
 	

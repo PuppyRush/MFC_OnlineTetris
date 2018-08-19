@@ -32,21 +32,26 @@ TServerSocket::~TServerSocket()
 	// TODO Auto-generated destructor stub
 }
 
+const tetris::t_error TServerSocket::regsiteMessage()
+{
 
-//void TServerSocket::switchingMessage(const tetris::msgElement &msg)
-//{
-//	const auto header = Header::getHeader(msgHelper::getMessage(msg));
-//	switch (header.msgIdx)
-//	{
-//	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
-//		recvConnectionInfo(msg);
-//		sendConnectionInfo();
-//		break;
-//	default:
-//		assert(false);
-//		//logger
-//	}
-//}
+}
+
+
+/*void TServerSocket::switchingMessage(const tetris::msgElement &msg)
+{
+	const auto header = Header::getHeader(msgHelper::getMessage(msg));
+	switch (header.msgIdx)
+	{
+	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
+		recvConnectionInfo(msg);
+		sendConnectionInfo();
+		break;
+	default:
+		assert(false);
+		//logger
+	}
+}*/
 
 void TServerSocket::recvConnectionInfo(const tetris::msgElement &msg)
 {

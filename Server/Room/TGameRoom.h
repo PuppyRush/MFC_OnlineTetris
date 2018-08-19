@@ -36,10 +36,10 @@ public:
 	explicit TGameRoom(const std::string roomname);
 	virtual ~TGameRoom();
 
-	virtual const TIRoom::errorCode add(const std::shared_ptr<TetrisUser> user) override;
-	virtual const TIRoom::errorCode exit(const std::shared_ptr<TetrisUser> user) override;
+	virtual const tetris::t_error add(const std::shared_ptr<TetrisUser> user) override;
+	virtual const tetris::t_error exit(const std::shared_ptr<TetrisUser> user) override;
 	virtual const tetris::t_error insertRoom(std::shared_ptr<TIGameRoom> room) override;
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) override;
+    virtual const tetris::t_error regsiteMessage() override;
 
 	inline static std::shared_ptr<TGameRoom> getRameRoom()
 	{
