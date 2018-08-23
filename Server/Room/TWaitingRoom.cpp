@@ -11,43 +11,20 @@
 #include "TWaitingRoom.h"
 #include "../../Commons/TypeTraits.h"
 
-//TWaitingRoom::TWaitingRoom(const string roomname, const vector<shared_ptr<TServerUser>> userQ)
-//	:TRoom(roomname,userQ)
-//{
-//	// TODO Auto-generated constructor stub
-//
-//}
+TWaitingRoom::TWaitingRoom(const tetris::t_roomUnique roomUnique)
+:TIWaitingRoom(roomUnique, std::string("ServerWaitingRoom"))
+{
+
+}
 
 TWaitingRoom::~TWaitingRoom()
 {
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TWaitingRoom::regsiteMessage()
+const tetris::t_error TWaitingRoom::registryMessage()
 {
 
-}
-
-const tetris::t_error TWaitingRoom::add(const std::shared_ptr<TetrisUser> user)
-{
-	if (m_userSet.count(user) == 0)
-	{
-		m_userSet.insert(user);
-		return toUType(TIRoom::errorCode::Ok);
-	}
-	else
-		return toUType( TIRoom::errorCode::Exist);
-}
-
-const tetris::t_error TWaitingRoom::exit(const std::shared_ptr<TetrisUser> user)
-{
-	if (m_userSet.count(user) > 0)
-	{
-		m_userSet.erase(user);
-		return toUType(TIRoom::errorCode::Ok);
-	}
-	else
-		return toUType(TIRoom::errorCode::Empty);
 }
 
 const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const

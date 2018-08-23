@@ -58,7 +58,7 @@ add_executable(OnlineTetris
         Server/Server/TSocketImpl.cpp
         Server/Server/TSocketImpl.h
         Server/main.cpp
-        ReadMe.txt)
+        ReadMe.txt Commons/Room/TIWaitingRoom.cpp Commons/Room/TIGameRoom.cpp)
 
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)

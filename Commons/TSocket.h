@@ -7,6 +7,7 @@
 #include <thread>
 #include <mutex>
 #include <limits>
+#include "TSocket.h"
 //#include <assert.h>
 
 #include "DefineInfo.h"
@@ -43,7 +44,7 @@ public:
 
 	bool operator!=(const TetrisSocket &socket)
 	{
-		return this->m_socket == socket.m_socket;
+		return this->m_socket != socket.m_socket;
 	}
 
 	static char* getBuffer();
@@ -56,7 +57,7 @@ public:
 
 	void setIP(IPString &ip);
 	void setPort(tetris::t_port port);
-	inline const tetris::t_socket getSocket() { return m_socket; }
+	inline const tetris::t_socket getUnique() { return m_socket; }
 
 	struct msgComp
 	{
@@ -76,7 +77,7 @@ protected:
 	std::queue<tetris::t_socket> m_acceptedSocketQ;
 	bool m_closeSocket;
 
-	TetrisSocket() = delete;
+
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
@@ -89,16 +90,17 @@ protected:
 	void _acceptSocket();
 
 	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
-	
 
 private:
+	TetrisSocket() = delete;
+
+	void _runAcception();
+	void _end();
+
 	tetris::t_socket m_socket;
-
 	std::shared_ptr<std::thread> m_acceptThread;
-
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_recvQ;
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_sendQ;
 	
-	void _runAcception();
-	void _end();
+
 };

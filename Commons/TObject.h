@@ -8,4 +8,7 @@ class TObject : private Uncopyable
 {
 public:
 	virtual ~TObject() {}
+
+
+
 };

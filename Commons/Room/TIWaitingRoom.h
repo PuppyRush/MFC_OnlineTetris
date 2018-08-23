@@ -17,15 +17,20 @@
 class TIWaitingRoom : public TIRoom
 {
 public:
+	virtual ~TIWaitingRoom() {}
 
-	inline bool operator!=(const TIWaitingRoom& room)
+	inline const bool operator!=(const TIWaitingRoom& room) const
 	{
 		return	getUnique() != room.getUnique();
 	}
 
-protected:
-	virtual ~TIWaitingRoom() {}
-	TIWaitingRoom() {}
+	virtual const tetris::t_error addRoom(const tetris::t_roomUnique roomUnique);
+	virtual const tetris::t_error exitRoom(const tetris::t_roomUnique roomUnique);
+    virtual const tetris::t_error existRoom(const tetris::t_roomUnique roomUnique);
 
-	
+protected:
+
+	TIWaitingRoom(const tetris::t_roomUnique unique, std::string nameroom);
+
+	std::unordered_set< tetris::t_roomUnique> m_roomSet;
 };

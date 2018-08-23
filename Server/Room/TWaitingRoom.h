@@ -24,20 +24,21 @@ public:
 		Size = 200
 	};
 
-	virtual const tetris::t_error add(const std::shared_ptr<TetrisUser> user) override;
-	virtual const tetris::t_error exit(const std::shared_ptr<TetrisUser> user) override;
-	virtual const tetris::t_error regsiteMessage() override;
+	virtual const tetris::t_error registryMessage() override;
 
 	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{
-		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom());
+		const auto unique = TIRoom::getAtomic();
+		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom(unique));
 		return waitingRoom;
 	}
 
 	virtual const tetris::t_error _validator(const TIRoom &room) const override;
 
+
+
 protected:
 
 private:
-	TWaitingRoom() {}
+	TWaitingRoom(const tetris::t_roomUnique roomUnique);
 };

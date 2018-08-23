@@ -32,23 +32,18 @@ public:
 		Size = 8
 	};
 
-	TGameRoom() {}
-	explicit TGameRoom(const std::string roomname);
+	explicit TGameRoom(const tetris::t_roomUnique roomUnique, const std::string roomname);
 	virtual ~TGameRoom();
 
-	virtual const tetris::t_error add(const std::shared_ptr<TetrisUser> user) override;
-	virtual const tetris::t_error exit(const std::shared_ptr<TetrisUser> user) override;
-	virtual const tetris::t_error insertRoom(std::shared_ptr<TIGameRoom> room) override;
-    virtual const tetris::t_error regsiteMessage() override;
+    virtual const tetris::t_error registryMessage() override;
 
-	inline static std::shared_ptr<TGameRoom> getRameRoom()
+	inline static std::shared_ptr<TGameRoom> makeShared(const std::string roomname)
 	{
-		static auto waitingRoom = std::make_shared<TGameRoom>();
+		static auto waitingRoom = std::make_shared<TGameRoom>(TIRoom::getAtomic(), roomname);
 		return waitingRoom;
 	}
 
 private:
-	TAtomic<tetris::t_roomUnique> m_unique;
 	std::unordered_map< tetris::t_roomUnique, std::shared_ptr<TIGameRoom>> m_roomMap;
 	const tetris::t_error _validator(const TIRoom &room) const override;
 };

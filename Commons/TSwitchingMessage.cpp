@@ -3,9 +3,12 @@
 #include "TypeTraits.h"
 #include "MessageHeader.h"
 
+TMessenger::TMessenger()
+{
+}
+
 void TMessenger::addCaller(const std::pair<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> registee)
 {
-
 	if(registee.second==nullptr)
 		return;
 
@@ -14,7 +17,7 @@ void TMessenger::addCaller(const std::pair<tetris::t_msgidx, std::function<void(
 
 bool TMessenger::isRegsiteMessage(const tetris::t_msgidx msgidx)
 {
-	if(m_messageCaller.count(msgidx)>0)
+	if(m_messageCaller.count(msgidx))
 		return true;
 	else
 		return false;

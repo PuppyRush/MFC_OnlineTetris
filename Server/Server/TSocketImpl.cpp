@@ -33,8 +33,8 @@ tetris::t_error TSocketImpl::listen(const unsigned port, int backlog)
 	SockInfo.sin_port = htons(port);
 	SockInfo.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	if (::bind(getSocket(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in)) == 0)
-		return ::listen(getSocket(), backlog) == 0;
+	if (::bind(getUnique(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in)) == 0)
+		return ::listen(getUnique(), backlog) == 0;
 	else
 		return -1;
 }
@@ -43,7 +43,7 @@ volatile tetris::t_error TSocketImpl::_accept()
 {
 	struct sockaddr_in cliaddr;
 	unsigned addrlen = sizeof(cliaddr);
-	auto accepted_socket = ::accept(getSocket(), reinterpret_cast<struct sockaddr *>(&cliaddr), &addrlen);
+	auto accepted_socket = ::accept(getUnique(), reinterpret_cast<struct sockaddr *>(&cliaddr), &addrlen);
 	if (accepted_socket < 0)
 	{
 		//perror("accept fail");
@@ -59,7 +59,7 @@ tetris::t_error TSocketImpl::_close(const unsigned _socket)
 
 const size_t TSocketImpl::_sendTo(const char *msg, const size_t size)
 {
-	return ::send(getSocket(), msg, size, 0);
+	return ::send(getUnique(), msg, size, 0);
 }
 
 tetris::msgElement TSocketImpl::_recvFrom()
@@ -68,7 +68,7 @@ tetris::msgElement TSocketImpl::_recvFrom()
 	auto buf = new char[PACKET_LEN];
 	memset(buf, 0, PACKET_LEN);
 	
-	int recved = ::recv(getSocket(), const_cast<char *>(buf), PACKET_LEN, 0);
+	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const size_t recvLen = recved <= 0 ? 0 : recved;
 	auto prio = Header::getPriority(buf);
 

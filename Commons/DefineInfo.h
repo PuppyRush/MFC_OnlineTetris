@@ -13,26 +13,6 @@ enum class Priority : tetris::t_priority
 	VeryLow=200
 };
 
-constexpr const Priority toProperty(const tetris::t_priority priority) noexcept
-{
-	switch (priority)
-	{
-	case 1000:
-		return Priority::VeryHigh;
-	case 800:
-		return Priority::High;
-	case 600:
-		return Priority::Normal;
-	case 400:
-		return Priority::Low;
-	case 200:
-		return Priority::VeryLow;
-	default:
-		return Priority::VeryLow;
-	}
-}
-
-
 enum class USER_MSG : uint16_t
 {
 	EMPTY_MESSAGE = 0,

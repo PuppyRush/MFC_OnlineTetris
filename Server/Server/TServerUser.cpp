@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 
 #include "../../Commons/MessageHeader.h"
+#include "../../Commons/TSocket.h"
 #include "TServerUser.h"
 
 #ifdef _DEBUG
@@ -17,9 +18,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TServerUser::TServerUser(const tetris::t_userUnique unique)
+TServerUser::TServerUser(const tetris::t_userUnique unique, const std::shared_ptr<TServerSocket> socket)
 	:TetrisUser(unique),
-	m_sharedPtr(shared_ptr<TServerUser>(this))
+	m_serverSocket(socket),
+	m_sharedPtr(std::shared_ptr<TServerUser>(this))
 {
 }
 
@@ -33,7 +35,7 @@ TServerUser::~TServerUser()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TServerUser::regsiteMessage()
+const tetris::t_error TServerUser::registryMessage()
 {
 
 }

@@ -13,7 +13,8 @@
 
 using namespace std;
 
-TGameRoom::TGameRoom(const string roomname)
+TGameRoom::TGameRoom(const tetris::t_roomUnique roomUnique, const string roomname)
+:TIGameRoom(roomUnique,roomname)
 {
 	// TODO Auto-generated constructor stub
 
@@ -25,42 +26,9 @@ TGameRoom::~TGameRoom()
 	m_roomMap.clear();
 }
 
-const tetris::t_error TGameRoom::regsiteMessage()
+const tetris::t_error TGameRoom::registryMessage()
 {
 
-}
-
-const tetris::t_error TGameRoom::add(const shared_ptr<TetrisUser> user)
-{
-	if (m_userSet.count(user) == 0)
-	{
-		m_userSet.insert(user);
-		return toUType( TIRoom::errorCode::Ok);
-	}
-	else
-		return toUType(TIRoom::errorCode::Exist);
-}
-
-const tetris::t_error TGameRoom::exit(const shared_ptr<TetrisUser> user)
-{
-	if (m_userSet.count(user) > 0)
-	{
-		m_userSet.erase(user);
-		return toUType(TIRoom::errorCode::Ok);
-	}
-	else
-		return toUType(TIRoom::errorCode::Empty);
-}
-
-
-const tetris::t_error TGameRoom::insertRoom(std::shared_ptr<TIGameRoom> room)
-{
-	
-	const auto errCode = _validator(*room.get());
-	if (errCode == toUType(TGameRoom::errorCode::Ok))
-		getRameRoom()->m_roomMap.insert(make_pair(m_unique.newUnique(), room));
-
-	return errCode;
 }
 
 const tetris::t_error TGameRoom::_validator(const TIRoom &room) const
