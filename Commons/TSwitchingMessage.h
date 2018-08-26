@@ -1,15 +1,28 @@
 #pragma once
 
+#include <functional>
 #include "TType.h"
+#include "unordered_map"
+
 
 class TMessenger
 {
 public:
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) = 0;
-	TMessenger() {}
+	void sendMessage(const tetris::msgElement &msg);
+
+	TMessenger();
 	virtual ~TMessenger() {}
+
 protected:
-	
+	std::unordered_map<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> m_messageCaller;
+
+	virtual void registryMessage() = 0;
+
+	bool isRegsiteMessage(const tetris::t_msgidx msgidx);
+	void addCaller(const std::pair<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> key_value);
 
 private:
+	const void switchingMessage(const tetris::t_msgidx , const tetris::msgElement &msg);
+
+
 };

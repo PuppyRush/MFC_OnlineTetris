@@ -39,10 +39,12 @@ public:
 		T* operator->() { return ptrValue;}
 		bool operator!=(const ContainerIterator &other)
 		{
-			if(ptrValue==nullptr || position==0 || other.position==0 || other.ptrValue == nullptr)
+			if(ptrValue==nullptr || other.ptrValue == nullptr)
+				return false;
+			else if(position==0 || other.position==0 || position > other.position)
 				return false;
 			else
-				return *ptrValue != *(other.ptrValue);
+				return !(*ptrValue != *(other.ptrValue));
 		}
 		ContainerIterator operator++() { ++position; return *this; }
 
@@ -55,6 +57,7 @@ public:
 		if (m_ptrMap.count(unique) == 0)
 		{
 			m_addedQ.push(make_pair(unique, newObj));
+			refresh();
 			return true;
 		}
 		else
@@ -68,6 +71,7 @@ public:
 			if (m_ptrMap.count(obj.first) == 0)
 				m_addedQ.push(obj);
 		}
+		refresh();
 	}
 
 	bool remove(const UniqueType unique)
@@ -75,6 +79,7 @@ public:
 		if (m_ptrMap.count(unique) > 0)
 		{
 			m_removedQ.push(unique);
+			refresh();
 			return true;
 		}
 		else
@@ -90,12 +95,16 @@ public:
 	void change(const UniqueType unique, const std::shared_ptr<T> &newObj)
 	{
 		if (remove(unique))
+		{
 			add(unique, unique.newObj);
+			refresh();
+		}
+
 	}
 
 	bool exist(const UniqueType unique) const
 	{
-		if (m_ptrMap.count(unique) > 0)
+		if (m_ptrMap.count(unique))
 			return true;
 		else
 			return false;
@@ -103,6 +112,7 @@ public:
 
 	void clear() noexcept
 	{
+		refresh();
 		m_ptrMap.clear();
 	}
 

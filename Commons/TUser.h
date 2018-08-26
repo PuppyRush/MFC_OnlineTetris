@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "TSocket.h"
 #include "TType.h"
 #include "TAtomic.h"
 #include "TObject.h"
@@ -24,16 +25,17 @@ public:
 	{
 		return this->m_order < user.getOrder();
 	}
-	inline bool operator!=(const TetrisUser &user)
+
+	virtual const bool operator!=(const TetrisUser &user) const
 	{
 		return m_unique != user.getUnique();
 	}
 
 	inline const std::string getUserName() const noexcept  { return m_name; }
-	inline const bool getReady() const noexcept  { return m_isReady; } 
-	inline const int getOrder() const noexcept { return m_order; } 
-	inline const bool getSurvive() const noexcept { return m_isSurvive; } 
-	inline const tetris::t_userUnique getUnique() const noexcept { return m_unique; } 
+	inline const bool getReady() const noexcept  { return m_isReady; }
+	inline const int getOrder() const noexcept { return m_order; }
+	inline const bool getSurvive() const noexcept { return m_isSurvive; }
+	inline const tetris::t_userUnique getUnique() const noexcept { return m_unique; }
 
 	inline void setSurvive(const bool n) noexcept { m_isSurvive = n; }
 	inline void setOrder(const int idx) noexcept { m_order = idx; }

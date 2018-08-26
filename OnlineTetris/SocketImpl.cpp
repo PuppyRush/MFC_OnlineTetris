@@ -9,7 +9,7 @@ SocketImpl::SocketImpl(const int domain, const int type, const int protocol, con
 SocketImpl::~SocketImpl()
 {
 	if(!m_closeSocket)
-		_close(getSocket());
+		_close(getUnique());
 	m_closeSocket = false;
 
 	while(!m_acceptedSocketQ.empty())
@@ -33,7 +33,7 @@ tetris::t_error SocketImpl::create(IPString ip, tetris::t_port port)
 	SockInfo.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	tetris::t_error err = 0;
-	err = ::bind(getSocket(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in));
+	err = ::bind(getUnique(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in));
 	if (err == 0)
 	{
 		return this->connect();
@@ -51,7 +51,7 @@ tetris::t_error SocketImpl::_connect()
 	addr.sin_addr.s_addr = inet_addr(m_ip.GetString());
 	addr.sin_port = htons(m_port);
 
-	return ::connect(getSocket(), (sockaddr *)&addr, sizeof(sockaddr_in));
+	return ::connect(getUnique(), (sockaddr *)&addr, sizeof(sockaddr_in));
 }
 
 tetris::t_error SocketImpl::_close(unsigned _socket)
@@ -61,13 +61,13 @@ tetris::t_error SocketImpl::_close(unsigned _socket)
 
 const size_t SocketImpl::_sendTo(const char *msg, const size_t size)
 {
-	return ::send(getSocket(), msg, size,0);
+	return ::send(getUnique(), msg, size,0);
 }
 
 tetris::msgElement SocketImpl::_recvFrom()
 {
 	auto buf = getBuffer();
-	int recved = ::recv(getSocket(), const_cast<char *>(buf), PACKET_LEN, 0);
+	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const size_t recvLen = recved <= 0 ? 0 : recved;
 	auto prio = Header::getPriority(buf);
 

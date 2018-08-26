@@ -17,6 +17,7 @@ class TClientSocket : public SocketImpl
 public:
 	//explicit TClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port);
 	virtual ~TClientSocket();
+	virtual void registryMessage();
 
 	void SelfClose();
 	void Broadcast(void* strc, int msgidx);

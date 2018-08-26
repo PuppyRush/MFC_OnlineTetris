@@ -9,12 +9,11 @@
 #include <iterator>
 #include <numeric>
 #include <limits>
-
+#include <type_traits>
 
 #include "DefineInfo.h"
 #include "structs.h"
 #include "TType.h"
-#include "TypeTraits.h"
 
 #undef GetMessage
 #undef min
@@ -65,12 +64,12 @@ public:
 	tetris::t_msgidx msgIdx;
 	tetris::t_msgsize size;
 
-	explicit Header(const Priority prio, const tetris::t_msgidx msgIdx)
-		:priority(toUType(prio)), msgIdx(msgIdx)
+	explicit Header(const tetris::t_priority prio, const tetris::t_msgidx msgIdx)
+		:priority(prio), msgIdx(msgIdx)
 	{}
 
-	explicit Header(const Priority prio, const tetris::t_msgidx msgIdx, const tetris::t_msgsize size)
-		:priority(toUType(prio)), msgIdx(msgIdx), size(size)
+	explicit Header(const tetris::t_priority prio, const tetris::t_msgidx msgIdx, const tetris::t_msgsize size)
+		:priority(prio), msgIdx(msgIdx), size(size)
 	{}
 
 	static const tetris::t_msgidx getMsgidx(const char *msg)
@@ -94,21 +93,7 @@ public:
 		memcpy(&priority, msg, sizeof(tetris::t_priority));
 		return priority;
 	}
-
-	static Header getHeader(const char *msg)
-	{
-		return Header(toProperty( Header::getPriority(msg)), Header::getMsgidx(msg), Header::getMsgsize(msg));
-	}
 }Header;
-
-typedef struct mEmpty : public Header
-{
-	mEmpty()
-		:Header(Priority::VeryLow, toUType(SERVER_MSG::EMPTY_MESSAGE))
-	{}
-}mEmpty;
-
-
 
 //�޼����� ���� ����ü
 typedef struct mSendPermit : public Header
@@ -130,9 +115,11 @@ typedef struct mOnPermit : private receiver
 
 typedef struct mSendConnectionInfo : public Header
 {
+#define USER_SIZE 8
 	const tetris::t_userUnique userUnique;
-	UserInfo userinfo[128];
-	
+	const size_t userInfoSize;
+	UserInfo userinfo[USER_SIZE];
+
 	explicit mSendConnectionInfo
 	(
 		const Header h,
@@ -141,8 +128,12 @@ typedef struct mSendConnectionInfo : public Header
 		const size_t userInfoSize
 	)
 		:Header(h),
-		userUnique(userUnique)
+		userUnique(userUnique),
+		 userInfoSize(userInfoSize)
+
 	{
+		assert(USER_SIZE >= userInfoSize);
+
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&userinfo, _userinfo, userInfoSize);
 	}
@@ -213,7 +204,7 @@ typedef struct mSendMessage :public Header
 		size = sizeof(mSendMessage) - sizeof(h);
 	}
 
-	static mSendMessage GetMessage(const char* _msg)
+	/*static mSendMessage GetMessage(const char* _msg)
 	{
 		auto len = strnlen(_msg, MSG_LEN);
 		assert(len < MSG_LEN);
@@ -222,9 +213,9 @@ typedef struct mSendMessage :public Header
 		memset(msg, 0, sizeof(char)*MSG_LEN);
 		strncat(msg, _msg, len);
 
-		const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_MESSAGE));
+		const auto header = Header(Priority::Normal, std::underlying_type_t<(SERVER_MSG::ON_MESSAGE));
 		return mSendMessage(header, len, _msg);
-	}
+	}*/
 }mSendMessage;
 
 typedef struct mOnMessage : private receiver

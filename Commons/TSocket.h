@@ -7,31 +7,25 @@
 #include <thread>
 #include <mutex>
 #include <limits>
+
 //#include <assert.h>
 
+#include "TSocket.h"
+#include "TObject.h"
 #include "DefineInfo.h"
 #include "Logger.h"
 #include "MessageHeader.h"
 #include "TType.h"
 #include "TypeTraits.h"
-
+#include "TSwitchingMessage.h"
 #undef min
 #undef max
 
-class TetrisSocket
+class TetrisSocket : public TMessenger, public TObject
 {
 public:
 
-	struct msgComp
-	{
-		bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
-		{
-			return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
-		}
-	};
-
 	virtual ~TetrisSocket();
-
 	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
 	virtual tetris::t_error listen(unsigned port, int backlog) = 0;
 
@@ -53,7 +47,7 @@ public:
 
 	bool operator!=(const TetrisSocket &socket)
 	{
-		return this->m_socket == socket.m_socket;
+		return this->m_socket != socket.m_socket;
 	}
 
 	static char* getBuffer();
@@ -64,9 +58,17 @@ public:
 	const tetris::msgElement recv();
 	tetris::t_error close();
 
-	void SetIP(IPString &ip);
-	void SetPort(tetris::t_port port);
-	inline const tetris::t_socket getSocket() { return m_socket; }
+	void setIP(IPString &ip);
+	void setPort(tetris::t_port port);
+	inline const tetris::t_socket getUnique() { return m_socket; }
+
+	struct msgComp
+	{
+		bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
+		{
+			return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
+		}
+	};
 
 protected:
 	const int m_domain;
@@ -78,7 +80,7 @@ protected:
 	std::queue<tetris::t_socket> m_acceptedSocketQ;
 	bool m_closeSocket;
 
-	TetrisSocket() = delete;
+
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
@@ -91,16 +93,17 @@ protected:
 	void _acceptSocket();
 
 	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
-	
 
 private:
+	TetrisSocket() = delete;
+
+	void _runAcception();
+	void _end();
+
 	tetris::t_socket m_socket;
-
 	std::shared_ptr<std::thread> m_acceptThread;
-
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_recvQ;
 	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_sendQ;
 	
-	void _runAcception();
-	void _end();
+
 };

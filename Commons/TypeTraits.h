@@ -1,6 +1,8 @@
 #pragma once
 
 #include "TType.h"
+#include "DefineInfo.h"
+#include "MessageHeader.h"
 
 template<class T>
 constexpr const auto toUType(T enuml) noexcept
@@ -49,7 +51,28 @@ struct msgHelper
 template <class T>
 const T toMessage(const tetris::msgElement &msg)
 {
+	static size_t headerSize = sizeof(Header);
 	T message;
-	memcpy(&message, msgHelper::getMessage(msg), msgHelper::getSize(msg));
+	memcpy(&message, msgHelper::getMessage(msg)+headerSize, msgHelper::getSize(msg)-headerSize);
 	return message;
+}
+
+
+constexpr const Priority toProperty(const tetris::t_priority priority) noexcept
+{
+	switch (priority)
+	{
+		case 1000:
+			return Priority::VeryHigh;
+		case 800:
+			return Priority::High;
+		case 600:
+			return Priority::Normal;
+		case 400:
+			return Priority::Low;
+		case 200:
+			return Priority::VeryLow;
+		default:
+			return Priority::VeryLow;
+	}
 }

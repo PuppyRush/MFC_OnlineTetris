@@ -42,9 +42,8 @@ void TSocketThread::_send()
 		if (container->isRefreshing())
 			continue;
 
-		for (const auto user : *container)
-			user->send();
-		container->refresh();
+		for (const auto socket : *container)
+			socket->send();
 	}
 }
 
@@ -54,17 +53,15 @@ void TSocketThread::_recv()
 	auto ptrMap = container->getMap();
 	while (m_continue)
 	{
-		//if (container->isRefreshing())
-		//	continue;
+		if (container->isRefreshing())
+			continue;
 
-		for (const auto user : *container)
+		for (const auto socket : *container)
 		{
-			auto msg = user->recv();
+			auto msg = socket->recv();
 			if(msgHelper::getSize(msg)>0)
 				m_messageQ.push(msg);
 		}
-
-		container->refresh();
 	}
 }
 
@@ -72,25 +69,35 @@ void TSocketThread::_switchingMessage()
 {
 	auto factory = TObjectContainerFactory::get();
 
+    auto socketCon = TObjectContainerFactory::get()->getSocketContainer();
 	auto gameroomCon = factory->getGameRoomContainer();
 	auto waitroomCon = factory->getWaitingRoomContainer();
 	auto userCon = factory->getUserContainer();
 
 	while (m_continue)
 	{
+
+        userCon->refresh();
+        gameroomCon->refresh();
+        waitroomCon->refresh();
+        socketCon->refresh();
+
 		if (m_messageQ.empty())
 			continue;
 
 		const auto msg = m_messageQ.front();
 		m_messageQ.pop();
 
+        for (const auto obj : *userCon)
+            obj->sendMessage(msg);
+
+        for (const auto obj : *socketCon)
+            obj->sendMessage(msg);
+
 		for (const auto obj : *gameroomCon)
-			obj->switchingMessage(msg);
+			obj->sendMessage(msg);
 
 		for (const auto obj : *waitroomCon)
-			obj->switchingMessage(msg);
-
-		for (const auto obj : *userCon)
-			obj->switchingMessage(msg);
+			obj->sendMessage(msg);
 	}
 }

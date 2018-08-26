@@ -18,6 +18,7 @@
 
 #include "TServerManager.h"
 #include "TServerUser.h"
+#include "../Room/TWaitingRoom.h"
 #include "../../Commons/MessageHeader.h"
 #include "../../Commons/TSocketThread.h"
 #include "../../Commons/TObjectContainerFactory.h"
@@ -46,11 +47,13 @@ void TServerManager::beginServer()
 	{
 		if (m_mainServerSocket->accept() == 0)
 		{
+			makeWaitingRoom();
+
 			auto socketThread = TSocketThread::get();
 			socketThread->run();
 
 			const auto runfn = &TServerManager::run;
-			m_severManagerThread = make_shared<thread>(runfn, this);
+			m_severManagerThread = std::make_shared<std::thread>(runfn, this);
 			m_severManagerThread->join();
 		}
 	}
@@ -60,15 +63,32 @@ void TServerManager::run()
 {
 	while (m_closedServer)
 	{
-		lock_guard<mutex> lck(m_mutex);
+		std::lock_guard<std::mutex> lck(m_mutex);
 
 		auto socketUnique = m_mainServerSocket->popSocket();
-		auto socket = TServerSocket::makeShared(socketUnique);
-		
-		auto newUser = TServerUser::makeShared();
+		HelloUser(socketUnique);
 
-		TObjectContainerFactory::get()->getSocketContainer()->add(socketUnique,socket);
-		TObjectContainerFactory::get()->getUserContainer()->add(newUser->getUnique(), newUser);
+#ifdef _DEBUG
+		printf("hello new socket : %d\n",socketUnique);
+#endif
 
 	}
+}
+
+void TServerManager::makeWaitingRoom()
+{
+	auto waitingRoom = TWaitingRoom::getWaitingRoom();
+	TObjectContainerFactory::get()->getWaitingRoomContainer()->add(waitingRoom->getUnique(), waitingRoom);
+}
+
+void TServerManager::HelloUser(const tetris::t_socketUnique socketUnique)
+{
+	auto newsocket = TServerSocket::makeShared(socketUnique);
+	auto newUser = TServerUser::makeShared(newsocket);
+
+	TObjectContainerFactory::get()->getWaitingRoomContainer()->begin()->add(newUser->getUnique());
+	TObjectContainerFactory::get()->getUserContainer()->add(newUser->getUnique(), newUser);
+	TObjectContainerFactory::get()->getSocketContainer()->add(socketUnique, newsocket);
+
+	newsocket->sendConnectionInfo();
 }

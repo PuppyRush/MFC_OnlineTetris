@@ -18,16 +18,15 @@
 class TIGameRoom : public TIRoom
 {
 public:
-	TIGameRoom() {}
-	virtual ~TIGameRoom() {}
-
-	virtual const tetris::t_error insertRoom(std::shared_ptr<TIGameRoom> room) = 0;
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg) = 0;
+    virtual ~TIGameRoom() {}
 
 	inline bool operator!=(const TIGameRoom& room)
 	{	return	getUnique() != room.getUnique();	}
 
 protected:
+    TIGameRoom(const tetris::t_roomUnique ,const std::string roomname);
+
+
 	std::unordered_map< tetris::t_roomUnique, std::shared_ptr<TIGameRoom>> m_roomMap;
 
 };

@@ -18,10 +18,10 @@ int main()
 {
 	TServerManager::get()->beginServer();
 
-	cout << "choice menu\n";
+	std::cout << "choice menu\n";
 	while (1)
 	{
-		
+
 
 	}
 }
