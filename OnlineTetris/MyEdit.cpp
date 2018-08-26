@@ -78,7 +78,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, " : ");
 				strcat(chat, temp);
 
-				mSendMessage msg(Header(Priority::Normal, toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
+				mSendMessage msg(Header( toUType( Priority::Normal), toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
 				TClientSocket::get()->pushMessage(&msg);
 				Sleep(50);
 			}

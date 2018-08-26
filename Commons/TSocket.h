@@ -7,9 +7,11 @@
 #include <thread>
 #include <mutex>
 #include <limits>
-#include "TSocket.h"
+
 //#include <assert.h>
 
+#include "TSocket.h"
+#include "TObject.h"
 #include "DefineInfo.h"
 #include "Logger.h"
 #include "TMessage.h"
@@ -19,7 +21,7 @@
 #undef min
 #undef max
 
-class TetrisSocket : public TMessenger
+class TetrisSocket : public TMessenger, public TObject
 {
 public:
 
@@ -34,12 +36,13 @@ public:
 		assert(PACKET_LEN > len);
 
 		char *dest = getBuffer();
+		memset(dest, 0, PACKET_LEN);
 		memcpy(dest, msg, PACKET_LEN);
 
 		tetris::t_priority priority = msg->priority;
 
-		const auto val = std::make_tuple(priority, static_cast<const char*>(dest), len);
-		m_sendQ.emplace(val);
+		const auto val =  msgHelper::getMsgElement(priority, static_cast<const char*>(dest), len);
+		m_sendQ.push(val);
 	}
 
 	bool operator!=(const TetrisSocket &socket)

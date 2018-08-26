@@ -51,9 +51,6 @@
     <ClInclude Include="TAtomic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TMessage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -105,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Room\TIRoom.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\TIGameRoom.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\TIWaitingRoom.cpp">
       <Filter>Room</Filter>
     </ClCompile>
   </ItemGroup>

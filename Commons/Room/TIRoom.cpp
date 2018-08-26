@@ -36,31 +36,31 @@ const size_t TIRoom::size() const
 	return m_userSet.size();
 }
 
-const tetris::t_error TIRoom::add(const tetris::t_userUnique unique)
+const tetris::t_error TIRoom::add(const tetris::t_userUnique user)
 {
-	if (m_userSet.count(unique) == 0)
+	if (m_userSet.count(user) == 0)
 	{
-		m_userSet.insert(unique);
+		m_userSet.insert(user);
 		return toUType( TIRoom::errorCode::Ok);
 	}
 	else
 		return toUType(TIRoom::errorCode::Exist);
 }
 
-const tetris::t_error TIRoom::exit(const tetris::t_userUnique unique)
+const tetris::t_error TIRoom::exit(const tetris::t_userUnique user)
 {
-	if (m_userSet.count(unique) > 0)
+	if (m_userSet.count(user) > 0)
 	{
-		m_userSet.erase(unique);
+		m_userSet.erase(user);
 		return toUType(TIRoom::errorCode::Ok);
 	}
 	else
 		return toUType(TIRoom::errorCode::Empty);
 }
 
-const bool TIRoom::exist(const tetris::t_userUnique unique) const
+const bool TIRoom::exist(const tetris::t_userUnique user) const
 {
-	if (m_userSet.count(unique))
+	if (m_userSet.count(user))
 		return true;
 	else
 		return false;

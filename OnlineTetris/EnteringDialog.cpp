@@ -91,10 +91,10 @@ void EnteringDialog::OnBnClickedBtnEnter()
 
 			const auto me = TClientUser::get();
 
-			TObjectContainerFactory::get()->getSocketContainer()->add(socket->getSocket(), socket);
+			TObjectContainerFactory::get()->getSocketContainer()->add(socket->getUnique(), socket);
 			TObjectContainerFactory::get()->getUserContainer()->add(me->getUnique(), me);
 			
-			const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_CONNECTION_INFO));
+			const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::CONNECTION_INFO));
 			const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
 
 			socket->pushMessage(&sendname);

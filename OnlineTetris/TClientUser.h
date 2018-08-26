@@ -11,7 +11,7 @@ class TClientUser : public TetrisUser
 {
 public:
 	virtual ~TClientUser(void)	{}
-	virtual const tetris::t_error switchingMessage(const tetris::msgElement &msg);
+	virtual void registryMessage();
 
 	inline TClientSocket* GetSocket()
 	{
