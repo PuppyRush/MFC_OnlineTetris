@@ -20,7 +20,6 @@ add_executable(OnlineTetris
         Commons/DefineInfo.h
         Commons/ITObjectContainer.h
         Commons/Logger.h
-        Commons/MessageHeader.h
         Commons/Property.h
         Commons/structs.h
         Commons/TAtomic.cpp
@@ -31,8 +30,8 @@ add_executable(OnlineTetris
         Commons/TObjectContainerFactory.h
         Commons/TSocket.cpp
         Commons/TSocket.h
-        Commons/TSocketThread.cpp
-        Commons/TSocketThread.h
+        Commons/TMessageThread.cpp
+        Commons/TMessageThread.h
         Commons/TSwitchingMessage.cpp
         Commons/TSwitchingMessage.h
         Commons/TType.h

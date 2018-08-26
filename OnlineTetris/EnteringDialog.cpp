@@ -1,11 +1,11 @@
-// ServerDialog.cpp : ±¸Çö ÆÄÀÏÀÔ´Ï´Ù.
+// ServerDialog.cpp : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 //
 
 #include "StdAfx.h"
 #include "EnteringDialog.h"
 #include "ConnectingDialog.h"
 
-#include "../Commons/TSocketThread.h"
+#include "TMessageThread.h"
 #include "../Commons/TObjectContainerFactory.h"
 #include "../Commons/Validator.h"
 
@@ -43,13 +43,13 @@ BEGIN_MESSAGE_MAP(EnteringDialog, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// ServerDialog ¸Þ½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
+// ServerDialog ï¿½Þ½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 
 
-//ÀÔÀåÇÏ±â
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 void EnteringDialog::OnBnClickedBtnEnter()
 {
-	// TODO: ¿©±â¿¡ ÄÁÆ®·Ñ ¾Ë¸² Ã³¸®±â ÄÚµå¸¦ Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ë¸ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½ß°ï¿½ï¿½Õ´Ï´ï¿½.
 	CString name;
 	Edt_Entername.GetWindowTextW(name);
 	string str_name = StringManager::ToStringFrom(name);
@@ -67,7 +67,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	size_t portnum = atoi(StringManager::ToStringFrom(str_portnum).c_str());
 	if (!(portnum >= 1000 && portnum <= 10000))
 	{
-		MessageBox(_T("Æ÷Æ®´Â 1000~10000¸¸ °¡´ÉÇÕ´Ï´Ù"));
+		MessageBox(_T("ï¿½ï¿½Æ®ï¿½ï¿½ 1000~10000ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½"));
 		return;
 	}
 
@@ -125,13 +125,13 @@ BOOL EnteringDialog::OnInitDialog()
 	Edt_Serverport.SetWindowTextW(_T("5905"));
 	Edt_Entername.SetWindowTextW( _T("your_name"));
 	return TRUE;  // return TRUE unless you set the focus to a control
-	// ¿¹¿Ü: OCX ¼Ó¼º ÆäÀÌÁö´Â FALSE¸¦ ¹ÝÈ¯ÇØ¾ß ÇÕ´Ï´Ù.
+	// ï¿½ï¿½ï¿½ï¿½: OCX ï¿½Ó¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ FALSEï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ø¾ï¿½ ï¿½Õ´Ï´ï¿½.
 }
 
 
 void EnteringDialog::OnClose()
 {
-	// TODO: ¿©±â¿¡ ¸Þ½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	// TODO: ï¿½ï¿½ï¿½â¿¡ ï¿½Þ½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½ß°ï¿½ ï¿½ï¿½/ï¿½Ç´ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 
 	CDialogEx::OnClose();
 }
@@ -139,7 +139,7 @@ void EnteringDialog::OnClose()
 
 void EnteringDialog::PostNcDestroy()
 {
-	// TODO: ¿©±â¿¡ Æ¯¼öÈ­µÈ ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº» Å¬·¡½º¸¦ È£ÃâÇÕ´Ï´Ù.
+	// TODO: ï¿½ï¿½ï¿½â¿¡ Æ¯ï¿½ï¿½È­ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½ß°ï¿½ ï¿½ï¿½/ï¿½Ç´ï¿½ ï¿½âº» Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 	this->DestroyWindow();
 	CDialogEx::PostNcDestroy();
 }

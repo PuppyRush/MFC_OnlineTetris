@@ -37,7 +37,7 @@
     <ClInclude Include="TSwitchingMessage.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="TSocketThread.h" />
+    <ClInclude Include="TMessageThread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TSocket.cpp">
@@ -49,7 +49,7 @@
     <ClCompile Include="Validator.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="TSocketThread.cpp" />
+    <ClCompile Include="TMessageThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

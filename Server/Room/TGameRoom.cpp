@@ -17,7 +17,7 @@ TGameRoom::TGameRoom(const tetris::t_roomUnique roomUnique, const string roomnam
 :TIGameRoom(roomUnique,roomname)
 {
 	// TODO Auto-generated constructor stub
-
+	registryMessage();
 }
 
 TGameRoom::~TGameRoom()

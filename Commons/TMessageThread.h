@@ -11,21 +11,21 @@
 #include "TSwitchingMessage.h"
 #include "TUser.h"
 
-class TSocketThread : private Uncopyable
+class TMessageThread : private Uncopyable
 {
 public:
-	virtual ~TSocketThread();
+	virtual ~TMessageThread();
 	void run();
 	void end();
 
-	inline static std::shared_ptr<TSocketThread> get()
+	inline static std::shared_ptr<TMessageThread> get()
 	{
-		static std::shared_ptr<TSocketThread> th = std::shared_ptr<TSocketThread>(new TSocketThread());
+		static std::shared_ptr<TMessageThread> th = std::shared_ptr<TMessageThread>(new TMessageThread());
 		return th;
 	}
 
 private:
-	TSocketThread();
+	TMessageThread();
 
 	void _send() ;
 	void _recv() ;

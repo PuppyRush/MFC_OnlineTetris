@@ -14,7 +14,7 @@
 TWaitingRoom::TWaitingRoom(const tetris::t_roomUnique roomUnique)
 :TIWaitingRoom(roomUnique, std::string("ServerWaitingRoom"))
 {
-
+    registryMessage();
 }
 
 TWaitingRoom::~TWaitingRoom()

@@ -10,9 +10,7 @@
 #include <thread>
 #include <unistd.h>
 
-#include "../Commons/MessageHeader.h"
 #include "Server/TServerManager.h"
-#include "Server/TServerSocket.h"
 
 int main()
 {

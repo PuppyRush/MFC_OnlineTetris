@@ -8,7 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 
-#include "../../Commons/MessageHeader.h"
+#include "../../Commons/TMessage.h"
 #include "../../Commons/TSocket.h"
 #include "TServerUser.h"
 
@@ -23,11 +23,13 @@ TServerUser::TServerUser(const tetris::t_userUnique unique, const std::shared_pt
 	m_serverSocket(socket),
 	m_sharedPtr(std::shared_ptr<TServerUser>(this))
 {
+    registryMessage();
 }
 
 TServerUser::TServerUser(TServerUser* user)
 	:TetrisUser(user->getUnique())
 {
+    registryMessage();
 }
 
 TServerUser::~TServerUser()
@@ -37,21 +39,13 @@ TServerUser::~TServerUser()
 
 const tetris::t_error TServerUser::registryMessage()
 {
-
+    this->addCaller(make_pair(toUType(SERVER_MSG::ON_CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
 }
 
-/*
-const tetris::t_error TServerUser::switchingMessage(const tetris::msgElement &msg)
+
+void TServerUser::recvConnectionInfo(const tetris::msgElement &msg)
 {
-	auto realMsg = msgHelper::getMessage(msg);
-	auto msgidx = Header::getMsgidx(realMsg)
-	switch(msgidx)
-	{
-	case toUType(SERVER_MSG::ON_CONNECTION_INFO):
-
-		break;
-
-	}
-
+	const auto message = toMessage<mOnName>(msg);
+	setName(message.name);
 }
-*/
+

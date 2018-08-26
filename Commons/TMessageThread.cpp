@@ -1,40 +1,40 @@
-#include "TSocketThread.h"
+#include "TMessageThread.h"
 #include "TypeTraits.h"
 #include "TSocket.h"
 #include "TObjectContainerFactory.h"
 
 using namespace std;
 
-TSocketThread::TSocketThread()
+TMessageThread::TMessageThread()
 	:m_continue(true),
 	m_recvThread(nullptr),
 	m_sendThread(nullptr)
 {
 }
 
-TSocketThread::~TSocketThread()
+TMessageThread::~TMessageThread()
 {
 	end();
 }
 
-void TSocketThread::run()
+void TMessageThread::run()
 {
-	const auto recvfn = &TSocketThread::_recv;
+	const auto recvfn = &TMessageThread::_recv;
 	m_recvThread = make_shared<thread>(recvfn, this);
 
-	const auto sendfn = &TSocketThread::_send;
+	const auto sendfn = &TMessageThread::_send;
 	m_sendThread = make_shared<thread>(sendfn, this);
 
-	const auto popfn = &TSocketThread::_switchingMessage;
+	const auto popfn = &TMessageThread::_switchingMessage;
 	m_popThread = make_shared<thread>(popfn, this);
 }
 
-void TSocketThread::end()
+void TMessageThread::end()
 {
 	m_continue = false;
 }
 
-void TSocketThread::_send()
+void TMessageThread::_send()
 {
 	auto container = TObjectContainerFactory::get()->getSocketContainer();
 	while (m_continue)
@@ -47,7 +47,7 @@ void TSocketThread::_send()
 	}
 }
 
-void TSocketThread::_recv()
+void TMessageThread::_recv()
 {
 	auto container = TObjectContainerFactory::get()->getSocketContainer();
 	auto ptrMap = container->getMap();
@@ -65,7 +65,7 @@ void TSocketThread::_recv()
 	}
 }
 
-void TSocketThread::_switchingMessage()
+void TMessageThread::_switchingMessage()
 {
 	auto factory = TObjectContainerFactory::get();
 

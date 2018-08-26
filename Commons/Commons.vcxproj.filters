@@ -63,7 +63,7 @@
     <ClInclude Include="TObjectContainerFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSocketThread.h">
+    <ClInclude Include="TMessageThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TSwitchingMessage.h">
@@ -98,7 +98,7 @@
     <ClCompile Include="TAtomic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSocketThread.cpp">
+    <ClCompile Include="TMessageThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TSwitchingMessage.cpp">

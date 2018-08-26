@@ -34,6 +34,7 @@ protected:
 
 private:
 	TServerUser() = delete;
+	void recvConnectionInfo(const tetris::msgElement &msg);
 
 	std::shared_ptr<TServerSocket> m_serverSocket;
 	std::shared_ptr<TServerUser> m_sharedPtr;

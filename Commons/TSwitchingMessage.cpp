@@ -1,7 +1,7 @@
 #include "TSwitchingMessage.h"
 
 #include "TypeTraits.h"
-#include "MessageHeader.h"
+#include "TMessage.h"
 
 TMessenger::TMessenger()
 {

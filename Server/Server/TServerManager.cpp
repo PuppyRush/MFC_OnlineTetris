@@ -19,8 +19,8 @@
 #include "TServerManager.h"
 #include "TServerUser.h"
 #include "../Room/TWaitingRoom.h"
-#include "../../Commons/MessageHeader.h"
-#include "../../Commons/TSocketThread.h"
+#include "../../Commons/TMessage.h"
+#include "TMessageThread.h"
 #include "../../Commons/TObjectContainerFactory.h"
 
 #ifdef _DEBUG
@@ -49,7 +49,7 @@ void TServerManager::beginServer()
 		{
 			makeWaitingRoom();
 
-			auto socketThread = TSocketThread::get();
+			auto socketThread = TMessageThread::get();
 			socketThread->run();
 
 			const auto runfn = &TServerManager::run;
@@ -89,6 +89,8 @@ void TServerManager::HelloUser(const tetris::t_socketUnique socketUnique)
 	TObjectContainerFactory::get()->getWaitingRoomContainer()->begin()->add(newUser->getUnique());
 	TObjectContainerFactory::get()->getUserContainer()->add(newUser->getUnique(), newUser);
 	TObjectContainerFactory::get()->getSocketContainer()->add(socketUnique, newsocket);
+
+
 
 	newsocket->sendConnectionInfo();
 }

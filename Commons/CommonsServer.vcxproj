@@ -41,7 +41,7 @@
     <ClInclude Include="TObject.h" />
     <ClInclude Include="TObjectContainerFactory.h" />
     <ClInclude Include="TSocket.h" />
-    <ClInclude Include="TSocketThread.h" />
+    <ClInclude Include="TMessageThread.h" />
     <ClInclude Include="TSwitchingMessage.h" />
     <ClInclude Include="TType.h" />
     <ClInclude Include="TUser.h" />
@@ -53,7 +53,7 @@
     <ClCompile Include="Room\TIRoom.cpp" />
     <ClCompile Include="TAtomic.cpp" />
     <ClCompile Include="TSocket.cpp" />
-    <ClCompile Include="TSocketThread.cpp" />
+    <ClCompile Include="TMessageThread.cpp" />
     <ClCompile Include="TUser.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>

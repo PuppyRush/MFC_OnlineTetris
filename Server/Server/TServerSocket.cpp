@@ -37,16 +37,12 @@ TServerSocket::~TServerSocket()
 
 const tetris::t_error TServerSocket::registryMessage()
 {
-	std::function<void(const tetris::msgElement&)> fn =  [&](const tetris::msgElement & msg)->void
-	{
-		this->recvConnectionInfo(msg);
-	};
-	this->addCaller(make_pair( toUType(SERVER_MSG::ON_CONNECTION_INFO) ,fn ));
+
 }
 
 void TServerSocket::recvConnectionInfo(const tetris::msgElement &msg)
 {
-	const auto message = toMessage<mOnName>(msg);
+
 	//setName(string(message.name));
 
 	//TWaitingRoom::getWaitingRoom()->add(m_sharedPtr);

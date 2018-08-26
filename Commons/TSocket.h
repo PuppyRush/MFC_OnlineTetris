@@ -12,7 +12,7 @@
 
 #include "DefineInfo.h"
 #include "Logger.h"
-#include "MessageHeader.h"
+#include "TMessage.h"
 #include "TType.h"
 #include "TypeTraits.h"
 #include "TSwitchingMessage.h"
