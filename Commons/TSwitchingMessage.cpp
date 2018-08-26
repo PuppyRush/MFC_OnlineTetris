@@ -23,16 +23,14 @@ bool TMessenger::isRegsiteMessage(const tetris::t_msgidx msgidx)
 		return false;
 }
 
-tetris::t_error TMessenger::sendMessage(const tetris::msgElement &msg)
+void TMessenger::sendMessage(const tetris::msgElement &msg)
 {
 	const tetris::t_msgidx msgidx = Header::getMsgidx(msgHelper::getMessage(msg));
-	if(isRegsiteMessage(msgidx))
-		return switchingMessage(msgidx, msg);
-	else
-		return false;
+	if (isRegsiteMessage(msgidx))
+		switchingMessage(msgidx, msg);
 }
 
-const tetris::t_error TMessenger::switchingMessage(const tetris::t_msgidx msgidx, const tetris::msgElement &msg)
+const void TMessenger::switchingMessage(const tetris::t_msgidx msgidx, const tetris::msgElement &msg)
 {
 	m_messageCaller.at(msgidx)(msg);
 }

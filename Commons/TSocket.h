@@ -7,9 +7,11 @@
 #include <thread>
 #include <mutex>
 #include <limits>
-#include "TSocket.h"
+
 //#include <assert.h>
 
+#include "TSocket.h"
+#include "TObject.h"
 #include "DefineInfo.h"
 #include "Logger.h"
 #include "MessageHeader.h"
@@ -19,7 +21,7 @@
 #undef min
 #undef max
 
-class TetrisSocket : public TMessenger
+class TetrisSocket : public TMessenger, public TObject
 {
 public:
 

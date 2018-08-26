@@ -37,6 +37,11 @@ TClientSocket::TClientSocket()
 TClientSocket::~TClientSocket()
 {}
 
+void TClientSocket::registryMessage()
+{
+
+}
+
 //void CClientSocket::OnClose(int nErrorCode)
 //{
 	//TUser *user = pDoc->SocketToTUser(this);
@@ -438,14 +443,14 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 
 void TClientSocket::Sendname(const char *name, int namelen)
 {
-	const auto header = Header(Priority::Normal, toUType(SERVER_MSG::ON_NAME));
+	const auto header = Header( toUType(Priority::Normal), toUType(SERVER_MSG::ON_NAME));
 	mSendName sendname(header , namelen, name);
 	pushMessage(&sendname);
 }
 
 void TClientSocket::Sendmapstate()
 {
-	auto header = Header(Priority::High, toUType(SERVER_MSG::BC_MAPSTATE));
+	auto header = Header(toUType( Priority::High), toUType(SERVER_MSG::BC_MAPSTATE));
 	mSendMapstate mapstate(header, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
 
 	pushMessage(&mapstate);
@@ -453,7 +458,7 @@ void TClientSocket::Sendmapstate()
 
 void TClientSocket::Sendready(bool ready)
 {
-	const auto header = Header(Priority::High, toUType(SERVER_MSG::PER_READY));
+	const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::PER_READY));
 	mSendReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
 	pushMessage(&sendready);
 }
@@ -509,14 +514,14 @@ void TClientSocket::ProcessMapsate(mOnMapstate on_map)
 
 void TClientSocket::SendDead()
 {
-	const auto header = Header(Priority::High, toUType(SERVER_MSG::BC_DEAD));
+	const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::BC_DEAD));
 	const mSendName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
 	pushMessage(&sendname);
 }
 
 void TClientSocket::SendRestart()
 {
-	const auto header = Header(Priority::Normal, toUType(SERVER_MSG::BC_RESTART));
+	const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::BC_RESTART));
 	mSendPermit permit(header, -1);
 	pushMessage(&permit);
 }
@@ -527,7 +532,7 @@ void TClientSocket::SendLine(int num = 1, bool isSelf = true)
 {
 	if(!isSelf)
 	{
-		const auto header = Header(Priority::High, toUType(SERVER_MSG::BC_ADDLINE));
+		const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::BC_ADDLINE));
 		const auto name = m_me->getUserName();
 		mSendAddline addline(header, name.size(), name.c_str(), num);
 		pushMessage(&addline);

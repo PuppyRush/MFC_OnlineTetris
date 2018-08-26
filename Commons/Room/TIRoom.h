@@ -31,8 +31,8 @@ public:
 	virtual const tetris::t_error exit(const tetris::t_userUnique unique);
 	virtual const bool exist(const tetris::t_userUnique unique) const;
 
-	const std::vector<UserInfo> getUserInfo() const;
     inline const size_t size() const;
+	const std::vector<UserInfo> getUserInfo() const;
 	inline const std::shared_ptr<roomInfo> getRoomInfo() const noexcept {return m_roominfo;	}
 	inline const tetris::t_roomUnique getUnique() const noexcept { return m_unique; }
 

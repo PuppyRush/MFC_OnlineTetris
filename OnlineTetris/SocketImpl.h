@@ -4,6 +4,7 @@
 
 #include "../Commons/TSocket.h"
 #include "../Commons/TType.h"
+#include "../Commons/Property.h"
 
 class SocketImpl : public TetrisSocket
 {
@@ -17,9 +18,9 @@ public:
 protected:
 	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 
-	virtual volatile int _accept() override
+	virtual volatile tetris::t_error _accept() override
 	{
-		return 0;
+		return toUType(property_error::eFail);
 	}
 
 	virtual tetris::t_error _connect() override;

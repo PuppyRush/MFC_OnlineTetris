@@ -176,7 +176,6 @@
     <ClInclude Include="Room\TIWaitingRoom.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="TAtomic.h" />
-    <ClInclude Include="TMessage.h" />
     <ClInclude Include="TObject.h" />
     <ClInclude Include="TObjectContainer.h" />
     <ClInclude Include="TObjectContainerFactory.h" />
@@ -190,7 +189,9 @@
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Room\TIGameRoom.cpp" />
     <ClCompile Include="Room\TIRoom.cpp" />
+    <ClCompile Include="Room\TIWaitingRoom.cpp" />
     <ClCompile Include="TAtomic.cpp" />
     <ClCompile Include="TSocketThread.cpp" />
     <ClCompile Include="TSwitchingMessage.cpp" />

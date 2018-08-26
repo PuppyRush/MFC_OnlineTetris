@@ -2,9 +2,12 @@
 //
 
 #include "stdafx.h"
+#include "afxdialogex.h"
+
 #include "OnlineTetris.h"
 #include "WaitingRoom.h"
-#include "afxdialogex.h"
+#include "../Commons/Property.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,7 +20,8 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(WaitingRoomDlg, CDialogEx)
 
 WaitingRoomDlg::WaitingRoomDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(_DLG_WAITINGROOM, pParent)
+	: CDialogEx(_DLG_WAITINGROOM, pParent),
+	TIWaitingRoom(TIRoom::getAtomic(), std::string("WaitingRoom"))
 {
 
 }
@@ -39,6 +43,22 @@ END_MESSAGE_MAP()
 
 
 // WaitingRoomDlg 메시지 처리기입니다.
+
+void WaitingRoomDlg::registryMessage()
+{
+	this->addCaller(make_pair(toUType(SERVER_MSG::WAITINGROOM_INFO), std::bind(&WaitingRoomDlg::updateWaitingUsers, this, std::placeholders::_1)));
+}
+
+const tetris::t_error WaitingRoomDlg::_validator(const TIRoom &room) const
+{
+
+	return toUType(property_error::eOK);
+}
+
+void WaitingRoomDlg::updateWaitingUsers(const tetris::msgElement &msg)
+{
+
+}
 
 BOOL WaitingRoomDlg::OnInitDialog()
 {
