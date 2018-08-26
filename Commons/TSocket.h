@@ -42,12 +42,13 @@ public:
 		assert(PACKET_LEN > len);
 
 		char *dest = getBuffer();
+		memset(dest, 0, PACKET_LEN);
 		memcpy(dest, msg, PACKET_LEN);
 
 		tetris::t_priority priority = msg->priority;
 
-		const auto val = std::make_tuple(priority, static_cast<const char*>(dest), len);
-		m_sendQ.emplace(val);
+		const auto val =  msgHelper::getMsgElement(priority, static_cast<const char*>(dest), len);
+		m_sendQ.push(val);
 	}
 
 	bool operator!=(const TetrisSocket &socket)

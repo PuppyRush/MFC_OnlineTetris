@@ -122,11 +122,6 @@ void TetrisSocket::send()
 const tetris::msgElement TetrisSocket::recv()
 {
 	auto msg = _recvFrom();
-	if (msgHelper::getSize(msg) <= 0)
-	{
-		//writeLog("error recvfrom");
-	}
-	else
 		return msg;
 }
 

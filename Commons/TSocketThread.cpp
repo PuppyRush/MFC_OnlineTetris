@@ -84,13 +84,13 @@ void TSocketThread::_switchingMessage()
 		const auto msg = m_messageQ.front();
 		m_messageQ.pop();
 
-		/*for (const auto obj : *gameroomCon)
+		for (const auto obj : *gameroomCon)
 			obj->switchingMessage(msg);
 
 		for (const auto obj : *waitroomCon)
 			obj->switchingMessage(msg);
 
 		for (const auto obj : *userCon)
-			obj->switchingMessage(msg);*/
+			obj->switchingMessage(msg);
 	}
 }
