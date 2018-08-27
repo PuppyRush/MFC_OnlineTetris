@@ -18,7 +18,7 @@ public:
 	TServerSocket();
 	virtual ~TServerSocket();
 
-	virtual const tetris::t_error registryMessage() override;
+	virtual void registryMessage() override;
 
 
 	inline static std::shared_ptr<TServerSocket> makeShared()

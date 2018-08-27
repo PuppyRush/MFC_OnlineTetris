@@ -22,7 +22,7 @@ TWaitingRoom::~TWaitingRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TWaitingRoom::registryMessage()
+void TWaitingRoom::registryMessage()
 {
 
 }

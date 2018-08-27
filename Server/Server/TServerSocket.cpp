@@ -35,7 +35,7 @@ TServerSocket::~TServerSocket()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TServerSocket::registryMessage()
+void TServerSocket::registryMessage()
 {
 
 }
@@ -57,8 +57,8 @@ void TServerSocket::sendConnectionInfo()
 	for (int i = 0; i < size; i++)
 		userinfoAry[i] = UserInfo(userinfo.at(i).userUnique, userinfo.at(i).name);
 
-	const auto header = Header( toUType(Priority::High), toUType(CLIENT_MSG::ON_CONNECTION_INFO));
-	mSendConnectionInfo msg(header, this->getUnique(), userinfoAry, size);
+	const auto header = Header( toUType(Priority::High), toUType(CLIENT_MSG::CONNECTION_INFO));
+	mConnectionInfo msg(header, this->getUnique(), userinfoAry, size);
 	pushMessage(&msg);
 
 	delete[] userinfoAry;

@@ -17,7 +17,7 @@ class TServerUser : public TetrisUser
 {
 public:
 	virtual ~TServerUser();
-	virtual const tetris::t_error registryMessage() override;
+	virtual void registryMessage() override;
 
 	static std::shared_ptr<TServerUser> makeShared(const std::shared_ptr<TServerSocket> socket)
 	{

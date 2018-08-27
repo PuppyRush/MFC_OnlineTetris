@@ -35,7 +35,7 @@ public:
 	explicit TGameRoom(const tetris::t_roomUnique roomUnique, const std::string roomname);
 	virtual ~TGameRoom();
 
-    virtual const tetris::t_error registryMessage() override;
+    virtual void registryMessage() override;
 
 	inline static std::shared_ptr<TGameRoom> makeShared(const std::string roomname)
 	{

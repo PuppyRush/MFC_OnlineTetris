@@ -26,7 +26,7 @@ TGameRoom::~TGameRoom()
 	m_roomMap.clear();
 }
 
-const tetris::t_error TGameRoom::registryMessage()
+void TGameRoom::registryMessage()
 {
 
 }

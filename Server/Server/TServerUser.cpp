@@ -37,15 +37,15 @@ TServerUser::~TServerUser()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TServerUser::registryMessage()
+void TServerUser::registryMessage()
 {
-    this->addCaller(make_pair(toUType(SERVER_MSG::ON_CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
+    this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
 }
 
 
 void TServerUser::recvConnectionInfo(const tetris::msgElement &msg)
 {
-	const auto message = toMessage<mOnName>(msg);
+	const auto message = toMessage<mName>(msg);
 	setName(message.name);
 }
 

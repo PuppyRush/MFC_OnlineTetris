@@ -24,7 +24,7 @@ public:
 		Size = 200
 	};
 
-	virtual const tetris::t_error registryMessage() override;
+	virtual void registryMessage() override;
 
 	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{

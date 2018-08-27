@@ -51,14 +51,13 @@ struct msgHelper
 template <class T>
 const T toMessage(const tetris::msgElement &msg)
 {
-	static size_t headerSize = sizeof(Header);
 	T message;
-	memcpy(&message, msgHelper::getMessage(msg)+headerSize, msgHelper::getSize(msg)-headerSize);
+	memcpy(&message, msgHelper::getMessage(msg), msgHelper::getSize(msg));
 	return message;
 }
 
 
-constexpr const Priority toProperty(const tetris::t_priority priority) noexcept
+constexpr const Priority toPriority(const tetris::t_priority priority) noexcept
 {
 	switch (priority)
 	{
@@ -75,4 +74,9 @@ constexpr const Priority toProperty(const tetris::t_priority priority) noexcept
 		default:
 			return Priority::VeryLow;
 	}
+}
+
+constexpr const tetris::t_priority toPriority(const Priority priority) noexcept
+{
+    return toUType(priority);
 }

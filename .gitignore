@@ -321,5 +321,6 @@ OnlineTetris.VC.VC.opendb
  compile_commands.json
  CTestTestfile.cmake
 
-./cmake-build-debug
+/cmake-build-debug
+.idea
  # End of https://www.gitignore.io/api/clion,cmake
