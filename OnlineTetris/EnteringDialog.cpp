@@ -5,7 +5,7 @@
 #include "EnteringDialog.h"
 #include "ConnectingDialog.h"
 
-#include "TMessageThread.h"
+#include "../Commons/TMessageThread.h"
 #include "../Commons/TObjectContainerFactory.h"
 #include "../Commons/Validator.h"
 
@@ -86,7 +86,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	//{
 		if (socket->create(ipstring, portnum) == 0)
 		{
-			auto socketThread = TSocketThread::get();
+			auto socketThread = TMessageThread::get();
 			socketThread->run();
 
 			const auto me = TClientUser::get();

@@ -5,7 +5,7 @@
 #include <mutex>
 #include <memory>
 
-#include "../Commons/MessageHeader.h"
+#include "../Commons/TMessage.h"
 #include "../Commons/structs.h"
 #include "../Commons/TType.h"
 

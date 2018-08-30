@@ -176,6 +176,7 @@
     <ClInclude Include="Room\TIWaitingRoom.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="TAtomic.h" />
+    <ClInclude Include="TMessage.h" />
     <ClInclude Include="TObject.h" />
     <ClInclude Include="TObjectContainer.h" />
     <ClInclude Include="TObjectContainerFactory.h" />
