@@ -10,7 +10,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 TetrisUser::TetrisUser(const tetris::t_userUnique unique)
-	:m_unique(unique)
+		:m_unique(unique)
 {
 }
 

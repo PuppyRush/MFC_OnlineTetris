@@ -24,7 +24,6 @@ TWaitingRoom::~TWaitingRoom()
 
 void TWaitingRoom::registryMessage()
 {
-
 }
 
 const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const

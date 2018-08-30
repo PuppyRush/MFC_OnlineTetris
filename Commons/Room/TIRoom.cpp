@@ -16,8 +16,8 @@
 using namespace std;
 
 TIRoom::TIRoom(const tetris::t_roomUnique roomuUnique ,const std::string roomname)
-	:m_unique(roomuUnique),
-	m_roomname(roomname)
+		:m_unique(roomuUnique),
+		 m_roomname(roomname)
 {
 
 	time_t ltime = 0;

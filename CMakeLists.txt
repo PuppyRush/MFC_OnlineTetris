@@ -6,16 +6,18 @@ set(CMAKE_CXX_STANDARD 14)
 
 
 include_directories(Commons)
-include_directories(Commons/Room)
-include_directories(OnlineTetris)
+include_directories(Commons/Entity)
+include_directories(Commons/Entity/Room)
 include_directories(Server/Messenger)
 include_directories(Server/Room)
 include_directories(Server/Server)
 
 add_executable(OnlineTetris
+        Commons/Room/TIGameRoom.cpp
         Commons/Room/TIGameRoom.h
         Commons/Room/TIRoom.cpp
         Commons/Room/TIRoom.h
+        Commons/Room/TIWaitingRoom.cpp
         Commons/Room/TIWaitingRoom.h
         Commons/DefineInfo.h
         Commons/ITObjectContainer.h
@@ -41,6 +43,7 @@ add_executable(OnlineTetris
         Commons/Uncopyable.h
         Commons/Validator.cpp
         Commons/Validator.h
+        Commons/TFunctional.h
         Server/Messenger/Messenger.h
         Server/Messenger/TUserMessenger.cpp
         Server/Messenger/TUserMessenger.h
@@ -57,7 +60,7 @@ add_executable(OnlineTetris
         Server/Server/TSocketImpl.cpp
         Server/Server/TSocketImpl.h
         Server/main.cpp
-        ReadMe.txt Commons/Room/TIWaitingRoom.cpp Commons/Room/TIGameRoom.cpp)
+        ReadMe.txt )
 
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)

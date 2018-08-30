@@ -18,6 +18,7 @@
 #include "TType.h"
 #include "TypeTraits.h"
 #include "TSwitchingMessage.h"
+#include "TFunctional.h"
 #undef min
 #undef max
 
@@ -29,32 +30,17 @@ public:
 	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
 	virtual tetris::t_error listen(unsigned port, int backlog) = 0;
 
-	template <class T>
-	inline	void pushMessage(T *msg)
-	{
-		const size_t len = sizeof(T);
-		assert(PACKET_LEN > len);
 
-		char *dest = getBuffer();
-		memset(dest, 0, PACKET_LEN);
-		memcpy(dest, msg, PACKET_LEN);
-
-		tetris::t_priority priority = msg->priority;
-
-		const auto val =  msgHelper::getMsgElement(priority, static_cast<const char*>(dest), len);
-		m_sendQ.push(val);
-	}
 
 	bool operator!=(const TetrisSocket &socket)
 	{
 		return this->m_socket != socket.m_socket;
 	}
 
-	static char* getBuffer();
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
 	tetris::t_error accept();
-	void send();
+	void send(const tetris::msgElement msg);
 	const tetris::msgElement recv();
 	tetris::t_error close();
 
@@ -62,13 +48,7 @@ public:
 	void setPort(tetris::t_port port);
 	inline const tetris::t_socket getUnique() { return m_socket; }
 
-	struct msgComp
-	{
-		bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
-		{
-			return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
-		}
-	};
+
 
 protected:
 	const int m_domain;
@@ -79,7 +59,6 @@ protected:
 
 	std::queue<tetris::t_socket> m_acceptedSocketQ;
 	bool m_closeSocket;
-
 
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
@@ -102,8 +81,4 @@ private:
 
 	tetris::t_socket m_socket;
 	std::shared_ptr<std::thread> m_acceptThread;
-	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_recvQ;
-	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, msgComp> m_sendQ;
-	
-
 };

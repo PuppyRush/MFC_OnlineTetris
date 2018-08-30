@@ -43,9 +43,6 @@ void TServerSocket::registryMessage()
 void TServerSocket::recvConnectionInfo(const tetris::msgElement &msg)
 {
 
-	//setName(string(message.name));
-
-	//TWaitingRoom::getWaitingRoom()->add(m_sharedPtr);
 }
 
 void TServerSocket::sendConnectionInfo()
@@ -59,7 +56,7 @@ void TServerSocket::sendConnectionInfo()
 
 	const auto header = Header( toUType(Priority::High), toUType(CLIENT_MSG::CONNECTION_INFO));
 	mConnectionInfo msg(header, this->getUnique(), userinfoAry, size);
-	pushMessage(&msg);
+	//pushMessage(&msg);
 
 	delete[] userinfoAry;
 }

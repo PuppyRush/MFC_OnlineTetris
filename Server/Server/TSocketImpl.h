@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../Commons/DefineInfo.h"
 #include "../../Commons/TSocket.h"
+#include "../../Commons/DefineInfo.h"
 #include "../../Commons/TType.h"
 
 class TSocketImpl : public TetrisSocket

@@ -19,9 +19,6 @@
 #undef min
 #undef max
 
-struct sender {};
-struct receiver {};
-
 template <class T>
 static void CopyChars(T *dest, const size_t destlen, const T *src, const size_t srclen)
 {
@@ -57,7 +54,7 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 			memcpy(dest[i][l], src[i][l], src_dimension3);
 }
 
-typedef struct Header : private sender
+typedef struct Header
 {
 public:
 	tetris::t_priority priority;

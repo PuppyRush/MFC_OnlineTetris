@@ -26,7 +26,7 @@ public:
 
 	virtual const tetris::t_error addRoom(const tetris::t_roomUnique roomUnique);
 	virtual const tetris::t_error exitRoom(const tetris::t_roomUnique roomUnique);
-    virtual const tetris::t_error existRoom(const tetris::t_roomUnique roomUnique);
+	virtual const tetris::t_error existRoom(const tetris::t_roomUnique roomUnique);
 
 protected:
 

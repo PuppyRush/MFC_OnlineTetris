@@ -11,8 +11,9 @@
 #include <memory>
 
 #include "../../Commons/Room/TIWaitingRoom.h"
-#include "../../Commons/TSwitchingMessage.h"
 #include "../../Commons/TUser.h"
+#include "../../Commons/TSwitchingMessage.h"
+
 
 class TWaitingRoom : public TIWaitingRoom
 {

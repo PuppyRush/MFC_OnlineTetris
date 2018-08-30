@@ -56,6 +56,20 @@ const T toMessage(const tetris::msgElement &msg)
 	return message;
 }
 
+template <class T>
+const tetris::msgElement toMessage(T *msg)
+{
+	const size_t len = sizeof(T);
+	assert(PACKET_LEN > len);
+
+	char* dest = new char[PACKET_LEN];
+	memset(dest, 0, PACKET_LEN);
+	memcpy(dest, msg, PACKET_LEN);
+
+	tetris::t_priority priority = msg->priority;
+
+	return msgHelper::getMsgElement(priority, static_cast<const char*>(dest), len);
+}
 
 constexpr const Priority toPriority(const tetris::t_priority priority) noexcept
 {

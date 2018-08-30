@@ -3,6 +3,8 @@
 #include "TSocket.h"
 #include "TObjectContainerFactory.h"
 
+#include <queue>
+
 using namespace std;
 
 TMessageThread::TMessageThread()
@@ -10,6 +12,11 @@ TMessageThread::TMessageThread()
 	m_recvThread(nullptr),
 	m_sendThread(nullptr)
 {
+	auto factory = TObjectContainerFactory::get();
+	m_userCon = factory->getUserContainer().get();
+	m_socketCon = factory->getSocketContainer().get();
+	m_gameroomCon = factory->getGameRoomContainer().get();
+	m_waitingroomCon = factory->getWaitingRoomContainer().get();
 }
 
 TMessageThread::~TMessageThread()
@@ -36,14 +43,18 @@ void TMessageThread::end()
 
 void TMessageThread::_send()
 {
-	auto container = TObjectContainerFactory::get()->getSocketContainer();
 	while (m_continue)
 	{
-		if (container->isRefreshing())
-			continue;
+		/*if (container->isRefreshing())
+			continue;*/
 
-		for (const auto socket : *container)
-			socket->send();
+		std::queue<tetris::msgElement> msgQ;
+
+		/*for(const auto user : *m_userCon)
+			msgQ.push(user->pop())*/
+
+		/*for (const auto socket : *container)
+			socket->send();*/
 	}
 }
 
@@ -67,37 +78,29 @@ void TMessageThread::_recv()
 
 void TMessageThread::_switchingMessage()
 {
-	auto factory = TObjectContainerFactory::get();
-
-    auto socketCon = TObjectContainerFactory::get()->getSocketContainer();
-	auto gameroomCon = factory->getGameRoomContainer();
-	auto waitroomCon = factory->getWaitingRoomContainer();
-	auto userCon = factory->getUserContainer();
-
 	while (m_continue)
 	{
-
-        userCon->refresh();
-        gameroomCon->refresh();
-        waitroomCon->refresh();
-        socketCon->refresh();
+        m_userCon->refresh();
+		m_gameroomCon->refresh();
+		m_waitingroomCon->refresh();
+		m_socketCon->refresh();
 
 		if (m_messageQ.empty())
 			continue;
 
-		const auto msg = m_messageQ.front();
+		const auto msg = m_messageQ.top();
 		m_messageQ.pop();
 
-        for (const auto obj : *userCon)
-            obj->sendMessage(msg);
+        /*for (const auto obj : *userCon)
+			obj->send(msg);
 
         for (const auto obj : *socketCon)
-            obj->sendMessage(msg);
+			obj->send(msg);
 
 		for (const auto obj : *gameroomCon)
-			obj->sendMessage(msg);
+			obj->send(msg);
 
 		for (const auto obj : *waitroomCon)
-			obj->sendMessage(msg);
+			obj->send(msg);*/
 	}
 }

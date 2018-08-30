@@ -39,7 +39,7 @@ public:
 
 	inline void setSurvive(const bool n) noexcept { m_isSurvive = n; }
 	inline void setOrder(const int idx) noexcept { m_order = idx; }
-	inline void setName(const std::string name) { m_name = name; } 
+	inline void setName(const std::string name) { m_name = name; }
 	inline void setReady(const bool rdy) noexcept { m_isReady = rdy; }
 
 	inline static const tetris::t_userUnique newUnique() noexcept

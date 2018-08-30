@@ -5,7 +5,7 @@
 #include "TIWaitingRoom.h"
 
 TIWaitingRoom::TIWaitingRoom(const tetris::t_roomUnique unique, const std::string roomname)
-:TIRoom(unique, roomname)
+        :TIRoom(unique, roomname)
 {
 
 }
