@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <mutex>
 
-#include "../../Commons/Room/TIGameRoom.h"
+#include "../../Commons/Entity/Room/TIGameRoom.h"
 #include "../../Commons/TType.h"
 #include "../../Commons/TAtomic.h"
 

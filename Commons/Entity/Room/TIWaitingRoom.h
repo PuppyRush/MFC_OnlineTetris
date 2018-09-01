@@ -10,9 +10,10 @@
 #include <unordered_set>
 #include <memory>
 
-#include "../../Commons/Room/TIRoom.h"
-#include "../../Commons/TSwitchingMessage.h"
-#include "../../Commons/TUser.h"
+#include "../../Commons/Entity/Room/TIRoom.h"
+#include "../../Commons/Entity/TUser.h"
+#include "../../Commons/TMessenger.h"
+
 
 class TIWaitingRoom : public TIRoom
 {

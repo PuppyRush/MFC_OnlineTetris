@@ -10,14 +10,14 @@
 
 //#include <assert.h>
 
-#include "TSocket.h"
-#include "TObject.h"
+#include "Entity/TSocket.h"
+#include "Entity/TObject.h"
 #include "DefineInfo.h"
 #include "Logger.h"
 #include "TMessage.h"
 #include "TType.h"
 #include "TypeTraits.h"
-#include "TSwitchingMessage.h"
+#include "TMessenger.h"
 #include "TFunctional.h"
 #undef min
 #undef max

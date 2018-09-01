@@ -9,7 +9,7 @@
 
 #include <atomic>
 
-#include "../../Commons/TUser.h"
+#include "../../Commons/Entity/TUser.h"
 #include "../../Commons/TType.h"
 #include "TServerSocket.h"
 

@@ -7,12 +7,12 @@
 
 #include "Uncopyable.h"
 #include "TType.h"
-#include "TSocket.h"
-#include "TUser.h"
-#include "Room/TIGameRoom.h"
-#include "Room/TIWaitingRoom.h"
+#include "Entity/TSocket.h"
+#include "Entity/TUser.h"
+#include "Entity/Room/TIGameRoom.h"
+#include "Entity/Room/TIWaitingRoom.h"
 #include "TObjectContainer.h"
-#include "TSwitchingMessage.h"
+#include "TMessenger.h"
 
 #include <functional>
 

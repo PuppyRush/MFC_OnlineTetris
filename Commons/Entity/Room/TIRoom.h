@@ -16,9 +16,9 @@
 #include "../structs.h"
 #include "../TType.h"
 #include "../TAtomic.h"
-#include "../TObject.h"
-#include "../TUser.h"
-#include "../TSwitchingMessage.h"
+#include "../Entity/TObject.h"
+#include "../Entity/TUser.h"
+#include "../TMessenger.h"
 
 class TIRoom : public TObject, public TMessenger
 {

@@ -9,7 +9,7 @@
 #include <sys/socket.h>
 
 #include "../../Commons/TMessage.h"
-#include "../../Commons/TSocket.h"
+#include "../../Commons/Entity/TSocket.h"
 #include "TServerUser.h"
 
 #ifdef _DEBUG

@@ -3,11 +3,12 @@
 #include <memory>
 #include <string>
 
-#include "TSocket.h"
+
 #include "TType.h"
 #include "TAtomic.h"
-#include "TObject.h"
-#include "TSwitchingMessage.h"
+#include "Entity/TSocket.h"
+#include "Entity/TObject.h"
+#include "TMessenger.h"
 #include "structs.h"
 #include "TObjectContainer.h"
 

@@ -10,9 +10,9 @@
 #include <unordered_set>
 #include <memory>
 
-#include "../../Commons/Room/TIWaitingRoom.h"
-#include "../../Commons/TUser.h"
-#include "../../Commons/TSwitchingMessage.h"
+#include "../../Commons/Entity/Room/TIWaitingRoom.h"
+#include "../../Commons/Entity/TUser.h"
+#include "../../Commons/TMessenger.h"
 
 
 class TWaitingRoom : public TIWaitingRoom

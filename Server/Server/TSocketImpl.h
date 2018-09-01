@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Commons/TSocket.h"
+#include "../../Commons/Entity/TSocket.h"
 #include "../../Commons/DefineInfo.h"
 #include "../../Commons/TType.h"
 
