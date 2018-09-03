@@ -19,8 +19,6 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
          m_socket(0)
 {
     using namespace tetris;
-    //m_sendQ = priority_queue<msgElement, vector<msgElement>, greater<msgElement> >();
-    //m_recvQ = priority_queue<msgElement, vector<msgElement>, greater<msgElement> >();
 }
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket)

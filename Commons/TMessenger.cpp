@@ -9,18 +9,12 @@ TMessenger::TMessenger()
 
 TMessenger::~TMessenger()
 {
-	while (!m_recvQ.empty())
-	{
-		auto msg = m_recvQ.top();
-		m_recvQ.pop();
-		delete[] msgHelper::getMessage(msg);
-	}
-	while (!m_sendQ.empty())
+	/*while (!m_sendQ.empty())
 	{
 		auto msg = m_sendQ.top();
-		m_recvQ.pop();
+		m_sendQ.pop();
 		delete[] msgHelper::getMessage(msg);
-	}
+	}*/
 
 }
 
@@ -45,18 +39,6 @@ void TMessenger::send(const tetris::msgElement &msg)
 	const tetris::t_msgidx msgidx = Header::getMsgidx(msgHelper::getMessage(msg));
 	if (isRegsiteMessage(msgidx))
 		_switchingMessage(msgidx, msg);
-}
-
-void TMessenger::push(const tetris::msgElement &msg)
-{
-	m_sendQ.push(msg);
-}
-
-const tetris::msgElement TMessenger::pop()
-{
-	auto msg = m_recvQ.top();
-	m_recvQ.pop();
-	return msg;
 }
 
 const void TMessenger::_switchingMessage(const tetris::t_msgidx msgidx, const tetris::msgElement &msg)

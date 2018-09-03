@@ -29,8 +29,7 @@ public:
 
 	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{
-		const auto unique = TIRoom::getAtomic();
-		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom(unique));
+		static auto waitingRoom = std::shared_ptr<TWaitingRoom>();
 		return waitingRoom;
 	}
 
@@ -41,5 +40,5 @@ public:
 protected:
 
 private:
-	TWaitingRoom(const tetris::t_roomUnique roomUnique);
+	TWaitingRoom();
 };

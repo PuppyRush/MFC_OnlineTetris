@@ -13,8 +13,8 @@
 
 using namespace std;
 
-TGameRoom::TGameRoom(const tetris::t_roomUnique roomUnique, const string roomname)
-:TIGameRoom(roomUnique,roomname)
+TGameRoom::TGameRoom( const string roomname)
+:TIGameRoom(roomname)
 {
 	// TODO Auto-generated constructor stub
 	registryMessage();

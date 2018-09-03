@@ -18,16 +18,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TServerUser::TServerUser(const tetris::t_userUnique unique, const std::shared_ptr<TServerSocket> socket)
-	:TetrisUser(unique),
-	m_serverSocket(socket),
+TServerUser::TServerUser(const std::shared_ptr<TServerSocket> socket)
+	:m_serverSocket(socket),
 	m_sharedPtr(std::shared_ptr<TServerUser>(this))
 {
     registryMessage();
 }
 
 TServerUser::TServerUser(TServerUser* user)
-	:TetrisUser(user->getUnique())
 {
     registryMessage();
 }

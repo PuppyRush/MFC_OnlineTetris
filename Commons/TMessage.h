@@ -108,14 +108,14 @@ typedef struct mPermit : public Header
 typedef struct mConnectionInfo : public Header
 {
 #define USER_SIZE 8
-	const tetris::t_userUnique userUnique;
+	const tetris::t_unique userUnique;
 	const size_t userInfoSize;
 	UserInfo userinfo[USER_SIZE];
 
 	explicit mConnectionInfo
 	(
 		const Header h,
-		const tetris::t_userUnique userUnique,
+		const tetris::t_unique userUnique,
 		const UserInfo* _userinfo,
 		const size_t userInfoSize
 	)

@@ -22,15 +22,13 @@
 #undef min
 #undef max
 
-class TetrisSocket : public TMessenger, public TObject
+class TetrisSocket : public TMessenger
 {
 public:
 
 	virtual ~TetrisSocket();
 	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
 	virtual tetris::t_error listen(unsigned port, int backlog) = 0;
-
-
 
 	bool operator!=(const TetrisSocket &socket)
 	{

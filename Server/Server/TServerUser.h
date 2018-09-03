@@ -21,8 +21,7 @@ public:
 
 	static std::shared_ptr<TServerUser> makeShared(const std::shared_ptr<TServerSocket> socket)
 	{
-		const auto unique = TetrisUser::newUnique();
-		return std::shared_ptr<TServerUser>(new TServerUser(unique, socket));
+		return std::shared_ptr<TServerUser>(new TServerUser(socket));
 	}
 
 	inline std::shared_ptr<TServerSocket> getServerSocket() const noexcept
@@ -30,7 +29,7 @@ public:
 
 protected:
 	TServerUser(TServerUser* user);
-	TServerUser(const tetris::t_userUnique unique, const std::shared_ptr<TServerSocket> socket);
+	TServerUser(const std::shared_ptr<TServerSocket> socket);
 
 private:
 	TServerUser() = delete;

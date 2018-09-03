@@ -45,10 +45,11 @@ void TMessageThread::_send()
 {
 	while (m_continue)
 	{
-		/*if (container->isRefreshing())
-			continue;*/
 
-		std::queue<tetris::msgElement> msgQ;
+		//if(TMessenger::exist())
+		//	continue;
+
+		//const auto msg = TMessenger::pop();
 
 		/*for(const auto user : *m_userCon)
 			msgQ.push(user->pop())*/
@@ -61,7 +62,6 @@ void TMessageThread::_send()
 void TMessageThread::_recv()
 {
 	auto container = TObjectContainerFactory::get()->getSocketContainer();
-	auto ptrMap = container->getMap();
 	while (m_continue)
 	{
 		if (container->isRefreshing())
@@ -70,8 +70,8 @@ void TMessageThread::_recv()
 		for (const auto socket : *container)
 		{
 			auto msg = socket->recv();
-			if(msgHelper::getSize(msg)>0)
-				m_messageQ.push(msg);
+			/*if(msgHelper::getSize(msg)>0)
+				m_messageQ.push(msg);*/
 		}
 	}
 }
@@ -80,7 +80,7 @@ void TMessageThread::_switchingMessage()
 {
 	while (m_continue)
 	{
-        m_userCon->refresh();
+       /* m_userCon->refresh();
 		m_gameroomCon->refresh();
 		m_waitingroomCon->refresh();
 		m_socketCon->refresh();
@@ -91,7 +91,7 @@ void TMessageThread::_switchingMessage()
 		const auto msg = m_messageQ.top();
 		m_messageQ.pop();
 
-        /*for (const auto obj : *userCon)
+        for (const auto obj : *userCon)
 			obj->send(msg);
 
         for (const auto obj : *socketCon)

@@ -11,8 +11,8 @@
 #include "TWaitingRoom.h"
 #include "../../Commons/TypeTraits.h"
 
-TWaitingRoom::TWaitingRoom(const tetris::t_roomUnique roomUnique)
-:TIWaitingRoom(roomUnique, std::string("ServerWaitingRoom"))
+TWaitingRoom::TWaitingRoom()
+:TIWaitingRoom(std::string("ServerWaitingRoom"))
 {
     registryMessage();
 }
