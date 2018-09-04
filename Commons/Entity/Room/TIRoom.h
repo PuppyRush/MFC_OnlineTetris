@@ -27,19 +27,13 @@ public:
 
 	enum class errorCode : tetris::t_error;
 
-	virtual const tetris::t_error add(const tetris::t_userUnique unique);
-	virtual const tetris::t_error exit(const tetris::t_userUnique unique);
-	virtual const bool exist(const tetris::t_userUnique unique) const;
+	virtual const tetris::t_error add(const tetris::t_unique user);
+	virtual const tetris::t_error exit(const tetris::t_unique user);
+	virtual const bool exist(const tetris::t_unique unique) const;
 
 	inline const size_t size() const;
 	const std::vector<UserInfo> getUserInfo() const;
 	inline const std::shared_ptr<roomInfo> getRoomInfo() const noexcept {return m_roominfo;	}
-	inline const tetris::t_roomUnique getUnique() const noexcept { return m_unique; }
-
-	const bool operator!=(const TIRoom& room) const
-	{
-		return this->m_unique != room.m_unique;
-	}
 
 protected:
 	enum class errorCode : tetris::t_error
@@ -55,20 +49,13 @@ protected:
 		LengthMax = 20,
 	};
 
-	explicit TIRoom(const tetris::t_roomUnique roomuUnique,const std::string roomname);
+	explicit TIRoom(const std::string roomname);
 
 	virtual const tetris::t_error _validator(const TIRoom &room) const = 0;
-
-	inline static tetris::t_roomUnique getAtomic()
-	{
-		static TAtomic<tetris::t_roomUnique> m_roomUniqueAtomic;
-		return m_roomUniqueAtomic.newUnique();
-	}
 
 	std::string m_roomname;
 
 private:
-	std::unordered_set<tetris::t_userUnique> m_userSet;
+	std::unordered_set<tetris::t_unique> m_userSet;
 	std::shared_ptr<roomInfo> m_roominfo;
-	tetris::t_roomUnique m_unique;
 };

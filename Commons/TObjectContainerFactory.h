@@ -5,6 +5,7 @@
 #include "TType.h"
 #include "Uncopyable.h"
 #include "TObjectContainer.h"
+#include "TProperty.h"
 #include "Entity/TUser.h"
 #include "Entity/TSocket.h"
 #include "Entity/Room/TIGameRoom.h"
@@ -14,8 +15,8 @@ class TObjectContainerFactory : public Uncopyable
 {
 public:
 
-	template <class U, class T>
-	using Container = TObjectContainer<U, T>;
+	template <class T>
+	using Container = TObjectContainer<T>;
 
 	static inline std::shared_ptr<TObjectContainerFactory> get()
 	{
@@ -23,24 +24,24 @@ public:
 		return factory;
 	}
 
-	std::shared_ptr<Container<tetris::t_userUnique, TetrisUser>> getUserContainer()
+	auto getUserContainer()
 	{
-		return Container<tetris::t_userUnique, TetrisUser>::get();
+		return Container<TetrisUser>::get(toUType(property_distinguish::User));
 	}
 
-	std::shared_ptr<Container<tetris::t_socketUnique, TetrisSocket>> getSocketContainer()
+	auto getSocketContainer()
 	{
-		return Container<tetris::t_socketUnique, TetrisSocket>::get();
+		return Container<TetrisSocket>::get(toUType(property_distinguish::Socket));
 	}
 
-	std::shared_ptr<Container<tetris::t_roomUnique, TIGameRoom>> getGameRoomContainer()
+	auto getGameRoomContainer()
 	{
-		return Container<tetris::t_roomUnique, TIGameRoom>::get();
+		return Container<TIGameRoom>::get(toUType(property_distinguish::GameRoom));
 	}
 
-	std::shared_ptr<Container<tetris::t_roomUnique, TIWaitingRoom>> getWaitingRoomContainer()
+	auto getWaitingRoomContainer()
 	{
-		return Container<tetris::t_roomUnique, TIWaitingRoom>::get();
+		return Container<TIWaitingRoom>::get(toUType(property_distinguish::WaitingRoom));
 	}
 
 private:

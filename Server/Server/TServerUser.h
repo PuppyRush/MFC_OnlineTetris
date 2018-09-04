@@ -12,6 +12,8 @@
 #include "../../Commons/Entity/TUser.h"
 #include "../../Commons/TType.h"
 #include "TServerSocket.h"
+#include "TMessageObject.h"
+
 
 class TServerUser : public TetrisUser
 {
@@ -21,8 +23,7 @@ public:
 
 	static std::shared_ptr<TServerUser> makeShared(const std::shared_ptr<TServerSocket> socket)
 	{
-		const auto unique = TetrisUser::newUnique();
-		return std::shared_ptr<TServerUser>(new TServerUser(unique, socket));
+		return std::shared_ptr<TServerUser>(new TServerUser(socket));
 	}
 
 	inline std::shared_ptr<TServerSocket> getServerSocket() const noexcept
@@ -30,11 +31,11 @@ public:
 
 protected:
 	TServerUser(TServerUser* user);
-	TServerUser(const tetris::t_userUnique unique, const std::shared_ptr<TServerSocket> socket);
+	TServerUser(const std::shared_ptr<TServerSocket> socket);
 
 private:
 	TServerUser() = delete;
-	void recvConnectionInfo(const tetris::msgElement &msg);
+	void recvConnectionInfo(const TMessageObject& msg);
 
 	std::shared_ptr<TServerSocket> m_serverSocket;
 	std::shared_ptr<TServerUser> m_sharedPtr;

@@ -64,13 +64,13 @@ const size_t SocketImpl::_sendTo(const char *msg, const size_t size)
 	return ::send(getUnique(), msg, size,0);
 }
 
-tetris::msgElement SocketImpl::_recvFrom()
+const TMessageObject SocketImpl::_recvFrom()
 {
 	auto buf = new char[PACKET_LEN];
 	memset(buf, 0, PACKET_LEN);
 	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
-	const size_t recvLen = recved <= 0 ? 0 : recved;
+	const tetris::t_msgsize recvLen = recved <= 0 ? 0u : recved;
 	auto prio = Header::getPriority(buf);
 
-	return msgHelper::getMsgElement(prio, buf, recvLen);
+	return TMessageObject(prio, recvLen, buf);
 }

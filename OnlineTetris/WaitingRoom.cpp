@@ -6,7 +6,8 @@
 
 #include "OnlineTetris.h"
 #include "WaitingRoom.h"
-#include "../Commons/Property.h"
+#include "../Commons/TProperty.h"
+#include "../Commons/TMessageObject.h"
 
 
 #ifdef _DEBUG
@@ -21,7 +22,7 @@ IMPLEMENT_DYNAMIC(WaitingRoomDlg, CDialogEx)
 
 WaitingRoomDlg::WaitingRoomDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(_DLG_WAITINGROOM, pParent),
-	TIWaitingRoom(TIRoom::getAtomic(), std::string("WaitingRoom"))
+	TIWaitingRoom(std::string("WaitingRoom"))
 {
 
 }
@@ -78,12 +79,12 @@ void WaitingRoomDlg::getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom)
 
 }
 
-void WaitingRoomDlg::updateWaitingRoom(const tetris::msgElement &msg)
+void WaitingRoomDlg::updateWaitingRoom(const TMessageObject& msg)
 {
 
 }
 
-void WaitingRoomDlg::updateWaitingUsers(const tetris::msgElement &msg)
+void WaitingRoomDlg::updateWaitingUsers(const TMessageObject& msg)
 {
 
 }

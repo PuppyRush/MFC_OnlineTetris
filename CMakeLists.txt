@@ -13,32 +13,32 @@ include_directories(Server/Room)
 include_directories(Server/Server)
 
 add_executable(OnlineTetris
-        Commons/Room/TIGameRoom.cpp
-        Commons/Room/TIGameRoom.h
-        Commons/Room/TIRoom.cpp
-        Commons/Room/TIRoom.h
-        Commons/Room/TIWaitingRoom.cpp
-        Commons/Room/TIWaitingRoom.h
+        Commons/Entity/Room/TIGameRoom.cpp
+        Commons/Entity/Room/TIGameRoom.h
+        Commons/Entity/Room/TIRoom.cpp
+        Commons/Entity/Room/TIRoom.h
+        Commons/Entity/Room/TIWaitingRoom.cpp
+        Commons/Entity/Room/TIWaitingRoom.h
+        Commons/Entity/TObject.h
+        Commons/Entity/TObject.cpp
+        Commons/Entity/TSocket.cpp
+        Commons/Entity/TSocket.h
+        Commons/Entity/TUser.cpp
+        Commons/Entity/TUser.h
         Commons/DefineInfo.h
         Commons/ITObjectContainer.h
         Commons/Logger.h
         Commons/Property.h
         Commons/structs.h
-        Commons/TAtomic.cpp
         Commons/TAtomic.h
-        Commons/TMessage.h
-        Commons/TObject.h
+        Commons/TMessageStruct.h
         Commons/TObjectContainer.h
         Commons/TObjectContainerFactory.h
-        Commons/TSocket.cpp
-        Commons/TSocket.h
         Commons/TMessageThread.cpp
         Commons/TMessageThread.h
-        Commons/TSwitchingMessage.cpp
-        Commons/TSwitchingMessage.h
+        Commons/TMessenger.cpp
+        Commons/TMessenger.h
         Commons/TType.h
-        Commons/TUser.cpp
-        Commons/TUser.h
         Commons/TypeTraits.h
         Commons/Uncopyable.h
         Commons/Validator.cpp
@@ -60,7 +60,7 @@ add_executable(OnlineTetris
         Server/Server/TSocketImpl.cpp
         Server/Server/TSocketImpl.h
         Server/main.cpp
-        ReadMe.txt )
+        ReadMe.txt Commons/Entity/TObject.cpp Commons/TMessageObject.cpp Commons/TMessageObject.h)
 
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)

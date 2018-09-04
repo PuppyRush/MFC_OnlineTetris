@@ -90,6 +90,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <PerUserRedirection>true</PerUserRedirection>
       <AdditionalLibraryDirectories>$(ProjectDir)..\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Commons.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

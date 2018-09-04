@@ -8,11 +8,5 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-TetrisUser::TetrisUser(const tetris::t_userUnique unique)
-		:m_unique(unique)
-{
-}
-
 TetrisUser::TetrisUser()
 {}

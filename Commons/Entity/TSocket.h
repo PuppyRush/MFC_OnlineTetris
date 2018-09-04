@@ -14,7 +14,7 @@
 #include "TObject.h"
 #include "../DefineInfo.h"
 #include "../Logger.h"
-#include "../TMessage.h"
+#include "../TMessageObject.h"
 #include "../TType.h"
 #include "../TypeTraits.h"
 #include "../TMessenger.h"
@@ -22,15 +22,13 @@
 #undef min
 #undef max
 
-class TetrisSocket : public TMessenger, public TObject
+class TetrisSocket : public TMessenger
 {
 public:
 
 	virtual ~TetrisSocket();
 	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
 	virtual tetris::t_error listen(unsigned port, int backlog) = 0;
-
-
 
 	bool operator!=(const TetrisSocket &socket)
 	{
@@ -40,15 +38,13 @@ public:
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
 	tetris::t_error accept();
-	void send(const tetris::msgElement msg);
-	const tetris::msgElement recv();
+	void send(const TMessageObject& msg);
+	const TMessageObject recv();
 	tetris::t_error close();
 
 	void setIP(IPString &ip);
 	void setPort(tetris::t_port port);
 	inline const tetris::t_socket getUnique() { return m_socket; }
-
-
 
 protected:
 	const int m_domain;
@@ -67,7 +63,7 @@ protected:
 	virtual tetris::t_error _connect() = 0;
 	virtual tetris::t_error _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
-	virtual tetris::msgElement _recvFrom() = 0;
+	virtual const TMessageObject _recvFrom() = 0;
 
 	void _acceptSocket();
 

@@ -1,7 +1,7 @@
 #include "TMessenger.h"
 
 #include "TypeTraits.h"
-#include "TMessage.h"
+#include "TMessageStruct.h"
 
 TMessenger::TMessenger()
 {
@@ -9,22 +9,16 @@ TMessenger::TMessenger()
 
 TMessenger::~TMessenger()
 {
-	while (!m_recvQ.empty())
-	{
-		auto msg = m_recvQ.top();
-		m_recvQ.pop();
-		delete[] msgHelper::getMessage(msg);
-	}
-	while (!m_sendQ.empty())
+	/*while (!m_sendQ.empty())
 	{
 		auto msg = m_sendQ.top();
-		m_recvQ.pop();
+		m_sendQ.pop();
 		delete[] msgHelper::getMessage(msg);
-	}
+	}*/
 
 }
 
-void TMessenger::addCaller(const std::pair<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> registee)
+void TMessenger::addCaller(const std::pair<tetris::t_msgidx, std::function<void(const TMessageObject&)>> registee)
 {
 	if(registee.second==nullptr)
 		return;
@@ -40,26 +34,14 @@ bool TMessenger::isRegsiteMessage(const tetris::t_msgidx msgidx)
 		return false;
 }
 
-void TMessenger::send(const tetris::msgElement &msg)
+void TMessenger::send(const TMessageObject msg)
 {
-	const tetris::t_msgidx msgidx = Header::getMsgidx(msgHelper::getMessage(msg));
+	const auto msgidx = Header::getMsgidx(msg.getMessage());
 	if (isRegsiteMessage(msgidx))
 		_switchingMessage(msgidx, msg);
 }
 
-void TMessenger::push(const tetris::msgElement &msg)
-{
-	m_sendQ.push(msg);
-}
-
-const tetris::msgElement TMessenger::pop()
-{
-	auto msg = m_recvQ.top();
-	m_recvQ.pop();
-	return msg;
-}
-
-const void TMessenger::_switchingMessage(const tetris::t_msgidx msgidx, const tetris::msgElement &msg)
+const void TMessenger::_switchingMessage(const tetris::t_msgidx msgidx, const TMessageObject& msg)
 {
 	m_messageCaller.at(msgidx)(msg);
 }

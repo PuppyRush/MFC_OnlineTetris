@@ -176,15 +176,17 @@
     <ClInclude Include="ITObjectContainer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MessageHeader.h" />
-    <ClInclude Include="Property.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="TAtomic.h" />
     <ClInclude Include="TFunctional.h" />
     <ClInclude Include="TMessage.h" />
+    <ClInclude Include="TMessageObject.h" />
+    <ClInclude Include="TMessageStruct.h" />
     <ClInclude Include="TMessenger.h" />
     <ClInclude Include="TObjectContainer.h" />
     <ClInclude Include="TObjectContainerFactory.h" />
     <ClInclude Include="TMessageThread.h" />
+    <ClInclude Include="TProperty.h" />
     <ClInclude Include="TType.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Uncopyable.h" />
@@ -196,7 +198,7 @@
     <ClCompile Include="Entity\Room\TIWaitingRoom.cpp" />
     <ClCompile Include="Entity\TSocket.cpp" />
     <ClCompile Include="Entity\TUser.cpp" />
-    <ClCompile Include="TAtomic.cpp" />
+    <ClCompile Include="TMessageObject.cpp" />
     <ClCompile Include="TMessageThread.cpp" />
     <ClCompile Include="TMessenger.cpp" />
     <ClCompile Include="Validator.cpp" />

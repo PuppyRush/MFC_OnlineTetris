@@ -11,13 +11,12 @@
 
 #include "Uncopyable.h"
 
-template <class UniqueType, class T>
+template <class T>
 class TObjectContainer : public Uncopyable
 {
 public:
 	using PtrType = std::shared_ptr<T>;
-	using MyUniqueType = UniqueType;
-	using ContainerType = std::map<UniqueType, PtrType>;
+	using ContainerType = std::map<tetris::t_unique, PtrType>;
 
 	class ContainerIterator
 	{
@@ -52,7 +51,7 @@ public:
 
 	~TObjectContainer() {}
 
-	bool add(const UniqueType unique, const PtrType &newObj)
+	bool add(const tetris::t_unique unique, const PtrType &newObj)
 	{
 		if (m_ptrMap.count(unique) == 0)
 		{
@@ -64,9 +63,9 @@ public:
 			return false;
 	}
 
-	void addAll(const std::vector< std::pair<UniqueType, PtrType>> &objAry)
+	void addAll(const std::vector< std::pair<tetris::t_unique, PtrType>> &objAry)
 	{
-		for (const std::pair<UniqueType, PtrType> obj : objAry)
+		for (const std::pair<tetris::t_unique, PtrType> obj : objAry)
 		{
 			if (m_ptrMap.count(obj.first) == 0)
 				m_addedQ.push(obj);
@@ -74,7 +73,7 @@ public:
 		refresh();
 	}
 
-	bool remove(const UniqueType unique)
+	bool remove(const tetris::t_unique unique)
 	{
 		if (m_ptrMap.count(unique) > 0)
 		{
@@ -86,23 +85,23 @@ public:
 			return false;
 	}
 
-	PtrType at(const UniqueType unique)
+	PtrType at(const tetris::t_unique unique)
 	{
 		if (exist(unique))
 			return m_ptrMap.at(unique);
 	}
 
-	void change(const UniqueType unique, const std::shared_ptr<T> &newObj)
+	void change(const tetris::t_unique unique, const std::shared_ptr<T> &newObj)
 	{
 		if (remove(unique))
 		{
-			add(unique, unique.newObj);
+			add(unique, newObj);
 			refresh();
 		}
 
 	}
 
-	bool exist(const UniqueType unique) const
+	bool exist(const tetris::t_unique unique) const
 	{
 		if (m_ptrMap.count(unique))
 			return true;
@@ -155,9 +154,10 @@ public:
 		return m_ptrMap;
 	}
 
-	inline static std::shared_ptr<TObjectContainer> get()
+	inline static auto get(const tetris::t_dist dist)
 	{
-		static std::shared_ptr<TObjectContainer> container = std::shared_ptr<TObjectContainer>(new TObjectContainer());
+		static std::shared_ptr<TObjectContainer> container =
+				std::shared_ptr<TObjectContainer>(new TObjectContainer(dist));
 		return container;
 	}
 
@@ -169,14 +169,14 @@ public:
 
 		while (!m_addedQ.empty())
 		{
-			std::pair<UniqueType, PtrType> obj = m_addedQ.front();
+			std::pair<tetris::t_unique, PtrType> obj = m_addedQ.front();
 			m_addedQ.pop();
 			m_ptrMap.insert(obj);
 		}
 
 		while (!m_removedQ.empty())
 		{
-			UniqueType unique = m_removedQ.front();
+			tetris::t_unique unique = m_removedQ.front();
 			m_removedQ.pop();
 			m_ptrMap.erase(unique);
 		}
@@ -188,12 +188,15 @@ public:
 	{	return m_isRefreshing;	}
 
 private:
-	TObjectContainer() {}
+	TObjectContainer(const tetris::t_dist dist)
+	:m_dist(dist)
+	{}
 
 	ContainerType m_ptrMap;
 	std::mutex	m_refreshMutex;
 	bool m_isRefreshing;
-	std::queue<std::pair<UniqueType, PtrType>> m_addedQ;
-	std::queue<UniqueType> m_removedQ;
+	tetris::t_dist m_dist;
+	std::queue<std::pair<tetris::t_unique, PtrType>> m_addedQ;
+	std::queue<tetris::t_unique> m_removedQ;
 };
 

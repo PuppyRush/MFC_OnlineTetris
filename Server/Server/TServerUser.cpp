@@ -8,7 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 
-#include "../../Commons/TMessage.h"
+#include "../../Commons/TMessageStruct.h"
 #include "../../Commons/Entity/TSocket.h"
 #include "TServerUser.h"
 
@@ -18,16 +18,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TServerUser::TServerUser(const tetris::t_userUnique unique, const std::shared_ptr<TServerSocket> socket)
-	:TetrisUser(unique),
-	m_serverSocket(socket),
+TServerUser::TServerUser(const std::shared_ptr<TServerSocket> socket)
+	:m_serverSocket(socket),
 	m_sharedPtr(std::shared_ptr<TServerUser>(this))
 {
     registryMessage();
 }
 
 TServerUser::TServerUser(TServerUser* user)
-	:TetrisUser(user->getUnique())
 {
     registryMessage();
 }
@@ -43,9 +41,9 @@ void TServerUser::registryMessage()
 }
 
 
-void TServerUser::recvConnectionInfo(const tetris::msgElement &msg)
+void TServerUser::recvConnectionInfo(const TMessageObject& msg)
 {
-	const auto message = toMessage<mName>(msg);
+	const auto message = TMessageObject::toMessage<mName>(msg);
 	setName(message.name);
 }
 

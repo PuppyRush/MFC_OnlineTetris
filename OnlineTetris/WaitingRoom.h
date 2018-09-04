@@ -1,6 +1,7 @@
 #pragma once
 #include "afxcmn.h"
 #include "../Commons/Entity/Room/TIWaitingRoom.h"
+#include "../Commons/TMessageObject.h"
 
 // WaitingRoomDlg 대화 상자입니다.
 
@@ -46,6 +47,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	void updateWaitingRoom(const tetris::msgElement &msg);
-	void updateWaitingUsers(const tetris::msgElement &msg);
+	void updateWaitingRoom(const TMessageObject& msg);
+	void updateWaitingUsers(const TMessageObject& msg);
 };

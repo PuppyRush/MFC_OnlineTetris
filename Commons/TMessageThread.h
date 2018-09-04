@@ -4,6 +4,7 @@
 #include <queue>
 #include <thread>
 #include <mutex>
+#include <functional>
 
 #include "Uncopyable.h"
 #include "TType.h"
@@ -13,8 +14,8 @@
 #include "Entity/Room/TIWaitingRoom.h"
 #include "TObjectContainer.h"
 #include "TMessenger.h"
+#include "TMessageObject.h"
 
-#include <functional>
 
 class TMessageThread : private Uncopyable
 {
@@ -36,16 +37,16 @@ private:
 	void _recv() ;
 	void _switchingMessage();
 
-	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, std::greater<tetris::msgElement> > m_messageQ;
+	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject> > m_messageQ;
 
 	bool m_continue;
 	std::shared_ptr<std::thread> m_recvThread;
 	std::shared_ptr<std::thread> m_sendThread;
 	std::shared_ptr<std::thread> m_popThread;
 
-	TObjectContainer<tetris::t_userUnique, TetrisUser> *m_userCon;
-	TObjectContainer<tetris::t_socketUnique , TetrisSocket> *m_socketCon;
-	TObjectContainer<tetris::t_roomUnique, TIGameRoom> *m_gameroomCon;
-	TObjectContainer<tetris::t_roomUnique, TIWaitingRoom> *m_waitingroomCon;
+	TObjectContainer<TetrisUser> *m_userCon;
+	TObjectContainer<TetrisSocket> *m_socketCon;
+	TObjectContainer<TIGameRoom> *m_gameroomCon;
+	TObjectContainer<TIWaitingRoom> *m_waitingroomCon;
 
 };

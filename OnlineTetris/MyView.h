@@ -5,13 +5,13 @@
 #pragma once
 
 #include "..\Commons\structs.h"
+#include "..\Commons\Entity\TUser.h"
 
 class CMyDoc;
 class EnteringDialog;
 class CMyEdit;
 class OptionDialog;
 class CMyButton;
-class TetrisUser;
 
 class CMyView : public CView
 {

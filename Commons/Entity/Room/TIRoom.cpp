@@ -15,9 +15,8 @@
 
 using namespace std;
 
-TIRoom::TIRoom(const tetris::t_roomUnique roomuUnique ,const std::string roomname)
-		:m_unique(roomuUnique),
-		 m_roomname(roomname)
+TIRoom::TIRoom(const std::string roomname)
+	:m_roomname(roomname)
 {
 
 	time_t ltime = 0;
@@ -36,7 +35,7 @@ const size_t TIRoom::size() const
 	return m_userSet.size();
 }
 
-const tetris::t_error TIRoom::add(const tetris::t_userUnique user)
+const tetris::t_error TIRoom::add(const tetris::t_unique user)
 {
 	if (m_userSet.count(user) == 0)
 	{
@@ -47,7 +46,7 @@ const tetris::t_error TIRoom::add(const tetris::t_userUnique user)
 		return toUType(TIRoom::errorCode::Exist);
 }
 
-const tetris::t_error TIRoom::exit(const tetris::t_userUnique user)
+const tetris::t_error TIRoom::exit(const tetris::t_unique user)
 {
 	if (m_userSet.count(user) > 0)
 	{
@@ -58,7 +57,7 @@ const tetris::t_error TIRoom::exit(const tetris::t_userUnique user)
 		return toUType(TIRoom::errorCode::Empty);
 }
 
-const bool TIRoom::exist(const tetris::t_userUnique user) const
+const bool TIRoom::exist(const tetris::t_unique user) const
 {
 	if (m_userSet.count(user))
 		return true;

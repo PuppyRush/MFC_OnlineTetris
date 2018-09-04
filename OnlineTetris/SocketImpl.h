@@ -4,7 +4,9 @@
 
 #include "../Commons/Entity/TSocket.h"
 #include "../Commons/TType.h"
-#include "../Commons/Property.h"
+#include "../Commons/TProperty.h"
+#include "../Commons/TMessageObject.h"
+
 
 class SocketImpl : public TetrisSocket
 {
@@ -27,6 +29,6 @@ protected:
 	virtual tetris::t_error _close(unsigned _socket) override;
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
-	virtual tetris::msgElement _recvFrom() override;
+	virtual const TMessageObject _recvFrom() override;
 
 };

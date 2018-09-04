@@ -11,6 +11,7 @@
 #include "../../Commons/TType.h"
 #include "../Room/TWaitingRoom.h"
 #include "TSocketImpl.h"
+#include "TMessageObject.h"
 
 class TServerSocket : public TSocketImpl
 {
@@ -36,5 +37,5 @@ public:
 private:
 
 	explicit TServerSocket(tetris::t_socket socekt);
-	void recvConnectionInfo(const tetris::msgElement &msg);
+	void recvConnectionInfo(const TMessageObject& msg);
 };

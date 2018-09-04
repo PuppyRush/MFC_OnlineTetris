@@ -42,9 +42,6 @@
     <ClInclude Include="ITObjectContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Property.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TAtomic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,12 +87,18 @@
     <ClInclude Include="Entity\Room\TIWaitingRoom.h">
       <Filter>Entity\Room</Filter>
     </ClInclude>
+    <ClInclude Include="TMessageObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TMessageStruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Validator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TAtomic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TMessageThread.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="Entity\Room\TIWaitingRoom.cpp">
       <Filter>Entity\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="TMessageObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

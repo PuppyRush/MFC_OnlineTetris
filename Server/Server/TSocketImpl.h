@@ -23,5 +23,5 @@ protected:
 	virtual tetris::t_error _connect() override { return 0; };
 
 	virtual const size_t _sendTo(const char *msg, const size_t size) override;
-	virtual tetris::msgElement _recvFrom() override;
+	virtual const TMessageObject _recvFrom() override;
 };

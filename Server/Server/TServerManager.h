@@ -37,7 +37,7 @@ private:
 	TServerManager();
 
     void makeWaitingRoom();
-    void HelloUser(const tetris::t_socketUnique);
+    void HelloUser(const tetris::t_socket);
 
 	std::shared_ptr<std::thread> m_severManagerThread;
 	std::shared_ptr<TServerSocket> m_mainServerSocket;

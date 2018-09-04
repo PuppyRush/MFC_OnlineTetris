@@ -19,8 +19,6 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
          m_socket(0)
 {
     using namespace tetris;
-    //m_sendQ = priority_queue<msgElement, vector<msgElement>, greater<msgElement> >();
-    //m_recvQ = priority_queue<msgElement, vector<msgElement>, greater<msgElement> >();
 }
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket)
@@ -91,19 +89,16 @@ void TetrisSocket::_end()
     m_closeSocket = false;
 }
 
-void TetrisSocket::send(const tetris::msgElement msg)
+void TetrisSocket::send(const TMessageObject& msg)
 {
-    const auto realMsg = msgHelper::getMessage(msg);
-    const auto size = msgHelper::getSize(msg);
-
-    const auto written = _sendTo(realMsg, size);
+    const auto written = _sendTo(msg.getMessage(), msg.getSize());
     if (written <= 0)
     {
         //writeLog("error sendto");
     }
 }
 
-const tetris::msgElement TetrisSocket::recv()
+const TMessageObject TetrisSocket::recv()
 {
     return _recvFrom();
 }

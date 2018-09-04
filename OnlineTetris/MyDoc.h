@@ -8,7 +8,7 @@
 #include <deque>
 #include <map>
 
-#include "../Commons/TMessage.h"
+#include "../Commons/TMessageStruct.h"
 #include "../Commons/structs.h"
 #include "TClientUser.h"
 #include "ServerSocket.h"

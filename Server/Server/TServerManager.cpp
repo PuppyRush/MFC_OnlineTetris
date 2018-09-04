@@ -19,7 +19,7 @@
 #include "TServerManager.h"
 #include "TServerUser.h"
 #include "../Room/TWaitingRoom.h"
-#include "../../Commons/TMessage.h"
+#include "../../Commons/TMessageStruct.h"
 #include "TMessageThread.h"
 #include "../../Commons/TObjectContainerFactory.h"
 
@@ -81,7 +81,7 @@ void TServerManager::makeWaitingRoom()
 	TObjectContainerFactory::get()->getWaitingRoomContainer()->add(waitingRoom->getUnique(), waitingRoom);
 }
 
-void TServerManager::HelloUser(const tetris::t_socketUnique socketUnique)
+void TServerManager::HelloUser(const tetris::t_socket socketUnique)
 {
 	auto newsocket = TServerSocket::makeShared(socketUnique);
 	auto newUser = TServerUser::makeShared(newsocket);
