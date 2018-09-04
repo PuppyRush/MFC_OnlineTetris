@@ -1,8 +1,8 @@
 // MySocket.cpp : 구현 파일입니다.
 //
 
-#include "../Commons/TType.h"
-#include "../Commons/TSocket.h"
+#include "../Comms/TType.h"
+#include "../Comms/TSocket.h"
 
 #include "stdafx.h"
 #include "OnlineTetris.h"
@@ -96,12 +96,12 @@ void TClientSocket::registryMessage()
 	//
 	//
 	////접속해 있는 나머지 사람들에게 나갔음을 알린다.
-	//mSendName msg(Header(EXIT_USER), strlen(chname), chname);
+	//mName msg(Header(EXIT_USER), strlen(chname), chname);
 	//
 	//if(!Broadcast( &msg, EXIT_USER))
 	//	m_view->MessageHandler(FAIL_SENDMSG);
 	//
-	//auto sendmsg = mSendMessage::GetMessage("님이 도중에 나갔습니다");
+	//auto sendmsg = mMessage::GetMessage("님이 도중에 나갔습니다");
 	//
 	//if(!Broadcast( &sendmsg, ON_MESSAGE))
 	//	m_view->MessageHandler(FAIL_SENDMSG);
@@ -123,14 +123,14 @@ void TClientSocket::SelfClose()
 
 	case PER_NAME:
 	{
-		auto msg = mSendMessage::GetMessage(pDoc->m_name.c_str());
+		auto msg = mMessage::GetMessage(pDoc->m_name.c_str());
 		Send((char *)&msg, sizeof(msg));
 	}
 	break;
 
 	case ON_MESSAGE:
 	{
-		mOnMessage msg;
+		mMessage msg;
 		memcpy(&msg, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		pDoc->AddChat(msg.msg, msg.msglen);
 	}
@@ -138,7 +138,7 @@ void TClientSocket::SelfClose()
 
 	case ADD_USERS:
 	{
-		mOnNames names;
+		mNames names;
 		memcpy(&names, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		pDoc->SetEnterUsers(names);
 		pDoc->SetOrder();
@@ -147,7 +147,7 @@ void TClientSocket::SelfClose()
 
 	case ON_READY:
 	{
-		mOnReadies readies;
+		mReadies readies;
 		memcpy(&readies, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		pDoc->SetReady(readies);
 	}
@@ -155,7 +155,7 @@ void TClientSocket::SelfClose()
 
 	case EXIT_USER:
 	{
-		mOnName name;
+		mName name;
 		memcpy(&name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		pDoc->ExitUser(string(name.name));
 	}
@@ -163,7 +163,7 @@ void TClientSocket::SelfClose()
 
 	case FAIL_ENTER:
 	{
-		mOnPermit permit;
+		mPermit permit;
 		memcpy(&permit, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		m_view->MessageHandler(permit.res);
 		SelfClose();
@@ -172,7 +172,7 @@ void TClientSocket::SelfClose()
 
 	case START_SIGNAL:
 	{
-		mOnStartsignal sig;
+		mStartsignal sig;
 		memcpy(&sig, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		pDoc->Client_ProcessStart(sig);
 	}
@@ -180,7 +180,7 @@ void TClientSocket::SelfClose()
 
 	case END_SIGNAL:
 	{
-		mOnName name;
+		mName name;
 		memcpy(&name, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		pDoc->Client_ProcessEnd(name);
 	}
@@ -188,7 +188,7 @@ void TClientSocket::SelfClose()
 
 	case ON_MAPSTATE:
 	{
-		mOnMapstate mapstate;
+		mMapstate mapstate;
 		memcpy(&mapstate, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		m_view->ProcessMapState(&mapstate);
 	}
@@ -196,7 +196,7 @@ void TClientSocket::SelfClose()
 
 	case ON_ADDLINE:
 	{
-		mOnAddline addline;
+		mAddline addline;
 		memcpy(&addline, &Buffer[sizeof(int)*HEADER_NUM / sizeof(char)], header[2]);
 		m_view->AddLine(addline.linenum);
 	}
@@ -226,8 +226,8 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//switch(msgidx){
 	//
 	//	case ON_MESSAGE:{
-	//		mOnMessage *tmp = (mOnMessage *)strc;
-	//		mSendMessage msg;
+	//		mMessage *tmp = (mMessage *)strc;
+	//		mMessage msg;
 	//		memset(&msg , 0, sizeof(msg));
 	//		memcpy(msg.msg,  tmp->msg, tmp->msglen);
 	//		msg.IsServer = false;
@@ -273,8 +273,8 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//		break;
 	//
 	//	case EXIT_USER:{
-	//		mSendName *send_name = (mSendName *)strc;
-	//		mSendName name;
+	//		mName *send_name = (mName *)strc;
+	//		mName name;
 	//		memset(&name, 0, sizeof(name));
 	//		memcpy(name.name, send_name->name, send_name->namelen);
 	//		name.namelen = send_name->namelen;
@@ -346,7 +346,7 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//		break;
 	//
 	//	case ON_MAPSTATE:{
-	//		mOnMapstate aa = *((mOnMapstate *)strc);
+	//		mMapstate aa = *((mMapstate *)strc);
 	//		memset( &send_map, 0, sizeof(send_map));
 	//		memcpy( send_map.board , aa.board , sizeof(aa.board));
 	//		memcpy( send_map.name , aa.name , aa.namelen);
@@ -369,12 +369,12 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//	}
 	//
 	//	case END_SIGNAL:{
-	//		mSendName send_name;
+	//		mName send_name;
 	//		memset(&send_name,0,sizeof(send_name));
 	//		send_name.IsServer = false;
 	//		send_name.msg_idx = msgidx;
-	//		memcpy( send_name.name , ((mSendName *)strc)->name , strlen(  ((mSendName *)strc)->name ));
-	//		send_name.namelen = strlen (  ((mSendName *)strc)->name  );
+	//		memcpy( send_name.name , ((mName *)strc)->name , strlen(  ((mName *)strc)->name ));
+	//		send_name.namelen = strlen (  ((mName *)strc)->name  );
 	//		send_name.struct_size = sizeof(send_name) - sizeof(int)*HEADER_NUM;
 	//		
 	//		while(pos != NULL){
@@ -392,7 +392,7 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//		ON_ADDLINE *on_line = (ON_ADDLINE *)strc;
 	//		CString name(on_line->name, on_line->namelen);
 	//
-	//		mSendAddline addline(Header(ON_ADDLINE),)
+	//		mAddline addline(Header(ON_ADDLINE),)
 	//		memset(&send_per, 0, sizeof(send_per));
 	//		send_per.msg_idx = msgidx;
 	//		send_per.res = on_line->linenum;
@@ -428,7 +428,7 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//			
 	//			if(user->GetSocket() == NULL)
 	//				continue;
-	//			if(user->GetSocket()->Send( (char *)(mSendMapstates *)strc, sizeof(*(mSendMapstates *)strc) ) <=0)
+	//			if(user->GetSocket()->Send( (char *)(mMapstates *)strc, sizeof(*(mMapstates *)strc) ) <=0)
 	//				return false;
 	//	
 	//		}
@@ -444,26 +444,26 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 void TClientSocket::Sendname(const char *name, int namelen)
 {
 	const auto header = Header( toUType(Priority::Normal), toUType(SERVER_MSG::ON_NAME));
-	mSendName sendname(header , namelen, name);
-	pushMessage(&sendname);
+	mName sendname(header , namelen, name);
+	//pushMessage(&sendname);
 }
 
 void TClientSocket::Sendmapstate()
 {
 	auto header = Header(toUType( Priority::High), toUType(SERVER_MSG::BC_MAPSTATE));
-	mSendMapstate mapstate(header, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
+	mMapstate mapstate(header, m_me->getUserName().size() , m_me->getUserName().c_str() , m_me->FixedBoard, m_me->FG.Figure, m_me->FG.FgInfo);
 
-	pushMessage(&mapstate);
+	//pushMessage(&mapstate);
 }
 
 void TClientSocket::Sendready(bool ready)
 {
 	const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::PER_READY));
-	mSendReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
-	pushMessage(&sendready);
+	mReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
+	//pushMessage(&sendready);
 }
 
-void TClientSocket::ProcessReady(mOnReady rdy)
+void TClientSocket::ProcessReady(mReady rdy)
 {
 	//const auto name = string(rdy.fromname);
 	//auto user = pDoc->NameToTUser(name);
@@ -473,11 +473,11 @@ void TClientSocket::ProcessReady(mOnReady rdy)
 	//user->SetReady(rdy.ready);
 }
 
-void TClientSocket::ProcessMapsate(mOnMapstate on_map)
+void TClientSocket::ProcessMapsate(mMapstate on_map)
 {
 
 	//static CStringArray AsyncSend;
-	//static mSendMapstates map_state;
+	//static mMapstates map_state;
 	//static int idx=0;
 	//
 	//TUser *user=NULL;
@@ -515,15 +515,15 @@ void TClientSocket::ProcessMapsate(mOnMapstate on_map)
 void TClientSocket::SendDead()
 {
 	const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::BC_DEAD));
-	const mSendName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
-	pushMessage(&sendname);
+	const mName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
+	//pushMessage(&sendname);
 }
 
 void TClientSocket::SendRestart()
 {
 	const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::BC_RESTART));
-	mSendPermit permit(header, -1);
-	pushMessage(&permit);
+	mPermit permit(header, -1);
+	//pushMessage(&permit);
 }
 
 //자기 제외하고 두줄 추가하기
@@ -534,7 +534,7 @@ void TClientSocket::SendLine(int num = 1, bool isSelf = true)
 	{
 		const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::BC_ADDLINE));
 		const auto name = m_me->getUserName();
-		mSendAddline addline(header, name.size(), name.c_str(), num);
-		pushMessage(&addline);
+		mAddline addline(header, name.size(), name.c_str(), num);
+		//pushMessage(&addline);
 	}
 }

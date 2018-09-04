@@ -13,12 +13,12 @@
 #include <memory>
 #include <unordered_set>
 
-#include "../structs.h"
-#include "../TType.h"
-#include "../TAtomic.h"
-#include "../Entity/TObject.h"
-#include "../Entity/TUser.h"
-#include "../TMessenger.h"
+#include "../../structs.h"
+#include "../../TType.h"
+#include "../../TAtomic.h"
+#include "../../TMessenger.h"
+#include "../TObject.h"
+#include "../TUser.h"
 
 class TIRoom : public TObject, public TMessenger
 {

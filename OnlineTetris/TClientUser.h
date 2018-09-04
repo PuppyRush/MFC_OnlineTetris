@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "../Commons/structs.h"
-#include "../Commons/TUser.h"
+#include "../Commons/Entity/TUser.h"
 
 class TClientSocket;
 

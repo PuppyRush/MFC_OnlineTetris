@@ -27,8 +27,8 @@ public:
 	void SendDead();
 	void SendRestart();
 	void SendLine(int , bool);
-	void ProcessReady(mOnReady rdy);
-	void ProcessMapsate(mOnMapstate on_map);
+	void ProcessReady(mReady rdy);
+	void ProcessMapsate(mMapstate on_map);
 
 	inline bool isConnected() { return m_isConnected; }
 

@@ -72,16 +72,16 @@ public:
 	void CreateRoot();
 	string GetServerIP();
 	void AddChat(const char *msg,const int msglen);
-	void SetEnterUsers(mOnNames names);
-	void SetReady(mOnReadies rdy);
+	void SetEnterUsers(mNames names);
+	void SetReady(mRadies rdy);
 	void SetOrder();
 	bool ExitUser(const string name);
 	bool ExistUser(string name);
 	void ProcessEnter(string );
 	void ProcessClose();
-	void Client_ProcessEnd(mOnName on_name);
-	void ProcessDead(mOnName on_name);
-	void Client_ProcessStart(mOnStartsignal on_start);
+	void Client_ProcessEnd(mName on_name);
+	void ProcessDead(mName on_name);
+	void Client_ProcessStart(mStartsignal on_start);
 	void RestartGame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;

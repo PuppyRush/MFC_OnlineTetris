@@ -2,7 +2,7 @@
 
 #include <winsock.h>
 
-#include "../Commons/TSocket.h"
+#include "../Commons/Entity/TSocket.h"
 #include "../Commons/TType.h"
 #include "../Commons/Property.h"
 

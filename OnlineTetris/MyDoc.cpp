@@ -306,7 +306,7 @@ void CMyDoc::AddChat(const char *msg, const int msglen)
 
 //방에 접속하면 서버에서 이름들을 보냄.
 //현재 방에 입장해 있는사람들을 점검하기 위함.
-void CMyDoc::SetEnterUsers(mOnNames names)
+void CMyDoc::SetEnterUsers(mNames names)
 {
 	bool nothing = true;
 
@@ -329,7 +329,7 @@ void CMyDoc::SetEnterUsers(mOnNames names)
 	//	m_view->MessageHandler(FAIL_FINDNAME);
 }
 
-void CMyDoc::SetReady(mOnReadies rdy)
+void CMyDoc::SetReady(mRadies rdy)
 {
 	int rdynum = 0;
 	for(int i = 0; i < rdy.enternum; i++)
@@ -408,7 +408,7 @@ void CMyDoc::ProcessClose()
 }
 
 //서버가 시작신호를 보내면 클라인트에선 시작을 위한 처리를 한다.
-void CMyDoc::Client_ProcessStart(mOnStartsignal on_start)
+void CMyDoc::Client_ProcessStart(mStartsignal on_start)
 {
 	m_ghost = on_start.ghost;
 	m_view->SetMap(on_start.map);
@@ -555,7 +555,7 @@ bool CMyDoc::ExitUser(const string name)
 
 //서버에서 클라이언트의 게임종료상태를 넘겨 받음
 //한명만 남고 모두 끝난다면 전체 클라이언트에게 END_ENDSIGNAL을 보낸다
-void CMyDoc::ProcessDead(mOnName on_name)
+void CMyDoc::ProcessDead(mName on_name)
 {
 	const auto name = string(on_name.name);
 	//auto user = NameToTUser(name);
@@ -598,7 +598,7 @@ void CMyDoc::ProcessDead(mOnName on_name)
 
 //서버에서 클라이언트로 게임종료를 알림
 //on_name승리한 사람 이름이 들어가 있음.
-void CMyDoc::Client_ProcessEnd(mOnName on_name)
+void CMyDoc::Client_ProcessEnd(mName on_name)
 {
 	string str;
 	str.reserve(100);

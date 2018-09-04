@@ -66,7 +66,8 @@ const size_t SocketImpl::_sendTo(const char *msg, const size_t size)
 
 tetris::msgElement SocketImpl::_recvFrom()
 {
-	auto buf = getBuffer();
+	auto buf = new char[PACKET_LEN];
+	memset(buf, 0, PACKET_LEN);
 	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const size_t recvLen = recved <= 0 ? 0 : recved;
 	auto prio = Header::getPriority(buf);

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Uncopyable.h"
+#include "../Uncopyable.h"
 
 class TObject : private Uncopyable
 {

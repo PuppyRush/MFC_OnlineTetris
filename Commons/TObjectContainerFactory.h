@@ -5,10 +5,10 @@
 #include "TType.h"
 #include "Uncopyable.h"
 #include "TObjectContainer.h"
-#include "TUser.h"
-#include "TSocket.h"
-#include "Room/TIGameRoom.h"
-#include "Room/TIWaitingRoom.h"
+#include "Entity/TUser.h"
+#include "Entity/TSocket.h"
+#include "Entity/Room/TIGameRoom.h"
+#include "Entity/Room/TIWaitingRoom.h"
 
 class TObjectContainerFactory : public Uncopyable
 {

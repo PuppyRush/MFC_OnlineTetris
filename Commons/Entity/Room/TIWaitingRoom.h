@@ -10,9 +10,9 @@
 #include <unordered_set>
 #include <memory>
 
-#include "../../Commons/Entity/Room/TIRoom.h"
-#include "../../Commons/Entity/TUser.h"
-#include "../../Commons/TMessenger.h"
+#include "TIRoom.h"
+#include "../TUser.h"
+#include "../../TMessenger.h"
 
 
 class TIWaitingRoom : public TIRoom

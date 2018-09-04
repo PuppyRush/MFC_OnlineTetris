@@ -46,18 +46,14 @@ END_MESSAGE_MAP()
 
 void WaitingRoomDlg::registryMessage()
 {
-	this->addCaller(make_pair(toUType(SERVER_MSG::WAITINGROOM_INFO), std::bind(&WaitingRoomDlg::updateWaitingUsers, this, std::placeholders::_1)));
+	this->addCaller(make_pair(toUType(SERVER_MSG::WAITINGROOM_INFO), std::bind(&WaitingRoomDlg::updateWaitingRoom, this, std::placeholders::_1)));
+	this->addCaller(make_pair(toUType(SERVER_MSG::WAITINGROOM_USER), std::bind(&WaitingRoomDlg::updateWaitingUsers, this, std::placeholders::_1)));
 }
 
 const tetris::t_error WaitingRoomDlg::_validator(const TIRoom &room) const
 {
 
 	return toUType(property_error::eOK);
-}
-
-void WaitingRoomDlg::updateWaitingUsers(const tetris::msgElement &msg)
-{
-
 }
 
 BOOL WaitingRoomDlg::OnInitDialog()
@@ -68,8 +64,8 @@ BOOL WaitingRoomDlg::OnInitDialog()
 	m_roomList.DeleteAllItems();
 
 	m_roomList.InsertColumn(0, _T("방 번호"), NULL, 50);
-	m_roomList.InsertColumn(1, _T("이름"), NULL, 150);
-	m_roomList.InsertColumn(2, _T("참가인원"), NULL, 50);
+	m_roomList.InsertColumn(1, _T("방 이름"), NULL, 150);
+	m_roomList.InsertColumn(2, _T("참가인원(%d/%d)"), NULL, 50);
 	m_roomList.InsertColumn(3, _T("방 생성시간"), NULL, 50);
 
 	return true;
@@ -79,6 +75,16 @@ BOOL WaitingRoomDlg::OnInitDialog()
 void WaitingRoomDlg::getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom)
 {
 
+
+}
+
+void WaitingRoomDlg::updateWaitingRoom(const tetris::msgElement &msg)
+{
+
+}
+
+void WaitingRoomDlg::updateWaitingUsers(const tetris::msgElement &msg)
+{
 
 }
 

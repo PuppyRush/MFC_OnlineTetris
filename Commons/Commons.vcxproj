@@ -167,37 +167,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DefineInfo.h" />
+    <ClInclude Include="Entity\Room\TIGameRoom.h" />
+    <ClInclude Include="Entity\Room\TIRoom.h" />
+    <ClInclude Include="Entity\Room\TIWaitingRoom.h" />
+    <ClInclude Include="Entity\TObject.h" />
+    <ClInclude Include="Entity\TSocket.h" />
+    <ClInclude Include="Entity\TUser.h" />
     <ClInclude Include="ITObjectContainer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MessageHeader.h" />
     <ClInclude Include="Property.h" />
-    <ClInclude Include="Room\TIGameRoom.h" />
-    <ClInclude Include="Room\TIRoom.h" />
-    <ClInclude Include="Room\TIWaitingRoom.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="TAtomic.h" />
+    <ClInclude Include="TFunctional.h" />
     <ClInclude Include="TMessage.h" />
-    <ClInclude Include="TObject.h" />
+    <ClInclude Include="TMessenger.h" />
     <ClInclude Include="TObjectContainer.h" />
     <ClInclude Include="TObjectContainerFactory.h" />
-    <ClInclude Include="TSocket.h" />
     <ClInclude Include="TMessageThread.h" />
-    <ClInclude Include="TSwitchingMessage.h" />
     <ClInclude Include="TType.h" />
-    <ClInclude Include="TUser.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="Uncopyable.h" />
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Room\TIGameRoom.cpp" />
-    <ClCompile Include="Room\TIRoom.cpp" />
-    <ClCompile Include="Room\TIWaitingRoom.cpp" />
+    <ClCompile Include="Entity\Room\TIGameRoom.cpp" />
+    <ClCompile Include="Entity\Room\TIRoom.cpp" />
+    <ClCompile Include="Entity\Room\TIWaitingRoom.cpp" />
+    <ClCompile Include="Entity\TSocket.cpp" />
+    <ClCompile Include="Entity\TUser.cpp" />
     <ClCompile Include="TAtomic.cpp" />
     <ClCompile Include="TMessageThread.cpp" />
-    <ClCompile Include="TSwitchingMessage.cpp" />
-    <ClCompile Include="TUser.cpp" />
-    <ClCompile Include="TSocket.cpp" />
+    <ClCompile Include="TMessenger.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

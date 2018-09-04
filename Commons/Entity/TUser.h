@@ -4,13 +4,13 @@
 #include <string>
 
 
-#include "TType.h"
-#include "TAtomic.h"
-#include "Entity/TSocket.h"
-#include "Entity/TObject.h"
-#include "TMessenger.h"
-#include "structs.h"
-#include "TObjectContainer.h"
+#include "../TType.h"
+#include "../TAtomic.h"
+#include "TSocket.h"
+#include "TObject.h"
+#include "../TMessenger.h"
+#include "../structs.h"
+#include "../TObjectContainer.h"
 
 class TetrisUser : public TObject, public TMessenger
 {

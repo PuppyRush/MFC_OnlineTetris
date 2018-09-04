@@ -1,6 +1,6 @@
 #include "TMessageThread.h"
 #include "TypeTraits.h"
-#include "TSocket.h"
+#include "Entity/TSocket.h"
 #include "TObjectContainerFactory.h"
 
 #include <queue>

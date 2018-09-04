@@ -1572,7 +1572,7 @@ void CMyView::SetMap(int i)
 }
 
 //시작 후 서버가 보낸 다른 유저들의 맵정보를 자신의 것을 제외하고 그려낸다.
-void CMyView::ProcessMapState(mOnMapstate *map)
+void CMyView::ProcessMapState(mMapstate *map)
 {
 	const auto name = string(map->name);
 	if(name.compare(pDoc->m_name)!=0)

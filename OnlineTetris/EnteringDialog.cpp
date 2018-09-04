@@ -95,9 +95,9 @@ void EnteringDialog::OnBnClickedBtnEnter()
 			TObjectContainerFactory::get()->getUserContainer()->add(me->getUnique(), me);
 			
 			const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::CONNECTION_INFO));
-			const mSendName sendname(header, me->getUserName().size(), me->getUserName().c_str());
+			const mName sendname(header, me->getUserName().size(), me->getUserName().c_str());
 
-			socket->pushMessage(&sendname);
+			//socket->pushMessage(&sendname);
 
 			if (WaitingRoomDlg::GetDialog()->DoModal() == IDOK)
 			{

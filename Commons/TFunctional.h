@@ -5,8 +5,8 @@
 #ifndef ONLINETETRIS_TFUNCTIONAL_H
 #define ONLINETETRIS_TFUNCTIONAL_H
 
-#include <TType.h>
-#include <TypeTraits.h>
+#include "TType.h"
+#include "TypeTraits.h"
 
 struct messageComp
 {
