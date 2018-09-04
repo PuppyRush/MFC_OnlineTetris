@@ -8,12 +8,12 @@
 #include <TType.h>
 #include <TypeTraits.h>
 
-struct messageComp
+/*struct messageComp
 {
     bool operator()(tetris::msgElement &lhs, tetris::msgElement &rhs)
     {
         return msgHelper::getPriority(lhs) > msgHelper::getPriority(rhs);
     }
-};
+};*/
 
 #endif //ONLINETETRIS_TFUNCTIONAL_H

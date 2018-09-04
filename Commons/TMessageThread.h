@@ -4,6 +4,7 @@
 #include <queue>
 #include <thread>
 #include <mutex>
+#include <functional>
 
 #include "Uncopyable.h"
 #include "TType.h"
@@ -13,8 +14,8 @@
 #include "Entity/Room/TIWaitingRoom.h"
 #include "TObjectContainer.h"
 #include "TMessenger.h"
+#include "TMessageObject.h"
 
-#include <functional>
 
 class TMessageThread : private Uncopyable
 {
@@ -36,7 +37,7 @@ private:
 	void _recv() ;
 	void _switchingMessage();
 
-	std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, std::greater<tetris::msgElement> > m_messageQ;
+	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject> > m_messageQ;
 
 	bool m_continue;
 	std::shared_ptr<std::thread> m_recvThread;

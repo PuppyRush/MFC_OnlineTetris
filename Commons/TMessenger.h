@@ -8,7 +8,7 @@
 #include "TypeTraits.h"
 #include "TType.h"
 #include "TFunctional.h"
-
+#include "TMessageObject.h"
 
 class TMessenger
 {
@@ -36,21 +36,21 @@ public:
 		return m_sendQ.empty();
 	}*/
 
-	void send(const tetris::msgElement &msg);
+	void send(const TMessageObject msg);
 
 protected:
-	std::unordered_map<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> m_messageCaller;
+	std::unordered_map<tetris::t_msgidx, std::function<void(const TMessageObject&)>> m_messageCaller;
 
 
 	virtual void registryMessage() = 0;
 	bool isRegsiteMessage(const tetris::t_msgidx msgidx);
-	void addCaller(const std::pair<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> key_value);
+	void addCaller(const std::pair<tetris::t_msgidx, std::function<void(const TMessageObject&)>> key_value);
 
 private:
 	/*static std::priority_queue<tetris::msgElement, std::vector<tetris::msgElement>, messageComp> m_sendQ;
 	static std::mutex	m_qMutex;*/
 
-	const void _switchingMessage(const tetris::t_msgidx , const tetris::msgElement &msg);
+	const void _switchingMessage(const tetris::t_msgidx , const TMessageObject& msg);
 
 
 };

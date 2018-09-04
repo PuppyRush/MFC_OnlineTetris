@@ -14,7 +14,8 @@
 #include "Entity/TObject.h"
 #include "DefineInfo.h"
 #include "Logger.h"
-#include "TMessage.h"
+#include "TMessageStruct.h"
+#include "TMessageObject.h"
 #include "TType.h"
 #include "TypeTraits.h"
 #include "TMessenger.h"
@@ -38,8 +39,8 @@ public:
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
 	tetris::t_error accept();
-	void send(const tetris::msgElement msg);
-	const tetris::msgElement recv();
+	void send(const TMessageObject& msg);
+	const TMessageObject recv();
 	tetris::t_error close();
 
 	void setIP(IPString &ip);
@@ -65,7 +66,7 @@ protected:
 	virtual tetris::t_error _connect() = 0;
 	virtual tetris::t_error _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
-	virtual tetris::msgElement _recvFrom() = 0;
+	virtual const TMessageObject _recvFrom() = 0;
 
 	void _acceptSocket();
 

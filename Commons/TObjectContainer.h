@@ -154,9 +154,10 @@ public:
 		return m_ptrMap;
 	}
 
-	inline static std::shared_ptr<TObjectContainer> get()
+	inline static auto get(const tetris::t_dist dist)
 	{
-		static std::shared_ptr<TObjectContainer> container = std::shared_ptr<TObjectContainer>(new TObjectContainer());
+		static std::shared_ptr<TObjectContainer> container =
+				std::shared_ptr<TObjectContainer>(new TObjectContainer(dist));
 		return container;
 	}
 
@@ -187,11 +188,14 @@ public:
 	{	return m_isRefreshing;	}
 
 private:
-	TObjectContainer() {}
+	TObjectContainer(const tetris::t_dist dist)
+	:m_dist(dist)
+	{}
 
 	ContainerType m_ptrMap;
 	std::mutex	m_refreshMutex;
 	bool m_isRefreshing;
+	tetris::t_dist m_dist;
 	std::queue<std::pair<tetris::t_unique, PtrType>> m_addedQ;
 	std::queue<tetris::t_unique> m_removedQ;
 };

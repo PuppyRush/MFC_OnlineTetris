@@ -40,7 +40,7 @@ void TServerSocket::registryMessage()
 
 }
 
-void TServerSocket::recvConnectionInfo(const tetris::msgElement &msg)
+void TServerSocket::recvConnectionInfo(const TMessageObject& msg)
 {
 
 }

@@ -19,7 +19,7 @@
 #include "TServerManager.h"
 #include "TServerUser.h"
 #include "../Room/TWaitingRoom.h"
-#include "../../Commons/TMessage.h"
+#include "../../Commons/TMessageStruct.h"
 #include "TMessageThread.h"
 #include "../../Commons/TObjectContainerFactory.h"
 

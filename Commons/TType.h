@@ -15,13 +15,10 @@ namespace tetris
 	using t_header  = unsigned short;
 	using t_error = unsigned short;
 	using t_property = unsigned short;
-
-	using msgElement = std::tuple<t_priority, const char*, size_t>;
+	using t_dist = unsigned short;
 
 	using t_unique = std::uint_fast16_t ;
 	using t_uniqueAtomic = std::atomic<t_unique>;
-
-
 
 	template <class T>
 	using t_ptr = std::shared_ptr<T>;

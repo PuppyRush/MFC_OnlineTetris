@@ -1,7 +1,7 @@
 #include "TMessenger.h"
 
 #include "TypeTraits.h"
-#include "TMessage.h"
+#include "TMessageStruct.h"
 
 TMessenger::TMessenger()
 {
@@ -18,7 +18,7 @@ TMessenger::~TMessenger()
 
 }
 
-void TMessenger::addCaller(const std::pair<tetris::t_msgidx, std::function<void(const tetris::msgElement&)>> registee)
+void TMessenger::addCaller(const std::pair<tetris::t_msgidx, std::function<void(const TMessageObject&)>> registee)
 {
 	if(registee.second==nullptr)
 		return;
@@ -34,14 +34,14 @@ bool TMessenger::isRegsiteMessage(const tetris::t_msgidx msgidx)
 		return false;
 }
 
-void TMessenger::send(const tetris::msgElement &msg)
+void TMessenger::send(const TMessageObject msg)
 {
-	const tetris::t_msgidx msgidx = Header::getMsgidx(msgHelper::getMessage(msg));
+	const auto msgidx = Header::getMsgidx(msg.getMessage());
 	if (isRegsiteMessage(msgidx))
 		_switchingMessage(msgidx, msg);
 }
 
-const void TMessenger::_switchingMessage(const tetris::t_msgidx msgidx, const tetris::msgElement &msg)
+const void TMessenger::_switchingMessage(const tetris::t_msgidx msgidx, const TMessageObject& msg)
 {
 	m_messageCaller.at(msgidx)(msg);
 }

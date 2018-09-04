@@ -9,6 +9,7 @@
 #include "TSocket.h"
 #include "Room/TIGameRoom.h"
 #include "Room/TIWaitingRoom.h"
+#include "TProperty.h"
 
 class TObjectContainerFactory : public Uncopyable
 {
@@ -25,22 +26,22 @@ public:
 
 	auto getUserContainer()
 	{
-		return Container<TetrisUser>::get();
+		return Container<TetrisUser>::get(toUType(property_distinguish::User));
 	}
 
 	auto getSocketContainer()
 	{
-		return Container<TetrisSocket>::get();
+		return Container<TetrisSocket>::get(toUType(property_distinguish::Socket));
 	}
 
 	auto getGameRoomContainer()
 	{
-		return Container<TIGameRoom>::get();
+		return Container<TIGameRoom>::get(toUType(property_distinguish::GameRoom));
 	}
 
 	auto getWaitingRoomContainer()
 	{
-		return Container<TIWaitingRoom>::get();
+		return Container<TIWaitingRoom>::get(toUType(property_distinguish::WaitingRoom));
 	}
 
 private:

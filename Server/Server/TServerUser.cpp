@@ -8,7 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 
-#include "../../Commons/TMessage.h"
+#include "../../Commons/TMessageStruct.h"
 #include "../../Commons/Entity/TSocket.h"
 #include "TServerUser.h"
 
@@ -41,9 +41,9 @@ void TServerUser::registryMessage()
 }
 
 
-void TServerUser::recvConnectionInfo(const tetris::msgElement &msg)
+void TServerUser::recvConnectionInfo(const TMessageObject& msg)
 {
-	const auto message = toMessage<mName>(msg);
+	const auto message = TMessageObject::toMessage<mName>(msg);
 	setName(message.name);
 }
 
