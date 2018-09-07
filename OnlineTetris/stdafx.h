@@ -61,8 +61,4 @@
 
 #define MAKEINTERSOURCE(i)(LPWSTR)((DWORD)((WORD)(i)))
 
-#include "../Commons/DefineInfo.h"
-#include "../Commons/TMessageStruct.h"
-#include "../Commons/structs.h"
-#include "../Commons/Validator.h"
 #include <afxcontrolbars.h>

@@ -175,12 +175,11 @@
     <ClInclude Include="Entity\TUser.h" />
     <ClInclude Include="ITObjectContainer.h" />
     <ClInclude Include="Logger.h" />
-    <ClInclude Include="MessageHeader.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="TAtomic.h" />
     <ClInclude Include="TFunctional.h" />
-    <ClInclude Include="TMessage.h" />
     <ClInclude Include="TMessageObject.h" />
+    <ClInclude Include="TMessageSender.h" />
     <ClInclude Include="TMessageStruct.h" />
     <ClInclude Include="TMessenger.h" />
     <ClInclude Include="TObjectContainer.h" />
@@ -199,6 +198,7 @@
     <ClCompile Include="Entity\TSocket.cpp" />
     <ClCompile Include="Entity\TUser.cpp" />
     <ClCompile Include="TMessageObject.cpp" />
+    <ClCompile Include="TMessageSender.cpp" />
     <ClCompile Include="TMessageThread.cpp" />
     <ClCompile Include="TMessenger.cpp" />
     <ClCompile Include="Validator.cpp" />

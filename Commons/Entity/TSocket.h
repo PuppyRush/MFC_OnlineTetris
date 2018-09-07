@@ -16,7 +16,6 @@
 #include "../Logger.h"
 #include "../TMessageObject.h"
 #include "../TType.h"
-#include "../TypeTraits.h"
 #include "../TMessenger.h"
 #include "../TFunctional.h"
 #undef min

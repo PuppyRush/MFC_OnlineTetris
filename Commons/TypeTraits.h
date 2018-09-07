@@ -1,5 +1,8 @@
 #pragma once
 
+#include <set>
+#include <numeric>
+
 #include "TType.h"
 #include "DefineInfo.h"
 #include "TMessageStruct.h"
@@ -9,46 +12,6 @@ constexpr const auto toUType(T enuml) noexcept
 {
 	return static_cast<std::underlying_type_t<T>>(enuml);
 }
-
-/*
-
-struct msgHelper
-{
-	enum class eElementvalue : uint8_t
-	{
-		priority = 0,
-		message = 1,
-		size = 2
-	};
-
-	inline static const tetris::msgElement getEmptyMessage()
-	{
-		static tetris::msgElement empty = tetris::msgElement(0, 0, 0);
-		return empty;
-	}
-
-	static constexpr tetris::msgElement getMsgElement(const tetris::t_priority prio, const char* msg, const size_t size)
-	{
-		return std::make_tuple(prio, msg, size);
-	}
-
-	static constexpr const auto getPriority(const tetris::msgElement &msg) noexcept
-	{
-		return std::get<toUType(eElementvalue::priority)>(msg);
-	}
-
-	static constexpr auto getMessage(const tetris::msgElement &msg) noexcept
-	{
-		return std::get<toUType(eElementvalue::message)>(msg);
-	}
-
-	static constexpr const auto getSize(const tetris::msgElement &msg) noexcept
-	{
-		return std::get<toUType(eElementvalue::size)>(msg);
-	}
-	
-};
-*/
 
 constexpr const Priority toPriority(const tetris::t_priority priority) noexcept
 {
@@ -73,3 +36,17 @@ constexpr const tetris::t_priority toPriority(const Priority priority) noexcept
 {
     return toUType(priority);
 }
+
+
+//const std::set<tetris::t_dist> toDistinguish(const tetris::t_dist dist)
+//{
+//	std::set<tetris::t_dist> distset;
+//	constexpr size_t maxi = sizeof(dist) * 8;
+//	for (size_t d = 0u; d < maxi; d++)
+//	{
+//		const auto shifted = 1ull << d;
+//		if (dist & shifted)
+//			distset.insert(shifted);
+//	}
+//	return distset;
+//}

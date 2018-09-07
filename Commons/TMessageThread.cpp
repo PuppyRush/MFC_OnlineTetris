@@ -1,6 +1,7 @@
 #include "TMessageThread.h"
 #include "TypeTraits.h"
 #include "Entity/TSocket.h"
+#include "TMessageSender.h"
 #include "TObjectContainerFactory.h"
 
 #include <queue>
@@ -32,8 +33,8 @@ void TMessageThread::run()
 	const auto sendfn = &TMessageThread::_send;
 	m_sendThread = make_shared<thread>(sendfn, this);
 
-	const auto popfn = &TMessageThread::_switchingMessage;
-	m_popThread = make_shared<thread>(popfn, this);
+	//const auto popfn = &TMessageThread::_switchingMessage;
+	//m_popThread = make_shared<thread>(popfn, this);
 }
 
 void TMessageThread::end()
@@ -43,19 +44,17 @@ void TMessageThread::end()
 
 void TMessageThread::_send()
 {
+	auto sender = TMessageSender::get();
 	while (m_continue)
 	{
-
 		//if(TMessenger::exist())
 		//	continue;
 
-		//const auto msg = TMessenger::pop();
+		const auto msg = sender->pop();
+		const auto sender = msg.getSocket();
 
-		/*for(const auto user : *m_userCon)
-			msgQ.push(user->pop())*/
-
-		/*for (const auto socket : *container)
-			socket->send();*/
+		if (m_socketCon->exist(sender))
+			m_socketCon->at(sender)->send(msg);
 	}
 }
 
@@ -64,14 +63,23 @@ void TMessageThread::_recv()
 	auto container = TObjectContainerFactory::get()->getSocketContainer();
 	while (m_continue)
 	{
-		if (container->isRefreshing())
-			continue;
+		//if (container->isRefreshing())
+		//	continue;
 
 		for (const auto socket : *container)
 		{
 			auto msg = socket->recv();
-			/*if(msgHelper::getSize(msg)>0)
-				m_messageQ.push(msg);*/
+			if (msg.getSize() > 0)
+			{
+				//const auto dist = toDistinguish(msg.getDistinguish());
+				//for (auto d : dist)
+				//{
+				//	
+				//}
+
+				
+
+			}
 		}
 	}
 }

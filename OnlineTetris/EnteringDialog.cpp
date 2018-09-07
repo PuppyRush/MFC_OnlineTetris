@@ -8,7 +8,7 @@
 #include "../Commons/TMessageThread.h"
 #include "../Commons/TObjectContainerFactory.h"
 #include "../Commons/Validator.h"
-
+#include "../Commons/TMessageSender.h" 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -97,7 +97,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 			const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::CONNECTION_INFO));
 			const mName sendname(header, me->getUserName().size(), me->getUserName().c_str());
 
-			//socket->pushMessage(&sendname);
+			TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getUnique(), &sendname));
 
 			if (WaitingRoomDlg::GetDialog()->DoModal() == IDOK)
 			{

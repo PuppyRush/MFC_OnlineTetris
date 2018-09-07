@@ -9,10 +9,10 @@
 #include <thread>
 #include <mutex>
 
-#include "Uncopyable.h"
+#include "ITObjectContainer.h"
 
 template <class T>
-class TObjectContainer : public Uncopyable
+class TObjectContainer : public ITObjectContainer
 {
 public:
 	using PtrType = std::shared_ptr<T>;
@@ -189,13 +189,12 @@ public:
 
 private:
 	TObjectContainer(const tetris::t_dist dist)
-	:m_dist(dist)
+		: ITObjectContainer(m_dist(dist))
 	{}
 
 	ContainerType m_ptrMap;
 	std::mutex	m_refreshMutex;
 	bool m_isRefreshing;
-	tetris::t_dist m_dist;
 	std::queue<std::pair<tetris::t_unique, PtrType>> m_addedQ;
 	std::queue<tetris::t_unique> m_removedQ;
 };

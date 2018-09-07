@@ -70,7 +70,7 @@ const TMessageObject SocketImpl::_recvFrom()
 	memset(buf, 0, PACKET_LEN);
 	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const tetris::t_msgsize recvLen = recved <= 0 ? 0u : recved;
-	auto prio = Header::getPriority(buf);
+	
 
-	return TMessageObject(prio, recvLen, buf);
+	return TMessageObject::toMessage(getUnique(), buf, recvLen);
 }

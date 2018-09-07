@@ -1,8 +1,8 @@
 // MySocket.cpp : 구현 파일입니다.
 //
 
-#include "../Comms/TType.h"
-#include "../Comms/TSocket.h"
+#include "../Commons/TType.h"
+#include "../Commons/TSocket.h"
 
 #include "stdafx.h"
 #include "OnlineTetris.h"

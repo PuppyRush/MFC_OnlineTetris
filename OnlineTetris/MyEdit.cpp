@@ -9,6 +9,9 @@
 #include "MainFrm.h"
 #include "TClientSocket.h"
 
+#include "../Commons/TMessageObject.h"
+#include "../Commons/TMessageSender.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -79,7 +82,8 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, temp);
 
 				mMessage msg(Header( toUType( Priority::Normal), toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
-				//TClientSocket::get()->pushMessage(&msg);
+
+				TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getUnique(), &msg));
 				Sleep(50);
 			}
 		}

@@ -15,6 +15,8 @@ class TObjectContainerFactory : public Uncopyable
 {
 public:
 
+	~TObjectContainerFactory() {}
+
 	template <class T>
 	using Container = TObjectContainer<T>;
 

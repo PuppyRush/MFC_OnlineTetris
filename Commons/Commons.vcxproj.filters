@@ -24,9 +24,6 @@
     <ClInclude Include="structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MessageHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Validator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,9 +55,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Uncopyable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TFunctional.h">
@@ -96,6 +90,9 @@
     <ClInclude Include="TProperty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TMessageSender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Validator.cpp">
@@ -123,6 +120,9 @@
       <Filter>Entity\Room</Filter>
     </ClCompile>
     <ClCompile Include="TMessageObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TMessageSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
