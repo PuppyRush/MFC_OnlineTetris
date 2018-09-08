@@ -12,7 +12,6 @@
 
 #include "TIRoom.h"
 #include "../TUser.h"
-#include "../../TMessenger.h"
 
 
 class TIWaitingRoom : public TIRoom

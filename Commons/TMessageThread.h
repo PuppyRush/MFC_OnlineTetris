@@ -13,7 +13,6 @@
 #include "Entity/Room/TIGameRoom.h"
 #include "Entity/Room/TIWaitingRoom.h"
 #include "TObjectContainer.h"
-#include "TMessenger.h"
 #include "TMessageObject.h"
 
 

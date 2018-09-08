@@ -8,10 +8,9 @@
 
 #include "TMessageStruct.h"
 #include "DefineInfo.h"
-#include "Entity/TObject.h"
 #include "TType.h"
 
-class TMessageObject : public TObject
+class TMessageObject
 {
 public:
 

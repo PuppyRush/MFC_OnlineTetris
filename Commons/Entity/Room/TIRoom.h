@@ -16,11 +16,10 @@
 #include "../../structs.h"
 #include "../../TType.h"
 #include "../../TAtomic.h"
-#include "../../TMessenger.h"
 #include "../TObject.h"
 #include "../TUser.h"
 
-class TIRoom : public TObject, public TMessenger
+class TIRoom : public TObject
 {
 public:
 	virtual ~TIRoom();

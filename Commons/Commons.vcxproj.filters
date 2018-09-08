@@ -60,9 +60,6 @@
     <ClInclude Include="TFunctional.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TMessenger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity\TObject.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -101,9 +98,6 @@
     <ClCompile Include="TMessageThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TMessenger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Entity\TSocket.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
@@ -124,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="TMessageSender.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TObject.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

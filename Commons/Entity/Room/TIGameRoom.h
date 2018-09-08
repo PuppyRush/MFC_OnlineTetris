@@ -13,7 +13,6 @@
 #include "TIRoom.h"
 #include "../../TType.h"
 #include "../../TAtomic.h"
-#include "../../TMessenger.h"
 
 class TIGameRoom : public TIRoom
 {

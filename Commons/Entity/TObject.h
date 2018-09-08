@@ -1,14 +1,21 @@
 #pragma once
 
 #include <memory>
+#include <functional>
+#include <unordered_map>
+#include <queue>
+
 #include "../TAtomic.h"
 #include "../TType.h"
+#include "../TMessageObject.h"
+
 
 class TObject
 {
 public:
-	
 	virtual ~TObject() {}
+
+	void send(const TMessageObject& msg);
 
 	inline const bool operator==(const TObject& object) const noexcept
 	{	return this->getUnique() == object.getUnique();}
@@ -22,6 +29,14 @@ public:
 protected:
 	TObject() {}
 
+	std::unordered_map<tetris::t_msgidx, std::function<void(const TMessageObject&)>> m_messageCaller;
+
+	virtual void registryMessage() = 0;
+	bool isRegsiteMessage(const tetris::t_msgidx msgidx);
+	void addCaller(const std::pair<tetris::t_msgidx, std::function<void(const TMessageObject&)>> key_value);
+
 private:
 	tetris::t_unique m_unique;
+
+	const void _switchingMessage(const tetris::t_msgidx, const TMessageObject& msg);
 };

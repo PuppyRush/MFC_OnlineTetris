@@ -21,10 +21,19 @@ public:
 
 	inline const TMessageObject pop()
 	{
-		std::lock_guard<std::mutex> lock(m_qMutex);
-		const auto msg = m_sendQ.top();
-		m_sendQ.pop();
-		return msg;
+		
+		while (m_isContinue)
+		{
+			if (m_sendQ.empty())
+				continue;
+
+			std::lock_guard<std::mutex> lock(m_qMutex);
+
+			const auto msg = m_sendQ.top();
+			m_sendQ.pop();
+			return msg;
+		}
+		
 	}
 
 	inline const bool exist()
@@ -45,5 +54,6 @@ protected:
 private:
 	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject>> m_sendQ;
 	std::mutex	m_qMutex;
+	bool m_isContinue;
 };
 

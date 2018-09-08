@@ -9,8 +9,7 @@
 using namespace std;
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
-        :TMessenger(),
-         m_closeSocket(true),
+         :m_closeSocket(true),
          m_domain(domain),
          m_type(type),
          m_protocol(protocol),
@@ -22,8 +21,7 @@ TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol,
 }
 
 TetrisSocket::TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket)
-        :TMessenger(),
-         m_closeSocket(true),
+         :m_closeSocket(true),
          m_domain(domain),
          m_type(type),
          m_protocol(protocol),

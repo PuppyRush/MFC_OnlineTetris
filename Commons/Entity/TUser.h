@@ -6,10 +6,9 @@
 
 #include "TSocket.h"
 #include "TObject.h"
-#include "../TMessenger.h"
 #include "../structs.h"
 
-class TetrisUser : public TObject, public TMessenger
+class TetrisUser : public TObject
 {
 public:
 	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];

@@ -16,12 +16,12 @@
 #include "../Logger.h"
 #include "../TMessageObject.h"
 #include "../TType.h"
-#include "../TMessenger.h"
 #include "../TFunctional.h"
+
 #undef min
 #undef max
 
-class TetrisSocket : public TMessenger
+class TetrisSocket
 {
 public:
 

@@ -181,7 +181,6 @@
     <ClInclude Include="TMessageObject.h" />
     <ClInclude Include="TMessageSender.h" />
     <ClInclude Include="TMessageStruct.h" />
-    <ClInclude Include="TMessenger.h" />
     <ClInclude Include="TObjectContainer.h" />
     <ClInclude Include="TObjectContainerFactory.h" />
     <ClInclude Include="TMessageThread.h" />
@@ -200,7 +199,7 @@
     <ClCompile Include="TMessageObject.cpp" />
     <ClCompile Include="TMessageSender.cpp" />
     <ClCompile Include="TMessageThread.cpp" />
-    <ClCompile Include="TMessenger.cpp" />
+    <ClCompile Include="TObject.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

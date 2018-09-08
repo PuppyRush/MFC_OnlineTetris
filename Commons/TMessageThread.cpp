@@ -61,6 +61,7 @@ void TMessageThread::_send()
 void TMessageThread::_recv()
 {
 	auto container = TObjectContainerFactory::get()->getSocketContainer();
+	auto sender = TMessageSender::get();
 	while (m_continue)
 	{
 		//if (container->isRefreshing())
@@ -71,14 +72,17 @@ void TMessageThread::_recv()
 			auto msg = socket->recv();
 			if (msg.getSize() > 0)
 			{
-				//const auto dist = toDistinguish(msg.getDistinguish());
-				//for (auto d : dist)
-				//{
-				//	
-				//}
+				for (const auto obj : *m_userCon)
+					obj->send(msg);
 
-				
+				for (const auto obj : *m_socketCon)
+					obj->send(msg);
 
+				for (const auto obj : *m_gameroomCon)
+					obj->send(msg);
+
+				for (const auto obj : *m_waitingroomCon)
+					obj->send(msg); 
 			}
 		}
 	}
@@ -88,27 +92,8 @@ void TMessageThread::_switchingMessage()
 {
 	while (m_continue)
 	{
-       /* m_userCon->refresh();
-		m_gameroomCon->refresh();
-		m_waitingroomCon->refresh();
-		m_socketCon->refresh();
+       
 
-		if (m_messageQ.empty())
-			continue;
-
-		const auto msg = m_messageQ.top();
-		m_messageQ.pop();
-
-        for (const auto obj : *userCon)
-			obj->send(msg);
-
-        for (const auto obj : *socketCon)
-			obj->send(msg);
-
-		for (const auto obj : *gameroomCon)
-			obj->send(msg);
-
-		for (const auto obj : *waitroomCon)
-			obj->send(msg);*/
+        
 	}
 }

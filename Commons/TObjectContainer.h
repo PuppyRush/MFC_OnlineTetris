@@ -33,7 +33,6 @@ public:
 		{
 		}
 
-
 		T* operator*() { return ptrValue; }
 		T* operator->() { return ptrValue;}
 		bool operator!=(const ContainerIterator &other)
@@ -189,7 +188,7 @@ public:
 
 private:
 	TObjectContainer(const tetris::t_dist dist)
-		: ITObjectContainer(m_dist(dist))
+		: ITObjectContainer(dist)
 	{}
 
 	ContainerType m_ptrMap;
