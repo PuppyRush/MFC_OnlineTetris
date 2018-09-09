@@ -71,6 +71,5 @@ const TMessageObject SocketImpl::_recvFrom()
 	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const tetris::t_msgsize recvLen = recved <= 0 ? 0u : recved;
 	
-
 	return TMessageObject::toMessage(getUnique(), buf, recvLen);
 }

@@ -6,11 +6,13 @@
 
 #include "TSocket.h"
 #include "TObject.h"
+#include "../TProperty.h"
 #include "../structs.h"
 
 class TetrisUser : public TObject
 {
 public:
+
 	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];
 	int StateBoard[25][10];
 	FIGURE FG;

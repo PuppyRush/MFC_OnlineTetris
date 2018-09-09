@@ -43,9 +43,9 @@ private:
 	std::shared_ptr<std::thread> m_sendThread;
 	std::shared_ptr<std::thread> m_popThread;
 
-	TObjectContainer<TetrisUser> *m_userCon;
-	TObjectContainer<TetrisSocket> *m_socketCon;
-	TObjectContainer<TIGameRoom> *m_gameroomCon;
-	TObjectContainer<TIWaitingRoom> *m_waitingroomCon;
+	std::shared_ptr<TObjectContainer<TetrisUser>> m_userCon;
+	std::shared_ptr<TObjectContainer<TetrisSocket>> m_socketCon;
+	std::shared_ptr<TObjectContainer<TIGameRoom>> m_gameroomCon;
+	std::shared_ptr<TObjectContainer<TIWaitingRoom>> m_waitingroomCon;
 
 };

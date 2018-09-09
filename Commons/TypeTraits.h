@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include "TType.h"
+#include "TProperty.h"
 #include "DefineInfo.h"
 #include "TMessageStruct.h"
 
@@ -37,6 +38,36 @@ constexpr const tetris::t_priority toPriority(const Priority priority) noexcept
     return toUType(priority);
 }
 
+template <class T>
+struct EnumIterator
+{
+	T it;
+
+	EnumIterator()
+		:it(T::Begin)
+	{}
+
+	inline const T begin() noexcept
+	{
+		return  static_cast<T>((toUType(it) << 1));
+	}
+
+	inline const T end() const noexcept
+	{
+		return T::End;
+	}
+
+	EnumIterator operator++()
+	{
+		it = (T)(toUType(it) << 1);
+		return *this;
+	}
+	
+	bool operator!=(const EnumIterator *other)
+	{
+		return toUType(it) != toUType(other->it);
+	}
+};
 
 //const std::set<tetris::t_dist> toDistinguish(const tetris::t_dist dist)
 //{

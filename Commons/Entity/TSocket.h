@@ -21,7 +21,7 @@
 #undef min
 #undef max
 
-class TetrisSocket
+class TetrisSocket : public TObject
 {
 public:
 
@@ -34,6 +34,8 @@ public:
 		return this->m_socket != socket.m_socket;
 	}
 
+	inline const tetris::t_socket getUnique() { return m_socket; }
+
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
 	tetris::t_error accept();
@@ -43,7 +45,7 @@ public:
 
 	void setIP(IPString &ip);
 	void setPort(tetris::t_port port);
-	inline const tetris::t_socket getUnique() { return m_socket; }
+	
 
 protected:
 	const int m_domain;

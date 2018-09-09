@@ -14,10 +14,10 @@ TMessageThread::TMessageThread()
 	m_sendThread(nullptr)
 {
 	auto factory = TObjectContainerFactory::get();
-	m_userCon = factory->getUserContainer().get();
-	m_socketCon = factory->getSocketContainer().get();
-	m_gameroomCon = factory->getGameRoomContainer().get();
-	m_waitingroomCon = factory->getWaitingRoomContainer().get();
+	m_userCon = factory->getContainer<TetrisUser>(property_distinguish::User);
+	m_socketCon = factory->getContainer<TetrisSocket>(property_distinguish::Socket);
+	m_gameroomCon = factory->getContainer<TIGameRoom>(property_distinguish::GameRoom);
+	m_waitingroomCon = factory->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
 }
 
 TMessageThread::~TMessageThread()
@@ -33,8 +33,6 @@ void TMessageThread::run()
 	const auto sendfn = &TMessageThread::_send;
 	m_sendThread = make_shared<thread>(sendfn, this);
 
-	//const auto popfn = &TMessageThread::_switchingMessage;
-	//m_popThread = make_shared<thread>(popfn, this);
 }
 
 void TMessageThread::end()
@@ -47,35 +45,28 @@ void TMessageThread::_send()
 	auto sender = TMessageSender::get();
 	while (m_continue)
 	{
-		//if(TMessenger::exist())
-		//	continue;
+		if (sender->exist())
+		{
+			const auto msg = sender->pop();
+			const auto sender = msg.getSocket();
 
-		const auto msg = sender->pop();
-		const auto sender = msg.getSocket();
-
-		if (m_socketCon->exist(sender))
-			m_socketCon->at(sender)->send(msg);
+			if (m_socketCon->exist(sender))
+				m_socketCon->at(sender)->send(msg);
+		}
 	}
 }
 
 void TMessageThread::_recv()
 {
-	auto container = TObjectContainerFactory::get()->getSocketContainer();
 	auto sender = TMessageSender::get();
 	while (m_continue)
 	{
-		//if (container->isRefreshing())
-		//	continue;
-
-		for (const auto socket : *container)
+		for (const auto socket : *m_socketCon)
 		{
 			auto msg = socket->recv();
 			if (msg.getSize() > 0)
 			{
 				for (const auto obj : *m_userCon)
-					obj->send(msg);
-
-				for (const auto obj : *m_socketCon)
 					obj->send(msg);
 
 				for (const auto obj : *m_gameroomCon)
@@ -85,15 +76,5 @@ void TMessageThread::_recv()
 					obj->send(msg); 
 			}
 		}
-	}
-}
-
-void TMessageThread::_switchingMessage()
-{
-	while (m_continue)
-	{
-       
-
-        
 	}
 }

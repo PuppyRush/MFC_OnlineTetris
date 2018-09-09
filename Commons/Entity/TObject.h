@@ -26,6 +26,7 @@ public:
 	inline const tetris::t_unique getUnique() const noexcept
 	{ return m_unique;	}
 
+
 protected:
 	TObject() {}
 

@@ -91,8 +91,8 @@ void EnteringDialog::OnBnClickedBtnEnter()
 
 			const auto me = TClientUser::get();
 
-			TObjectContainerFactory::get()->getSocketContainer()->add(socket->getUnique(), socket);
-			TObjectContainerFactory::get()->getUserContainer()->add(me->getUnique(), me);
+			TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(socket);
+			TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(me);
 			
 			const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::CONNECTION_INFO));
 			const mName sendname(header, me->getUserName().size(), me->getUserName().c_str());

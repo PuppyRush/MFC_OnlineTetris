@@ -69,7 +69,7 @@ const vector<userInfo> TIRoom::getUserInfo() const
 {
 	vector<UserInfo> userinfoAry;
 	userinfoAry.reserve(m_userSet.size());
-	const auto userCon = TObjectContainerFactory::get()->getUserContainer();
+	auto userCon = TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User);
 
 	for (const auto unique : m_userSet)
 	{

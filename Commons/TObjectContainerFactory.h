@@ -1,10 +1,13 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
+#include "TypeTraits.h"
 #include "TType.h"
 #include "Uncopyable.h"
 #include "TObjectContainer.h"
+#include "ITObjectContainer.h"
 #include "TProperty.h"
 #include "Entity/TUser.h"
 #include "Entity/TSocket.h"
@@ -26,26 +29,45 @@ public:
 		return factory;
 	}
 
-	auto getUserContainer()
+	template <class T>
+	auto getContainer(const property_distinguish dist)
 	{
-		return Container<TetrisUser>::get(toUType(property_distinguish::User));
-	}
-
-	auto getSocketContainer()
-	{
-		return Container<TetrisSocket>::get(toUType(property_distinguish::Socket));
-	}
-
-	auto getGameRoomContainer()
-	{
-		return Container<TIGameRoom>::get(toUType(property_distinguish::GameRoom));
-	}
-
-	auto getWaitingRoomContainer()
-	{
-		return Container<TIWaitingRoom>::get(toUType(property_distinguish::WaitingRoom));
+		const auto _dist = toUType(dist);
+		if (m_objMap.count(_dist))
+			return std::dynamic_pointer_cast< Container<T>>(m_objMap.at(_dist));
+		else
+		{
+			assert("there is no container");
+			return  std::dynamic_pointer_cast<Container<T>>(std::shared_ptr<ITObjectContainer>(nullptr));
+		}
 	}
 
 private:
-	TObjectContainerFactory() {}
+	TObjectContainerFactory() 
+	{
+		auto it = EnumIterator<property_distinguish>();
+		for (auto dist = it.begin() ; dist != it.end() ; ++it)
+		{
+			switch (dist)
+			{
+			case property_distinguish::GameRoom:
+				m_objMap.insert(make_pair( toUType(dist), std::dynamic_pointer_cast<ITObjectContainer>(Container<TIGameRoom>::get(dist))));
+				break;
+			case property_distinguish::WaitingRoom:
+				m_objMap.insert(make_pair(toUType(dist), std::dynamic_pointer_cast<ITObjectContainer>(Container<TIWaitingRoom>::get(dist))));
+				break;
+			case property_distinguish::User:
+				m_objMap.insert(make_pair(toUType(dist), std::dynamic_pointer_cast<ITObjectContainer>(Container<TetrisUser>::get(dist))));
+				break;
+			case property_distinguish::Socket:
+				m_objMap.insert(make_pair(toUType(dist), std::dynamic_pointer_cast<ITObjectContainer>(Container<TetrisSocket>::get(dist))));
+				break;
+			default:
+				assert("make container of registed enum");
+			}
+		}
+	}
+
+
+	std::unordered_map<tetris::t_dist, std::shared_ptr<ITObjectContainer>> m_objMap;
 };
