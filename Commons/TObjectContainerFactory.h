@@ -46,8 +46,9 @@ private:
 	TObjectContainerFactory() 
 	{
 		auto it = EnumIterator<property_distinguish>();
-		for (auto dist = it.begin() ; dist != it.end() ; ++it)
+		for (it.begin() ; it.end() ; ++it)
 		{
+			auto dist = it.it;
 			switch (dist)
 			{
 			case property_distinguish::GameRoom:

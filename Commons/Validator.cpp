@@ -13,7 +13,7 @@ const bool idCheck(const std::string &id, const size_t min, const size_t max)
 {
 	std::string reg;
 	reg.reserve(50);
-	reg.append("[가-핳|\\w]{");
+	reg.append("[��-�R|\\w]{");
 	reg.append(std::to_string(min));
 	reg.append(",");
 	reg.append(std::to_string(max));

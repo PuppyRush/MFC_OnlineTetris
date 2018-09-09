@@ -49,12 +49,13 @@ struct EnumIterator
 
 	inline const T begin() noexcept
 	{
-		return  static_cast<T>((toUType(it) << 1));
+		it = static_cast<T>( toUType(it) << 1);
+		return it;
 	}
 
-	inline const T end() const noexcept
+	inline const bool end() const noexcept
 	{
-		return T::End;
+		return toUType(it) != toUType(T::End);
 	}
 
 	EnumIterator operator++()
