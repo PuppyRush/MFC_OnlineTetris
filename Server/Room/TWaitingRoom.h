@@ -12,7 +12,6 @@
 
 #include "../../Commons/Entity/Room/TIWaitingRoom.h"
 #include "../../Commons/Entity/TUser.h"
-#include "../../Commons/TMessenger.h"
 
 
 class TWaitingRoom : public TIWaitingRoom
@@ -29,13 +28,11 @@ public:
 
 	inline static std::shared_ptr<TWaitingRoom> getWaitingRoom()
 	{
-		static auto waitingRoom = std::shared_ptr<TWaitingRoom>();
+		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom());
 		return waitingRoom;
 	}
 
 	virtual const tetris::t_error _validator(const TIRoom &room) const override;
-
-
 
 protected:
 

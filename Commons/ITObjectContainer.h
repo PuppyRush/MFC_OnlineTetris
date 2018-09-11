@@ -10,7 +10,7 @@ class ITObjectContainer : public Uncopyable
 {
 public:
 
-	inline const property_distinguish const getDistinguish()
+	inline const property_distinguish getDistinguish() const
 	{
 		return m_dist;
 	}
@@ -26,6 +26,7 @@ protected:
 	ITObjectContainer(const property_distinguish dist)
 		:m_dist(dist) 
 	{}
+
 
 	bool add(const PtrType newObj)
 	{
@@ -77,6 +78,18 @@ protected:
 			return false;
 	}
 
+	const bool isRefreshing() const
+	{	return m_isRefreshing;	}
+
+	const ContainerType  getMap() const noexcept
+	{
+		return m_ptrMap;
+	}
+
+protected:
+	std::mutex	m_refreshMutex;
+	bool m_isRefreshing;
+
 	std::queue<PtrType> m_addedQ;
 	std::queue<tetris::t_unique> m_removedQ;
 	ContainerType m_ptrMap;
@@ -84,5 +97,35 @@ protected:
 private:
 	property_distinguish m_dist;
 
+};
+
+template <class T>
+class ContainerIterator
+{
+public:
+	T* ptrValue;
+	size_t position;
+
+	ContainerIterator()
+			:ptrValue(nullptr), position(0)
+	{}
+
+	explicit ContainerIterator(T* value, const size_t pos) noexcept
+			:ptrValue(value),position(pos)
+	{
+	}
+
+	T* operator*() { return ptrValue; }
+	T* operator->() { return ptrValue;}
+	bool operator!=(const ContainerIterator &other)
+	{
+		if(ptrValue==nullptr || other.ptrValue == nullptr)
+			return false;
+		else if(position==0 || other.position==0 || position > other.position)
+			return false;
+		else
+			return !(*ptrValue != *(other.ptrValue));
+	}
+	ContainerIterator operator++() { ++position; return *this; }
 
 };

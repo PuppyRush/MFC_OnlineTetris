@@ -10,6 +10,7 @@
 #include <mutex>
 
 #include "ITObjectContainer.h"
+#include "Entity/TSocket.h"
 
 template <class T>
 class TObjectContainer : public ITObjectContainer
@@ -17,36 +18,6 @@ class TObjectContainer : public ITObjectContainer
 public:
 	
 	using PtrType = std::shared_ptr<T>;
-
-	class ContainerIterator
-	{
-	public:
-		T* ptrValue;
-		size_t position;
-
-		ContainerIterator()
-			:ptrValue(nullptr), position(0)
-		{}
-
-		explicit ContainerIterator(T* value, const size_t pos) noexcept
-				:ptrValue(value),position(pos)
-		{
-		}
-
-		T* operator*() { return ptrValue; }
-		T* operator->() { return ptrValue;}
-		bool operator!=(const ContainerIterator &other)
-		{
-			if(ptrValue==nullptr || other.ptrValue == nullptr)
-				return false;
-			else if(position==0 || other.position==0 || position > other.position)
-				return false;
-			else
-				return !(*ptrValue != *(other.ptrValue));
-		}
-		ContainerIterator operator++() { ++position; return *this; }
-
-	};
 
 	~TObjectContainer() {}
 
@@ -57,12 +28,12 @@ public:
 
 	void addAll(const std::vector<PtrType> &objAry)
 	{
-		return ITObjectContainer::addAll(newObj);
+		return ITObjectContainer::addAll(objAry);
 	}
 
 	bool remove(PtrType removedObj)
 	{
-		return ITObjectContainer::remove(newObj);
+		return ITObjectContainer::remove(removedObj);
 	}
 
 	PtrType at(const tetris::t_unique unique)
@@ -70,15 +41,14 @@ public:
 		return std::static_pointer_cast<T>(ITObjectContainer::at(unique));
 	}
 
-	//void change(const tetris::t_unique unique, const std::shared_ptr<T> &newObj)
-	//{
-	//	if (remove(unique))
-	//	{
-	//		add(unique, newObj);
-	//		refresh();
-	//	}
-	//
-	//}
+	void change(const PtrType newObj)
+	{
+		if (remove(newObj->getUnique()))
+		{
+			add(newObj);
+			refresh();
+		}
+	}
 
 	bool exist(const tetris::t_unique unique) const
 	{
@@ -91,43 +61,38 @@ public:
 		m_ptrMap.clear();
 	}
 
-	ContainerIterator begin() const
+	ContainerIterator<T> begin() const
 	{
 
 		if (m_ptrMap.empty())
-			return ContainerIterator(0, 0);
+			return ContainerIterator<T>(0, 0);
 		else
 		{
 			T* begin = dynamic_cast<T*>(m_ptrMap.begin()->second.get());
-			return ContainerIterator(begin, m_ptrMap.size());
+			return ContainerIterator<T>(begin, m_ptrMap.size());
 		}
 	}
 
-	ContainerIterator end() const
+	ContainerIterator<T> end() const
 	{
 		if(m_ptrMap.empty())
-			return ContainerIterator(0, 0);
+			return ContainerIterator<T>(0, 0);
 		else
 		{
 			T* end = dynamic_cast<T*>((--m_ptrMap.end())->second.get());
-			return ContainerIterator(end, m_ptrMap.size());
+			return ContainerIterator<T>(end, m_ptrMap.size());
 		}
 	}
 
-	const ContainerIterator cbegin() const noexcept
+	const ContainerIterator<T> cbegin() const noexcept
 	{
 		T* begin = m_ptrMap.begin()->second.get();
-		return ContainerIterator(begin, m_ptrMap.size());
+		return ContainerIterator<T>(begin, m_ptrMap.size());
 	}
 
-	const ContainerIterator cend() const noexcept
+	const ContainerIterator<T> cend() const noexcept
 	{
-		return ContainerIterator(0, m_ptrMap.size());
-	}
-
-	ContainerType getMap()
-	{
-		return m_ptrMap;
+		return ContainerIterator<T>(0, m_ptrMap.size());
 	}
 
 	inline static auto get(const property_distinguish dist)
@@ -160,18 +125,159 @@ public:
 		m_isRefreshing = false;
 	}
 
-	const bool isRefreshing() const
-	{	return m_isRefreshing;	}
+
 
 private:
 	TObjectContainer(const property_distinguish dist)
 		: ITObjectContainer(dist)
 	{}
 
-	
-	std::mutex	m_refreshMutex;
-	bool m_isRefreshing;
-	
-	
 };
 
+
+template <>
+class TObjectContainer<TetrisSocket> : public ITObjectContainer
+{
+public:
+
+    using T = TetrisSocket;
+	using PtrType = std::shared_ptr<T>;
+
+	~TObjectContainer() {}
+
+	bool add(const PtrType newObj)
+	{
+		if (m_ptrMap.count(newObj->getSocket()) == 0)
+		{
+			m_addedQ.push(newObj);
+			refresh();
+			return true;
+		}
+		else
+			return false;
+	}
+
+	void addAll(const std::vector<PtrType> &objAry)
+	{
+		for (const auto obj : objAry)
+		{
+			if (m_ptrMap.count(obj->getSocket()) == 0)
+				m_addedQ.push(obj);
+		}
+		refresh();
+	}
+
+	bool remove(PtrType removedObj)
+	{
+		if (m_ptrMap.count(removedObj->getSocket()) > 0)
+		{
+			m_removedQ.push(removedObj->getSocket());
+			refresh();
+			return true;
+		}
+	}
+
+	PtrType at(const tetris::t_unique unique)
+	{
+		if (exist(unique))
+			return std::dynamic_pointer_cast<T>(m_ptrMap.at(unique));
+		else
+			return nullptr;
+	}
+
+	void change(const PtrType newObj)
+	{
+		if (remove(newObj))
+		{
+			add(newObj);
+			refresh();
+		}
+	}
+
+	bool exist(const tetris::t_unique unique) const
+	{
+		if (m_ptrMap.count(unique))
+			return true;
+		else
+			return false;
+	}
+
+	void clear() noexcept
+	{
+		refresh();
+		m_ptrMap.clear();
+	}
+
+	ContainerIterator<T> begin() const
+	{
+
+		if (m_ptrMap.empty())
+			return ContainerIterator<T>(0, 0);
+		else
+		{
+			T* begin = dynamic_cast<T*>(m_ptrMap.begin()->second.get());
+			return ContainerIterator<T>(begin, m_ptrMap.size());
+		}
+	}
+
+	ContainerIterator<T> end() const
+	{
+		if(m_ptrMap.empty())
+			return ContainerIterator<T>(0, 0);
+		else
+		{
+			T* end = dynamic_cast<T*>((--m_ptrMap.end())->second.get());
+			return ContainerIterator<T>(end, m_ptrMap.size());
+		}
+	}
+
+	/*const ContainerIterator<T> cbegin() const noexcept
+	{
+		T* begin = m_ptrMap.begin()->second.get();
+		return ContainerIterator<T>(begin, m_ptrMap.size());
+	}
+
+	const ContainerIterator<T> cend() const noexcept
+	{
+		return ContainerIterator<T>(0, m_ptrMap.size());
+	}
+*/
+	inline static auto get(const property_distinguish dist)
+	{
+		static std::shared_ptr<TObjectContainer<T>> container =
+				std::shared_ptr<TObjectContainer<T>>(new TObjectContainer<T>(dist));
+		return container;
+	}
+
+	virtual void refresh() override
+	{
+		std::lock_guard<std::mutex> lock(m_refreshMutex);
+
+		m_isRefreshing = true;
+
+		while (!m_addedQ.empty())
+		{
+			auto obj = m_addedQ.front();
+			m_addedQ.pop();
+			auto socket = std::dynamic_pointer_cast<T>(obj);
+			m_ptrMap.insert(make_pair(socket->getSocket(),obj));
+		}
+
+		while (!m_removedQ.empty())
+		{
+			tetris::t_unique unique = m_removedQ.front();
+			m_removedQ.pop();
+			m_ptrMap.erase(unique);
+		}
+
+		m_isRefreshing = false;
+	}
+
+
+
+private:
+	TObjectContainer(const property_distinguish dist)
+			: ITObjectContainer(dist)
+	{}
+
+};

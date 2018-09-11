@@ -47,16 +47,5 @@ void TServerSocket::recvConnectionInfo(const TMessageObject& msg)
 
 void TServerSocket::sendConnectionInfo()
 {
-	const auto userinfo = TWaitingRoom::getWaitingRoom()->getUserInfo();
-	const size_t size = userinfo.size();
-	UserInfo* userinfoAry = new UserInfo[size];
 
-	for (int i = 0; i < size; i++)
-		userinfoAry[i] = UserInfo(userinfo.at(i).userUnique, userinfo.at(i).name);
-
-	const auto header = Header( toUType(Priority::High), toUType(CLIENT_MSG::CONNECTION_INFO));
-	mConnectionInfo msg(header, this->getUnique(), userinfoAry, size);
-	//pushMessage(&msg);
-
-	delete[] userinfoAry;
 }

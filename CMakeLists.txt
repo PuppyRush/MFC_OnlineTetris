@@ -28,7 +28,7 @@ add_executable(OnlineTetris
         Commons/DefineInfo.h
         Commons/ITObjectContainer.h
         Commons/Logger.h
-        Commons/Property.h
+        Commons/TProperty.h
         Commons/structs.h
         Commons/TAtomic.h
         Commons/TMessageStruct.h
@@ -36,14 +36,16 @@ add_executable(OnlineTetris
         Commons/TObjectContainerFactory.h
         Commons/TMessageThread.cpp
         Commons/TMessageThread.h
-        Commons/TMessenger.cpp
-        Commons/TMessenger.h
+        Commons/TMessageSender.h
+        Commons/TMessageSender.cpp
         Commons/TType.h
         Commons/TypeTraits.h
         Commons/Uncopyable.h
         Commons/Validator.cpp
         Commons/Validator.h
         Commons/TFunctional.h
+        Commons/TMessageObject.cpp
+        Commons/TMessageObject.h
         Server/Messenger/Messenger.h
         Server/Messenger/TUserMessenger.cpp
         Server/Messenger/TUserMessenger.h
@@ -60,7 +62,7 @@ add_executable(OnlineTetris
         Server/Server/TSocketImpl.cpp
         Server/Server/TSocketImpl.h
         Server/main.cpp
-        ReadMe.txt Commons/Entity/TObject.cpp Commons/TMessageObject.cpp Commons/TMessageObject.h)
+        )
 
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)

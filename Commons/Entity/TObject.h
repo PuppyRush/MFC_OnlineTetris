@@ -28,7 +28,7 @@ public:
 
 
 protected:
-	TObject() {}
+	TObject();
 
 	std::unordered_map<tetris::t_msgidx, std::function<void(const TMessageObject&)>> m_messageCaller;
 

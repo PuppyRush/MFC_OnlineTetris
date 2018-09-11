@@ -34,16 +34,6 @@ TetrisSocket::~TetrisSocket()
 
 }
 
-void TetrisSocket::setIP(IPString &ip)
-{
-    m_ip = ip;
-}
-
-void TetrisSocket::setPort(tetris::t_port port)
-{
-    m_port = port;
-}
-
 tetris::t_socket TetrisSocket::popSocket()
 {
     while (true)
@@ -106,7 +96,7 @@ void TetrisSocket::_acceptSocket()
 {
     while (m_closeSocket)
     {
-        volatile const int socket = _accept();
+        tetris::t_socket socket = _accept();
         if (socket == -1)
         {
             ;//writeLog("error recvfrom");

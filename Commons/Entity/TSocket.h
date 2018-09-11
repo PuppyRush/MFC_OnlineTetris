@@ -34,7 +34,9 @@ public:
 		return this->m_socket != socket.m_socket;
 	}
 
-	inline const tetris::t_socket getUnique() { return m_socket; }
+	inline const tetris::t_socket getSocket()noexcept { return m_socket; }
+	inline void setIP(const IPString &ip)	 noexcept {m_ip = ip;}
+	inline void setPort(tetris::t_port port) noexcept {m_port = port;}
 
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
@@ -42,10 +44,6 @@ public:
 	void send(const TMessageObject& msg);
 	const TMessageObject recv();
 	tetris::t_error close();
-
-	void setIP(IPString &ip);
-	void setPort(tetris::t_port port);
-	
 
 protected:
 	const int m_domain;
@@ -60,7 +58,7 @@ protected:
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 	explicit TetrisSocket(const int domain, const int type, const int protocol, tetris::t_socket socket);
 
-	virtual volatile tetris::t_error _accept() = 0;
+	virtual volatile tetris::t_socket _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
 	virtual tetris::t_error _close(const unsigned _socket) = 0;
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
