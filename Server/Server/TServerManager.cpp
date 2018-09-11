@@ -18,9 +18,11 @@
 
 #include "TServerManager.h"
 #include "TServerUser.h"
-#include "../Room/TWaitingRoom.h"
-#include "../../Commons/TMessageStruct.h"
 #include "TMessageThread.h"
+#include "../Room/TWaitingRoom.h"
+#include "../../Commons/TMessageSender.h"
+#include "../../Commons/Entity/TSocket.h"
+#include "../../Commons/TMessageStruct.h"
 #include "../../Commons/TObjectContainerFactory.h"
 
 #ifdef _DEBUG
@@ -78,19 +80,41 @@ void TServerManager::run()
 void TServerManager::makeWaitingRoom()
 {
 	auto waitingRoom = TWaitingRoom::getWaitingRoom();
-	TObjectContainerFactory::get()->getWaitingRoomContainer()->add(waitingRoom->getUnique(), waitingRoom);
+	TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->add(waitingRoom);
 }
 
 void TServerManager::HelloUser(const tetris::t_socket socketUnique)
 {
 	auto newsocket = TServerSocket::makeShared(socketUnique);
 	auto newUser = TServerUser::makeShared(newsocket);
+    auto waitingRoom = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->begin();
 
-	TObjectContainerFactory::get()->getWaitingRoomContainer()->begin()->add(newUser->getUnique());
-	TObjectContainerFactory::get()->getUserContainer()->add(newUser->getUnique(), newUser);
-	TObjectContainerFactory::get()->getSocketContainer()->add(socketUnique, newsocket);
+	waitingRoom->add(newUser->getUnique());
+	TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(newUser);
+	TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(newsocket);
+
+    const auto header = Header( toUType(Priority::High), toUType(SERVER_MSG::CONNECTION_INFO));
+    mConnectionInfo msg(header, newUser->getUnique());
+
+    TMessageSender::get()->push( TMessageObject::toMessage(socketUnique, &msg));
 
 
+    const auto userinfo = TWaitingRoom::getWaitingRoom()->getUserInfo();
+    const size_t size = userinfo.size();
+    UserInfo* userinfoAry = new UserInfo[size];
 
-	newsocket->sendConnectionInfo();
+    const auto routine = size/USER_SIZE+1;
+    size_t accu=0;
+    for(size_t i=0 ; i < routine ; i++)
+    {
+		for (size_t l = 0; l < USER_SIZE && l < userinfo.size() ; l++)
+			userinfoAry[l] = UserInfo(userinfo.at(l+accu).userUnique, userinfo.at(l+accu).name);
+		accu += userinfo.size();
+
+		const auto header2 = Header( toUType(Priority::High), toUType(SERVER_MSG::WAITINGROOM_INFO));
+		mWaitingRoomInfo waitingroom_msg(header2, waitingRoom->getUnique() ,userinfoAry, size);
+
+		TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitingroom_msg));
+	}
+	delete[] userinfoAry;
 }

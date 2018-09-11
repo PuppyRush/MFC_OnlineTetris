@@ -81,7 +81,7 @@ void WaitingRoomDlg::getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom)
 
 void WaitingRoomDlg::updateWaitingRoom(const TMessageObject& msg)
 {
-
+	//const auto info = TMessageObject::toMessage<mWaitingRoomInfo>(msg);
 }
 
 void WaitingRoomDlg::updateWaitingUsers(const TMessageObject& msg)

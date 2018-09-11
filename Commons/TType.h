@@ -7,7 +7,7 @@
 namespace tetris
 {
 	using t_port = unsigned short;
-	using t_socket = unsigned int;
+	using t_socket = int;
 
 	using t_priority = unsigned short;
 	using t_msgidx = unsigned short;

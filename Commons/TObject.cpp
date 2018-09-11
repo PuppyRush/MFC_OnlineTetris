@@ -30,3 +30,10 @@ const void TObject::_switchingMessage(const tetris::t_msgidx msgidx, const TMess
 	m_messageCaller.at(msgidx)(msg);
 }
 
+void TObject::updateUnique(const SERVER_MSG msgtype, const tetris::t_unique unique)
+{
+	if (msgtype == SERVER_MSG::CONNECTION_INFO)
+		m_unique = unique;
+	else
+		assert("can put unique only SERVER_MSG::CONNECTION_INFO");
+}

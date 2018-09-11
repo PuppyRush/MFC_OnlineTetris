@@ -61,6 +61,8 @@ public:
 	tetris::t_msgidx msgIdx;
 	tetris::t_msgsize size;
 
+	Header() {}
+
 	explicit Header(const tetris::t_priority prio, const tetris::t_msgidx msgIdx)
 		:priority(prio), msgIdx(msgIdx)
 	{}
@@ -107,21 +109,37 @@ typedef struct mPermit : public Header
 
 typedef struct mConnectionInfo : public Header
 {
-#define USER_SIZE 8
 	const tetris::t_unique userUnique;
-	const size_t userInfoSize;
-	UserInfo userinfo[USER_SIZE];
 
 	explicit mConnectionInfo
 	(
 		const Header h,
-		const tetris::t_unique userUnique,
-		const UserInfo* _userinfo,
-		const size_t userInfoSize
+		const tetris::t_unique userUnique
 	)
 		:Header(h),
-		userUnique(userUnique),
-		 userInfoSize(userInfoSize)
+		userUnique(userUnique)
+	{
+		size = sizeof(*this) - sizeof(h);
+	}
+}mConnectionInfo;
+
+typedef struct mWaitingRoomInfo : public Header
+{
+#define USER_SIZE 8
+	const tetris::t_unique roomUnique;
+	const size_t userInfoSize;
+	UserInfo userinfo[USER_SIZE];
+
+	explicit mWaitingRoomInfo
+			(
+				const Header h,
+				const tetris::t_unique roomUnique;
+				const UserInfo* _userinfo,
+				const size_t userInfoSize
+			)
+			:Header(h),
+			 roomUnique(roomUnique),
+			 userInfoSize(userInfoSize)
 
 	{
 		assert(USER_SIZE >= userInfoSize);
@@ -129,7 +147,7 @@ typedef struct mConnectionInfo : public Header
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&userinfo, _userinfo, userInfoSize);
 	}
-}mConnectionInfo;
+}mWaitingRoomInfo;
 
 typedef struct mName : public Header
 {

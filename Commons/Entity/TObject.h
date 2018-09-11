@@ -8,6 +8,7 @@
 #include "../TAtomic.h"
 #include "../TType.h"
 #include "../TMessageObject.h"
+#include "../DefineInfo.h"
 
 
 class TObject
@@ -28,10 +29,11 @@ public:
 
 
 protected:
-	TObject() {}
+	TObject();
 
 	std::unordered_map<tetris::t_msgidx, std::function<void(const TMessageObject&)>> m_messageCaller;
 
+	void updateUnique(const SERVER_MSG msgtype, const tetris::t_unique unique);
 	virtual void registryMessage() = 0;
 	bool isRegsiteMessage(const tetris::t_msgidx msgidx);
 	void addCaller(const std::pair<tetris::t_msgidx, std::function<void(const TMessageObject&)>> key_value);

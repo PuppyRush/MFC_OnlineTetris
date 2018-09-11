@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
+#include <numeric>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -33,23 +34,23 @@ tetris::t_error TSocketImpl::listen(const unsigned port, int backlog)
 	SockInfo.sin_port = htons(port);
 	SockInfo.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	if (::bind(getUnique(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in)) == 0)
-		return ::listen(getUnique(), backlog) == 0;
+	if (::bind(getSocket(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in)) == 0)
+		return ::listen(getSocket(), backlog) == 0;
 	else
 		return -1;
 }
 
-volatile tetris::t_error TSocketImpl::_accept()
+volatile tetris::t_socket TSocketImpl::_accept()
 {
 	struct sockaddr_in cliaddr;
 	unsigned addrlen = sizeof(cliaddr);
-	auto accepted_socket = ::accept(getUnique(), reinterpret_cast<struct sockaddr *>(&cliaddr), &addrlen);
+	int accepted_socket = ::accept(getSocket(), reinterpret_cast<struct sockaddr *>(&cliaddr), &addrlen);
 	if (accepted_socket < 0)
 	{
-		//perror("accept fail");
-		return accepted_socket;
+		perror("accept fail");
+		return std::numeric_limits<tetris::t_socket>::max();
 	}
-	return accepted_socket;
+	return static_cast<tetris::t_socket>(accepted_socket);
 }
 
 tetris::t_error TSocketImpl::_close(const unsigned _socket)
@@ -59,7 +60,7 @@ tetris::t_error TSocketImpl::_close(const unsigned _socket)
 
 const size_t TSocketImpl::_sendTo(const char *msg, const size_t size)
 {
-	return ::send(getUnique(), msg, size, 0);
+	return ::send(getSocket(), msg, size, 0);
 }
 
 const TMessageObject TSocketImpl::_recvFrom()
@@ -68,9 +69,9 @@ const TMessageObject TSocketImpl::_recvFrom()
 	auto buf = new char[PACKET_LEN];
 	memset(buf, 0, PACKET_LEN);
 	
-	int recved = ::recv(getUnique(), const_cast<char *>(buf), PACKET_LEN, 0);
+	int recved = ::recv(getSocket(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const tetris::t_msgsize recvLen = recved <= 0 ? 0u : recved;
 	auto prio = Header::getPriority(buf);
 
-	return TMessageObject(prio, recvLen, buf);
+	return TMessageObject::toMessage(getSocket(), buf,recvLen);
 }

@@ -4,6 +4,7 @@
 
 #include "../Commons/structs.h"
 #include "../Commons/Entity/TUser.h"
+#include "../Commons/TMessageObject.h"
 
 class TClientUser : public TetrisUser
 {
@@ -20,4 +21,6 @@ public:
 
 private:
 	TClientUser() {}
+
+	void updateUserInfo(const TMessageObject& msg);
 };
