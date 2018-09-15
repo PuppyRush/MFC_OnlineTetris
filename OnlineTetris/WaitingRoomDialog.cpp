@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "afxdialogex.h"
 
+#include <algorithm>
+
 #include "OnlineTetris.h"
 #include "WaitingRoomDialog.h"
 #include "../Commons/TProperty.h"
@@ -24,6 +26,7 @@ WaitingRoomDlg::WaitingRoomDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(_DLG_WAITINGROOM, pParent),
 	m_waitingRoom(TWaitingRoom::get())
 {
+	m_gamerooms.reserve(100);
 }
 
 WaitingRoomDlg::~WaitingRoomDlg()
@@ -54,11 +57,16 @@ BOOL WaitingRoomDlg::OnInitDialog()
 	m_roomList.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES);
 	m_roomList.DeleteAllItems();
 
-	m_roomList.InsertColumn(0, _T("방 번호"), NULL, 50);
-	m_roomList.InsertColumn(1, _T("방 이름"), NULL, 150);
-	m_roomList.InsertColumn(2, _T("참가인원(%d/%d)"), NULL, 50);
-	m_roomList.InsertColumn(3, _T("방 생성시간"), NULL, 50);
+	m_columnNames.emplace_back("방 번호");
+	m_columnNames.emplace_back("방 이름");
+	m_columnNames.emplace_back("참가인원(%d/%d)");
+	m_columnNames.emplace_back("방 생성시간");
 
+	for(int i=0; i < m_columnNames.size() ; i++)
+	{
+		m_roomList.InsertColumn(i, CString(m_columnNames.at(i).c_str()), NULL, 50);
+	}
+	
 	return true;
 }
 
@@ -69,11 +77,37 @@ void WaitingRoomDlg::OnBnClickedOk()
 	CDialogEx::OnOK();
 }
 
-void WaitingRoomDlg::updateRoomInfo(const mWaitingUserInfo* info)
+void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomInfo& info)
 {
-	for (size_t i = 0; i < info->userInfoSize; i++)
+	for (size_t i = 0; i < info.waitingRoomSize; i++)
 	{
-		m_waitUserListBox.AddString(CString(info->userinfo[i].name.c_str()));
-		
+		const auto &room = info.waitingRoom[i];
+		auto it = std::find_if(m_gamerooms.begin(), m_gamerooms.end(), [&](const std::shared_ptr<RoomInfo> exroom)
+		{
+			return exroom->unique == room.unique;
+		});
+
+		if (it == m_gamerooms.end())
+		{
+			m_gamerooms.emplace_back(make_shared<RoomInfo>(room));
+		}
+	}
+}
+
+void WaitingRoomDlg::updateRoomUserInfo(const mWaitingUserInfo& info)
+{
+	for (size_t i = 0; i < info.userInfoSize; i++)
+	{
+		const auto &user = info.userinfo[i];
+		auto it = std::find_if(m_users.begin(), m_users.end(), [&](const std::shared_ptr<UserInfo> exuser)
+		{
+			return exuser->userUnique == user.userUnique;
+		});
+
+		if (it == m_users.end())
+		{
+			m_users.emplace_back(make_shared<UserInfo>(user));
+			m_waitUserListBox.AddString(CString(info.userinfo[i].name.c_str()));
+		}
 	}
 }

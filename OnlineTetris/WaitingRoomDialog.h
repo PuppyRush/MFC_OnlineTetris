@@ -1,4 +1,7 @@
 #pragma once
+
+#include <functional>
+
 #include "afxcmn.h"
 #include "TWaitingRoom.h"
 #include "../Commons/TMessageObject.h"
@@ -22,13 +25,12 @@ public:
 		return dlg;
 	}
 
-	CListCtrl m_roomList;
-	CListBox m_waitUserListBox;
+	
 
 	afx_msg void OnBnClickedOk();
 
-	void updateRoomInfo(const mWaitingUserInfo* info);
-
+	void updateRoomUserInfo(const mWaitingUserInfo& info);
+	void updateRoomInfo(const mWaitingRoomInfo& info);
 protected:
 	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -44,6 +46,25 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+
+	enum class sortType
+	{
+		number,
+		name,
+		maketime,
+		count
+	};
+
+
 	std::shared_ptr<TWaitingRoom> m_waitingRoom;
+	CListCtrl m_roomList;
+	CListBox m_waitUserListBox;
+
+	std::function<bool(const std::shared_ptr<RoomInfo>, const std::shared_ptr<RoomInfo>)> m_sortfn;
+
+	std::vector<string> m_columnNames;
+	std::vector<std::shared_ptr<RoomInfo>> m_gamerooms;
+	std::vector<std::shared_ptr<UserInfo>> m_users;
+
 	
 };

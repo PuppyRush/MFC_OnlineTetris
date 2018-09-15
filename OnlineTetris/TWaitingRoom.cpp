@@ -27,11 +27,12 @@ void TWaitingRoom::registryMessage()
 
 void TWaitingRoom::updateWaitingRoom(const TMessageObject& msg)
 {
-	
+	const auto info = TMessageObject::toMessage<mWaitingRoomInfo>(msg);
+	WaitingRoomDlg::getDialog()->updateRoomInfo(info);
 }
 
 void TWaitingRoom::updateWaitingUsers(const TMessageObject& msg)
 {
 	const auto info = TMessageObject::toMessage<mWaitingUserInfo>(msg);
-	WaitingRoomDlg::getDialog()->updateRoomInfo(&info);
+	WaitingRoomDlg::getDialog()->updateRoomUserInfo(info);
 }
