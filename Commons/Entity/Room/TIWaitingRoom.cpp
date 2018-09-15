@@ -6,8 +6,8 @@
 
 using namespace std;
 
-TIWaitingRoom::TIWaitingRoom( const std::string roomname)
-        :TIRoom(roomname)
+TIWaitingRoom::TIWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry)
+	:TIRoom(roominfo, userinfoAry)
 {
 
 }

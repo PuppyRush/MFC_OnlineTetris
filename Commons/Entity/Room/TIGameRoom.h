@@ -20,8 +20,7 @@ public:
 	virtual ~TIGameRoom() {}
 
 protected:
-	TIGameRoom(const std::string roomname);
+	TIGameRoom() {}
+	explicit TIGameRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
 
-
-	std::unordered_map< tetris::t_unique, std::shared_ptr<TIGameRoom>> m_roomMap;
 };

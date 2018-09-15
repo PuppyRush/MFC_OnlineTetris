@@ -9,6 +9,8 @@
 #include "../Commons/TObjectContainerFactory.h"
 #include "../Commons/Validator.h"
 #include "../Commons/TMessageSender.h" 
+#include "TWaitingRoom.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -86,20 +88,13 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	//{
 		if (socket->create(ipstring, portnum) == 0)
 		{
-			auto socketThread = TMessageThread::get();
-			socketThread->run();
-
-			const auto me = TClientUser::get();
-
+			auto me = TClientUser::get();
+			TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->add(TWaitingRoom::get());
 			TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(socket);
 			TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(me);
-			
-			const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::CONNECTION_INFO));
-			const mName sendname(header, me->getUserName().size(), me->getUserName().c_str());
 
-			TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getUnique(), &sendname));
 
-			if (WaitingRoomDlg::GetDialog()->DoModal() == IDOK)
+			if (WaitingRoomDlg::getDialog()->DoModal() == IDOK)
 			{
 				socket->SelfClose();
 			}

@@ -159,7 +159,8 @@
     <ClInclude Include="StringManager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TClientUser.h" />
-    <ClInclude Include="WaitingRoom.h" />
+    <ClInclude Include="TWaitingRoom.h" />
+    <ClInclude Include="WaitingRoomDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConnectingDialog.cpp" />
@@ -180,7 +181,8 @@
     </ClCompile>
     <ClCompile Include="StringManager.cpp" />
     <ClCompile Include="TClientUser.cpp" />
-    <ClCompile Include="WaitingRoom.cpp" />
+    <ClCompile Include="TWaitingRoom.cpp" />
+    <ClCompile Include="WaitingRoomDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OnlineTetris.rc" />

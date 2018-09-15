@@ -7,7 +7,7 @@
 #include "../Commons/Validator.h"
 #include "TClientSocket.h"
 #include "StringManager.h"
-#include "WaitingRoom.h"
+#include "WaitingRoomDialog.h"
 
 #include <regex>
 

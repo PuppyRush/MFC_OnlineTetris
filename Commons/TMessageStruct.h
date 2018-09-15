@@ -61,6 +61,8 @@ public:
 	tetris::t_msgidx msgIdx;
 	tetris::t_msgsize size;
 
+	Header() {}
+
 	explicit Header(const tetris::t_priority prio, const tetris::t_msgidx msgIdx)
 		:priority(prio), msgIdx(msgIdx)
 	{}
@@ -107,8 +109,9 @@ typedef struct mPermit : public Header
 
 typedef struct mConnectionInfo : public Header
 {
-	const tetris::t_unique userUnique;
+	tetris::t_unique userUnique;
 
+	mConnectionInfo() {}
 	explicit mConnectionInfo
 	(
 		const Header h,
@@ -121,14 +124,14 @@ typedef struct mConnectionInfo : public Header
 	}
 }mConnectionInfo;
 
-typedef struct mWaitingRoomInfo : public Header
+typedef struct mWaitingUserInfo : public Header
 {
-#define USER_SIZE 8
-	const tetris::t_unique roomUnique;
-	const size_t userInfoSize;
-	UserInfo userinfo[USER_SIZE];
+#define USER_LENGTH 16
+	size_t userInfoSize;
+	UserInfo userinfo[USER_LENGTH];
 
-	explicit mWaitingRoomInfo
+	mWaitingUserInfo() {}
+	explicit mWaitingUserInfo
 			(
 				const Header h,
 				const tetris::t_unique roomUnique,
@@ -136,14 +139,36 @@ typedef struct mWaitingRoomInfo : public Header
 				const size_t userInfoSize
 			)
 			:Header(h),
-			 roomUnique(roomUnique),
 			 userInfoSize(userInfoSize)
-
 	{
-		assert(USER_SIZE >= userInfoSize);
+		assert(USER_LENGTH >= userInfoSize);
 
 		size = sizeof(*this) - sizeof(h);
-		memcpy(&userinfo, _userinfo, userInfoSize);
+		memcpy(&userinfo, _userinfo, sizeof(UserInfo)*userInfoSize);
+	}
+}mWaitingUserInfo;
+
+
+typedef struct mWaitingRoomInfo : public Header
+{
+#define ROOM_LENGTH 8
+	size_t waitingRoomSize;
+	RoomInfo waitingRoom[ROOM_LENGTH];
+
+	mWaitingRoomInfo() {}
+	explicit mWaitingRoomInfo
+	(
+		const Header h,
+		const RoomInfo* _roominfo,
+		const size_t waitingRoomSize
+	)
+		:Header(h),
+		waitingRoomSize(waitingRoomSize)
+	{
+		assert(ROOM_LENGTH >= waitingRoomSize);
+
+		size = sizeof(*this) - sizeof(h);
+		memcpy(&waitingRoom, _roominfo, sizeof(UserInfo)*waitingRoomSize);
 	}
 }mWaitingRoomInfo;
 

@@ -71,11 +71,22 @@ typedef struct userInfo
 
 typedef struct roomInfo
 {
-	const tetris::t_unique unique;
+	tetris::t_unique unique;
 	time_t makeTime;
-	const std::string roomName;
+	size_t roomNumber;
+	std::string roomName;
+	size_t fullUserCount;
+	size_t currentUserCount;
 
-	explicit roomInfo(const tetris::t_unique unique, const time_t makeTime, const std::string roomName)
+	roomInfo() {}
+	roomInfo(const roomInfo& other)
+	{
+		roomInfo(other.unique, other.makeTime, other.roomName, other.roomNumber, other.fullUserCount, other.currentUserCount);
+	}
+
+	explicit roomInfo(const tetris::t_unique unique, const time_t makeTime, const std::string roomName
+	,const size_t roomnumber, const size_t fullusercount, const size_t currentusercount)
 		:unique(unique), makeTime(makeTime), roomName(roomName)
+		, roomNumber(roomnumber), fullUserCount(fullusercount), currentUserCount(currentusercount)
 	{}
 }RoomInfo;
