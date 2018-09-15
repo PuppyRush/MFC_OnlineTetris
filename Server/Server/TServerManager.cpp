@@ -111,10 +111,30 @@ void TServerManager::HelloUser(const tetris::t_socket socketUnique)
 			userinfoAry[l] = UserInfo(userinfo.at(l+accu).userUnique, userinfo.at(l+accu).name);
 		accu += userinfo.size();
 
-		const auto header2 = Header( toUType(Priority::High), toUType(SERVER_MSG::WAITINGROOM_INFO));
+		const auto header2 = Header( toUType(Priority::Normal), toUType(SERVER_MSG::WAITINGROOM_INFO));
 		mWaitingRoomInfo waitingroom_msg(header2, waitingRoom->getUnique() ,userinfoAry, size);
 
 		TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitingroom_msg));
 	}
+
+
+    const auto roominfo = TWaitingRoom::getWaitingRoom()->getUserInfo();
+    const size_t totalRoomsize = roominfo.size();
+    auto roominfoAry = new RoomInfo[totalRoomsize];
+
+    const auto routine = size/ROOM_SIZE+1;
+    accu=0;
+    for(size_t i=0 ; i < routine ; i++)
+    {
+        for (size_t l = 0; l < ROOM_SIZE && l < roominfo.size() ; l++)
+            roominfoAry[l] = RoomInfo(roominfo);
+        accu += totalRoomsize;
+
+        const auto header2 = Header( toUType(Priority::High), toUType(SERVER_MSG::WAITINGROOM_USER));
+        mWaitingUserInfo waitinguser_msg(header2, waitingRoom->getUnique() ,roominfoAry, totalRoomsize);
+
+        TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitinguser_msg));
+    }
+
 	delete[] userinfoAry;
 }

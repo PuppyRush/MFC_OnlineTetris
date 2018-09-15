@@ -131,7 +131,7 @@ typedef struct mWaitingRoomInfo : public Header
 	explicit mWaitingRoomInfo
 			(
 				const Header h,
-				const tetris::t_unique roomUnique;
+				const tetris::t_unique roomUnique,
 				const UserInfo* _userinfo,
 				const size_t userInfoSize
 			)

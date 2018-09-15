@@ -4,6 +4,8 @@
 
 #include "TIWaitingRoom.h"
 
+using namespace std;
+
 TIWaitingRoom::TIWaitingRoom( const std::string roomname)
         :TIRoom(roomname)
 {
@@ -38,4 +40,15 @@ const tetris::t_error TIWaitingRoom::existRoom(const tetris::t_unique roomUnique
         return true;
     else
         return false;
+}
+
+const std::shared_ptr<vector<roomInfo>> TIWaitingRoom::getRoomInfos() const
+{
+    auto rooms = make_shared<std::vector<roomInfo>>();
+    rooms->reserve(m_roomSet.size());
+    for(const auto room : m_roomSet)
+    {
+        //rooms->emplace_back();
+    }
+    return rooms;
 }

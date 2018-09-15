@@ -10,6 +10,7 @@
 #include <unordered_set>
 #include <memory>
 
+#include "../../structs.h"
 #include "TIRoom.h"
 #include "../TUser.h"
 
@@ -22,6 +23,8 @@ public:
 	virtual const tetris::t_error addRoom(const tetris::t_unique roomUnique);
 	virtual const tetris::t_error exitRoom(const tetris::t_unique roomUnique);
 	virtual const tetris::t_error existRoom(const tetris::t_unique roomUnique);
+
+	const std::shared_ptr<std::vector<roomInfo>> getRoomInfos() const;
 
 protected:
 

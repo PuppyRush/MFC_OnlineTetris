@@ -78,4 +78,4 @@ typedef struct roomInfo
 	explicit roomInfo(const tetris::t_unique unique, const time_t makeTime, const std::string roomName)
 		:unique(unique), makeTime(makeTime), roomName(roomName)
 	{}
-}roomInfo;
+}RoomInfo;
