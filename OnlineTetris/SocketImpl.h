@@ -20,7 +20,7 @@ public:
 protected:
 	explicit SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
 
-	virtual volatile tetris::t_error _accept() override
+	virtual volatile tetris::t_socket _accept() override
 	{
 		return toUType(property_error::eFail);
 	}

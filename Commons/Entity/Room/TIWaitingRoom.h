@@ -24,8 +24,8 @@ public:
 	virtual const tetris::t_error existRoom(const tetris::t_unique roomUnique);
 
 protected:
-
-	TIWaitingRoom(std::string nameroom);
+	TIWaitingRoom() {}
+	explicit TIWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
 
 	std::unordered_set< tetris::t_unique> m_roomSet;
 };

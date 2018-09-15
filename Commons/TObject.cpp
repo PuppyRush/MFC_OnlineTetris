@@ -1,6 +1,9 @@
 #include "Entity/TObject.h"
 
-
+TObject::TObject()
+	:m_unique(TAtomic::newUnique())
+{
+}
 
 void TObject::addCaller(const std::pair<tetris::t_msgidx, std::function<void(const TMessageObject&)>> registee)
 {

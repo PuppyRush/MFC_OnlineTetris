@@ -20,7 +20,7 @@ public:
 	}
 
 private:
-	TClientUser() {}
+	TClientUser();
 
 	void updateUserInfo(const TMessageObject& msg);
 };

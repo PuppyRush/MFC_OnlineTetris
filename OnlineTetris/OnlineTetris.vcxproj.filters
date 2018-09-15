@@ -176,9 +176,6 @@
     <ClInclude Include="TClientUser.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="WaitingRoom.h">
-      <Filter>Dialog\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="EnteringDialog.h">
       <Filter>Dialog\Headers</Filter>
     </ClInclude>
@@ -186,6 +183,12 @@
       <Filter>Dialog\Headers</Filter>
     </ClInclude>
     <ClInclude Include="ConnectingDialog.h">
+      <Filter>Dialog\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TWaitingRoom.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitingRoomDialog.h">
       <Filter>Dialog\Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -232,10 +235,13 @@
     <ClCompile Include="OptionDialog.cpp">
       <Filter>Dialog\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="WaitingRoom.cpp">
+    <ClCompile Include="ConnectingDialog.cpp">
       <Filter>Dialog\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="ConnectingDialog.cpp">
+    <ClCompile Include="TWaitingRoom.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitingRoomDialog.cpp">
       <Filter>Dialog\Sources</Filter>
     </ClCompile>
   </ItemGroup>

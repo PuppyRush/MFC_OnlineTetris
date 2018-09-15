@@ -26,13 +26,8 @@ TClientSocket::TClientSocket()
 	:SocketImpl(AF_INET, SOCK_STREAM, 0, IPString{192,168,0,1}, 5905),
 	m_isConnected(false),m_me(TClientUser::get())
 {
-
+	
 }
-
-//TClientSocket::TClientSocket(const int domain, const int type, const int protocol, const IPString ip, const t_port port)
-//	:SocketImpl(domain, type, protocol, ip, port),
-//	m_isConnected(false)
-//{}
 
 TClientSocket::~TClientSocket()
 {}

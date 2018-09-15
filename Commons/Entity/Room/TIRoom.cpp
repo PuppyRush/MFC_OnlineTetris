@@ -15,14 +15,16 @@
 
 using namespace std;
 
-TIRoom::TIRoom(const std::string roomname)
-	:m_roomname(roomname)
+TIRoom::TIRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry)
+	:m_roomInfo(roominfo)
+	//m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User))
 {
-
-	time_t ltime = 0;
-	std::time(&ltime);
-
-	//m_roominfo->makeTime = ltime;
+	m_userInfo.reserve(userinfoAry.size());
+	for (auto info : userinfoAry)
+	{
+		auto userinfo = std::make_shared<UserInfo>(info.userUnique, string(info.name));
+		m_userInfo.insert(make_pair(info.userUnique, userinfo));
+	}
 }
 
 TIRoom::~TIRoom()
@@ -30,16 +32,11 @@ TIRoom::~TIRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const size_t TIRoom::size() const
+const tetris::t_error TIRoom::add(const tetris::t_ptr<UserInfo> userinfo)
 {
-	return m_userSet.size();
-}
-
-const tetris::t_error TIRoom::add(const tetris::t_unique user)
-{
-	if (m_userSet.count(user) == 0)
+	if (m_userInfo.count(userinfo->userUnique) == 0)
 	{
-		m_userSet.insert(user);
+		m_userInfo.insert(make_pair(userinfo->userUnique, userinfo));
 		return toUType( TIRoom::errorCode::Ok);
 	}
 	else
@@ -48,9 +45,9 @@ const tetris::t_error TIRoom::add(const tetris::t_unique user)
 
 const tetris::t_error TIRoom::exit(const tetris::t_unique user)
 {
-	if (m_userSet.count(user) > 0)
+	if (m_userInfo.count(user) > 0)
 	{
-		m_userSet.erase(user);
+		m_userInfo.erase(user);
 		return toUType(TIRoom::errorCode::Ok);
 	}
 	else
@@ -59,7 +56,7 @@ const tetris::t_error TIRoom::exit(const tetris::t_unique user)
 
 const bool TIRoom::exist(const tetris::t_unique user) const
 {
-	if (m_userSet.count(user))
+	if (m_userInfo.count(user))
 		return true;
 	else
 		return false;
@@ -68,14 +65,14 @@ const bool TIRoom::exist(const tetris::t_unique user) const
 const vector<userInfo> TIRoom::getUserInfo() const
 {
 	vector<UserInfo> userinfoAry;
-	userinfoAry.reserve(m_userSet.size());
+	userinfoAry.reserve(m_userInfo.size());
 	auto userCon = TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User);
 
-	for (const auto unique : m_userSet)
+	for (const auto user : m_userInfo)
 	{
-		if(userCon->exist(unique))
+		if(userCon->exist(user.first))
 		{
-			UserInfo info(unique, userCon->at(unique)->getUserName());
+			UserInfo info(user.first, userCon->at(user.first)->getUserName());
 			userinfoAry.emplace_back(info);
 		}
 	}

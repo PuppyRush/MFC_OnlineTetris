@@ -15,7 +15,7 @@
 #include "TClientSocket.h"
 #include "EnteringDialog.h"
 #include "OptionDialog.h"
-#include "WaitingRoom.h"
+#include "WaitingRoomDialog.h"
 #include "TClientUser.h"
 #include "MyButton.h"
 

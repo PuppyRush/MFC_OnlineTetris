@@ -1,37 +1,33 @@
 #pragma once
 #include "afxcmn.h"
-#include "../Commons/Entity/Room/TIWaitingRoom.h"
+#include "TWaitingRoom.h"
 #include "../Commons/TMessageObject.h"
+#include "../Commons/structs.h"
 
 // WaitingRoomDlg 대화 상자입니다.
 
 
-class WaitingRoom;
-
-class WaitingRoomDlg : public CDialogEx, public TIWaitingRoom
+class WaitingRoomDlg : public CDialogEx
 {
 DECLARE_DYNAMIC(WaitingRoomDlg)
-
 
 public:
 	WaitingRoomDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~WaitingRoomDlg();
 	virtual BOOL OnInitDialog();
 	
-	virtual void registryMessage() override;
-	virtual const tetris::t_error _validator(const TIRoom &room) const override;
-	
-	static shared_ptr<WaitingRoomDlg> GetDialog()
+	static shared_ptr<WaitingRoomDlg> getDialog()
 	{
 		static auto dlg = std::make_shared<WaitingRoomDlg>();
 		return dlg;
 	}
 
-	void getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom);
-
 	CListCtrl m_roomList;
+	CListBox m_waitUserListBox;
+
 	afx_msg void OnBnClickedOk();
 
+	void updateRoomInfo(const mWaitingUserInfo* info);
 
 protected:
 	// 대화 상자 데이터입니다.
@@ -43,10 +39,11 @@ protected:
 #endif
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
+	
 
 	DECLARE_MESSAGE_MAP()
 
 private:
-	void updateWaitingRoom(const TMessageObject& msg);
-	void updateWaitingUsers(const TMessageObject& msg);
+	std::shared_ptr<TWaitingRoom> m_waitingRoom;
+	
 };

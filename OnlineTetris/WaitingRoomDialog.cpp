@@ -5,7 +5,7 @@
 #include "afxdialogex.h"
 
 #include "OnlineTetris.h"
-#include "WaitingRoom.h"
+#include "WaitingRoomDialog.h"
 #include "../Commons/TProperty.h"
 #include "../Commons/TMessageObject.h"
 
@@ -22,9 +22,8 @@ IMPLEMENT_DYNAMIC(WaitingRoomDlg, CDialogEx)
 
 WaitingRoomDlg::WaitingRoomDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(_DLG_WAITINGROOM, pParent),
-	TIWaitingRoom(std::string("WaitingRoom"))
+	m_waitingRoom(TWaitingRoom::get())
 {
-
 }
 
 WaitingRoomDlg::~WaitingRoomDlg()
@@ -35,6 +34,7 @@ void WaitingRoomDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, _LST_WAITING, m_roomList);
+	DDX_Control(pDX, _LST_WIATGAMER, m_waitUserListBox);
 }
 
 
@@ -45,17 +45,7 @@ END_MESSAGE_MAP()
 
 // WaitingRoomDlg 메시지 처리기입니다.
 
-void WaitingRoomDlg::registryMessage()
-{
-	this->addCaller(make_pair(toUType(SERVER_MSG::WAITINGROOM_INFO), std::bind(&WaitingRoomDlg::updateWaitingRoom, this, std::placeholders::_1)));
-	this->addCaller(make_pair(toUType(SERVER_MSG::WAITINGROOM_USER), std::bind(&WaitingRoomDlg::updateWaitingUsers, this, std::placeholders::_1)));
-}
 
-const tetris::t_error WaitingRoomDlg::_validator(const TIRoom &room) const
-{
-
-	return toUType(property_error::eOK);
-}
 
 BOOL WaitingRoomDlg::OnInitDialog()
 {
@@ -72,26 +62,18 @@ BOOL WaitingRoomDlg::OnInitDialog()
 	return true;
 }
 
-
-void WaitingRoomDlg::getWaitingUsers(const shared_ptr<WaitingRoom> waitRoom)
-{
-
-
-}
-
-void WaitingRoomDlg::updateWaitingRoom(const TMessageObject& msg)
-{
-	//const auto info = TMessageObject::toMessage<mWaitingRoomInfo>(msg);
-}
-
-void WaitingRoomDlg::updateWaitingUsers(const TMessageObject& msg)
-{
-
-}
-
 void WaitingRoomDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 
 	CDialogEx::OnOK();
+}
+
+void WaitingRoomDlg::updateRoomInfo(const mWaitingUserInfo* info)
+{
+	for (size_t i = 0; i < info->userInfoSize; i++)
+	{
+		m_waitUserListBox.AddString(CString(info->userinfo[i].name.c_str()));
+		
+	}
 }
