@@ -42,9 +42,9 @@ const tetris::t_error TIWaitingRoom::existRoom(const tetris::t_unique roomUnique
         return false;
 }
 
-const std::shared_ptr<vector<roomInfo>> TIWaitingRoom::getRoomInfos() const
+const std::shared_ptr<vector<RoomInfo>> TIWaitingRoom::getRoomInfos() const
 {
-    auto rooms = make_shared<std::vector<roomInfo>>();
+    auto rooms = make_shared<std::vector<RoomInfo>>();
     rooms->reserve(m_roomSet.size());
     for(const auto room : m_roomSet)
     {

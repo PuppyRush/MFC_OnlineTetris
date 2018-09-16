@@ -2,6 +2,11 @@
 #include "TWaitingRoom.h"
 #include "WaitingRoomDialog.h"
 
+TWaitingRoom::TWaitingRoom()
+{
+	registryMessage();
+}
+
 TWaitingRoom::TWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry)
 	:TIWaitingRoom(roominfo, userinfoAry)
 {

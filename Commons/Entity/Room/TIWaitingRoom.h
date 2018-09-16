@@ -24,7 +24,7 @@ public:
 	virtual const tetris::t_error exitRoom(const tetris::t_unique roomUnique);
 	virtual const tetris::t_error existRoom(const tetris::t_unique roomUnique);
 
-	const std::shared_ptr<std::vector<roomInfo>> getRoomInfos() const;
+	const std::shared_ptr<std::vector<RoomInfo>> getRoomInfos() const;
 
 protected:
 	TIWaitingRoom() {}

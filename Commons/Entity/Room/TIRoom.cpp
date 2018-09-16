@@ -62,7 +62,7 @@ const bool TIRoom::exist(const tetris::t_unique user) const
 		return false;
 }
 
-const vector<userInfo> TIRoom::getUserInfo() const
+const vector<UserInfo> TIRoom::getUserInfo() const
 {
 	vector<UserInfo> userinfoAry;
 	userinfoAry.reserve(m_userInfo.size());

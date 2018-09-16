@@ -13,6 +13,12 @@ class TetrisUser : public TObject
 {
 public:
 
+	enum class property
+	{
+		Min = 5,
+		Max = 10
+	};
+
 	int GameBoard[25][10], FixedBoard[25][10], NextFigureBoard[4][2];
 	int StateBoard[25][10];
 	FIGURE FG;

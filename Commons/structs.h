@@ -57,36 +57,40 @@ typedef struct FIGURE
 	int dir;
 }FIGURE;
 
-typedef struct userInfo
+typedef struct UserInfo
 {
 	tetris::t_unique userUnique;
-	std::string name;
+	char name[10];
 
-	userInfo() {}
-	explicit userInfo(const tetris::t_unique userUnique, const std::string name)
-		:userUnique(userUnique),
-		name(name)
-	{}
+	UserInfo() {}
+	explicit UserInfo(const tetris::t_unique userUnique, const char* name)
+		:userUnique(userUnique)
+	{
+		//assert(toUType(TetrisUser::property::Max) > strlen(name));
+	}
 }UserInfo;
 
-typedef struct roomInfo
+typedef struct RoomInfo
 {
 	tetris::t_unique unique;
 	time_t makeTime;
 	size_t roomNumber;
-	std::string roomName;
+	char roomName[10];
 	size_t fullUserCount;
 	size_t currentUserCount;
 
-	roomInfo() {}
-	roomInfo(const roomInfo& other)
+	RoomInfo() {}
+	RoomInfo(const RoomInfo& other)
 	{
-		roomInfo(other.unique, other.makeTime, other.roomName, other.roomNumber, other.fullUserCount, other.currentUserCount);
+		RoomInfo(other.unique, other.makeTime, other.roomName, other.roomNumber, other.fullUserCount, other.currentUserCount);
 	}
 
-	explicit roomInfo(const tetris::t_unique unique, const time_t makeTime, const std::string roomName
+	explicit RoomInfo(const tetris::t_unique unique, const time_t makeTime, const char* roomName
 	,const size_t roomnumber, const size_t fullusercount, const size_t currentusercount)
-		:unique(unique), makeTime(makeTime), roomName(roomName)
+		:unique(unique), makeTime(makeTime)
 		, roomNumber(roomnumber), fullUserCount(fullusercount), currentUserCount(currentusercount)
-	{}
+	{
+		//assert(toUType(TIRoom::property::LengthMax) > strlen(roomName));
+		//strcpy(this->
+	}
 }RoomInfo;

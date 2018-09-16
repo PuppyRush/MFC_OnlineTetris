@@ -18,7 +18,7 @@ public:
 	}
 
 private:
-	TWaitingRoom() {}
+	TWaitingRoom();
 	TWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
 	void updateWaitingRoom(const TMessageObject& msg);
 	void updateWaitingUsers(const TMessageObject& msg);
