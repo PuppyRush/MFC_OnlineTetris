@@ -13,7 +13,6 @@
 
 #include "DefineInfo.h"
 #include "structs.h"
-#include "TType.h"
 
 #undef GetMessage
 #undef min

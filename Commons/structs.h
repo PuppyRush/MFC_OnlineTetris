@@ -5,6 +5,7 @@
 
 #include <ctime>
 #include "TType.h"
+//#include "TypeTraits.h"
 
 #undef POINT
 
@@ -59,6 +60,7 @@ typedef struct FIGURE
 
 typedef struct UserInfo
 {
+public:
 	tetris::t_unique userUnique;
 	char name[10];
 
@@ -66,7 +68,8 @@ typedef struct UserInfo
 	explicit UserInfo(const tetris::t_unique userUnique, const char* name)
 		:userUnique(userUnique)
 	{
-		//assert(toUType(TetrisUser::property::Max) > strlen(name));
+		assert(10 > strlen(name));
+		strncpy(this->name, name, 10);
 	}
 }UserInfo;
 
@@ -90,7 +93,7 @@ typedef struct RoomInfo
 		:unique(unique), makeTime(makeTime)
 		, roomNumber(roomnumber), fullUserCount(fullusercount), currentUserCount(currentusercount)
 	{
-		//assert(toUType(TIRoom::property::LengthMax) > strlen(roomName));
-		//strcpy(this->
+		assert(10 > strlen(roomName));
+		strncpy(this->roomName, roomName, 10);
 	}
 }RoomInfo;

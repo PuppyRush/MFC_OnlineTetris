@@ -22,7 +22,7 @@ TIRoom::TIRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserI
 	m_userInfo.reserve(userinfoAry.size());
 	for (auto info : userinfoAry)
 	{
-		auto userinfo = std::make_shared<UserInfo>(info.userUnique, string(info.name));
+		auto userinfo = std::make_shared<UserInfo>(info.userUnique, info.name);
 		m_userInfo.insert(make_pair(info.userUnique, userinfo));
 	}
 }
@@ -72,7 +72,7 @@ const vector<UserInfo> TIRoom::getUserInfo() const
 	{
 		if(userCon->exist(user.first))
 		{
-			UserInfo info(user.first, userCon->at(user.first)->getUserName());
+			UserInfo info(user.first, userCon->at(user.first)->getUserName().c_str());
 			userinfoAry.emplace_back(info);
 		}
 	}
