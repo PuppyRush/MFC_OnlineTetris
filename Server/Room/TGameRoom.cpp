@@ -6,6 +6,7 @@
  */
 
 #include <ctime>
+#include <string.h>
 
 #include "TGameRoom.h"
 #include "../../Commons/Validator.h"
@@ -40,7 +41,7 @@ const tetris::t_error TGameRoom::_validator(const TIRoom &room) const
 
 	for (const auto _room : m_roomMap)
 	{
-		if (_room.second->getRoomInfo()->roomName.compare(roomname) == 0)
+		if (strcmp(_room.second->getRoomInfo()->roomName, roomname) == 0)
 			return toUType(errorCode::OverNameLength);
 	}
 

@@ -35,7 +35,7 @@ public:
 	virtual const tetris::t_error _validator(const TIRoom &room) const override;
 
 	void sendWaitingUsers(const tetris::t_socket socketUnique);
-	void sendWaitingRooms(const tetris::t_socket socketUnique);
+	static void sendWaitingRooms(const tetris::t_socket socketUnique);
 
 protected:
 

@@ -91,7 +91,7 @@ void TServerManager::HelloUser(const tetris::t_socket socketUnique)
 	auto newUser = TServerUser::makeShared(newsocket);
     auto waitingRoom = TWaitingRoom::get();
 
-    auto userinfo = make_shared<UserInfo>(newUser->getUnique(), newUser->getUserName());
+    auto userinfo = make_shared<UserInfo>(newUser->getUnique(), newUser->getUserName().c_str());
 	waitingRoom->add(userinfo);
 	TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(newUser);
 	TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(newsocket);

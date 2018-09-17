@@ -13,44 +13,22 @@ TIWaitingRoom::TIWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std
 
 }
 
-const tetris::t_error TIWaitingRoom::addRoom(const tetris::t_ptr<RoomInfo> roominfo)
+const std::shared_ptr<vector<RoomInfo>> TIWaitingRoom::getWaitingRoomsInfo()
 {
-    if (m_roomSet.count(roominfo->unique) == 0)
-    {
-        m_roomSet.insert(make_pair(roominfo->unique,roominfo));
-        return toUType( TIRoom::errorCode::Ok);
-    }
-    else
-        return toUType(TIRoom::errorCode::Exist);
-}
-
-const tetris::t_error TIWaitingRoom::exitRoom(const tetris::t_unique roomUnique)
-{
-    if (m_roomSet.count(roomUnique) > 0)
-    {
-        m_roomSet.erase(roomUnique);
-        return toUType(TIRoom::errorCode::Ok);
-    }
-    else
-        return toUType(TIRoom::errorCode::Empty);
-}
-
-const tetris::t_error TIWaitingRoom::existRoom(const tetris::t_unique roomUnique)
-{
-    if (m_roomSet.count(roomUnique) )
-        return true;
-    else
-        return false;
-}
-
-const std::shared_ptr<vector<roomInfo>> TIWaitingRoom::getWaitingRoomsInfo() const
-{
-
+    const auto roomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+    const size_t totalRoomsize = roomcon->size();
     auto rooms = make_shared<std::vector<RoomInfo>>();
-    rooms->reserve(m_roomSet.size());
-    for(const auto room : m_roomSet)
+
+    if(totalRoomsize==0)
+        return rooms;
+
+    rooms->reserve(totalRoomsize);
+    auto roominfoAry = new RoomInfo[totalRoomsize];
+
+    for(auto room : *roomcon)
     {
-        rooms->push_back(*room.second.get());
+        rooms->push_back(RoomInfo(*room->getRoomInfo().get()));
     }
+
     return rooms;
 }

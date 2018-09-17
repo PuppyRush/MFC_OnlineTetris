@@ -127,7 +127,7 @@ typedef struct mWaitingUserInfo : public Header
 {
 #define USER_LENGTH 16
 	size_t userInfoSize;
-	userInfo userinfo[USER_LENGTH];
+	UserInfo userinfo[USER_LENGTH];
 	tetris::t_unique unique;
 
 	mWaitingUserInfo() {}
@@ -155,19 +155,16 @@ typedef struct mWaitingRoomInfo : public Header
 #define ROOM_LENGTH 2
 	size_t waitingRoomSize;
 	RoomInfo waitingRoom[ROOM_LENGTH];
-	tetris::t_unique unique;
 
 	mWaitingRoomInfo() {}
 	explicit mWaitingRoomInfo
 	(
 		const Header h,
-		const tetris::t_unique unique,
 		const RoomInfo* _roominfo,
 		const size_t waitingRoomSize
 	)
 		:Header(h),
-		waitingRoomSize(waitingRoomSize),
-		unique(unique)
+		waitingRoomSize(waitingRoomSize)
 	{
 		assert(ROOM_LENGTH >= waitingRoomSize);
 

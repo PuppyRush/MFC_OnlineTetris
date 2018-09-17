@@ -16,7 +16,11 @@ public:
 	}
 
 	virtual void refresh() = 0;
-	
+
+	const size_t size() const noexcept
+	{
+		return m_ptrMap.size();
+	}
 
 protected:
 
@@ -85,6 +89,7 @@ protected:
 	{
 		return m_ptrMap;
 	}
+
 
 protected:
 	std::mutex	m_refreshMutex;

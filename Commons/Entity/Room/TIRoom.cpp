@@ -22,7 +22,7 @@ TIRoom::TIRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserI
 	m_userInfo.reserve(userinfoAry.size());
 	for (auto info : userinfoAry)
 	{
-		auto userinfo = std::make_shared<UserInfo>(info.userUnique, string(info.name));
+		auto userinfo = std::make_shared<UserInfo>(info.userUnique, info.name);
 		m_userInfo.insert(make_pair(info.userUnique, userinfo));
 	}
 }
@@ -62,7 +62,7 @@ const bool TIRoom::exist(const tetris::t_unique user) const
 		return false;
 }
 
-const shared_ptr<vector<userInfo>> TIRoom::getUserInfo() const
+const shared_ptr<vector<UserInfo>> TIRoom::getUserInfo() const
 {
 	auto userinfoAry = make_shared<vector<UserInfo>>();
 	userinfoAry->reserve(m_userInfo.size());
@@ -72,7 +72,7 @@ const shared_ptr<vector<userInfo>> TIRoom::getUserInfo() const
 	{
 		if(userCon->exist(user.first))
 		{
-			UserInfo info(user.first, userCon->at(user.first)->getUserName());
+			UserInfo info(user.first, userCon->at(user.first)->getUserName().c_str());
 			userinfoAry->emplace_back(info);
 		}
 	}

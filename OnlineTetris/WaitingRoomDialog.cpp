@@ -107,7 +107,7 @@ void WaitingRoomDlg::updateRoomUserInfo(const mWaitingUserInfo& info)
 		if (it == m_users.end())
 		{
 			m_users.emplace_back(make_shared<UserInfo>(user));
-			m_waitUserListBox.AddString(CString(info.userinfo[i].name.c_str()));
+			m_waitUserListBox.AddString(CString(info.userinfo[i].name));
 		}
 	}
 }

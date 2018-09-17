@@ -14,7 +14,6 @@
 #include <unordered_set>
 
 #include "../../structs.h"
-#include "../../TType.h"
 #include "../../TAtomic.h"
 #include "../TObject.h"
 #include "../TUser.h"
@@ -23,21 +22,7 @@
 class TIRoom : public TObject
 {
 public:
-	virtual ~TIRoom();
 
-	enum class errorCode : tetris::t_error;
-
-	virtual const tetris::t_error add(const tetris::t_ptr<UserInfo> userinfo);
-	virtual const tetris::t_error exit(const tetris::t_unique user);
-	virtual const bool exist(const tetris::t_unique unique) const;
-
-	inline const size_t size() const { return m_userInfo.size(); }
-	inline const size_t roomNumber() const { return m_roomInfo->roomNumber;	}
-	const std::shared_ptr<std::vector<UserInfo>> getUserInfo() const;
-	inline const std::shared_ptr<roomInfo> getRoomInfo() const noexcept {return m_roomInfo;	}
-
-
-protected:
 	enum class errorCode : tetris::t_error
 	{
 		Exist,
@@ -51,6 +36,20 @@ protected:
 		LengthMax = 20,
 	};
 
+	virtual ~TIRoom();
+
+	virtual const tetris::t_error add(const tetris::t_ptr<UserInfo> userinfo);
+	virtual const tetris::t_error exit(const tetris::t_unique user);
+	virtual const bool exist(const tetris::t_unique unique) const;
+
+	inline const size_t size() const { return m_userInfo.size(); }
+	inline const size_t roomNumber() const { return m_roomInfo->roomNumber;	}
+	const std::shared_ptr<std::vector<UserInfo>> getUserInfo() const;
+	inline const std::shared_ptr<RoomInfo> getRoomInfo() const noexcept {return m_roomInfo;	}
+
+
+
+protected:
 	TIRoom() {}
 	explicit TIRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
 
@@ -58,6 +57,6 @@ protected:
 
 private:
 	std::shared_ptr<TObjectContainer<TetrisUser>> m_userCon;
-	std::unordered_map<tetris::t_unique, std::shared_ptr<userInfo>> m_userInfo;
-	std::shared_ptr<roomInfo> m_roomInfo;
+	std::unordered_map<tetris::t_unique, std::shared_ptr<UserInfo>> m_userInfo;
+	std::shared_ptr<RoomInfo> m_roomInfo;
 };
