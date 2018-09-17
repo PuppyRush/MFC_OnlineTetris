@@ -33,7 +33,7 @@ public:
 
 	inline const size_t size() const { return m_userInfo.size(); }
 	inline const size_t roomNumber() const { return m_roomInfo->roomNumber;	}
-	const std::vector<UserInfo> getUserInfo() const;
+	const std::shared_ptr<std::vector<UserInfo>> getUserInfo() const;
 	inline const std::shared_ptr<roomInfo> getRoomInfo() const noexcept {return m_roomInfo;	}
 
 

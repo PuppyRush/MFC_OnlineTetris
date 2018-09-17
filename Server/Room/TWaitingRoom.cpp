@@ -7,12 +7,16 @@
 
 #include <ctime>
 
-#include "../../Commons/Validator.h"
 #include "TWaitingRoom.h"
+#include "../../Commons/TMessageSender.h"
+#include "../../Commons/TMessageStruct.h"
+#include "../../Commons/structs.h"
+#include "../../Commons/Validator.h"
 #include "../../Commons/TypeTraits.h"
 
+
 TWaitingRoom::TWaitingRoom()
-:TIWaitingRoom(std::string("ServerWaitingRoom"))
+:TIWaitingRoom()
 {
     registryMessage();
 }
@@ -47,4 +51,47 @@ const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const
 	////	return errorCode::Nobody;
 	//
 	//return errorCode::Ok;
+}
+
+void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
+{
+    const auto userinfo = TWaitingRoom::get()->getUserInfo();
+    const size_t size = userinfo->size();
+    UserInfo* userinfoAry = new UserInfo[size];
+
+    const auto routine = size/USER_LENGTH+1;
+    size_t accu=0;
+    for(size_t i=0 ; i < routine ; i++)
+    {
+        for (size_t l = 0; l < USER_LENGTH && l < userinfo->size() ; l++)
+            userinfoAry[l] = UserInfo(userinfo->at(l+accu).userUnique, userinfo->at(l+accu).name);
+        accu += userinfo->size();
+
+        const auto header2 = Header( toUType(Priority::Normal), toUType(SERVER_MSG::WAITINGROOM_USER));
+        mWaitingUserInfo waitingroom_msg(header2, this->getUnique() ,userinfoAry, size);
+
+        TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitingroom_msg));
+    }
+
+}
+void TWaitingRoom::sendWaitingRooms(const tetris::t_socket socketUnique)
+{
+
+    const auto roominfo = TWaitingRoom::get()->getWaitingRoomsInfo();
+    const size_t totalRoomsize = roominfo->size();
+    auto roominfoAry = new RoomInfo[totalRoomsize];
+
+    const auto routine = totalRoomsize/ROOM_LENGTH+1;
+    size_t accu=0;
+    for(size_t i=0 ; i < routine ; i++)
+    {
+        for (size_t l = 0; l < ROOM_LENGTH && l < roominfo->size() ; l++)
+            roominfoAry[l] = RoomInfo(roominfo->at(l));
+        accu += totalRoomsize;
+
+        const auto header2 = Header( toUType(Priority::High), toUType(SERVER_MSG::WAITINGROOM_INFO));
+        mWaitingRoomInfo waitinguser_msg(header2, this->getUnique() ,roominfoAry, totalRoomsize);
+
+        TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitinguser_msg));
+    }
 }

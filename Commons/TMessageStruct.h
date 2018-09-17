@@ -13,7 +13,6 @@
 
 #include "DefineInfo.h"
 #include "structs.h"
-#include "TType.h"
 
 #undef GetMessage
 #undef min
@@ -128,18 +127,20 @@ typedef struct mWaitingUserInfo : public Header
 {
 #define USER_LENGTH 16
 	size_t userInfoSize;
-	UserInfo userinfo[USER_LENGTH];
+	userInfo userinfo[USER_LENGTH];
+	tetris::t_unique unique;
 
 	mWaitingUserInfo() {}
 	explicit mWaitingUserInfo
 			(
 				const Header h,
-				const tetris::t_unique roomUnique,
+				const tetris::t_unique unique,
 				const UserInfo* _userinfo,
 				const size_t userInfoSize
 			)
 			:Header(h),
-			 userInfoSize(userInfoSize)
+			 userInfoSize(userInfoSize),
+			 unique(unique)
 	{
 		assert(USER_LENGTH >= userInfoSize);
 
@@ -151,19 +152,22 @@ typedef struct mWaitingUserInfo : public Header
 
 typedef struct mWaitingRoomInfo : public Header
 {
-#define ROOM_LENGTH 8
+#define ROOM_LENGTH 2
 	size_t waitingRoomSize;
 	RoomInfo waitingRoom[ROOM_LENGTH];
+	tetris::t_unique unique;
 
 	mWaitingRoomInfo() {}
 	explicit mWaitingRoomInfo
 	(
 		const Header h,
+		const tetris::t_unique unique,
 		const RoomInfo* _roominfo,
 		const size_t waitingRoomSize
 	)
 		:Header(h),
-		waitingRoomSize(waitingRoomSize)
+		waitingRoomSize(waitingRoomSize),
+		unique(unique)
 	{
 		assert(ROOM_LENGTH >= waitingRoomSize);
 

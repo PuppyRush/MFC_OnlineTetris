@@ -62,10 +62,10 @@ const bool TIRoom::exist(const tetris::t_unique user) const
 		return false;
 }
 
-const vector<userInfo> TIRoom::getUserInfo() const
+const shared_ptr<vector<userInfo>> TIRoom::getUserInfo() const
 {
-	vector<UserInfo> userinfoAry;
-	userinfoAry.reserve(m_userInfo.size());
+	auto userinfoAry = make_shared<vector<UserInfo>>();
+	userinfoAry->reserve(m_userInfo.size());
 	auto userCon = TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User);
 
 	for (const auto user : m_userInfo)
@@ -73,7 +73,7 @@ const vector<userInfo> TIRoom::getUserInfo() const
 		if(userCon->exist(user.first))
 		{
 			UserInfo info(user.first, userCon->at(user.first)->getUserName());
-			userinfoAry.emplace_back(info);
+			userinfoAry->emplace_back(info);
 		}
 	}
 

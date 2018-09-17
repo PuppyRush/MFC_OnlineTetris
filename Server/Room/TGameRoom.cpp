@@ -14,7 +14,7 @@
 using namespace std;
 
 TGameRoom::TGameRoom( const string roomname)
-:TIGameRoom(roomname)
+:TIGameRoom()
 {
 	// TODO Auto-generated constructor stub
 	registryMessage();

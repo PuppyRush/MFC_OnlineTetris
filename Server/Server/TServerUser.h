@@ -21,9 +21,9 @@ public:
 	virtual ~TServerUser();
 	virtual void registryMessage() override;
 
-	static std::shared_ptr<TServerUser> makeShared(const std::shared_ptr<TServerSocket> socket)
+	static tetris::t_ptr<TServerUser> makeShared(const tetris::t_ptr<TServerSocket> socket)
 	{
-		return std::shared_ptr<TServerUser>(new TServerUser(socket));
+		return tetris::t_ptr<TServerUser>(new TServerUser(socket));
 	}
 
 	inline std::shared_ptr<TServerSocket> getServerSocket() const noexcept

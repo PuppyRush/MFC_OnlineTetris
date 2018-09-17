@@ -20,15 +20,15 @@ class TIWaitingRoom : public TIRoom
 public:
 	virtual ~TIWaitingRoom() {}
 
-	virtual const tetris::t_error addRoom(const tetris::t_unique roomUnique);
+	virtual const tetris::t_error addRoom(const tetris::t_ptr<RoomInfo> roomUnique);
 	virtual const tetris::t_error exitRoom(const tetris::t_unique roomUnique);
 	virtual const tetris::t_error existRoom(const tetris::t_unique roomUnique);
 
-	const std::shared_ptr<std::vector<roomInfo>> getRoomInfos() const;
+	const std::shared_ptr<std::vector<roomInfo>> getWaitingRoomsInfo() const;
 
 protected:
 	TIWaitingRoom() {}
 	explicit TIWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
 
-	std::unordered_set< tetris::t_unique> m_roomSet;
+	std::unordered_map<tetris::t_unique, tetris::t_ptr<RoomInfo>> m_roomSet;
 };

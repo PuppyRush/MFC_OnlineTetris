@@ -31,6 +31,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using namespace std;
+
 TServerManager::TServerManager()
 	:m_closedServer(true)
 {
@@ -79,7 +81,7 @@ void TServerManager::run()
 
 void TServerManager::makeWaitingRoom()
 {
-	auto waitingRoom = TWaitingRoom::getWaitingRoom();
+	auto waitingRoom = TWaitingRoom::get();
 	TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->add(waitingRoom);
 }
 
@@ -87,9 +89,10 @@ void TServerManager::HelloUser(const tetris::t_socket socketUnique)
 {
 	auto newsocket = TServerSocket::makeShared(socketUnique);
 	auto newUser = TServerUser::makeShared(newsocket);
-    auto waitingRoom = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->begin();
+    auto waitingRoom = TWaitingRoom::get();
 
-	waitingRoom->add(newUser->getUnique());
+    auto userinfo = make_shared<UserInfo>(newUser->getUnique(), newUser->getUserName());
+	waitingRoom->add(userinfo);
 	TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(newUser);
 	TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(newsocket);
 
@@ -99,42 +102,7 @@ void TServerManager::HelloUser(const tetris::t_socket socketUnique)
     TMessageSender::get()->push( TMessageObject::toMessage(socketUnique, &msg));
 
 
-    const auto userinfo = TWaitingRoom::getWaitingRoom()->getUserInfo();
-    const size_t size = userinfo.size();
-    UserInfo* userinfoAry = new UserInfo[size];
+	waitingRoom->sendWaitingRooms(socketUnique);
+	waitingRoom->sendWaitingUsers(socketUnique);
 
-    const auto routine = size/USER_SIZE+1;
-    size_t accu=0;
-    for(size_t i=0 ; i < routine ; i++)
-    {
-		for (size_t l = 0; l < USER_SIZE && l < userinfo.size() ; l++)
-			userinfoAry[l] = UserInfo(userinfo.at(l+accu).userUnique, userinfo.at(l+accu).name);
-		accu += userinfo.size();
-
-		const auto header2 = Header( toUType(Priority::Normal), toUType(SERVER_MSG::WAITINGROOM_INFO));
-		mWaitingRoomInfo waitingroom_msg(header2, waitingRoom->getUnique() ,userinfoAry, size);
-
-		TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitingroom_msg));
-	}
-
-
-    const auto roominfo = TWaitingRoom::getWaitingRoom()->getUserInfo();
-    const size_t totalRoomsize = roominfo.size();
-    auto roominfoAry = new RoomInfo[totalRoomsize];
-
-    const auto routine = size/ROOM_SIZE+1;
-    accu=0;
-    for(size_t i=0 ; i < routine ; i++)
-    {
-        for (size_t l = 0; l < ROOM_SIZE && l < roominfo.size() ; l++)
-            roominfoAry[l] = RoomInfo(roominfo);
-        accu += totalRoomsize;
-
-        const auto header2 = Header( toUType(Priority::High), toUType(SERVER_MSG::WAITINGROOM_USER));
-        mWaitingUserInfo waitinguser_msg(header2, waitingRoom->getUnique() ,roominfoAry, totalRoomsize);
-
-        TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitinguser_msg));
-    }
-
-	delete[] userinfoAry;
 }

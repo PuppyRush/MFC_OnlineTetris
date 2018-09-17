@@ -3,6 +3,7 @@
 //
 
 #include "TIWaitingRoom.h"
+#include "../../TObjectContainerFactory.h"
 
 using namespace std;
 
@@ -12,11 +13,11 @@ TIWaitingRoom::TIWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std
 
 }
 
-const tetris::t_error TIWaitingRoom::addRoom(const tetris::t_unique roomUnique)
+const tetris::t_error TIWaitingRoom::addRoom(const tetris::t_ptr<RoomInfo> roominfo)
 {
-    if (m_roomSet.count(roomUnique) == 0)
+    if (m_roomSet.count(roominfo->unique) == 0)
     {
-        m_roomSet.insert(roomUnique);
+        m_roomSet.insert(make_pair(roominfo->unique,roominfo));
         return toUType( TIRoom::errorCode::Ok);
     }
     else
@@ -42,13 +43,14 @@ const tetris::t_error TIWaitingRoom::existRoom(const tetris::t_unique roomUnique
         return false;
 }
 
-const std::shared_ptr<vector<roomInfo>> TIWaitingRoom::getRoomInfos() const
+const std::shared_ptr<vector<roomInfo>> TIWaitingRoom::getWaitingRoomsInfo() const
 {
-    auto rooms = make_shared<std::vector<roomInfo>>();
+
+    auto rooms = make_shared<std::vector<RoomInfo>>();
     rooms->reserve(m_roomSet.size());
     for(const auto room : m_roomSet)
     {
-        //rooms->emplace_back();
+        rooms->push_back(*room.second.get());
     }
     return rooms;
 }
