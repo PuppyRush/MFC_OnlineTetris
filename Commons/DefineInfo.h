@@ -137,7 +137,7 @@ enum class ETC : uint16_t
 //��Ÿ����
 
 #define PORTNUM		5905
-#define PACKET_LEN 	256
+#define PACKET_LEN 	512
 #define TIMER_TETRIS		1
 #define	TIMER_SENDMAPSTATE	2
 #define SENDTIME			50		//timer

@@ -14,8 +14,8 @@
 
 using namespace std;
 
-TGameRoom::TGameRoom( const string roomname)
-:TIGameRoom()
+TGameRoom::TGameRoom( const RoomInfo& roominfo)
+:TIGameRoom(roominfo)
 {
 	// TODO Auto-generated constructor stub
 	registryMessage();

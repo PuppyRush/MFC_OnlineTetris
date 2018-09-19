@@ -1,3 +1,5 @@
+#pragma pack(push,1)
+
 #pragma once
 
 #include <string>
@@ -74,7 +76,7 @@ public:
 typedef struct RoomInfo
 {
 	tetris::t_unique unique;
-	time_t makeTime;
+	tetris::t_time makeTime;
 	size_t roomNumber;
 	char roomName[10];
 	size_t fullUserCount;
@@ -82,8 +84,9 @@ typedef struct RoomInfo
 
 	RoomInfo() {}
 	RoomInfo(const RoomInfo& other)
+	:RoomInfo(other.unique, other.makeTime, other.roomName, other.roomNumber, other.fullUserCount, other.currentUserCount)
 	{
-		RoomInfo(other.unique, other.makeTime, other.roomName, other.roomNumber, other.fullUserCount, other.currentUserCount);
+
 	}
 
 	explicit RoomInfo(const tetris::t_unique unique, const time_t makeTime, const char* roomName
@@ -95,3 +98,5 @@ typedef struct RoomInfo
 		strncpy(this->roomName, roomName, 10);
 	}
 }RoomInfo;
+
+#pragma pop()

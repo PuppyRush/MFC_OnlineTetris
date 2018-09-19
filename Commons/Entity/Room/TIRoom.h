@@ -51,12 +51,11 @@ public:
 
 protected:
 	TIRoom() {}
-	explicit TIRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
+	explicit TIRoom(const RoomInfo& roominfo);
 
 	virtual const tetris::t_error _validator(const TIRoom &room) const = 0;
 
 private:
-	std::shared_ptr<TObjectContainer<TetrisUser>> m_userCon;
 	std::unordered_map<tetris::t_unique, std::shared_ptr<UserInfo>> m_userInfo;
 	std::shared_ptr<RoomInfo> m_roomInfo;
 };

@@ -15,16 +15,14 @@
 
 using namespace std;
 
-TIRoom::TIRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry)
-	:m_roomInfo(roominfo)
-	//m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User))
+TIRoom::TIRoom(const RoomInfo& roominfo)
 {
-	m_userInfo.reserve(userinfoAry.size());
-	for (auto info : userinfoAry)
-	{
-		auto userinfo = std::make_shared<UserInfo>(info.userUnique, info.name);
-		m_userInfo.insert(make_pair(info.userUnique, userinfo));
-	}
+	m_roomInfo = make_shared<RoomInfo>(roominfo);
+	m_roomInfo->unique = this->getUnique();
+	m_roomInfo->makeTime =  std::time(0);
+	auto l = sizeof(RoomInfo); //40
+	if(l==8)
+		l++;
 }
 
 TIRoom::~TIRoom()

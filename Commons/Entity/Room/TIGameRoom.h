@@ -21,6 +21,6 @@ public:
 
 protected:
 	TIGameRoom() {}
-	explicit TIGameRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
+	explicit TIGameRoom(const RoomInfo& roominfo);
 
 };

@@ -4,8 +4,8 @@
 
 #include "TIGameRoom.h"
 
-TIGameRoom::TIGameRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry)
-	:TIRoom(roominfo, userinfoAry)
+TIGameRoom::TIGameRoom(const RoomInfo& roominfo)
+	:TIRoom(roominfo)
 {
 
 }

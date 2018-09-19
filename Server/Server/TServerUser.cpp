@@ -19,8 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 TServerUser::TServerUser(const std::shared_ptr<TServerSocket> socket)
-	:m_serverSocket(socket),
-	m_sharedPtr(std::shared_ptr<TServerUser>(this))
+	//:m_serverSocket(socket)
 {
     registryMessage();
 }
@@ -37,7 +36,7 @@ TServerUser::~TServerUser()
 
 void TServerUser::registryMessage()
 {
-    this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
+   // this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
 }
 
 

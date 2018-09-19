@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#pragma pack(1)
+
 #pragma warning(push)
 #pragma warning(disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#
 
@@ -125,7 +127,7 @@ typedef struct mConnectionInfo : public Header
 
 typedef struct mWaitingUserInfo : public Header
 {
-#define USER_LENGTH 16
+#define USER_LENGTH 8
 	size_t userInfoSize;
 	UserInfo userinfo[USER_LENGTH];
 	tetris::t_unique unique;
@@ -143,6 +145,7 @@ typedef struct mWaitingUserInfo : public Header
 			 unique(unique)
 	{
 		assert(USER_LENGTH >= userInfoSize);
+		memset(&userinfo, 0, sizeof(RoomInfo)*USER_LENGTH);
 
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&userinfo, _userinfo, sizeof(UserInfo)*userInfoSize);
@@ -167,9 +170,10 @@ typedef struct mWaitingRoomInfo : public Header
 		waitingRoomSize(waitingRoomSize)
 	{
 		assert(ROOM_LENGTH >= waitingRoomSize);
+		memset(&waitingRoom, 0, sizeof(RoomInfo)*ROOM_LENGTH);
 
 		size = sizeof(*this) - sizeof(h);
-		memcpy(&waitingRoom, _roominfo, sizeof(UserInfo)*waitingRoomSize);
+		memcpy(&waitingRoom, _roominfo, sizeof(RoomInfo)*waitingRoomSize);
 	}
 }mWaitingRoomInfo;
 
@@ -346,4 +350,5 @@ typedef struct mAddline : public Header
 	}
 }mAddline;
 
+#pragma warning(pop)
 #pragma warning(pop)
