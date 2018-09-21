@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#pragma pack(push,1)
+
 #pragma warning(push)
 #pragma warning(disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#
 
@@ -167,7 +169,7 @@ typedef struct mWaitingRoomInfo : public Header
 		waitingRoomSize(waitingRoomSize)
 	{
 		assert(ROOM_LENGTH >= waitingRoomSize);
-
+		
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&waitingRoom, _roominfo, sizeof(UserInfo)*waitingRoomSize);
 	}
@@ -346,4 +348,5 @@ typedef struct mAddline : public Header
 	}
 }mAddline;
 
+#pragma warning(pop)
 #pragma warning(pop)

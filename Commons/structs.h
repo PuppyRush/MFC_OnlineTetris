@@ -1,3 +1,5 @@
+
+#pragma pack(push,1)
 #pragma once
 
 #include <string>
@@ -95,3 +97,5 @@ typedef struct RoomInfo
 		strncpy(this->roomName, roomName, 10);
 	}
 }RoomInfo;
+
+#pragma pop()

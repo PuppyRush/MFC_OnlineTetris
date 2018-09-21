@@ -31,9 +31,10 @@ void TWaitingRoom::registryMessage()
 }
 
 void TWaitingRoom::updateWaitingRoom(const TMessageObject& msg)
-{
+{ 
 	const auto info = TMessageObject::toMessage<mWaitingRoomInfo>(msg);
 	WaitingRoomDlg::getDialog()->updateRoomInfo(info);
+	sizeof(RoomInfo);
 }
 
 void TWaitingRoom::updateWaitingUsers(const TMessageObject& msg)
