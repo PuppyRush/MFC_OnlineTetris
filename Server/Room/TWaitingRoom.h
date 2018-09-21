@@ -17,6 +17,7 @@
 class TWaitingRoom : public TIWaitingRoom
 {
 public:
+
 	virtual ~TWaitingRoom();
 
 	enum class property : tetris::t_error
@@ -25,20 +26,18 @@ public:
 	};
 
 	virtual void registryMessage() override;
-
-	inline static std::shared_ptr<TWaitingRoom> get()
-	{
-		static auto waitingRoom = std::shared_ptr<TWaitingRoom>(new TWaitingRoom());
-		return waitingRoom;
-	}
-
 	virtual const tetris::t_error _validator(const TIRoom &room) const override;
 
 	void sendWaitingUsers(const tetris::t_socket socketUnique);
+
 	static void sendWaitingRooms(const tetris::t_socket socketUnique);
 
-protected:
+	static tetris::t_ptr<TWaitingRoom> makeShared(const RoomInfo& room)
+	{
+		return tetris::t_ptr<TWaitingRoom>(new TWaitingRoom(room));
+	}
 
 private:
-	TWaitingRoom();
+	explicit TWaitingRoom(const RoomInfo& roominfo);
+
 };

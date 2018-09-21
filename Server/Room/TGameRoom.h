@@ -32,14 +32,14 @@ public:
 		Size = 8
 	};
 
-	explicit TGameRoom(const std::string roomname);
+	explicit TGameRoom(const RoomInfo& roomname);
 	virtual ~TGameRoom();
 
     virtual void registryMessage() override;
 
-	inline static std::shared_ptr<TGameRoom> makeShared(const std::string roomname)
+	inline static std::shared_ptr<TGameRoom> makeShared(const RoomInfo& room)
 	{
-		static auto waitingRoom = std::make_shared<TGameRoom>(roomname);
+		static auto waitingRoom = std::make_shared<TGameRoom>(room);
 		return waitingRoom;
 	}
 

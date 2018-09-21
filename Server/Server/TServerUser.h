@@ -21,6 +21,12 @@ public:
 	virtual ~TServerUser();
 	virtual void registryMessage() override;
 
+	static tetris::t_ptr<TServerUser> get()
+	{
+		static auto me = std::shared_ptr<TServerUser>(new TServerUser());
+		return me;
+	}
+
 	static tetris::t_ptr<TServerUser> makeShared(const tetris::t_ptr<TServerSocket> socket)
 	{
 		return tetris::t_ptr<TServerUser>(new TServerUser(socket));
@@ -34,9 +40,8 @@ protected:
 	TServerUser(const std::shared_ptr<TServerSocket> socket);
 
 private:
-	TServerUser() = delete;
+	TServerUser(){}
 	void recvConnectionInfo(const TMessageObject& msg);
 
 	std::shared_ptr<TServerSocket> m_serverSocket;
-	std::shared_ptr<TServerUser> m_sharedPtr;
 };

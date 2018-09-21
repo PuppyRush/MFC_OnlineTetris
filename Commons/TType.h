@@ -17,6 +17,8 @@ namespace tetris
 	using t_property = unsigned short;
 	using t_dist = unsigned short;
 
+	using t_time = unsigned long long ;
+
 	using t_unique = std::uint_fast16_t ;
 	using t_uniqueAtomic = std::atomic<t_unique>;
 

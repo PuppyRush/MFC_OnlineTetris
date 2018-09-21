@@ -16,8 +16,8 @@
 #include "../../Commons/TypeTraits.h"
 
 
-TWaitingRoom::TWaitingRoom()
-:TIWaitingRoom()
+TWaitingRoom::TWaitingRoom(const RoomInfo& roominfo)
+:TIWaitingRoom(roominfo)
 {
     registryMessage();
 }
@@ -56,7 +56,7 @@ const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const
 
 void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
 {
-    const auto userinfo = TWaitingRoom::get()->getUserInfo();
+    const auto userinfo = this->getUserInfo();
     const size_t size = userinfo->size();
     if(size==0)
         return;

@@ -24,6 +24,6 @@ public:
 
 protected:
 	TIWaitingRoom() {}
-	explicit TIWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry);
+	explicit TIWaitingRoom(const RoomInfo& roominfo);
 
 };
