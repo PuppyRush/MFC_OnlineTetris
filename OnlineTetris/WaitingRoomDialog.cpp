@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+#include "StringManager.h"
 #include "OnlineTetris.h"
 #include "WaitingRoomDialog.h"
 #include "../Commons/TProperty.h"
@@ -59,12 +60,12 @@ BOOL WaitingRoomDlg::OnInitDialog()
 
 	m_columnNames.emplace_back("방 번호");
 	m_columnNames.emplace_back("방 이름");
-	m_columnNames.emplace_back("참가인원(%d/%d)");
+	m_columnNames.emplace_back("참가인원");
 	m_columnNames.emplace_back("방 생성시간");
 
 	for(int i=0; i < m_columnNames.size() ; i++)
 	{
-		m_roomList.InsertColumn(i, CString(m_columnNames.at(i).c_str()), NULL, 50);
+		m_roomList.InsertColumn(i, CString(m_columnNames.at(i).c_str()), NULL, 100);
 	}
 	
 	return true;
@@ -79,6 +80,7 @@ void WaitingRoomDlg::OnBnClickedOk()
 
 void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomInfo& info)
 {
+	auto lastrow = m_roomList.GetItemCount();
 	for (size_t i = 0; i < info.waitingRoomSize; i++)
 	{
 		const auto &room = info.waitingRoom[i];
@@ -90,6 +92,23 @@ void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomInfo& info)
 		if (it == m_gamerooms.end())
 		{
 			m_gamerooms.emplace_back(make_shared<RoomInfo>(room));
+
+			int col = 1;
+			m_roomList.InsertItem(lastrow, StringManager::ToCStringFrom(room.roomNumber));
+			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, StringManager::ToCStringFrom(room.roomName),0, 0, 0, NULL);
+
+			char buf[10];
+			sprintf(buf, "%d/%d", room.currentUserCount, room.fullUserCount);
+			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(buf), 0, 0, 0, NULL);
+
+			//생성시간
+			auto now = localtime(&room.makeTime);
+			char time[100];
+			sprintf(time, "%d일 %d시 %d분", now->tm_mday, now->tm_hour, now->tm_min);
+			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(time), 0, 0, 0, NULL);
+
+			delete now;
+			lastrow++;
 		}
 	}
 }
