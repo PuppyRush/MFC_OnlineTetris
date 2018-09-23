@@ -36,8 +36,6 @@ private:
 	void _recv() ;
 	void _switchingMessage();
 
-	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject> > m_messageQ;
-
 	bool m_continue;
 	std::shared_ptr<std::thread> m_recvThread;
 	std::shared_ptr<std::thread> m_sendThread;

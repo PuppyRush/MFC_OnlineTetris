@@ -22,6 +22,12 @@ public:
 	virtual void registryMessage() override;
 
 
+	inline static std::shared_ptr<TServerSocket> get()
+	{
+		static auto serversocekt = std::make_shared<TServerSocket>();
+		return serversocekt;
+	}
+
 	inline static std::shared_ptr<TServerSocket> makeShared()
 	{
 		return std::shared_ptr<TServerSocket>(new TServerSocket());

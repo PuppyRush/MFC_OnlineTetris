@@ -27,8 +27,6 @@ TIRoom::TIRoom(const RoomInfo& roominfo)
 	m_roomInfo = make_shared<RoomInfo>(roominfo);
 	m_roomInfo->unique = this->getUnique();
 	m_roomInfo->makeTime =  std::time(0);
-	
-
 }
 
 TIRoom::~TIRoom()

@@ -1,4 +1,4 @@
-#pragma pack(push,1)
+
 
 #pragma once
 
@@ -6,7 +6,9 @@
 #include <cassert>
 #include <string.h>
 #include <ctime>
+
 #include "TType.h"
+#include "DefineInfo.h"
 #undef POINT
 
 
@@ -43,8 +45,8 @@ private:
 
 typedef struct tPOINT
 {
-	long x;
-	long y;
+	short x;
+	short y;
 }tPOINT;
 
 
@@ -58,27 +60,29 @@ typedef struct FIGURE
 	int dir;
 }FIGURE;
 
+#pragma pack(push,1)
+
 typedef struct UserInfo
 {
 public:
+	char name[ID_LEN];
 	tetris::t_unique userUnique;
-	char name[10];
 
 	UserInfo() {}
 	explicit UserInfo(const tetris::t_unique userUnique, const char* name)
 		:userUnique(userUnique)
 	{
-		assert(10 > strlen(name));
+		assert(ID_LEN > strlen(name));
 		strncpy(this->name, name, 10);
 	}
 }UserInfo;
 
 typedef struct RoomInfo
 {
-	tetris::t_unique unique;
 	tetris::t_time makeTime;
+	char roomName[ROOMNAME_LEN];
+	tetris::t_unique unique;
 	size_t roomNumber;
-	char roomName[10];
 	size_t fullUserCount;
 	size_t currentUserCount;
 
@@ -94,7 +98,7 @@ typedef struct RoomInfo
 		:unique(unique), makeTime(makeTime)
 		, roomNumber(roomnumber), fullUserCount(fullusercount), currentUserCount(currentusercount)
 	{
-		assert(10 > strlen(roomName));
+		assert(ROOMNAME_LEN > strlen(roomName));
 		strncpy(this->roomName, roomName, 10);
 	}
 }RoomInfo;

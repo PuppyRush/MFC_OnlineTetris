@@ -47,7 +47,6 @@ volatile tetris::t_socket TSocketImpl::_accept()
 	int accepted_socket = ::accept(getSocket(), reinterpret_cast<struct sockaddr *>(&cliaddr), &addrlen);
 	if (accepted_socket < 0)
 	{
-		perror("accept fail");
 		return std::numeric_limits<tetris::t_socket>::max();
 	}
 	return static_cast<tetris::t_socket>(accepted_socket);

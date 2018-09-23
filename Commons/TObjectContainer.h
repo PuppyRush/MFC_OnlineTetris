@@ -104,7 +104,7 @@ public:
 
 	virtual void refresh() override
 	{
-		std::lock_guard<std::mutex> lock(m_refreshMutex);
+		//std::lock_guard<std::mutex> lock(m_refreshMutex);
 
 		m_isRefreshing = true;
 
@@ -149,8 +149,7 @@ public:
 	{
 		if (m_ptrMap.count(newObj->getSocket()) == 0)
 		{
-			m_addedQ.push(newObj);
-			refresh();
+			m_ptrMap.insert(make_pair(newObj->getSocket(), newObj));
 			return true;
 		}
 		else
@@ -220,7 +219,6 @@ public:
 
 	ContainerIterator<T> begin() const
 	{
-
 		if (m_ptrMap.empty())
 			return ContainerIterator<T>(0, 0);
 		else

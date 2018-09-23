@@ -61,6 +61,7 @@ void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
     if(size==0)
         return;
 
+/*
     UserInfo* userinfoAry = new UserInfo[size];
 
     const auto routine = size/USER_LENGTH+1;
@@ -77,6 +78,7 @@ void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
 
         TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitingroom_msg));
     }
+*/
 
 }
 void TWaitingRoom::sendWaitingRooms(const tetris::t_socket socketUnique)
