@@ -80,14 +80,19 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	this->portnum = portnum;
 	this->ipstring = ipstring;
 
-	shared_ptr<TClientSocket> socket = TClientSocket::get();
-	//ConnectingDialog conDlg;
-	//conDlg.Create(IDD_CONNECTING);
+	const auto waitfn = &EnteringDialog::_RunWaitDialog;
+	auto wiat_th = make_shared<thread>(waitfn, this);
 
-	//while (!socket->isConnected())
-	//{
+	shared_ptr<TClientSocket> socket = TClientSocket::get();
+	while (!socket->isConnected())
+	{
 		if (socket->create(ipstring, portnum) == 0)
 		{
+			ConnectingDialog::GetDialog()->CloseWindow();
+
+			auto socketThread = TMessageThread::get();
+			socketThread->run();
+
 			auto me = TClientUser::get();
 			TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->add(TWaitingRoom::get());
 			TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(socket);
@@ -99,15 +104,14 @@ void EnteringDialog::OnBnClickedBtnEnter()
 				socket->SelfClose();
 			}
 
-			//conDlg.CloseWindow();
+			break;
 		}
 		else
 		{
-			//conDlg.ShowWindow(SW_SHOW);
-			//AfxMessageBox(_T("Cant Connect to server. check written your ip and port"));
 			socket->SelfClose();
 		}
-	//}
+	}
+
 	CDialogEx::OnOK();
 }
 
@@ -137,4 +141,14 @@ void EnteringDialog::PostNcDestroy()
 	// TODO: ���⿡ Ư��ȭ�� �ڵ带 �߰� ��/�Ǵ� �⺻ Ŭ������ ȣ���մϴ�.
 	this->DestroyWindow();
 	CDialogEx::PostNcDestroy();
+}
+
+
+void EnteringDialog::_RunWaitDialog()
+{
+	
+	auto conDlg = ConnectingDialog::GetDialog();
+	conDlg->DoModal();
+	//conDlg->Create(IDD_CONNECTING);
+	//conDlg->ShowWindow(SW_SHOW);
 }

@@ -59,6 +59,9 @@ void TMessageThread::_send()
 void TMessageThread::_recv()
 {
 	auto sender = TMessageSender::get();
+	vector<tetris::t_socket> closedSockets;
+	closedSockets.reserve(10);
+
 	while (m_continue)
 	{
 		for (const auto socket : *m_socketCon)
@@ -73,8 +76,20 @@ void TMessageThread::_recv()
 					obj->send(msg);
 
 				for (const auto obj : *m_waitingroomCon)
-					obj->send(msg); 
+					obj->send(msg);
+			}
+			else
+			{
+				closedSockets.push_back(socket->getSocket());
+				socket->close();
+				break;
 			}
 		}
+
+		for (const auto socket : closedSockets)
+		{
+			m_socketCon->remove(socket);
+		}
+		closedSockets.clear();
 	}
 }

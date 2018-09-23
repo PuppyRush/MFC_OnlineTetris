@@ -15,14 +15,20 @@
 
 using namespace std;
 
+TIRoom::TIRoom()
+	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::Socket))
+{
+}
+
+
 TIRoom::TIRoom(const RoomInfo& roominfo)
+	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::Socket))
 {
 	m_roomInfo = make_shared<RoomInfo>(roominfo);
 	m_roomInfo->unique = this->getUnique();
 	m_roomInfo->makeTime =  std::time(0);
-	auto l = sizeof(RoomInfo); //40
-	if(l==8)
-		l++;
+	
+
 }
 
 TIRoom::~TIRoom()
@@ -30,11 +36,14 @@ TIRoom::~TIRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TIRoom::add(const tetris::t_ptr<UserInfo> userinfo)
+const tetris::t_error TIRoom::enter(const tetris::t_ptr<UserInfo> userinfo)
 {
 	if (m_userInfo.count(userinfo->userUnique) == 0)
 	{
 		m_userInfo.insert(make_pair(userinfo->userUnique, userinfo));
+
+		//m_userCon->at(userinfo->userUnique)->
+
 		return toUType( TIRoom::errorCode::Ok);
 	}
 	else

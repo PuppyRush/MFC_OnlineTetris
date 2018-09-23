@@ -49,9 +49,7 @@ tetris::t_socket TetrisSocket::popSocket()
 
 tetris::t_error TetrisSocket::accept()
 {
-    _runAcception();
-
-
+    _callRunAcception();
     return 0u;
 }
 
@@ -66,9 +64,9 @@ tetris::t_error TetrisSocket::close()
     return _close(m_socket);
 }
 
-void TetrisSocket::_runAcception()
+void TetrisSocket::_callRunAcception()
 {
-    const auto acceptFn = &TetrisSocket::_acceptSocket;
+    const auto acceptFn = &TetrisSocket::_runAccept;
     m_acceptThread = make_shared<thread>(acceptFn, this);
 }
 
@@ -92,7 +90,7 @@ const TMessageObject TetrisSocket::recv()
 }
 
 
-void TetrisSocket::_acceptSocket()
+void TetrisSocket::_runAccept()
 {
     while (m_closeSocket)
     {

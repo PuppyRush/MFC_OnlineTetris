@@ -167,7 +167,17 @@ public:
 		refresh();
 	}
 
-	bool remove(PtrType removedObj)
+	bool remove(const tetris::t_socket socket)
+	{
+		if (m_ptrMap.count(socket) > 0)
+		{
+			m_removedQ.push(socket);
+			refresh();
+			return true;
+		}
+	}
+
+	bool remove(const PtrType removedObj)
 	{
 		if (m_ptrMap.count(removedObj->getSocket()) > 0)
 		{

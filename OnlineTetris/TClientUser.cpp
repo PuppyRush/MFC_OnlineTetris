@@ -14,8 +14,6 @@ static char THIS_FILE[] = __FILE__;
 TClientUser::TClientUser()
 {
 	registryMessage();
-
-	
 }
 
 void TClientUser::registryMessage()

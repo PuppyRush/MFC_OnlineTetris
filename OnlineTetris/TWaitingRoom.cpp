@@ -2,13 +2,21 @@
 #include "TWaitingRoom.h"
 #include "WaitingRoomDialog.h"
 
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+
 TWaitingRoom::TWaitingRoom()
 {
 	registryMessage();
 }
 
 TWaitingRoom::TWaitingRoom(const std::shared_ptr<RoomInfo> roominfo, const std::vector<UserInfo>& userinfoAry)
-	:TIWaitingRoom(roominfo, userinfoAry)
+	:TIWaitingRoom()
 {
 	registryMessage();
 }

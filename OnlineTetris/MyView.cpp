@@ -268,7 +268,7 @@ void CMyView::DrawImage(CDC *pDC)
 
 	if(!pDoc->m_isStart && !pDoc->m_end)
 	{
-		for each(const auto pair in pDoc->m_clientUserList)
+		for (const auto pair : pDoc->m_clientUserList)
 		{
 			const auto user = pair.second;
 			const CString username(user->getUserName().c_str());
@@ -477,7 +477,7 @@ void CMyView::DrawImage(CDC *pDC)
 		CImage SubFigure;
 		CImage SubMoveFigure;
 
-		for each(const auto pair in pDoc->m_clientUserList)
+		for (const auto pair : pDoc->m_clientUserList)
 		{
 			const auto user = pair.second;
 			const CString username(user->getUserName().c_str());
@@ -675,7 +675,7 @@ void CMyView::DrawImage(CDC *pDC)
 			}
 		}
 
-		for each(const auto pair in pDoc->m_clientUserList)
+		for (const auto pair : pDoc->m_clientUserList)
 		{
 			const auto user = pair.second;
 			const CString username(user->getUserName().c_str());
@@ -866,8 +866,6 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
-
-
 	if(pDoc->m_isStart && ME->getSurvive())
 	{
 
@@ -879,83 +877,79 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		FIGURE *fg = &(ME->FG);
 		tPOINT c;
 
-		if(nChar == VK_SPACE)
+		switch (nChar)
+		{
+		case VK_SPACE:
 		{
 			bool chk = false;
 			int l = 0;
 			//현재 도형의 폭에 한해서 제일 높은 행을 찾는다.
-			while(fg->end.y < VERNUM)
+			while (fg->end.y < VERNUM)
 			{
 
-				for(l = 0; l < FG_FIXEDNUM; l++)
+				for (l = 0; l < FG_FIXEDNUM; l++)
 				{
 					c = ME->FG.FgInfo[l];
 					//바닥이나 도형에 착지
-					if(c.y == VERNUM - 1 || ME->GameBoard[c.y + 1][c.x] == 1)
+					if (c.y == VERNUM - 1 || ME->GameBoard[c.y + 1][c.x] == 1)
 					{
 						SetFigure();
 						CreateFigure();
 						goto brk;
 					}
 				}
-
 				MoveToDown();
-
-
 			}
-		}//VK_SPACE
-
-		else if(nChar == VK_LEFT)
+			break;
+		}
+		case VK_LEFT:
 		{
-			if(fg->end.x == 0)
+			if (fg->end.x == 0)
 				goto brk;
 
-
 			int i = 0;
-			for(i = 0; i < FG_FIXEDNUM; i++)
+			for (i = 0; i < FG_FIXEDNUM; i++)
 			{
 				c = fg->FgInfo[i];
-				if(ME->GameBoard[c.y][c.x - 1] == 1)
+				if (ME->GameBoard[c.y][c.x - 1] == 1)
 					break;
 			}
-			if(i == FG_FIXEDNUM)
+			if (i == FG_FIXEDNUM)
 				MoveToLeft();
 
 			ME->GhostFG = ME->FG;
 			SetGhostFigure();
-
-		}//vk_left	
-
-		else if(nChar == VK_RIGHT)
+			break;
+		}
+		case VK_RIGHT:
 		{
-			if(fg->end.x + fg->Width == HORNUM)
+			if (fg->end.x + fg->Width == HORNUM)
 				goto brk;
 
 			int i = 0;
-			for(i = 0; i < FG_FIXEDNUM; i++)
+			for (i = 0; i < FG_FIXEDNUM; i++)
 			{
 				c = fg->FgInfo[i];
-				if(ME->GameBoard[c.y][c.x + 1] == 1)
+				if (ME->GameBoard[c.y][c.x + 1] == 1)
 					break;
 			}
-			if(i == FG_FIXEDNUM)
+			if (i == FG_FIXEDNUM)
 				MoveToRight();
 
-			if(pDoc->m_ghost)
+			if (pDoc->m_ghost)
 			{
 				ME->GhostFG = ME->FG;
 				SetGhostFigure();
 			}
-		}//vk_right
-
-		else if(nChar == VK_DOWN)
+			break;
+		}
+		case VK_DOWN:
 		{
-
 			int i = 0;
-			for(i = 0; i < FG_FIXEDNUM; i++)
+			for (i = 0; i < FG_FIXEDNUM; i++)
 			{
 				c = fg->FgInfo[i];
-				if(c.y + 1 == VERNUM || ME->GameBoard[c.y + 1][c.x] == 1)
+				if (c.y + 1 == VERNUM || ME->GameBoard[c.y + 1][c.x] == 1)
 				{
 					SetFigure();
 					CreateFigure();
@@ -963,19 +957,17 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 
 			}
-			if(i == FG_FIXEDNUM)
+			if (i == FG_FIXEDNUM)
 				MoveToDown();
 
-			if(pDoc->m_ghost)
+			if (pDoc->m_ghost)
 			{
 				ME->GhostFG = ME->FG;
 				SetGhostFigure();
 			}
-
-		}//vk_down
-
-
-		else if(nChar == VK_UP)
+			break;
+		}
+		case VK_UP:
 		{
 			auto c = ME->FG.end;
 			FIGURE backup;
@@ -986,11 +978,11 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			backup.Width = fg->Width;
 			backup.NextFigure = fg->NextFigure;
 
-			switch(fg->Figure)
+			switch (fg->Figure)
 			{
 
 			case JMINO:
-				switch(fg->dir)
+				switch (fg->dir)
 				{
 				case 1:
 
@@ -1056,7 +1048,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 				break;
 			case LMINO:
-				switch(fg->dir)
+				switch (fg->dir)
 				{
 				case 1:
 					fg->FgInfo[0].x = c.x - 1;
@@ -1121,7 +1113,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			case OMINO:
 				break;
 			case TMINO:
-				switch(fg->dir)
+				switch (fg->dir)
 				{
 				case 1:
 					fg->FgInfo[0].x = c.x;
@@ -1182,7 +1174,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 				break;
 			case SMINO:
-				switch(fg->dir)
+				switch (fg->dir)
 				{
 				case 1:
 					fg->FgInfo[0].x = c.x;
@@ -1213,7 +1205,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 				break;
 			case ZMINO:
-				switch(fg->dir)
+				switch (fg->dir)
 				{
 				case 1:
 					fg->FgInfo[0].x = c.x;
@@ -1244,12 +1236,12 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 				break;
 			case IMINO:
-				switch(fg->dir)
+				switch (fg->dir)
 				{
 				case 1:
-					if(fg->end.x == 0)
+					if (fg->end.x == 0)
 						MoveToRight();
-					else if(fg->end.x > HORNUM - 3)
+					else if (fg->end.x > HORNUM - 3)
 					{
 						MoveToLeft();
 						MoveToLeft();
@@ -1287,10 +1279,11 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 				break;
 			default:
+				ASSERT(0);
 				break;
 			}//switch
 
-			if(CheckDup(backup))
+			if (CheckDup(backup))
 			{
 				fg->dir = backup.dir;
 				fg->end = backup.end;
@@ -1301,14 +1294,14 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				fg->Width = backup.Width;
 			}
 
-			if(pDoc->m_ghost)
+			if (pDoc->m_ghost)
 			{
 				ME->GhostFG = ME->FG;
 				SetGhostFigure();
 			}
-
-		}//vk up
-
+			break;
+		}
+		}
 		VirtualDraw();
 	}//if start
 

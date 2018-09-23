@@ -44,8 +44,6 @@ public:
 	IPString ipstring;
 	size_t portnum;
 
-public:
-
 	static shared_ptr<EnteringDialog> GetDialog()
 	{
 		static auto dlg = shared_ptr<EnteringDialog>(new EnteringDialog());
@@ -57,5 +55,8 @@ public:
 	afx_msg void OnClose();
 	virtual void PostNcDestroy();
 	
+private:
 	
+	void _RunWaitDialog();
+
 };

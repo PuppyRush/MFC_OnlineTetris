@@ -90,6 +90,9 @@
     <ClInclude Include="TMessageSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Entity\TChat.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Validator.cpp">
@@ -120,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TObject.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\TChat.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>

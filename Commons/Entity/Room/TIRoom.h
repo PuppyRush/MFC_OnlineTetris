@@ -38,19 +38,19 @@ public:
 
 	virtual ~TIRoom();
 
-	virtual const tetris::t_error add(const tetris::t_ptr<UserInfo> userinfo);
+	virtual const tetris::t_error enter(const tetris::t_ptr<UserInfo> userinfo);
 	virtual const tetris::t_error exit(const tetris::t_unique user);
 	virtual const bool exist(const tetris::t_unique unique) const;
 
 	inline const size_t size() const { return m_userInfo.size(); }
-	inline const size_t roomNumber() const { return m_roomInfo->roomNumber;	}
+	inline const size_t getRoomNumber() const { return m_roomInfo->roomNumber;	}
 	const std::shared_ptr<std::vector<UserInfo>> getUserInfo() const;
 	inline const std::shared_ptr<RoomInfo> getRoomInfo() const noexcept {return m_roomInfo;	}
 
 
 
 protected:
-	TIRoom() {}
+	TIRoom();
 	explicit TIRoom(const RoomInfo& roominfo);
 
 	virtual const tetris::t_error _validator(const TIRoom &room) const = 0;
@@ -58,4 +58,5 @@ protected:
 private:
 	std::unordered_map<tetris::t_unique, std::shared_ptr<UserInfo>> m_userInfo;
 	std::shared_ptr<RoomInfo> m_roomInfo;
+	std::shared_ptr<TObjectContainer<TetrisUser>> m_userCon;
 };

@@ -34,9 +34,13 @@ public:
 		return this->m_socket != socket.m_socket;
 	}
 
-	inline const tetris::t_socket getSocket()noexcept { return m_socket; }
+	inline const tetris::t_socket getSocket() const noexcept { return m_socket; }
 	inline void setIP(const IPString &ip)	 noexcept {m_ip = ip;}
+	inline const IPString getIP() const noexcept {	m_ip;	}
 	inline void setPort(tetris::t_port port) noexcept {m_port = port;}
+	inline const tetris::t_port  getPort() const noexcept {	return m_port;	}
+	inline void setClose(const bool close) { m_closeSocket = close;	}
+	inline const bool isClose() const noexcept { return m_closeSocket; }
 
 	tetris::t_socket popSocket();
 	tetris::t_error connect();
@@ -64,14 +68,14 @@ protected:
 	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
 	virtual const TMessageObject _recvFrom() = 0;
 
-	void _acceptSocket();
+	void _runAccept();
 
 	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
 
 private:
 	TetrisSocket() = delete;
 
-	void _runAcception();
+	void _callRunAcception();
 	void _end();
 
 	tetris::t_socket m_socket;

@@ -4,6 +4,7 @@
 
 #include "TIGameRoom.h"
 
+
 TIGameRoom::TIGameRoom(const RoomInfo& roominfo)
 	:TIRoom(roominfo)
 {

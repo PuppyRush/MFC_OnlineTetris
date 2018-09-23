@@ -2,6 +2,13 @@
 #include "SocketImpl.h"
 #include "../Commons/TMessageThread.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+
 SocketImpl::SocketImpl(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port)
 	:TetrisSocket(domain, type, protocol,ip,port)
 {
@@ -25,7 +32,7 @@ tetris::t_error SocketImpl::create(IPString ip, tetris::t_port port)
 {
 	m_ip = ip;
 	m_port = port;
-	setSocket(socket(m_domain, m_type, m_protocol));
+	setSocket(::socket(m_domain, m_type, m_protocol));
 
 	struct sockaddr_in SockInfo;
 
@@ -37,6 +44,7 @@ tetris::t_error SocketImpl::create(IPString ip, tetris::t_port port)
 	err = ::bind(getSocket(), (struct sockaddr*)&SockInfo, sizeof(struct sockaddr_in));
 	if (err == 0)
 	{
+		this->setClose(false);
 		return this->connect();
 	}
 	else
@@ -55,8 +63,6 @@ tetris::t_error SocketImpl::_connect()
 	int res = 0;
 	if ((res = ::connect(getSocket(), (sockaddr *)&addr, sizeof(sockaddr_in))) == 0)
 	{
-		auto socketThread = TMessageThread::get();
-		socketThread->run();
 		return tetris::t_error(0);
 	}
 	else
@@ -79,6 +85,10 @@ const TMessageObject SocketImpl::_recvFrom()
 	memset(buf, 0, PACKET_LEN);
 	int recved = ::recv(getSocket(), const_cast<char *>(buf), PACKET_LEN, 0);
 	const tetris::t_msgsize recvLen = recved <= 0 ? 0u : recved;
-	
+	if (recvLen == 0)
+	{
+		delete buf;
+		TMessageObject::emptyMessage(getSocket());
+	}
 	return TMessageObject::toMessage(getSocket(), buf, recvLen);
 }

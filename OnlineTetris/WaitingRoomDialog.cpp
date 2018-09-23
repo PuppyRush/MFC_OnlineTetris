@@ -102,12 +102,12 @@ void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomInfo& info)
 			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(buf), 0, 0, 0, NULL);
 
 			//생성시간
-			auto now = localtime(&room.makeTime);
-			char time[100];
-			sprintf(time, "%d일 %d시 %d분", now->tm_mday, now->tm_hour, now->tm_min);
-			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(time), 0, 0, 0, NULL);
+			//auto now = localtime(&room.makeTime);
+			//char time[100];
+			//sprintf(time, "%d일 %d시 %d분", now->tm_mday, now->tm_hour, now->tm_min);
+			//m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(time), 0, 0, 0, NULL);
 
-			delete now;
+			//delete now;
 			lastrow++;
 		}
 	}

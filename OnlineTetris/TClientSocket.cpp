@@ -8,9 +8,7 @@
 #include "OnlineTetris.h"
 #include "TClientSocket.h"
 #include "TClientUser.h"
-
-
-
+ 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -107,7 +105,6 @@ void TClientSocket::registryMessage()
 
 void TClientSocket::SelfClose()
 {
-	m_isConnected = false;
 	close();
 }
 

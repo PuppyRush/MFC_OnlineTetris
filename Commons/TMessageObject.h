@@ -42,6 +42,11 @@ public:
 		return TMessageObject(socket, prio, size, msg);
 	}
 
+	inline static const TMessageObject emptyMessage(const tetris::t_socket socket)
+	{
+		return TMessageObject(socket, static_cast<tetris::t_priority>(Priority::VeryLow), 0, nullptr);
+	}
+
     inline bool operator<(const TMessageObject &msg) const noexcept
     {return this->m_priority < msg.m_priority;}
 

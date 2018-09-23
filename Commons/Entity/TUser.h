@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-
+#include "TChat.h"
 #include "TSocket.h"
 #include "TObject.h"
 #include "../TProperty.h"
@@ -40,11 +40,15 @@ public:
 	inline void setOrder(const int idx) noexcept { m_order = idx; }
 	inline void setName(const std::string name) { m_name = name; }
 	inline void setReady(const bool rdy) noexcept { m_isReady = rdy; }
-	
-	TetrisUser();
+
+	void removeFilter(const tetris::t_unique);
+	void addFilter(const tetris::t_unique);
+	void add(const std::string str);
+	void addWhisper(const std::string str);
+	void clear();
 
 protected:
-	
+	TetrisUser();
 
 private:
 	int m_order;
@@ -52,4 +56,7 @@ private:
 	IPString m_ip;
 	bool m_isReady;
 	bool m_isSurvive;
+	std::shared_ptr<TChat> m_chat;
+
+	
 };
