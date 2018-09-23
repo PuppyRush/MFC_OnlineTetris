@@ -36,8 +36,7 @@ protected:
 	{
 		if (m_ptrMap.count(newObj->getUnique()) == 0)
 		{
-			m_addedQ.push(newObj);
-			refresh();
+			m_ptrMap.insert(make_pair(newObj->getUnique(),newObj));
 			return true;
 		}
 		else

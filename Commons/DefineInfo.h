@@ -121,8 +121,9 @@ enum class ETC : uint16_t
 #define	SY_MAIN	30
 
 //ũ��, ��������
-#define MAX_ENTER		6
-#define ID_LEN			12
+#define MAX_ENTER		8
+#define ID_LEN			16
+#define ROOMNAME_LEN	16
 #define HEADER_NUM		2
 #define MSG_LEN			1024
 #define FG_KINDNUM		7		//������ ������ 7��

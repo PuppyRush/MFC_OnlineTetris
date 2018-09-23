@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-#pragma pack(1)
+#pragma pack(push,1)
 
-#pragma warning(push)
-#pragma warning(disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#
+#pragma warning(push, disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#
 
 #include <cassert>
 #include <algorithm>
@@ -36,9 +35,9 @@ static void CopyChars(T dest[SIZE1][SIZE2], const T(*src)[SIZE2], const size_t s
 	assert(SIZE2 >= src_dimension2);
 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2);
-
-	for (size_t i = 0; i < src_dimension1; i++)
-		memcpy(dest[i], src[i], src_dimension2);
+	memcpy(dest, src, sizeof(T)*SIZE1*SIZE2);
+	/*for (size_t i = 0; i < src_dimension1; i++)
+		memcpy(dest[i], src[i], src_dimension2);*/
 }
 
 template <class T, size_t SIZE1, size_t SIZE2, size_t SIZE3>
@@ -49,10 +48,10 @@ static void CopyChars(T dest[SIZE1][SIZE2][SIZE3], const T(*src)[SIZE2][SIZE3], 
 	assert(SIZE3 >= src_dimension3);
 
 	memset(dest, 0, sizeof(T)*SIZE1*SIZE2*SIZE3);
-
-	for (size_t i = 0; i < src_dimension1; i++)
+	memcpy(dest, src, sizeof(T)*SIZE1*SIZE2*SIZE3);
+	/*for (size_t i = 0; i < src_dimension1; i++)
 		for (size_t l = 0; l < src_dimension2; l++)
-			memcpy(dest[i][l], src[i][l], src_dimension3);
+			memcpy(dest[i][l], src[i][l], src_dimension3);*/
 }
 
 typedef struct Header
@@ -128,8 +127,8 @@ typedef struct mConnectionInfo : public Header
 typedef struct mWaitingUserInfo : public Header
 {
 #define USER_LENGTH 8
-	size_t userInfoSize;
-	UserInfo userinfo[USER_LENGTH];
+    UserInfo userinfo[USER_LENGTH];
+    size_t userInfoSize;
 	tetris::t_unique unique;
 
 	mWaitingUserInfo() {}
@@ -156,8 +155,8 @@ typedef struct mWaitingUserInfo : public Header
 typedef struct mWaitingRoomInfo : public Header
 {
 #define ROOM_LENGTH 2
-	size_t waitingRoomSize;
-	RoomInfo waitingRoom[ROOM_LENGTH];
+    RoomInfo waitingRoom[ROOM_LENGTH];
+    size_t waitingRoomSize;
 
 	mWaitingRoomInfo() {}
 	explicit mWaitingRoomInfo
@@ -179,8 +178,8 @@ typedef struct mWaitingRoomInfo : public Header
 
 typedef struct mName : public Header
 {
-	size_t namelen;
-	char name[ID_LEN];
+    char name[ID_LEN];
+    size_t namelen;
 
 	mName()
 	:Header(200, 0), namelen(0)
@@ -199,9 +198,9 @@ typedef struct mName : public Header
 
 typedef struct mNames : public Header
 {
-	const size_t enternum;
-	size_t namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
+    char name[MAX_ENTER][ID_LEN];
+    size_t namelen[MAX_ENTER];
+    const size_t enternum;
 
 	explicit mNames(const Header h, const size_t enternum, const size_t *namelen, const char(*names)[ID_LEN])
 		:Header(h), 
@@ -216,8 +215,8 @@ typedef struct mNames : public Header
 
 typedef struct mMessage :public Header
 {
-	size_t msglen;
-	char msg[MSG_LEN];
+    char msg[MSG_LEN];
+    size_t msglen;
 
 	explicit mMessage(const Header h, const size_t msglen, const char* msg)
 		:Header(h)
@@ -245,6 +244,7 @@ typedef struct mReady : public Header
 	size_t namelen;
 	char fromname[ID_LEN];
 	bool ready;
+	char zero;
 
 	explicit mReady(const Header h, const size_t namelen, const char* fromname, const bool ready)
 		:Header(h),
@@ -257,9 +257,9 @@ typedef struct mReady : public Header
 
 typedef struct mRadies : public Header
 {
-	const size_t enternum;
-	size_t namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
+    char name[MAX_ENTER][ID_LEN];
+    size_t namelen[MAX_ENTER];
+    const size_t enternum;
 	bool ready[MAX_ENTER];
 
 	explicit mRadies(const Header h, const bool *ready, const int enternum, const size_t *namelen, 
@@ -295,10 +295,10 @@ typedef struct mStartsignal : public Header
 
 typedef struct mMapstates : public Header
 {
-	const size_t enternum;
-	int namelen[MAX_ENTER];
-	char name[MAX_ENTER][ID_LEN];
-	int board[MAX_ENTER][VERNUM][HORNUM];
+    int board[MAX_ENTER][VERNUM][HORNUM];
+    char name[MAX_ENTER][ID_LEN];
+    int namelen[MAX_ENTER];
+    const size_t enternum;
 
 	mMapstates(const Header h, const size_t enuternum, const int *namelen, char(*name)[ID_LEN], int(*board)[VERNUM][HORNUM])
 		:Header(h), 
@@ -314,11 +314,11 @@ typedef struct mMapstates : public Header
 
 typedef struct mMapstate : public Header
 {
-	const size_t namelen;
-	char name[ID_LEN];
-	int board[VERNUM][HORNUM];
+    int board[VERNUM][HORNUM];
+    tPOINT figure[FG_FIXEDNUM];
+    char name[ID_LEN];
+    const size_t namelen;
 	int kindfigure;
-	tPOINT figure[FG_FIXEDNUM];
 
 	mMapstate(const Header h, const size_t namelen, const char *name, const int board[VERNUM][HORNUM], const size_t kindfigure, const tPOINT figure[FG_FIXEDNUM])
 		:Header(h), 
@@ -335,9 +335,9 @@ typedef struct mMapstate : public Header
 
 typedef struct mAddline : public Header
 {
-	size_t namelen;
+    char name[ID_LEN];
+    size_t namelen;
 	size_t linenum;
-	char name[ID_LEN];
 
 	mAddline(const Header h, const size_t namelen, const char *name, const size_t linenum)
 		:Header(h), 
@@ -351,4 +351,4 @@ typedef struct mAddline : public Header
 }mAddline;
 
 #pragma warning(pop)
-#pragma warning(pop)
+#pragma pack(pop)

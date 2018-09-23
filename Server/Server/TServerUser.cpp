@@ -36,7 +36,7 @@ TServerUser::~TServerUser()
 
 void TServerUser::registryMessage()
 {
-   // this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
+   //this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
 }
 
 

@@ -64,8 +64,7 @@ add_executable(OnlineTetris
         Server/main.cpp
         )
 
-
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+set(THREADS_PREFER_PTHREAD_FLAG ON -g -fno-omit-frame-pointer)
 find_package(Threads REQUIRED)
 target_include_directories(OnlineTetris PUBLIC ${PROJECT_SOURCE_DIR}/Commons)
 target_link_libraries(OnlineTetris pthread)

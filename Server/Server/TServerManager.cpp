@@ -37,7 +37,7 @@ TServerManager::TServerManager()
 	:m_closedServer(true)
 {
 	// TODO Auto-generated constructor stub
-	m_mainServerSocket = TServerSocket::makeShared();
+	m_mainServerSocket = TServerSocket::get();
 }
 
 TServerManager::~TServerManager()
@@ -90,6 +90,8 @@ void TServerManager::makeWaitingRoom()
 
 	auto admin = TServerUser::get();
 	waitingRoom->add(make_shared<UserInfo>(admin->getUnique(), admin->getUserName().c_str()));
+
+	sizeof(RoomInfo);
 }
 
 void TServerManager::HelloUser(const tetris::t_socket socketUnique)

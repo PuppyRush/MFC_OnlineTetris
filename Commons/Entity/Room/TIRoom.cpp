@@ -16,13 +16,11 @@
 using namespace std;
 
 TIRoom::TIRoom(const RoomInfo& roominfo)
+:m_roomInfo(nullptr)
 {
 	m_roomInfo = make_shared<RoomInfo>(roominfo);
 	m_roomInfo->unique = this->getUnique();
 	m_roomInfo->makeTime =  std::time(0);
-	auto l = sizeof(RoomInfo); //40
-	if(l==8)
-		l++;
 }
 
 TIRoom::~TIRoom()
