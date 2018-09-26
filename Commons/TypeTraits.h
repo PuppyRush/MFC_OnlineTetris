@@ -41,32 +41,32 @@ constexpr const tetris::t_priority toPriority(const Priority priority) noexcept
 template <class T>
 struct EnumIterator
 {
-	T it;
+	T value;
 
 	EnumIterator()
-		:it(T::Begin)
+		:value(T::Begin)
 	{}
 
 	inline const T begin() noexcept
 	{
-		it = static_cast<T>( toUType(it) << 1);
-		return it;
+		value = static_cast<T>( toUType(value) << 1);
+		return value;
 	}
 
 	inline const bool end() const noexcept
 	{
-		return toUType(it) != toUType(T::End);
+		return toUType(value) != toUType(T::End);
 	}
 
 	EnumIterator operator++()
 	{
-		it = (T)(toUType(it) << 1);
+		value = (T)(toUType(value) << 1);
 		return *this;
 	}
 	
 	bool operator!=(const EnumIterator *other)
 	{
-		return toUType(it) != toUType(other->it);
+		return toUType(value) != toUType(other->value);
 	}
 };
 

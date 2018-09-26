@@ -18,6 +18,10 @@ TMessageThread::TMessageThread()
 	m_socketCon = factory->getContainer<TetrisSocket>(property_distinguish::Socket);
 	m_gameroomCon = factory->getContainer<TIGameRoom>(property_distinguish::GameRoom);
 	m_waitingroomCon = factory->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+
+	m_objcontainerAry.push_back(m_userCon);
+	m_objcontainerAry.push_back(m_gameroomCon);
+	m_objcontainerAry.push_back(m_waitingroomCon);
 }
 
 TMessageThread::~TMessageThread()
@@ -69,14 +73,13 @@ void TMessageThread::_recv()
 			auto msg = socket->recv();
 			if (msg.getSize() > 0)
 			{
-				for (const auto obj : *m_userCon)
-					obj->send(msg);
-
-				for (const auto obj : *m_gameroomCon)
-					obj->send(msg);
-
-				for (const auto obj : *m_waitingroomCon)
-					obj->send(msg);
+				for (const auto con : m_objcontainerAry)
+				{
+					for (auto it = con->begin(); it != con->end(); it++)
+					{
+						it->second->send(msg);
+					}
+				}
 			}
 			else
 			{

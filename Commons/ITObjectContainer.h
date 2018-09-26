@@ -9,6 +9,9 @@
 class ITObjectContainer : public Uncopyable
 {
 public:
+	using PtrType = std::shared_ptr<TObject>;
+	using ContainerType = std::map<tetris::t_unique, PtrType>;
+	using Iterator = ContainerType::iterator;
 
 	inline const property_distinguish getDistinguish() const
 	{
@@ -22,17 +25,24 @@ public:
 		return m_ptrMap.size();
 	}
 
-protected:
+	Iterator begin()
+	{
+		return m_ptrMap.begin();
+	}
 
-	using PtrType = std::shared_ptr<TObject>;
-	using ContainerType = std::map<tetris::t_unique, PtrType>;
+	Iterator end()
+	{
+		return m_ptrMap.end();
+	}
+
+protected:
 
 	ITObjectContainer(const property_distinguish dist)
 		:m_dist(dist) 
 	{}
 
 
-	bool add(const PtrType newObj)
+	bool _add(const PtrType newObj)
 	{
 		if (m_ptrMap.count(newObj->getUnique()) == 0)
 		{
@@ -43,7 +53,7 @@ protected:
 			return false;
 	}
 
-	void addAll(const std::vector<PtrType>& objAry)
+	void _addAll(const std::vector<PtrType>& objAry)
 	{
 		for (const auto obj : objAry)
 		{
@@ -53,7 +63,7 @@ protected:
 		refresh();
 	}
 
-	bool remove(const PtrType removedObj)
+	bool _remove(const PtrType removedObj)
 	{
 		if (m_ptrMap.count(removedObj->getUnique()) > 0)
 		{
@@ -65,15 +75,15 @@ protected:
 			return false;
 	}
 
-	std::shared_ptr<TObject> at(const tetris::t_unique unique)
+	std::shared_ptr<TObject> _at(const tetris::t_unique unique)
 	{
-		if (exist(unique))
+		if (_exist(unique))
 			return m_ptrMap.at(unique);
 		else
 			return nullptr;
 	}
 
-	bool exist(const tetris::t_unique unique) const
+	bool _exist(const tetris::t_unique unique) const
 	{
 		if (m_ptrMap.count(unique))
 			return true;

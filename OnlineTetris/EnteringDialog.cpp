@@ -83,12 +83,13 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	const auto waitfn = &EnteringDialog::_RunWaitDialog;
 	auto wiat_th = make_shared<thread>(waitfn, this);
 
+	const auto &waiting = ConnectingDialog::GetDialog()->getWaiting();
 	shared_ptr<TClientSocket> socket = TClientSocket::get();
-	while (!socket->isConnected())
+	while (!socket->isConnected() && waiting)
 	{
 		if (socket->create(ipstring, portnum) == 0)
 		{
-			ConnectingDialog::GetDialog()->CloseWindow();
+			ConnectingDialog::GetDialog()->EndDialog(IDOK);
 
 			auto socketThread = TMessageThread::get();
 			socketThread->run();
@@ -112,7 +113,7 @@ void EnteringDialog::OnBnClickedBtnEnter()
 		}
 	}
 
-	CDialogEx::OnOK();
+	//CDialogEx::OnOK();
 }
 
 
@@ -120,25 +121,21 @@ BOOL EnteringDialog::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	Edt_Serverip.SetAddress( (BYTE)210, (BYTE)179, (BYTE)101, (BYTE)193);
+	Edt_Serverip.SetAddress( (BYTE)121, (BYTE)132, (BYTE)4, (BYTE)64);
 	Edt_Serverport.SetWindowTextW(_T("5905"));
 	Edt_Entername.SetWindowTextW( _T("your_name"));
 	return TRUE;  // return TRUE unless you set the focus to a control
-	// ����: OCX �Ӽ� �������� FALSE�� ��ȯ�ؾ� �մϴ�.
 }
 
 
 void EnteringDialog::OnClose()
 {
-	// TODO: ���⿡ �޽��� ó���� �ڵ带 �߰� ��/�Ǵ� �⺻���� ȣ���մϴ�.
-
 	CDialogEx::OnClose();
 }
 
 
 void EnteringDialog::PostNcDestroy()
 {
-	// TODO: ���⿡ Ư��ȭ�� �ڵ带 �߰� ��/�Ǵ� �⺻ Ŭ������ ȣ���մϴ�.
 	this->DestroyWindow();
 	CDialogEx::PostNcDestroy();
 }
@@ -149,6 +146,4 @@ void EnteringDialog::_RunWaitDialog()
 	
 	auto conDlg = ConnectingDialog::GetDialog();
 	conDlg->DoModal();
-	//conDlg->Create(IDD_CONNECTING);
-	//conDlg->ShowWindow(SW_SHOW);
 }

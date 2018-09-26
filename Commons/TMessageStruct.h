@@ -93,6 +93,15 @@ public:
 	}
 }Header;
 
+typedef struct Client
+{
+	Client() {}
+	explicit Client(const tetris::t_unique unique)
+		:unique(unique)
+	{}
+	tetris::t_unique unique;
+};
+
 //�޼����� ���� ����ü
 typedef struct mPermit : public Header
 {
@@ -132,15 +141,15 @@ typedef struct mWaitingUserInfo : public Header
 
 	mWaitingUserInfo() {}
 	explicit mWaitingUserInfo
-			(
-				const Header h,
-				const tetris::t_unique unique,
-				const UserInfo* _userinfo,
-				const size_t userInfoSize
-			)
-			:Header(h),
-			 userInfoSize(userInfoSize),
-			 unique(unique)
+	(
+		const Header h,
+		const tetris::t_unique unique,
+		const UserInfo* _userinfo,
+		const size_t userInfoSize
+	)
+	:Header(h),
+		userInfoSize(userInfoSize),
+		unique(unique)
 	{
 		assert(USER_LENGTH >= userInfoSize);
 		memset(&userinfo, 0, sizeof(RoomInfo)*USER_LENGTH);
@@ -174,7 +183,7 @@ typedef struct mWaitingRoomInfo : public Header
 	}
 }mWaitingRoomInfo;
 
-typedef struct mName : public Header
+typedef struct mName : public Header, Client
 {
     char name[ID_LEN];
     size_t namelen;
@@ -185,8 +194,9 @@ typedef struct mName : public Header
 		name[0] = 0;
 	}
 
-	explicit mName(const Header h, const size_t namelen, const char *name)
-		:Header(h), 
+	explicit mName(const Header h, const tetris::t_unique unique, const size_t namelen, const char *name)
+		:Header(h),
+		Client(unique),
 		namelen(namelen)
 	{
 		CopyChars(this->name, ID_LEN, name, namelen);
@@ -273,23 +283,42 @@ typedef struct mRadies : public Header
 	}
 }mRadies;
 
-typedef struct mStartsignal : public Header
+typedef struct mRoomInitInfo : public Header, Client
 {
-	const int map;
-	const int level;
-	const bool ghost;
-	const bool gravity;
+	tetris::t_time createdTime;
+	int usercount;
+	int map;
+	int level;
+	bool ghost;
+	bool gravity;
 
-	explicit mStartsignal(const Header h, const int map, const int level, const bool ghost, const bool gravity)
+	mRoomInitInfo() {}
+	explicit mRoomInitInfo(const Header h,const tetris::t_unique unique, const int usercount, const int map, const int level, const bool ghost, const bool gravity)
 		:Header(h), 
+		Client(unique),
+		usercount(usercount),
 		map(map), 
 		level(level), 
 		ghost(ghost), 
 		gravity(gravity)
 	{
-		size = sizeof(mStartsignal) - sizeof(h);
+		size = sizeof(mRoomInitInfo) - sizeof(h);
 	}
-}mStartsignal;
+}mRoomInitInfo;
+
+typedef struct mRoomInOutUser : public Header
+{
+	tetris::t_time time;
+	UserInfo user;
+
+	mRoomInOutUser() {}
+	explicit mRoomInOutUser(const Header h, const UserInfo& user, const tetris::t_time time)
+		:Header(h), 
+		user(user),
+		time(time)
+	{}
+};
+
 
 typedef struct mMapstates : public Header
 {

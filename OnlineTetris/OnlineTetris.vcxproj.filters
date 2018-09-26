@@ -191,6 +191,9 @@
     <ClInclude Include="WaitingRoomDialog.h">
       <Filter>Dialog\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="TGameRoom.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OnlineTetris.cpp">
@@ -243,6 +246,9 @@
     </ClCompile>
     <ClCompile Include="WaitingRoomDialog.cpp">
       <Filter>Dialog\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TGameRoom.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,34 @@ public:
 		LengthMax = 20,
 	};
 
+	enum class property_level : tetris::t_property
+	{
+		Begin = 0,
+		Level1 = 0,
+		Level2 = 1,
+		Level3 = 2,
+		Level4 = 3,
+		Level5 = 4,
+		Level6 = 5,
+		Level7 = 6,
+		Level8 = 7,
+		Level9 = 8,
+		End = Level9
+	};
+
+	enum class property_map : tetris::t_property
+	{
+		Begin = 0,
+		stairway = 0,
+		pyramid = 1,
+		rainfall = 2,
+		straight = 3,
+		arbitrary = 4,
+		empty = 5,
+		random = 6,
+		End = random
+	};
+
 	virtual ~TIRoom();
 
 	virtual const tetris::t_error enter(const tetris::t_ptr<UserInfo> userinfo);

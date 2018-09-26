@@ -57,8 +57,6 @@ enum class SERVER_MSG : uint16_t
 	EMPTY_MESSAGE = 0,
 	ON_NAME,
 	CONNECTION_INFO,
-	WAITINGROOM_INFO,
-	WAITINGROOM_USER,
 	ON_MESSAGE,
 	PER_READY,
 	BC_MAPSTATES,		//BROADCAST
@@ -66,6 +64,18 @@ enum class SERVER_MSG : uint16_t
 	BC_DEAD,
 	BC_ADDLINE,
 	BC_RESTART
+};
+
+enum class WAITINGROOM_MSG : tetris::t_enum_room
+{
+	WAITINGROOM_INFO,
+	WAITINGROOM_USER,
+};
+
+enum class GAMEROOM_MSG : tetris::t_enum_room
+{
+	CREAT_INIT = 0,
+	CREATE_GAMEROOM,
 };
 
 enum class CHAT_MSG : tetris::t_enum_chat

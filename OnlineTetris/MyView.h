@@ -38,7 +38,6 @@ public:
 	CMyEdit *Edt_InputEdit;
 	CListBox Lst_EnterList;
 	CMyDoc *pDoc;
-	OptionDialog *pOptionDlg;
 
 	CBrush DeadBrush;
 	CBrush BkBrush;

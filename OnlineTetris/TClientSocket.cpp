@@ -433,13 +433,6 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 
 }
 
-void TClientSocket::Sendname(const char *name, int namelen)
-{
-	const auto header = Header( toUType(Priority::Normal), toUType(SERVER_MSG::ON_NAME));
-	mName sendname(header , namelen, name);
-	//pushMessage(&sendname);
-}
-
 void TClientSocket::Sendmapstate()
 {
 	auto header = Header(toUType( Priority::High), toUType(SERVER_MSG::BC_MAPSTATE));
@@ -506,8 +499,8 @@ void TClientSocket::ProcessMapsate(mMapstate on_map)
 
 void TClientSocket::SendDead()
 {
-	const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::BC_DEAD));
-	const mName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
+	//const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::BC_DEAD));
+	//const mName sendname(header, m_me->getUserName().size(), m_me->getUserName().c_str());
 	//pushMessage(&sendname);
 }
 

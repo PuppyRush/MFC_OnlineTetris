@@ -54,7 +54,6 @@ CMyView::CMyView()
 	// TODO: 여기에 생성 코드를 추가합니다.
 	Edt_InputEdit = NULL;
 	pDoc = NULL;
-	pOptionDlg = NULL;
 	Btn_Ready = Btn_Start = NULL;
 }
 
@@ -108,11 +107,6 @@ void CMyView::OnInitialUpdate()
 	{
 		pDoc = GetDocument();
 		pDoc->m_view = this;
-	}
-	if(pOptionDlg == NULL)
-	{
-		pOptionDlg = new OptionDialog;
-		pOptionDlg->pDoc = pDoc;
 	}
 
 	if(Btn_Start == NULL)
@@ -1394,13 +1388,7 @@ void CMyView::StartBtnClicked()
 	}
 	else
 	{
-
-		if(pOptionDlg->DoModal() == IDOK)
-		{
-			//pDoc->Server_ProceeStart();
-			Btn_Ready->EnableWindow(false);
-			Btn_Start->EnableWindow(false);
-		}
+		
 	}
 
 }
