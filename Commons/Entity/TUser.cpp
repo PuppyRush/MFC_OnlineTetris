@@ -8,5 +8,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TetrisUser::TetrisUser()
+TetrisUser::TetrisUser(const tetris::t_socket socket)
+:m_socketUnique(socket)
 {}

@@ -12,6 +12,28 @@ TIWaitingRoom::TIWaitingRoom(const RoomInfo& roominfo)
 {
 
 }
+tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room)
+{
+    if (m_roommap.count(room.unique) == 0)
+    {
+        m_roommap.insert(make_pair(room.unique, make_shared<RoomInfo>(room)) );
+        return toUType( TIRoom::errorCode::Ok);
+    }
+    else
+        return toUType(TIRoom::errorCode::Exist);
+}
+
+tetris::t_error TIWaitingRoom::removeGameRoom(const tetris::t_unique unique)
+{
+    if (m_roommap.count(unique))
+    {
+        m_roommap.erase(unique);
+        return toUType(TIRoom::errorCode::Ok);
+    }
+    else
+        return toUType(TIRoom::errorCode::Empty);
+}
+
 
 const std::shared_ptr<vector<RoomInfo>> TIWaitingRoom::getWaitingRoomsInfo()
 {

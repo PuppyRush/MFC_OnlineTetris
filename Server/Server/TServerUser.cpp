@@ -10,6 +10,7 @@
 
 #include "../../Commons/TMessageStruct.h"
 #include "../../Commons/Entity/TSocket.h"
+#include "../../Commons/TObjectContainerFactory.h"
 #include "TServerUser.h"
 
 #ifdef _DEBUG
@@ -18,13 +19,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TServerUser::TServerUser(const std::shared_ptr<TServerSocket> socket)
-	//:m_serverSocket(socket)
-{
-    registryMessage();
-}
-
-TServerUser::TServerUser(TServerUser* user)
+TServerUser::TServerUser(const tetris::t_socket socket)
+    :TetrisUser(socket)
 {
     registryMessage();
 }
@@ -36,7 +32,7 @@ TServerUser::~TServerUser()
 
 void TServerUser::registryMessage()
 {
-   //this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
+   this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
 }
 
 
@@ -44,5 +40,9 @@ void TServerUser::recvConnectionInfo(const TMessageObject& msg)
 {
 	const auto message = TMessageObject::toMessage<mName>(msg);
 	setName(message.name);
+
+    auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+    auto waitingRoom = dynamic_cast<TWaitingRoom*>(*waitroomcon->begin());
+    waitingRoom->sendWaitingUsers(this->getSocket());
 }
 

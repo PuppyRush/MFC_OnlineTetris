@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#pragma pack(push,1)
+#pragma pack(push,4)
 #pragma warning(push, disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#
 
 #include <cassert>
@@ -143,7 +143,7 @@ typedef struct mWaitingUserInfo : public Header
 			 unique(unique)
 	{
 		assert(USER_LENGTH >= userInfoSize);
-		memset(&userinfo, 0, sizeof(RoomInfo)*USER_LENGTH);
+		memset(&userinfo, 0, sizeof(UserInfo)*USER_LENGTH);
 
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&userinfo, _userinfo, sizeof(UserInfo)*userInfoSize);

@@ -28,11 +28,25 @@ TIRoom::~TIRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TIRoom::add(const tetris::t_ptr<UserInfo> userinfo)
+
+const tetris::t_error TIRoom::add(const TetrisUser& user)
 {
-	if (m_userInfo.count(userinfo->userUnique) == 0)
+	if (m_userInfo.count(user.getUnique()) == 0)
 	{
-		m_userInfo.insert(make_pair(userinfo->userUnique, userinfo));
+		m_userInfo.insert(make_pair(user.getUnique(),
+				make_shared<UserInfo>(user.getUnique(), user.getUserName().c_str())) );
+		return toUType( TIRoom::errorCode::Ok);
+	}
+	else
+		return toUType(TIRoom::errorCode::Exist);
+}
+
+
+const tetris::t_error TIRoom::add(const UserInfo& userinfo)
+{
+	if (m_userInfo.count(userinfo.unique) == 0)
+	{
+		m_userInfo.insert(make_pair(userinfo.unique, make_shared<UserInfo>(userinfo)) );
 		return toUType( TIRoom::errorCode::Ok);
 	}
 	else
@@ -41,7 +55,7 @@ const tetris::t_error TIRoom::add(const tetris::t_ptr<UserInfo> userinfo)
 
 const tetris::t_error TIRoom::exit(const tetris::t_unique user)
 {
-	if (m_userInfo.count(user) > 0)
+	if (m_userInfo.count(user))
 	{
 		m_userInfo.erase(user);
 		return toUType(TIRoom::errorCode::Ok);
