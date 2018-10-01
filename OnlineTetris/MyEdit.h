@@ -1,11 +1,9 @@
 #pragma once
 
+#include <queue>
+#include "../Commons/TMessageObject.h"
 
 // CMyEdit
-
-class CMainFrame;
-class CMyView;
-class CMyDoc;
 
 class CChatEdit : public CEdit
 {
@@ -14,11 +12,22 @@ class CChatEdit : public CEdit
 public:
 	CChatEdit();
 	virtual ~CChatEdit();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+	inline void setChatType(const TChat::property_chat chatType) {	m_chatType = chatType;	}
+	inline void setWhispee(const tetris::t_unique unique) {	m_whispee = unique;	}
+
 	CString GetEditText();
+	void sendChatMessage();
+
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+private:
+	tetris::t_unique m_whispee;
+	TChat::property_chat m_chatType;
+	std::queue<pair<const char*, size_t>> m_messageQ;
 };
+
 
 

@@ -12,7 +12,7 @@ public:
 	virtual ~TClientUser(void)	{}
 	virtual void registryMessage() override;
 
-	void setSocketUnique(const tetris::t_socket socket) {this->setSocketUnique(socket);	}
+	void setSocketUnique(const tetris::t_socket socket) { TetrisUser::setSocketUnique(socket);	}
 
 	static std::shared_ptr<TClientUser> get()
 	{
