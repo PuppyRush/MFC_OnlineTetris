@@ -4,6 +4,7 @@
 
 #include "afxcmn.h"
 #include "TWaitingRoom.h"
+#include "MyEdit.h"
 #include "../Commons/TMessageObject.h"
 #include "../Commons/structs.h"
 
@@ -25,8 +26,6 @@ public:
 		return dlg;
 	}
 
-	
-
 	afx_msg void OnBnClickedOk();
 
 	void updateRoomUserInfo(const mWaitingUserInfo& info);
@@ -41,8 +40,6 @@ protected:
 #endif
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
-	
-
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -67,4 +64,7 @@ private:
 	std::vector<std::shared_ptr<UserInfo>> m_users;
 
 	
+public:
+	afx_msg void OnBnClickedBtnCreateroom();
+	CMyEdit m_chat;
 };

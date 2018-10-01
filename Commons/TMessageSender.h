@@ -9,32 +9,19 @@
 #include "TType.h"
 #include "TMessageObject.h"
 
+#define T_SEND(socket, msg) TMessageSender::get()->push(TMessageObject::toMessage(socket, msg))
+
 class TMessageSender : public Uncopyable
 {
 public:
 	virtual ~TMessageSender();
 
+	const TMessageObject pop();
+
 	inline void push(const TMessageObject& msg)
 	{
 		std::lock_guard<std::mutex> lock(m_qMutex);
 		m_sendQ.push(msg);
-	}
-
-	inline const TMessageObject pop()
-	{
-		
-		while (m_isContinue)
-		{
-			if (m_sendQ.empty())
-				continue;
-
-			std::lock_guard<std::mutex> lock(m_qMutex);
-
-			const auto msg = m_sendQ.top();
-			m_sendQ.pop();
-			return msg;
-		}
-		
 	}
 
 	inline const bool exist()

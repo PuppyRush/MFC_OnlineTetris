@@ -69,8 +69,10 @@ public:
 	tetris::t_unique unique;
 
 	UserInfo() {}
-	UserInfo(const UserInfo& user)
-	:UserInfo(user.unique, user.name){}
+	explicit UserInfo(const UserInfo& user)
+		:UserInfo(user.unique, user.name)
+	{
+	}
 	explicit UserInfo(const tetris::t_unique userUnique, const char* name)
 		:unique(userUnique)
 	{

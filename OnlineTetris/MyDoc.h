@@ -81,7 +81,7 @@ public:
 	void ProcessClose();
 	void Client_ProcessEnd(mName on_name);
 	void ProcessDead(mName on_name);
-	void Client_ProcessStart(mStartsignal on_start);
+	void Client_ProcessStart(mRoomInitInfo on_start);
 	void RestartGame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;

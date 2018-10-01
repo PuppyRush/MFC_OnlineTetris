@@ -14,8 +14,6 @@ static char THIS_FILE[] = __FILE__;
 TClientUser::TClientUser()
 {
 	registryMessage();
-
-	
 }
 
 void TClientUser::registryMessage()
@@ -29,7 +27,7 @@ void TClientUser::updateUserInfo(const TMessageObject& msg)
 	updateUnique(SERVER_MSG::CONNECTION_INFO, info.userUnique);
 
 	const auto header = Header(toUType(Priority::Normal), toUType(SERVER_MSG::CONNECTION_INFO));
-	const mName sendname(header, getUserName().size(), getUserName().c_str());
+	const mName sendname(header, getUnique(), getUserName().size(), getUserName().c_str());
 
-	TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getSocket(), &sendname));
+	T_SEND(TClientSocket::get()->getSocket(), &sendname);
 }

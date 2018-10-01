@@ -80,14 +80,20 @@ void EnteringDialog::OnBnClickedBtnEnter()
 	this->portnum = portnum;
 	this->ipstring = ipstring;
 
-	shared_ptr<TClientSocket> socket = TClientSocket::get();
-	//ConnectingDialog conDlg;
-	//conDlg.Create(IDD_CONNECTING);
+	const auto waitfn = &EnteringDialog::_RunWaitDialog;
+	auto wiat_th = make_shared<thread>(waitfn, this);
 
-	//while (!socket->isConnected())
-	//{
+	const auto &waiting = ConnectingDialog::GetDialog()->getWaiting();
+	shared_ptr<TClientSocket> socket = TClientSocket::get();
+	while (!socket->isConnected() && waiting)
+	{
 		if (socket->create(ipstring, portnum) == 0)
 		{
+			ConnectingDialog::GetDialog()->EndDialog(IDOK);
+
+			auto socketThread = TMessageThread::get();
+			socketThread->run();
+
 			auto me = TClientUser::get();
 			TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->add(TWaitingRoom::get());
 			TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(socket);
@@ -99,16 +105,15 @@ void EnteringDialog::OnBnClickedBtnEnter()
 				socket->SelfClose();
 			}
 
-			//conDlg.CloseWindow();
+			break;
 		}
 		else
 		{
-			//conDlg.ShowWindow(SW_SHOW);
-			//AfxMessageBox(_T("Cant Connect to server. check written your ip and port"));
 			socket->SelfClose();
 		}
-	//}
-	CDialogEx::OnOK();
+	}
+
+	//CDialogEx::OnOK();
 }
 
 
@@ -116,25 +121,29 @@ BOOL EnteringDialog::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	Edt_Serverip.SetAddress( (BYTE)210, (BYTE)179, (BYTE)101, (BYTE)193);
+	Edt_Serverip.SetAddress( (BYTE)121, (BYTE)132, (BYTE)4, (BYTE)64);
 	Edt_Serverport.SetWindowTextW(_T("5905"));
 	Edt_Entername.SetWindowTextW( _T("your_name"));
 	return TRUE;  // return TRUE unless you set the focus to a control
-	// ����: OCX �Ӽ� �������� FALSE�� ��ȯ�ؾ� �մϴ�.
 }
 
 
 void EnteringDialog::OnClose()
 {
-	// TODO: ���⿡ �޽��� ó���� �ڵ带 �߰� ��/�Ǵ� �⺻���� ȣ���մϴ�.
-
 	CDialogEx::OnClose();
 }
 
 
 void EnteringDialog::PostNcDestroy()
 {
-	// TODO: ���⿡ Ư��ȭ�� �ڵ带 �߰� ��/�Ǵ� �⺻ Ŭ������ ȣ���մϴ�.
 	this->DestroyWindow();
 	CDialogEx::PostNcDestroy();
+}
+
+
+void EnteringDialog::_RunWaitDialog()
+{
+	
+	auto conDlg = ConnectingDialog::GetDialog();
+	conDlg->DoModal();
 }

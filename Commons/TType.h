@@ -24,4 +24,7 @@ namespace tetris
 
 	template <class T>
 	using t_ptr = std::shared_ptr<T>;
+
+	using t_enum_chat = std::uint16_t;
+	using t_enum_room = std::uint16_t;
 }

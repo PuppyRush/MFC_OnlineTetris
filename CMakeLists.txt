@@ -25,6 +25,8 @@ add_executable(OnlineTetris
         Commons/Entity/TSocket.h
         Commons/Entity/TUser.cpp
         Commons/Entity/TUser.h
+        Commons/Entity/TChat.cpp
+        Commons/Entity/TChat.h
         Commons/DefineInfo.h
         Commons/ITObjectContainer.h
         Commons/Logger.h

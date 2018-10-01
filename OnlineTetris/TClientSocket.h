@@ -21,7 +21,6 @@ public:
 
 	void SelfClose();
 	void Broadcast(void* strc, int msgidx);
-	void Sendname(const char* name, int namelen);
 	void Sendmapstate();
 	void Sendready(bool isReady);
 	void SendDead();

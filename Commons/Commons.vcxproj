@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DefineInfo.h" />
+    <ClInclude Include="Entity\TChat.h" />
     <ClInclude Include="Entity\Room\TIGameRoom.h" />
     <ClInclude Include="Entity\Room\TIRoom.h" />
     <ClInclude Include="Entity\Room\TIWaitingRoom.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Entity\TChat.cpp" />
     <ClCompile Include="Entity\Room\TIGameRoom.cpp" />
     <ClCompile Include="Entity\Room\TIRoom.cpp" />
     <ClCompile Include="Entity\Room\TIWaitingRoom.cpp" />

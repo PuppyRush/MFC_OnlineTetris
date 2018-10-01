@@ -48,7 +48,7 @@ private:
 		auto it = EnumIterator<property_distinguish>();
 		for (it.begin() ; it.end() ; ++it)
 		{
-			auto dist = it.it;
+			auto dist = it.value;
 			switch (dist)
 			{
 			case property_distinguish::GameRoom:

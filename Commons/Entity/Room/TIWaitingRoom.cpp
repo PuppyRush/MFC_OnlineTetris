@@ -4,13 +4,14 @@
 
 #include "TIWaitingRoom.h"
 #include "../../TObjectContainerFactory.h"
+#include "../../TAtomic.h"
 
 using namespace std;
 
 TIWaitingRoom::TIWaitingRoom(const RoomInfo& roominfo)
 	:TIRoom(roominfo)
 {
-
+    m_roomInfo->roomNumber = TAtomic::newWaitingRoomNumber();
 }
 tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room)
 {

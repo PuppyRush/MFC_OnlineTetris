@@ -40,6 +40,5 @@ protected:
 
 private:
 	tetris::t_unique m_unique;
-
 	const void _switchingMessage(const tetris::t_msgidx, const TMessageObject& msg);
 };

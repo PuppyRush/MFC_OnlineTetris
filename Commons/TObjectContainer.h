@@ -23,22 +23,22 @@ public:
 
 	bool add(const PtrType newObj)
 	{
-		return ITObjectContainer::add(std::dynamic_pointer_cast<TObject>(newObj));
+		return ITObjectContainer::_add(std::dynamic_pointer_cast<TObject>(newObj));
 	}
 
 	void addAll(const std::vector<PtrType> &objAry)
 	{
-		return ITObjectContainer::addAll(objAry);
+		return ITObjectContainer::_addAll(objAry);
 	}
 
 	bool remove(PtrType removedObj)
 	{
-		return ITObjectContainer::remove(removedObj);
+		return ITObjectContainer::_remove(removedObj);
 	}
 
 	PtrType at(const tetris::t_unique unique)
 	{
-		return std::static_pointer_cast<T>(ITObjectContainer::at(unique));
+		return std::static_pointer_cast<T>(ITObjectContainer::_at(unique));
 	}
 
 	void change(const PtrType newObj)
@@ -52,7 +52,7 @@ public:
 
 	bool exist(const tetris::t_unique unique) const
 	{
-		return ITObjectContainer::exist(unique);
+		return ITObjectContainer::_exist(unique);
 	}
 
 	void clear() noexcept
@@ -166,7 +166,17 @@ public:
 		refresh();
 	}
 
-	bool remove(PtrType removedObj)
+	bool remove(const tetris::t_socket socket)
+	{
+		if (m_ptrMap.count(socket) > 0)
+		{
+			m_removedQ.push(socket);
+			refresh();
+			return true;
+		}
+	}
+
+	bool remove(const PtrType removedObj)
 	{
 		if (m_ptrMap.count(removedObj->getSocket()) > 0)
 		{

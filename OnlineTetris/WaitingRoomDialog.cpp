@@ -9,6 +9,10 @@
 #include "StringManager.h"
 #include "OnlineTetris.h"
 #include "WaitingRoomDialog.h"
+#include "OptionDialog.h"
+#include "TClientSocket.h"
+
+#include "../Commons/TMessageSender.h"
 #include "../Commons/TProperty.h"
 #include "../Commons/TMessageObject.h"
 
@@ -39,11 +43,13 @@ void WaitingRoomDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, _LST_WAITING, m_roomList);
 	DDX_Control(pDX, _LST_WIATGAMER, m_waitUserListBox);
+	DDX_Control(pDX, _LIST_CHAT, m_chat);
 }
 
 
 BEGIN_MESSAGE_MAP(WaitingRoomDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &WaitingRoomDlg::OnBnClickedOk)
+	ON_BN_CLICKED(_BTN_CREATEROOM, &WaitingRoomDlg::OnBnClickedBtnCreateroom)
 END_MESSAGE_MAP()
 
 
@@ -55,9 +61,8 @@ BOOL WaitingRoomDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_roomList.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES);
+	m_roomList.SetExtendedStyle(LVS_EX_FULLROWSELECT  | LVS_EX_GRIDLINES | LVS_EX_SINGLEROW);
 	m_roomList.DeleteAllItems();
-
 	m_columnNames.emplace_back("방 번호");
 	m_columnNames.emplace_back("방 이름");
 	m_columnNames.emplace_back("참가인원");
@@ -68,6 +73,8 @@ BOOL WaitingRoomDlg::OnInitDialog()
 		m_roomList.InsertColumn(i, CString(m_columnNames.at(i).c_str()), NULL, 100);
 	}
 	
+	
+
 	return true;
 }
 
@@ -102,12 +109,12 @@ void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomInfo& info)
 			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(buf), 0, 0, 0, NULL);
 
 			//생성시간
-			auto now = localtime(&room.makeTime);
+			auto now = localtime(reinterpret_cast<const time_t*>(&room.makeTime));
 			char time[100];
 			sprintf(time, "%d일 %d시 %d분", now->tm_mday, now->tm_hour, now->tm_min);
 			m_roomList.SetItem(lastrow, col++, LVIF_TEXT, CString(time), 0, 0, 0, NULL);
 
-			delete now;
+			//delete now;
 			lastrow++;
 		}
 	}
@@ -128,5 +135,32 @@ void WaitingRoomDlg::updateRoomUserInfo(const mWaitingUserInfo& info)
 			m_users.emplace_back(make_shared<UserInfo>(user));
 			m_waitUserListBox.AddString(CString(info.userinfo[i].name));
 		}
+	}
+}
+
+
+
+void WaitingRoomDlg::OnBnClickedBtnCreateroom()
+{
+	// TODO: Add your control notification handler code here
+
+	auto dlg = OptionDialog::getDialog();
+	if (dlg->DoModal() == IDOK)
+	{
+		const auto header = Header(toUType(Priority::Normal), toUType(GAMEROOM_MSG::CREAT_INIT));
+		
+		const mRoomInitInfo roominfo(
+			header,
+			TClientUser::get()->getUnique(),
+			dlg->m_usercount,
+			toUType(dlg->m_map),
+			toUType(dlg->m_level),
+			dlg->m_ghost, dlg->m_gravity);
+
+		T_SEND(TClientSocket::get()->getSocket(), &roominfo);
+
+		//pDoc->Server_ProceeStart();
+		//Btn_Ready->EnableWindow(false);
+		//Btn_Start->EnableWindow(false);
 	}
 }

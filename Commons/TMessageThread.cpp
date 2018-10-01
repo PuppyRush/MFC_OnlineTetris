@@ -18,6 +18,10 @@ TMessageThread::TMessageThread()
 	m_socketCon = factory->getContainer<TetrisSocket>(property_distinguish::Socket);
 	m_gameroomCon = factory->getContainer<TIGameRoom>(property_distinguish::GameRoom);
 	m_waitingroomCon = factory->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+
+	m_objcontainerAry.push_back(m_userCon);
+	m_objcontainerAry.push_back(m_gameroomCon);
+	m_objcontainerAry.push_back(m_waitingroomCon);
 }
 
 TMessageThread::~TMessageThread()
@@ -45,20 +49,20 @@ void TMessageThread::_send()
 	auto sender = TMessageSender::get();
 	while (m_continue)
 	{
-		if (sender->exist())
-		{
-			const auto msg = sender->pop();
-			const auto sender = msg.getSocket();
+		const auto msg = sender->pop();
+		const auto sender = msg.getSocket();
 
-			if (m_socketCon->exist(sender))
-				m_socketCon->at(sender)->send(msg);
-		}
+		if (m_socketCon->exist(sender))
+			m_socketCon->at(sender)->send(msg);
 	}
 }
 
 void TMessageThread::_recv()
 {
 	auto sender = TMessageSender::get();
+	vector<tetris::t_socket> closedSockets;
+	closedSockets.reserve(10);
+
 	while (m_continue)
 	{
 		for (const auto socket : *m_socketCon)
@@ -66,15 +70,26 @@ void TMessageThread::_recv()
 			auto msg = socket->recv();
 			if (msg.getSize() > 0)
 			{
-				for (const auto obj : *m_userCon)
-					obj->send(msg);
-
-				for (const auto obj : *m_gameroomCon)
-					obj->send(msg);
-
-				for (const auto obj : *m_waitingroomCon)
-					obj->send(msg); 
+				for (const auto con : m_objcontainerAry)
+				{
+					for (auto it = con->begin(); it != con->end(); it++)
+					{
+						it->second->send(msg);
+					}
+				}
+			}
+			else
+			{
+				closedSockets.push_back(socket->getSocket());
+				socket->close();
+				break;
 			}
 		}
+
+		for (const auto socket : closedSockets)
+		{
+			m_socketCon->remove(socket);
+		}
+		closedSockets.clear();
 	}
 }

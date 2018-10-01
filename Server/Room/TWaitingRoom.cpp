@@ -72,7 +72,7 @@ void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
             userinfoAry[l] = UserInfo(userinfo->at(l+accu).unique, userinfo->at(l+accu).name);
         accu += userinfo->size();
 
-        const auto header2 = Header( toUType(Priority::Normal), toUType(SERVER_MSG::WAITINGROOM_USER));
+        const auto header2 = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOM_USER));
         mWaitingUserInfo waitingroom_msg(header2, this->getUnique() ,userinfoAry, size);
 
         TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitingroom_msg));
@@ -95,9 +95,18 @@ void TWaitingRoom::sendWaitingRooms(const tetris::t_socket socketUnique)
             roominfoAry[l] = RoomInfo(*pair.second.get());
         accu += totalRoomsize;
 
-        const auto header2 = Header( toUType(Priority::High), toUType(SERVER_MSG::WAITINGROOM_INFO));
-        mWaitingRoomInfo waitinguser_msg(header2,roominfoAry, totalRoomsize);
+        const auto header2 = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOMS_INFO));
+        mWaitingRoomsInfo waitinguser_msg(header2,roominfoAry, totalRoomsize);
 
         TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&waitinguser_msg));
     }
+}
+
+void TWaitingRoom::sendWaitingRoomInfo(const tetris::t_socket socketUnique)
+{
+    auto con = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+    const auto header = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOM_INFO));
+    mWaitingRoomInfo roominfo(header,*con->begin()->getRoomInfo().get());
+
+    TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&roominfo));
 }

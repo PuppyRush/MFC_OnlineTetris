@@ -57,8 +57,6 @@ enum class SERVER_MSG : uint16_t
 	EMPTY_MESSAGE = 0,
 	ON_NAME,
 	CONNECTION_INFO,
-	WAITINGROOM_INFO,
-	WAITINGROOM_USER,
 	ON_MESSAGE,
 	PER_READY,
 	BC_MAPSTATES,		//BROADCAST
@@ -66,6 +64,28 @@ enum class SERVER_MSG : uint16_t
 	BC_DEAD,
 	BC_ADDLINE,
 	BC_RESTART
+};
+
+enum class WAITINGROOM_MSG : tetris::t_enum_room
+{
+	WAITINGROOMS_INFO,
+    WAITINGROOM_INFO,
+	WAITINGROOM_USER,
+};
+
+enum class GAMEROOM_MSG : tetris::t_enum_room
+{
+	CREAT_INIT = 0,
+	CREATE_GAMEROOM,
+};
+
+enum class CHAT_MSG : tetris::t_enum_chat
+{
+	SEND_MESSAGE = 1 << 0,
+	RECV_MESSAGE = 1 << 1,
+	ADD_FILTER   = 1 << 2,
+	REMOVE_FILTER= 1 << 3,
+	WHISPER = 1 << 4
 };
 
 typedef enum MAP

@@ -23,9 +23,9 @@ public:
 	void run();
 	void end();
 
-	inline static std::shared_ptr<TMessageThread> get()
+	inline static tetris::t_ptr<TMessageThread> get()
 	{
-		static std::shared_ptr<TMessageThread> th = std::shared_ptr<TMessageThread>(new TMessageThread());
+		static tetris::t_ptr<TMessageThread> th = tetris::t_ptr<TMessageThread>(new TMessageThread());
 		return th;
 	}
 
@@ -37,13 +37,15 @@ private:
 	void _switchingMessage();
 
 	bool m_continue;
-	std::shared_ptr<std::thread> m_recvThread;
-	std::shared_ptr<std::thread> m_sendThread;
-	std::shared_ptr<std::thread> m_popThread;
+	tetris::t_ptr<std::thread> m_recvThread;
+	tetris::t_ptr<std::thread> m_sendThread;
+	tetris::t_ptr<std::thread> m_popThread;
 
-	std::shared_ptr<TObjectContainer<TetrisUser>> m_userCon;
-	std::shared_ptr<TObjectContainer<TetrisSocket>> m_socketCon;
-	std::shared_ptr<TObjectContainer<TIGameRoom>> m_gameroomCon;
-	std::shared_ptr<TObjectContainer<TIWaitingRoom>> m_waitingroomCon;
+	tetris::t_ptr<TObjectContainer<TetrisUser>> m_userCon;
+	tetris::t_ptr<TObjectContainer<TetrisSocket>> m_socketCon;
+	tetris::t_ptr<TObjectContainer<TIGameRoom>> m_gameroomCon;
+	tetris::t_ptr<TObjectContainer<TIWaitingRoom>> m_waitingroomCon;
+
+	std::vector<tetris::t_ptr<ITObjectContainer>> m_objcontainerAry;
 
 };

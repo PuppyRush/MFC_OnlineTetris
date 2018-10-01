@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConnectingDialog.h" />
+    <ClInclude Include="TGameRoom.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Messenger.h" />
     <ClInclude Include="MyButton.h" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConnectingDialog.cpp" />
+    <ClCompile Include="TGameRoom.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="MyButton.cpp" />

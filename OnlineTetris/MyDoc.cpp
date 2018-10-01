@@ -397,7 +397,7 @@ void CMyDoc::ProcessEnter(string name)
 	//auto tmp = TClientUser::MakeShared(name);
 	//m_clientUserList.insert( make_pair(name, tmp));
 
-	TClientSocket::get()->Sendname(name.c_str(), name.size());
+	//TClientSocket::get()->Sendname(name.c_str(), name.size());
 
 	m_view->Btn_Start->EnableWindow(false);
 }
@@ -408,7 +408,7 @@ void CMyDoc::ProcessClose()
 }
 
 //서버가 시작신호를 보내면 클라인트에선 시작을 위한 처리를 한다.
-void CMyDoc::Client_ProcessStart(mStartsignal on_start)
+void CMyDoc::Client_ProcessStart(mRoomInitInfo on_start)
 {
 	m_ghost = on_start.ghost;
 	m_view->SetMap(on_start.map);

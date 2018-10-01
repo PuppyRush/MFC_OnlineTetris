@@ -39,6 +39,9 @@ void TServerUser::registryMessage()
 void TServerUser::recvConnectionInfo(const TMessageObject& msg)
 {
 	const auto message = TMessageObject::toMessage<mName>(msg);
+	if(message.unique != this->getUnique())
+	    return;
+
 	setName(message.name);
 
     auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
