@@ -21,27 +21,22 @@ public:
 	virtual ~TServerUser();
 	virtual void registryMessage() override;
 
-	static tetris::t_ptr<TServerUser> get()
+	static tetris::t_ptr<TServerUser> get(const tetris::t_socket socket)
 	{
-		static auto me = std::shared_ptr<TServerUser>(new TServerUser());
+		static auto me = std::shared_ptr<TServerUser>(new TServerUser(socket));
 		return me;
 	}
 
-	static tetris::t_ptr<TServerUser> makeShared(const tetris::t_ptr<TServerSocket> socket)
+	static tetris::t_ptr<TServerUser> makeShared(const tetris::t_socket socket)
 	{
 		return tetris::t_ptr<TServerUser>(new TServerUser(socket));
 	}
 
-	inline std::shared_ptr<TServerSocket> getServerSocket() const noexcept
-	{ return m_serverSocket; }
-
 protected:
-	TServerUser(TServerUser* user);
-	TServerUser(const std::shared_ptr<TServerSocket> socket);
+    TServerUser(const tetris::t_socket socket);
 
 private:
-	TServerUser(){}
+
 	void recvConnectionInfo(const TMessageObject& msg);
 
-	std::shared_ptr<TServerSocket> m_serverSocket;
 };

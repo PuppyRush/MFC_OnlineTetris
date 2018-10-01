@@ -8,8 +8,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TetrisUser::TetrisUser()
-	:m_chat(std::make_shared<TChat>())
+TetrisUser::TetrisUser(const tetris::t_socket socket)
+	:m_chat(std::make_shared<TChat>()),
+	m_socketUnique(socket)
 {}
 
 void TetrisUser::removeFilter(const tetris::t_unique unique)

@@ -17,7 +17,10 @@ using namespace std;
 
 TIRoom::TIRoom()
 	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::Socket))
+	,m_roomInfo(make_shared<RoomInfo>())
 {
+	m_roomInfo->unique = this->getUnique();
+	m_roomInfo->makeTime =  std::time(0);
 }
 
 
@@ -34,14 +37,23 @@ TIRoom::~TIRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TIRoom::enter(const tetris::t_ptr<UserInfo> userinfo)
+const tetris::t_error TIRoom::enter(const UserInfo& userinfo)
 {
-	if (m_userInfo.count(userinfo->userUnique) == 0)
+	if (m_userInfo.count(userinfo.unique) == 0)
 	{
-		m_userInfo.insert(make_pair(userinfo->userUnique, userinfo));
+		m_userInfo.insert(make_pair(userinfo.unique, make_shared<UserInfo>(userinfo)));
+		return toUType( TIRoom::errorCode::Ok);
+	}
+	else
+		return toUType(TIRoom::errorCode::Exist);
+}
 
-		//m_userCon->at(userinfo->userUnique)->
-
+const tetris::t_error TIRoom::enter(const TetrisUser& userinfo)
+{
+	if (m_userInfo.count(userinfo.getUnique()) == 0)
+	{
+		m_userInfo.insert(make_pair(userinfo.getUnique(),
+				make_shared<UserInfo>(userinfo.getUnique(), userinfo.getUserName().c_str())));
 		return toUType( TIRoom::errorCode::Ok);
 	}
 	else
@@ -50,7 +62,7 @@ const tetris::t_error TIRoom::enter(const tetris::t_ptr<UserInfo> userinfo)
 
 const tetris::t_error TIRoom::exit(const tetris::t_unique user)
 {
-	if (m_userInfo.count(user) > 0)
+	if (m_userInfo.count(user))
 	{
 		m_userInfo.erase(user);
 		return toUType(TIRoom::errorCode::Ok);

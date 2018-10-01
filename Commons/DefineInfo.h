@@ -68,7 +68,8 @@ enum class SERVER_MSG : uint16_t
 
 enum class WAITINGROOM_MSG : tetris::t_enum_room
 {
-	WAITINGROOM_INFO,
+	WAITINGROOMS_INFO,
+    WAITINGROOM_INFO,
 	WAITINGROOM_USER,
 };
 

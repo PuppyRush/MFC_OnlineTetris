@@ -60,21 +60,21 @@ typedef struct FIGURE
 	int dir;
 }FIGURE;
 
-#pragma pack(push,1)
+#pragma pack(push,4)
 
 typedef struct UserInfo
 {
 public:
 	char name[ID_LEN];
-	tetris::t_unique userUnique;
+	tetris::t_unique unique;
 
 	UserInfo() {}
 	explicit UserInfo(const UserInfo& user)
-		:UserInfo(user.userUnique, user.name)
+		:UserInfo(user.unique, user.name)
 	{
 	}
 	explicit UserInfo(const tetris::t_unique userUnique, const char* name)
-		:userUnique(userUnique)
+		:unique(userUnique)
 	{
 		assert(ID_LEN > strlen(name));
 		strncpy(this->name, name, 10);

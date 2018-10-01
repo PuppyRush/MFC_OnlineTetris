@@ -29,6 +29,7 @@ void TChat::add(const std::string str)
 void TChat::addWhisper(const std::string str)
 {
 }
+
 void TChat::clear()
 {
 	m_chatQ.clear();

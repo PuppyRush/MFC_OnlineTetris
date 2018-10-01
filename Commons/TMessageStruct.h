@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#pragma pack(push,1)
+#pragma pack(push,4)
 #pragma warning(push, disable:4996) //4996 for _CRT_SECURE_NO_WARNINGS equivalent#
 
 #include <cassert>
@@ -100,7 +100,7 @@ typedef struct Client
 		:unique(unique)
 	{}
 	tetris::t_unique unique;
-};
+}Client;
 
 //�޼����� ���� ����ü
 typedef struct mPermit : public Header
@@ -152,7 +152,7 @@ typedef struct mWaitingUserInfo : public Header
 		unique(unique)
 	{
 		assert(USER_LENGTH >= userInfoSize);
-		memset(&userinfo, 0, sizeof(RoomInfo)*USER_LENGTH);
+		memset(&userinfo, 0, sizeof(UserInfo)*USER_LENGTH);
 
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&userinfo, _userinfo, sizeof(UserInfo)*userInfoSize);
@@ -160,14 +160,14 @@ typedef struct mWaitingUserInfo : public Header
 }mWaitingUserInfo;
 
 
-typedef struct mWaitingRoomInfo : public Header
+typedef struct mWaitingRoomsInfo : public Header
 {
 #define ROOM_LENGTH 2
     RoomInfo waitingRoom[ROOM_LENGTH];
     size_t waitingRoomSize;
 
-	mWaitingRoomInfo() {}
-	explicit mWaitingRoomInfo
+	mWaitingRoomsInfo() {}
+	explicit mWaitingRoomsInfo
 	(
 		const Header h,
 		const RoomInfo* _roominfo,
@@ -181,7 +181,20 @@ typedef struct mWaitingRoomInfo : public Header
 		size = sizeof(*this) - sizeof(h);
 		memcpy(&waitingRoom, _roominfo, sizeof(RoomInfo)*waitingRoomSize);
 	}
+}mWaitingRoomsInfo;
+
+
+typedef struct mWaitingRoomInfo : public Header, Client
+{
+    RoomInfo roominfo;
+
+    mWaitingRoomInfo() {}
+    explicit mWaitingRoomInfo( const Header h,const RoomInfo roominfo   )
+        :Header(h), roominfo(roominfo)
+    {
+    }
 }mWaitingRoomInfo;
+
 
 typedef struct mName : public Header, Client
 {
@@ -318,7 +331,7 @@ typedef struct mRoomInOutUser : public Header
 		user(user),
 		time(time)
 	{}
-};
+}mRoomInOutUser;
 
 
 typedef struct mMapstates : public Header

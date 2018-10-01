@@ -49,14 +49,11 @@ void TMessageThread::_send()
 	auto sender = TMessageSender::get();
 	while (m_continue)
 	{
-		if (sender->exist())
-		{
-			const auto msg = sender->pop();
-			const auto sender = msg.getSocket();
+		const auto msg = sender->pop();
+		const auto sender = msg.getSocket();
 
-			if (m_socketCon->exist(sender))
-				m_socketCon->at(sender)->send(msg);
-		}
+		if (m_socketCon->exist(sender))
+			m_socketCon->at(sender)->send(msg);
 	}
 }
 

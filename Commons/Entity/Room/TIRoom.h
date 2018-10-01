@@ -66,7 +66,8 @@ public:
 
 	virtual ~TIRoom();
 
-	virtual const tetris::t_error enter(const tetris::t_ptr<UserInfo> userinfo);
+	const tetris::t_error enter(const UserInfo& userinfo);
+	const tetris::t_error enter(const TetrisUser& userinfo);
 	virtual const tetris::t_error exit(const tetris::t_unique user);
 	virtual const bool exist(const tetris::t_unique unique) const;
 

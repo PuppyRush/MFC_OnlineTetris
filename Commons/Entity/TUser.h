@@ -32,9 +32,10 @@ public:
 	}
 
 	inline const std::string getUserName() const noexcept  { return m_name; }
-	inline const bool getReady() const noexcept  { return m_isReady; }
+	inline const bool isReady() const noexcept  { return m_isReady; }
 	inline const int getOrder() const noexcept { return m_order; }
-	inline const bool getSurvive() const noexcept { return m_isSurvive; }
+	inline const bool isSurvive() const noexcept { return m_isSurvive; }
+	inline const tetris::t_socket getSocket() const noexcept { return m_socketUnique; }
 
 	inline void setSurvive(const bool n) noexcept { m_isSurvive = n; }
 	inline void setOrder(const int idx) noexcept { m_order = idx; }
@@ -48,12 +49,13 @@ public:
 	void clear();
 
 protected:
-	TetrisUser();
+	TetrisUser(const tetris::t_socket socket);
 
 private:
 	int m_order;
 	std::string m_name;
 	IPString m_ip;
+	tetris::t_socket m_socketUnique;
 	bool m_isReady;
 	bool m_isSurvive;
 	std::shared_ptr<TChat> m_chat;

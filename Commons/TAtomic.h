@@ -16,6 +16,13 @@ public:
 		return _atomic.fetch_add(1);
 	}
 
+	static const tetris::t_unique newWaitingRoomNumber() noexcept
+	{
+		static tetris::t_uniqueAtomic _atomic;
+		return _atomic.fetch_add(1);
+	}
+
+
 private:
 	TAtomic()	{}
 };
