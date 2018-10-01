@@ -91,14 +91,13 @@ void EnteringDialog::OnBnClickedBtnEnter()
 		{
 			ConnectingDialog::GetDialog()->EndDialog(IDOK);
 
-			auto socketThread = TMessageThread::get();
-			socketThread->run();
-
 			auto me = TClientUser::get();
 			TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)->add(TWaitingRoom::get());
 			TObjectContainerFactory::get()->getContainer<TetrisSocket>(property_distinguish::Socket)->add(socket);
 			TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(me);
 
+			auto socketThread = TMessageThread::get();
+			socketThread->run();
 
 			if (WaitingRoomDlg::getDialog()->DoModal() == IDOK)
 			{
