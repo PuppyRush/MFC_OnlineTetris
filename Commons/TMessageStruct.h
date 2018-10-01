@@ -293,9 +293,10 @@ typedef struct mRoomInitInfo : public Header, Client
 	bool gravity;
 
 	mRoomInitInfo() {}
-	explicit mRoomInitInfo(const Header h,const tetris::t_unique unique, const int usercount, const int map, const int level, const bool ghost, const bool gravity)
+	explicit mRoomInitInfo(const Header h,const tetris::t_time time, const tetris::t_unique unique, const int usercount, const int map, const int level, const bool ghost, const bool gravity)
 		:Header(h), 
 		Client(unique),
+		createdTime(time),
 		usercount(usercount),
 		map(map), 
 		level(level), 

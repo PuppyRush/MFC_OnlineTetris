@@ -38,30 +38,30 @@ public:
 
 	enum class property_level : tetris::t_property
 	{
-		Begin = 0,
-		Level1 = 0,
-		Level2 = 1,
-		Level3 = 2,
-		Level4 = 3,
-		Level5 = 4,
-		Level6 = 5,
-		Level7 = 6,
-		Level8 = 7,
-		Level9 = 8,
-		End = Level9
+		Begin = 1ull << 0,
+		Level1 = 1ull << 1,
+		Level2 = 1ull << 2,
+		Level3 = 1ull << 3,
+		Level4 = 1ull << 4,
+		Level5 = 1ull << 5,
+		Level6 = 1ull << 6,
+		Level7 = 1ull << 7,
+		Level8 = 1ull << 8,
+		Level9 = 1ull << 9,
+		End = 1ull << 10
 	};
 
 	enum class property_map : tetris::t_property
 	{
-		Begin = 0,
-		stairway = 0,
-		pyramid = 1,
-		rainfall = 2,
-		straight = 3,
-		arbitrary = 4,
-		empty = 5,
-		random = 6,
-		End = random
+		Begin = 1ull << 0 ,
+		stairway = 1ull << 0,
+		pyramid = 1ull << 1,
+		rainfall = 1ull << 2,
+		straight = 1ull << 3,
+		arbitrary = 1ull << 4,
+		empty = 1ull << 5,
+		random = 1ull << 6,
+		End = 1ull << 7
 	};
 
 	virtual ~TIRoom();

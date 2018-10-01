@@ -151,6 +151,7 @@ void WaitingRoomDlg::OnBnClickedBtnCreateroom()
 		
 		const mRoomInitInfo roominfo(
 			header,
+			this->m_waitingRoom->getRoomInfo()->makeTime,
 			TClientUser::get()->getUnique(),
 			dlg->m_usercount,
 			toUType(dlg->m_map),

@@ -108,15 +108,15 @@ void OptionDialog::OnBnClickedOk()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
-	auto sel = m_cmb_map.GetCurSel();
+	auto sel = 1ull << (m_cmb_map.GetCurSel()+1);
 	m_map = TIRoom::property_map(sel);
 
-	sel = m_cmb_level.GetCurSel();
+	sel = 1ull << (m_cmb_level.GetCurSel()+1);
 	m_level = TIRoom::property_level(sel);
 
 	m_ghost = m_chk_Ghost.GetCheck();
 	m_gravity = m_chk_Gravity.GetCheck();
-	m_usercount = m_cmb_usercount.GetCurSel() + toUType(TIRoom::property::LengthMin);
+	m_usercount = m_cmb_usercount.GetCurSel() + toUType(TIGameRoom::property::MinimunCount);
 
 	CDialogEx::OnOK();
 }
