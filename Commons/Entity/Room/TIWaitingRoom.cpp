@@ -11,7 +11,7 @@ using namespace std;
 TIWaitingRoom::TIWaitingRoom(const RoomInfo& roominfo)
 	:TIRoom(roominfo)
 {
-    m_roomInfo->roomNumber = TAtomic::newWaitingRoomNumber();
+	this->setRoomNumber(TAtomic::newWaitingRoomNumber());
 }
 tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room)
 {

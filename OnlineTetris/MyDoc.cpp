@@ -299,9 +299,9 @@ std::shared_ptr<TClientUser> CMyDoc::Client_NameToTUser(string name)
 
 void CMyDoc::AddChat(const char *msg, const int msglen)
 {
-	CString str(msg, msglen);
-	m_chatLog.append(string("\r\n")).append(msg);
-	m_view->Edt_ChatEdit.SetWindowTextW(CString(m_chatLog.c_str()));
+	//CString str(msg, msglen);
+	//m_chatLog.append(string("\r\n")).append(msg);
+	//m_view->Edt_ChatEdit.SetWindowTextW(CString(m_chatLog.c_str()));
 }
 
 //방에 접속하면 서버에서 이름들을 보냄.
@@ -344,7 +344,7 @@ void CMyDoc::SetReady(mRadies rdy)
 		}
 		user->setReady(rdy.ready[i]);
 
-		if(user->getReady())
+		if(user->isReady())
 			rdynum++;
 	}
 
@@ -573,7 +573,7 @@ void CMyDoc::ProcessDead(mName on_name)
 	//{
 	//
 	//	user = (TUser *)Server_UserList.GetAt(pos);
-	//	if(user->GetSurvive() == false)
+	//	if(user->isSurvive() == false)
 	//		deadnum++;
 	//	else
 	//	{

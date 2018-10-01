@@ -288,7 +288,7 @@ void TClientSocket::Broadcast(void* strc, int msgidx)
 	//		memset(&send_readies, 0, sizeof(send_readies));
 	//		for(int i=0 ; i < pDoc->m_serverEnterUsers.GetCount() ; i++){
 	//			
-	//			send_readies.ready[i] = pDoc->NameToTUser(pDoc->m_serverEnterUsers[i])->GetReady();
+	//			send_readies.ready[i] = pDoc->NameToTUser(pDoc->m_serverEnterUsers[i])->isReady();
 	//
 	//			int len = WideCharToMultiByte(CP_ACP, 0, pDoc->m_serverEnterUsers[i], -1, NULL, 0, NULL, NULL);
 	//			WideCharToMultiByte(CP_ACP, 0, pDoc->m_serverEnterUsers[i], -1, send_readies.name[i] , len, NULL, NULL);
@@ -444,7 +444,7 @@ void TClientSocket::Sendmapstate()
 void TClientSocket::Sendready(bool ready)
 {
 	const auto header = Header(toUType(Priority::High), toUType(SERVER_MSG::PER_READY));
-	mReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->getReady());
+	mReady sendready(header, m_me->getUserName().size() , m_me->getUserName().c_str(), m_me->isReady());
 	//pushMessage(&sendready);
 }
 

@@ -122,7 +122,7 @@ void CMyView::OnInitialUpdate()
 
 	if(Edt_InputEdit == NULL)
 	{
-		Edt_InputEdit = new CMyEdit();
+		Edt_InputEdit = new CChatEdit();
 		Edt_InputEdit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE, CRect(cx, SY_MAIN + CHAT_HEIGHT + 10, cx + CHAT_WIDTH, SY_MAIN + CHAT_HEIGHT + INPUT_HEIGHT)
 			, this, 1001);
 	}
@@ -271,14 +271,14 @@ void CMyView::DrawImage(CDC *pDC)
 			{
 
 			case 1:
-				if(user->getReady())
+				if(user->isReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2, ReadyImg.GetWidth(), ReadyImg.GetHeight(), RGB(0, 255, 255));
 
 				pDC->TextOutW(SX_MAIN + MAIN_WIDTH / 2 - 10, SY_MAIN - 20, username);
 				break;
 
 			case 2:
-				if(user->getReady())
+				if(user->isReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -287,7 +287,7 @@ void CMyView::DrawImage(CDC *pDC)
 				break;
 
 			case 3:
-				if(user->getReady())
+				if(user->isReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -295,7 +295,7 @@ void CMyView::DrawImage(CDC *pDC)
 				pDC->TextOutW(SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH*1.5 - 10, SY_MAIN - 20, username);
 				break;
 			case 4:
-				if(user->getReady())
+				if(user->isReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH * 2 + ReadyImg.GetWidth() / 10, (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -303,7 +303,7 @@ void CMyView::DrawImage(CDC *pDC)
 				pDC->TextOutW(SX_MAIN + MAIN_WIDTH + GAME_SPACE*(userorder - 1) + SUB_WIDTH*2.5 - 10, SY_MAIN - 20, username);
 				break;
 			case 5:
-				if(user->getReady())
+				if(user->isReady())
 					ReadyImg.TransparentBlt(pDC->m_hDC, SX_MAIN + MAIN_WIDTH + GAME_SPACE + ReadyImg.GetWidth() / 10, MAIN_HEIGHT + (SY_MAIN + MAIN_HEIGHT) / 2,
 						ReadyImg.GetWidth()*0.6, ReadyImg.GetHeight()*0.6, RGB(0, 255, 255));
 
@@ -461,7 +461,7 @@ void CMyView::DrawImage(CDC *pDC)
 		}//for	
 
 
-		if(!ME->getSurvive())
+		if(!ME->isSurvive())
 			MainDeadBg.AlphaBlend(pDC->m_hDC, SX_MAIN, SY_MAIN, 90, AC_SRC_OVER);
 
 
@@ -639,7 +639,7 @@ void CMyView::DrawImage(CDC *pDC)
 			}//for
 
 			//클라이언트가 끝나면 반투명처리
-			if(!user->getSurvive())
+			if(!user->isSurvive())
 			{
 				switch(userorder)
 				{
@@ -675,7 +675,7 @@ void CMyView::DrawImage(CDC *pDC)
 			const CString username(user->getUserName().c_str());
 			const size_t userorder = user->getOrder();
 
-			if(user->getSurvive())
+			if(user->isSurvive())
 			{
 				switch(user->getOrder())
 				{
@@ -702,7 +702,7 @@ void CMyView::DrawImage(CDC *pDC)
 
 
 				}//switch			
-			}//if getsurvive
+			}//if isSurvive
 			 //게임이 끝나고 승리유저 외에는 모두 반투명처리
 			else
 			{
@@ -836,7 +836,7 @@ void CMyView::OnTimer(UINT_PTR nIDEvent)
 		VirtualDraw();
 	}
 
-	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->getSurvive() && TClientSocket::get()->isConnected() )
+	else if(nIDEvent == TIMER_SENDMAPSTATE && ME->isSurvive() && TClientSocket::get()->isConnected() )
 	{
 		TClientSocket::get()->Sendmapstate();
 		VirtualDraw();
@@ -860,7 +860,7 @@ void CMyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
-	if(pDoc->m_isStart && ME->getSurvive())
+	if(pDoc->m_isStart && ME->isSurvive())
 	{
 
 		if(ME == NULL)

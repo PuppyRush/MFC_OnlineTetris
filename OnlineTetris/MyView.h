@@ -9,7 +9,7 @@
 
 class CMyDoc;
 class EnteringDialog;
-class CMyEdit;
+class CChatEdit;
 class OptionDialog;
 class CMyButton;
 
@@ -35,7 +35,7 @@ public:
 	CEdit Edt_ChatEdit;
 
 	TetrisUser *ME;
-	CMyEdit *Edt_InputEdit;
+	CChatEdit *Edt_InputEdit;
 	CListBox Lst_EnterList;
 	CMyDoc *pDoc;
 

@@ -6,6 +6,11 @@ TMessageSender::~TMessageSender()
 	m_isContinue = false;
 }
 
+void TMessageSender::run()
+{
+
+}
+
 const TMessageObject TMessageSender::pop()
 {
 	while (m_isContinue)

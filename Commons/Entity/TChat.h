@@ -7,6 +7,18 @@
 class TChat
 {
 public:
+
+	enum class property_chat : tetris::t_enum_chat
+	{
+		Begin = static_cast<tetris::t_enum_chat>(1) << 0,
+		SendMessage = Begin << 0,
+		RecvMessage = Begin << 1,
+		AddFilter = Begin << 2,
+		RemoveFilter = Begin << 3,
+		Whisper = Begin << 4,
+		End = Begin << 5
+	};
+
 	TChat();
 	virtual ~TChat();
 

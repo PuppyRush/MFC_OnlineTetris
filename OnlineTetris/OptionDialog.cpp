@@ -17,19 +17,19 @@ static char THIS_FILE[] = __FILE__;
 
 // OptionDialog 대화 상자입니다.
 
-IMPLEMENT_DYNAMIC(OptionDialog, CDialogEx)
+IMPLEMENT_DYNAMIC(CreateRoomDialog, CDialogEx)
 
-OptionDialog::OptionDialog(CWnd* pParent /*=NULL*/)
-	: CDialogEx(OptionDialog::IDD, pParent)
+CreateRoomDialog::CreateRoomDialog(CWnd* pParent /*=NULL*/)
+	: CDialogEx(CreateRoomDialog::IDD, pParent)
 {
 
 }
 
-OptionDialog::~OptionDialog()
+CreateRoomDialog::~CreateRoomDialog()
 {
 }
 
-void OptionDialog::DoDataExchange(CDataExchange* pDX)
+void CreateRoomDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, _CMB_LEVEL, m_cmb_level);
@@ -38,18 +38,19 @@ void OptionDialog::DoDataExchange(CDataExchange* pDX)
 	//  DDX_Control(pDX, CHK_GRAVITY, Chk_Graviry);
 	DDX_Control(pDX, CHK_GRAVITY, m_chk_Gravity);
 	DDX_Control(pDX, _CMB_USERCOUNT, m_cmb_usercount);
+	DDX_Control(pDX, _EDT_ROOMNAME, m_edt_roomname);
 }
 
 
-BEGIN_MESSAGE_MAP(OptionDialog, CDialogEx)
-	ON_BN_CLICKED(IDOK, &OptionDialog::OnBnClickedOk)
+BEGIN_MESSAGE_MAP(CreateRoomDialog, CDialogEx)
+	ON_BN_CLICKED(IDOK, &CreateRoomDialog::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
 // OptionDialog 메시지 처리기입니다.
 
 
-BOOL OptionDialog::OnInitDialog()
+BOOL CreateRoomDialog::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -104,7 +105,7 @@ BOOL OptionDialog::OnInitDialog()
 }
 
 
-void OptionDialog::OnBnClickedOk()
+void CreateRoomDialog::OnBnClickedOk()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
@@ -117,6 +118,10 @@ void OptionDialog::OnBnClickedOk()
 	m_ghost = m_chk_Ghost.GetCheck();
 	m_gravity = m_chk_Gravity.GetCheck();
 	m_usercount = m_cmb_usercount.GetCurSel() + toUType(TIGameRoom::property::MinimunCount);
+
+	CString str;
+	m_edt_roomname.GetWindowTextW(str);
+	m_roomname = StringManager::ToStringFrom(str);
 
 	CDialogEx::OnOK();
 }

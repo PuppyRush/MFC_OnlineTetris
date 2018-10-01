@@ -7,13 +7,13 @@ class CMainFrame;
 class CMyView;
 class CMyDoc;
 
-class CMyEdit : public CEdit
+class CChatEdit : public CEdit
 {
-	DECLARE_DYNAMIC(CMyEdit)
+	DECLARE_DYNAMIC(CChatEdit)
 
 public:
-	CMyEdit();
-	virtual ~CMyEdit();
+	CChatEdit();
+	virtual ~CChatEdit();
 	CString GetEditText();
 protected:
 	DECLARE_MESSAGE_MAP()

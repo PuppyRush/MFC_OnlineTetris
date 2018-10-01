@@ -20,26 +20,20 @@ static char THIS_FILE[] = __FILE__;
 
 // CMyEdit
 
-IMPLEMENT_DYNAMIC(CMyEdit, CEdit)
+IMPLEMENT_DYNAMIC(CChatEdit, CEdit)
 
-CMyEdit::CMyEdit()
+CChatEdit::CChatEdit()
 {}
 
-CMyEdit::~CMyEdit()
+CChatEdit::~CChatEdit()
 {}
 
 
-BEGIN_MESSAGE_MAP(CMyEdit, CEdit)
+BEGIN_MESSAGE_MAP(CChatEdit, CEdit)
 END_MESSAGE_MAP()
 
 
-
-// CMyEdit 메시지 처리기입니다.
-
-
-
-
-BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
+BOOL CChatEdit::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 
@@ -81,10 +75,10 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 				strcat(chat, " : ");
 				strcat(chat, temp);
 
-				mMessage msg(Header( toUType( Priority::Normal), toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
-
-				TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getUnique(), &msg));
-				Sleep(50);
+				//mChatMessage msg(Header( toUType( Priority::Normal), toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
+				//
+				//TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getUnique(), &msg));
+				//Sleep(50);
 			}
 		}
 		this->SetWindowTextW(_T(""));
@@ -93,7 +87,7 @@ BOOL CMyEdit::PreTranslateMessage(MSG* pMsg)
 	return CEdit::PreTranslateMessage(pMsg);
 }
 
-CString CMyEdit::GetEditText()
+CString CChatEdit::GetEditText()
 {
 
 	CString str;

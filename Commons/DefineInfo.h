@@ -79,15 +79,6 @@ enum class GAMEROOM_MSG : tetris::t_enum_room
 	CREATE_GAMEROOM,
 };
 
-enum class CHAT_MSG : tetris::t_enum_chat
-{
-	SEND_MESSAGE = 1 << 0,
-	RECV_MESSAGE = 1 << 1,
-	ADD_FILTER   = 1 << 2,
-	REMOVE_FILTER= 1 << 3,
-	WHISPER = 1 << 4
-};
-
 typedef enum MAP
 {
 	STAIRWAY = 0,

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 
 #include "afxcmn.h"
 #include "TWaitingRoom.h"
@@ -29,7 +30,7 @@ public:
 	afx_msg void OnBnClickedOk();
 
 	void updateRoomUserInfo(const mWaitingUserInfo& info);
-	void updateRoomInfo(const mWaitingRoomInfo& info);
+	void updateRoomInfo(const mWaitingRoomsInfo& info);
 protected:
 	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -66,5 +67,5 @@ private:
 	
 public:
 	afx_msg void OnBnClickedBtnCreateroom();
-	CMyEdit m_chat;
+	CChatEdit m_chat;
 };

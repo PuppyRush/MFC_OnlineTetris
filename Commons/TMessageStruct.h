@@ -234,16 +234,19 @@ typedef struct mNames : public Header
 	}
 }mNames;
 
-typedef struct mMessage :public Header
+typedef struct mChatMessage :public Header
 {
     char msg[MSG_LEN];
-    size_t msglen;
+	size_t msglen;
+	tetris::t_enum_chat chatType;
 
-	explicit mMessage(const Header h, const size_t msglen, const char* msg)
-		:Header(h)
+	explicit mChatMessage(const Header h, const size_t msglen, const char* msg, tetris::t_enum_chat chatType)
+		:Header(h),
+		msglen(msglen),
+		chatType(chatType)
 	{
 		CopyChars(this->msg, MSG_LEN, msg, msglen);
-		size = sizeof(mMessage) - sizeof(h);
+		size = sizeof(mChatMessage) - sizeof(h);
 	}
 
 	/*static mMessage GetMessage(const char* _msg)
@@ -258,7 +261,7 @@ typedef struct mMessage :public Header
 		const auto header = Header(Priority::Normal, std::underlying_type_t<(SERVER_MSG::ON_MESSAGE));
 		return mMessage(header, len, _msg);
 	}*/
-}mMessage;
+}mChatMessage;
 
 typedef struct mReady : public Header
 {
@@ -298,19 +301,17 @@ typedef struct mRadies : public Header
 
 typedef struct mRoomInitInfo : public Header, Client
 {
-	tetris::t_time createdTime;
-	int usercount;
+	RoomInfo roominfo;
 	int map;
 	int level;
 	bool ghost;
 	bool gravity;
 
 	mRoomInitInfo() {}
-	explicit mRoomInitInfo(const Header h,const tetris::t_time time, const tetris::t_unique unique, const int usercount, const int map, const int level, const bool ghost, const bool gravity)
+	explicit mRoomInitInfo(const Header h, const tetris::t_unique unique, const RoomInfo roominfo, const int map, const int level, const bool ghost, const bool gravity)
 		:Header(h), 
 		Client(unique),
-		createdTime(time),
-		usercount(usercount),
+		roominfo(roominfo),
 		map(map), 
 		level(level), 
 		ghost(ghost), 

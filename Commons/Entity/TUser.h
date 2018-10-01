@@ -31,12 +31,14 @@ public:
 		return this->m_order < user.getOrder();
 	}
 
+	inline const auto getPlace() {	return m_place;	}
 	inline const std::string getUserName() const noexcept  { return m_name; }
 	inline const bool isReady() const noexcept  { return m_isReady; }
 	inline const int getOrder() const noexcept { return m_order; }
 	inline const bool isSurvive() const noexcept { return m_isSurvive; }
 	inline const tetris::t_socket getSocket() const noexcept { return m_socketUnique; }
 
+	inline void setPlace(const tetris::t_dist dist, const tetris::t_unique unique) { m_place = std::make_pair(dist, unique);	}
 	inline void setSurvive(const bool n) noexcept { m_isSurvive = n; }
 	inline void setOrder(const int idx) noexcept { m_order = idx; }
 	inline void setName(const std::string name) { m_name = name; }
@@ -50,6 +52,7 @@ public:
 
 protected:
 	TetrisUser(const tetris::t_socket socket);
+	void setSocketUnique(const tetris::t_socket socket) {this->m_socketUnique = socket;	}
 
 private:
 	int m_order;
@@ -59,6 +62,6 @@ private:
 	bool m_isReady;
 	bool m_isSurvive;
 	std::shared_ptr<TChat> m_chat;
-
+	std::pair<tetris::t_dist, tetris::t_unique> m_place;
 	
 };

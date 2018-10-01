@@ -5,6 +5,7 @@
 #include "afxdialogex.h"
 
 #include <algorithm>
+#include <numeric>
 
 #include "StringManager.h"
 #include "OnlineTetris.h"
@@ -15,7 +16,7 @@
 #include "../Commons/TMessageSender.h"
 #include "../Commons/TProperty.h"
 #include "../Commons/TMessageObject.h"
-
+#include "../Commons/Entity/Room/TIGameRoom.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -85,7 +86,7 @@ void WaitingRoomDlg::OnBnClickedOk()
 	CDialogEx::OnOK();
 }
 
-void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomInfo& info)
+void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomsInfo& info)
 {
 	auto lastrow = m_roomList.GetItemCount();
 	for (size_t i = 0; i < info.waitingRoomSize; i++)
@@ -127,7 +128,7 @@ void WaitingRoomDlg::updateRoomUserInfo(const mWaitingUserInfo& info)
 		const auto &user = info.userinfo[i];
 		auto it = std::find_if(m_users.begin(), m_users.end(), [&](const std::shared_ptr<UserInfo> exuser)
 		{
-			return exuser->userUnique == user.userUnique;
+			return exuser->unique == user.unique;
 		});
 
 		if (it == m_users.end())
@@ -144,21 +145,26 @@ void WaitingRoomDlg::OnBnClickedBtnCreateroom()
 {
 	// TODO: Add your control notification handler code here
 
-	auto dlg = OptionDialog::getDialog();
+	auto dlg = CreateRoomDialog::getDialog();
 	if (dlg->DoModal() == IDOK)
 	{
 		const auto header = Header(toUType(Priority::Normal), toUType(GAMEROOM_MSG::CREAT_INIT));
-		
-		const mRoomInitInfo roominfo(
+		RoomInfo roominfo(std::numeric_limits<tetris::t_unique>::max(),
+			std::numeric_limits<tetris::t_time>::max(),
+			dlg->m_roomname.c_str(),
+			std::numeric_limits<tetris::t_unique>::max(),
+			toUType(TIGameRoom::property::MaxCount),
+			1);
+
+		const mRoomInitInfo roominitinfo(
 			header,
-			this->m_waitingRoom->getRoomInfo()->makeTime,
 			TClientUser::get()->getUnique(),
-			dlg->m_usercount,
+			roominfo,
 			toUType(dlg->m_map),
 			toUType(dlg->m_level),
 			dlg->m_ghost, dlg->m_gravity);
 
-		T_SEND(TClientSocket::get()->getSocket(), &roominfo);
+		T_SEND(TClientSocket::get()->getSocket(), &roominitinfo);
 
 		//pDoc->Server_ProceeStart();
 		//Btn_Ready->EnableWindow(false);

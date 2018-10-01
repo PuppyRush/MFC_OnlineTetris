@@ -3,9 +3,9 @@
 #include "../Commons/Entity/Room/TIRoom.h"
 
 class CMyDoc;
-class OptionDialog : public CDialogEx
+class CreateRoomDialog : public CDialogEx
 {
-	DECLARE_DYNAMIC(OptionDialog)
+	DECLARE_DYNAMIC(CreateRoomDialog)
 
 public:
 	
@@ -18,6 +18,7 @@ public:
 	CButton m_chk_Gravity;
 	CComboBox m_cmb_usercount;
 
+	string m_roomname;
 	TIRoom::property_level m_level;
 	TIRoom::property_map m_map;
 	size_t m_usercount;
@@ -25,20 +26,22 @@ public:
 	bool m_ghost;
 	bool m_gravity;
 
-	virtual ~OptionDialog();
+	virtual ~CreateRoomDialog();
 
 	static auto getDialog()
 	{
-		static auto dlg = tetris::t_ptr< OptionDialog>(new OptionDialog());
+		static auto dlg = tetris::t_ptr< CreateRoomDialog>(new CreateRoomDialog());
 		return dlg;
 	}
 
-	enum { IDD = _OPTION };
+	enum { IDD = _DLG_CREATEROOM};
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	DECLARE_MESSAGE_MAP()
 
 private:
-	OptionDialog(CWnd* pParent = NULL);
+	CreateRoomDialog(CWnd* pParent = NULL);
+public:
+	CEdit m_edt_roomname;
 };

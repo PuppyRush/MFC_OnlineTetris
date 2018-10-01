@@ -16,6 +16,7 @@ class TMessageSender : public Uncopyable
 public:
 	virtual ~TMessageSender();
 
+	void run();
 	const TMessageObject pop();
 
 	inline void push(const TMessageObject& msg)
@@ -41,6 +42,7 @@ private:
 	:m_isContinue(true)
 	{}
 
+	std::queue<TMessageObject> m_messqgeQ;
 	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject>> m_sendQ;
 	std::mutex	m_qMutex;
 	bool m_isContinue;

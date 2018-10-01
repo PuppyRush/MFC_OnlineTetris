@@ -1,4 +1,7 @@
 #include "StdAfx.h"
+
+#include <numeric>
+
 #include "TClientUser.h"
 #include "../Commons/DefineInfo.h"
 #include "../Commons/TMessageSender.h"
@@ -12,6 +15,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 TClientUser::TClientUser()
+	:TetrisUser(numeric_limits<tetris::t_socket>::max())
 {
 	registryMessage();
 }
