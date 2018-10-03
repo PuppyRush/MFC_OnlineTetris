@@ -102,7 +102,6 @@ typedef struct Client
 	tetris::t_unique unique;
 }Client;
 
-//�޼����� ���� ����ü
 typedef struct mPermit : public Header
 {
 	size_t res;

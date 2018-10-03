@@ -37,7 +37,7 @@ TIRoom::~TIRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TIRoom::enter(const UserInfo& userinfo)
+const tetris::t_error TIRoom::_enter(const UserInfo &userinfo)
 {
 	if (m_userInfo.count(userinfo.unique) == 0)
 	{
@@ -48,7 +48,7 @@ const tetris::t_error TIRoom::enter(const UserInfo& userinfo)
 		return toUType(TIRoom::errorCode::Exist);
 }
 
-const tetris::t_error TIRoom::enter(const TetrisUser& userinfo)
+const tetris::t_error TIRoom::_enter(const TetrisUser &userinfo)
 {
 	if (m_userInfo.count(userinfo.getUnique()) == 0)
 	{
@@ -60,7 +60,7 @@ const tetris::t_error TIRoom::enter(const TetrisUser& userinfo)
 		return toUType(TIRoom::errorCode::Exist);
 }
 
-const tetris::t_error TIRoom::exit(const tetris::t_unique user)
+const tetris::t_error TIRoom::_exit(const tetris::t_unique user)
 {
 	if (m_userInfo.count(user))
 	{

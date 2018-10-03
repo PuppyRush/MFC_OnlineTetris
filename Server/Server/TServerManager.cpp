@@ -38,11 +38,29 @@ TServerManager::TServerManager()
 {
 	// TODO Auto-generated constructor stub
 	m_mainServerSocket = TServerSocket::get();
+	_makeWaitingRoom();
 }
 
 TServerManager::~TServerManager()
 {
 	// TODO Auto-generated destructor stub
+}
+
+
+void TServerManager::_makeWaitingRoom()
+{
+	auto admin = TServerUser::get(this->m_mainServerSocket->getSocket());
+	admin->setName("admin");
+
+	TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)
+			->add(admin);
+
+	RoomInfo room(-1,0,"Tetris1",0, toUType(TWaitingRoom::property::MaxSize),0);
+	auto basicWaitingRoom = TWaitingRoom::makeShared(room);
+	basicWaitingRoom->enter(*admin);
+
+	auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+	waitroomcon->add(basicWaitingRoom);
 }
 
 void TServerManager::beginServer()
@@ -51,8 +69,6 @@ void TServerManager::beginServer()
 	{
 		if (m_mainServerSocket->accept() == 0)
 		{
-			makeWaitingRoom();
-
 			auto socketThread = TMessageThread::get();
 			socketThread->run();
 
@@ -67,42 +83,19 @@ void TServerManager::run()
 {
 	while (m_closedServer)
 	{
-		std::lock_guard<std::mutex> lck(m_mutex);
-
 		auto socketUnique = m_mainServerSocket->popSocket();
-		HelloUser(socketUnique);
-
-#ifdef _DEBUG
-		printf("hello new socket : %d\n",socketUnique);
-#endif
-
+		_HelloUser(socketUnique);
 	}
 }
 
-void TServerManager::makeWaitingRoom()
-{
-    auto admin = TServerUser::get(this->m_mainServerSocket->getSocket());
-    admin->setName("admin");
 
-    TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)
-            ->add(admin);
-
-	RoomInfo room(-1,0,"Tetris1",0, toUType(TWaitingRoom::property::MaxSize),0);
-	auto basicWaitingRoom = TWaitingRoom::makeShared(room);
-	basicWaitingRoom->enter(*admin);
-
-    auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
-    waitroomcon->add(basicWaitingRoom);
-}
-
-void TServerManager::HelloUser(const tetris::t_socket socketUnique)
+void TServerManager::_HelloUser(const tetris::t_socket socketUnique)
 {
 	auto newsocket = TServerSocket::makeShared(socketUnique);
 	auto newUser = TServerUser::makeShared(newsocket->getSocket());
 
 	auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
 	auto waitingRoom = dynamic_cast<TWaitingRoom*>(*waitroomcon->begin());
-
 
 	waitingRoom->enter(*newUser.get());
 	TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User)->add(newUser);

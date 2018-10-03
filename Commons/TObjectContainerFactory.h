@@ -23,6 +23,8 @@ public:
 	template <class T>
 	using Container = TObjectContainer<T>;
 
+
+
 	static inline std::shared_ptr<TObjectContainerFactory> get()
 	{
 		static std::shared_ptr<TObjectContainerFactory> factory = std::shared_ptr<TObjectContainerFactory>(new TObjectContainerFactory());

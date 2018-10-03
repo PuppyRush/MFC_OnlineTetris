@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include "TProperty.h"
 #include "Uncopyable.h"
 #include "TType.h"
 #include "Entity/TObject.h"

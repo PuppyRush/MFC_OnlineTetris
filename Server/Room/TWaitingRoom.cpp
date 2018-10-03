@@ -8,16 +8,19 @@
 #include <ctime>
 
 #include "TWaitingRoom.h"
+#include "TGameRoom.h"
 #include "../../Commons/TObjectContainerFactory.h"
 #include "../../Commons/TMessageSender.h"
 #include "../../Commons/TMessageStruct.h"
 #include "../../Commons/structs.h"
 #include "../../Commons/Validator.h"
 #include "../../Commons/TypeTraits.h"
+#include "../../Commons/TProperty.h"
 
 
 TWaitingRoom::TWaitingRoom(const RoomInfo& roominfo)
-:TIWaitingRoom(roominfo)
+:TIWaitingRoom(roominfo),
+ m_waitingroomCon(TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom))
 {
     registryMessage();
 }
@@ -29,6 +32,7 @@ TWaitingRoom::~TWaitingRoom()
 
 void TWaitingRoom::registryMessage()
 {
+    this->addCaller(make_pair(toUType(GAMEROOM_MSG::CREAT_INIT), std::bind(&TWaitingRoom::recvCreateRoomInfo, this, std::placeholders::_1)));
 }
 
 const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const
@@ -52,6 +56,19 @@ const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const
 	////	return errorCode::Nobody;
 	//
 	//return errorCode::Ok;
+}
+
+const tetris::t_error TWaitingRoom::enter(const UserInfo &userinfo)
+{
+
+}
+const tetris::t_error TWaitingRoom::enter(const TetrisUser &userinfo)
+{
+
+}
+const tetris::t_error TWaitingRoom::exit(const tetris::t_unique user)
+{
+
 }
 
 void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
@@ -104,9 +121,26 @@ void TWaitingRoom::sendWaitingRooms(const tetris::t_socket socketUnique)
 
 void TWaitingRoom::sendWaitingRoomInfo(const tetris::t_socket socketUnique)
 {
-    auto con = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
-    const auto header = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOM_INFO));
-    mWaitingRoomInfo roominfo(header,*con->begin()->getRoomInfo().get());
 
-    TMessageSender::get()->push( TMessageObject::toMessage(socketUnique,&roominfo));
+    const auto info = *TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)
+            ->begin()->getRoomInfo().get();
+    const auto header = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOM_INFO));
+    mWaitingRoomInfo roominfo(header,info);
+
+    T_SEND(socketUnique, &roominfo);
+}
+
+void TWaitingRoom::recvCreateRoomInfo(const TMessageObject &obj)
+{
+    auto msg = TMessageObject::toMessage<mRoomInitInfo>(obj);
+    RoomInfo roominfo(TAtomic::newUnique(), time(0) , msg.roominfo.roomName,
+        msg.roominfo.roomNumber, msg.roominfo.fullUserCount, 1);
+
+
+
+}
+
+void TWaitingRoom::updateWaitingRooms(const RoomInfo& room)
+{
+
 }

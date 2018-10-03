@@ -43,6 +43,8 @@ public:
 		return waitingRoom;
 	}
 
+	static bool makeGameRoom(const RoomInfo& room);
+
 private:
 	std::unordered_map< tetris::t_unique, std::shared_ptr<TIGameRoom>> m_roomMap;
 	const tetris::t_error _validator(const TIRoom &room) const override;

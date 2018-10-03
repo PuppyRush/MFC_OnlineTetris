@@ -24,8 +24,11 @@ public:
 		MaxCount = 8,
 	};
 
-	
 	virtual ~TIGameRoom() {}
+	virtual const tetris::t_error enter(const UserInfo &userinfo) override;
+	virtual const tetris::t_error enter(const TetrisUser &userinfo) override;
+	virtual const tetris::t_error exit(const tetris::t_unique user) override;
+
 protected:
 	TIGameRoom() {}
 	explicit TIGameRoom(const RoomInfo& roominfo);

@@ -34,15 +34,11 @@ public:
 	}
 
 private:
-	TServerManager();
-
-    void makeWaitingRoom();
-    void HelloUser(const tetris::t_socket);
-
 	std::shared_ptr<std::thread> m_severManagerThread;
 	std::shared_ptr<TServerSocket> m_mainServerSocket;
-
-	std::mutex m_mutex;
-	
 	bool m_closedServer;
+
+	TServerManager();
+	void _makeWaitingRoom();
+	void _HelloUser(const tetris::t_socket);
 };

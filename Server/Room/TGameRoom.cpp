@@ -11,6 +11,7 @@
 #include "TGameRoom.h"
 #include "../../Commons/Validator.h"
 #include "../../Commons/TypeTraits.h"
+#include "../../Commons/TObjectContainerFactory.h"
 
 using namespace std;
 
@@ -50,4 +51,11 @@ const tetris::t_error TGameRoom::_validator(const TIRoom &room) const
 		return toUType(errorCode::PassedTime);
 
 	return toUType(errorCode::Ok);
+}
+
+bool TGameRoom::makeGameRoom(const RoomInfo& room)
+{
+	auto newroom = makeShared(room);
+	TObjectContainerFactory::get()->getContainer<TIGameRoom>(property_distinguish::GameRoom)
+			->add(newroom);
 }
