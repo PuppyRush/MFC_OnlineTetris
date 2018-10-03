@@ -1,5 +1,6 @@
 #pragma once
 
+#include <numeric>
 #include <atomic>
 #include <tuple>
 #include <memory>

@@ -95,11 +95,14 @@ public:
 
 typedef struct Client
 {
-	Client() {}
-	explicit Client(const tetris::t_unique unique)
-		:unique(unique)
-	{}
 	tetris::t_unique unique;
+	bool exceptme;
+
+	Client() {}
+	explicit Client(const tetris::t_unique unique, bool exception=false)
+		:unique(unique), exceptme(exception)
+	{}
+	
 }Client;
 
 //�޼����� ���� ����ü
@@ -234,15 +237,18 @@ typedef struct mNames : public Header
 	}
 }mNames;
 
-typedef struct mChatMessage :public Header
+typedef struct mChatMessage :public Header, Client
 {
     char msg[MSG_LEN];
 	size_t msglen;
+	tetris::t_unique receiver;
 	tetris::t_enum_chat chatType;
 
-	explicit mChatMessage(const Header h, const size_t msglen, const char* msg, tetris::t_enum_chat chatType)
+	explicit mChatMessage(const Header h, const Client client, const size_t msglen, const char* msg, tetris::t_unique receiver, tetris::t_enum_chat chatType)
 		:Header(h),
+		Client(client),
 		msglen(msglen),
+		receiver(receiver),
 		chatType(chatType)
 	{
 		CopyChars(this->msg, MSG_LEN, msg, msglen);

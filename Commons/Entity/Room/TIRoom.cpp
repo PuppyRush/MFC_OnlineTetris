@@ -16,7 +16,7 @@
 using namespace std;
 
 TIRoom::TIRoom()
-	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::Socket))
+	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>())
 	,m_roomInfo(make_shared<RoomInfo>())
 {
 	m_roomInfo->unique = this->getUnique();
@@ -25,7 +25,7 @@ TIRoom::TIRoom()
 
 
 TIRoom::TIRoom(const RoomInfo& roominfo)
-	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::Socket))
+	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>())
 {
 	m_roomInfo = make_shared<RoomInfo>(roominfo);
 	m_roomInfo->unique = this->getUnique();
@@ -83,7 +83,7 @@ const shared_ptr<vector<UserInfo>> TIRoom::getUserInfo() const
 {
 	auto userinfoAry = make_shared<vector<UserInfo>>();
 	userinfoAry->reserve(m_userInfo.size());
-	auto userCon = TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User);
+	auto userCon = TObjectContainerFactory::get()->getContainer<TetrisUser>();
 
 	for (const auto user : m_userInfo)
 	{

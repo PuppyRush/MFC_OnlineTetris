@@ -18,6 +18,8 @@
 class TIWaitingRoom : public TIRoom
 {
 public:
+	using dist = distinguishType<TIWaitingRoom>;
+
 	virtual ~TIWaitingRoom() {}
 
 	tetris::t_error addGameRoom(const RoomInfo&);

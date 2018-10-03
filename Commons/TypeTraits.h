@@ -70,6 +70,12 @@ struct EnumIterator
 	}
 };
 
+template <class T>
+struct distinguishType
+{
+	tetris::t_dist dist;
+};
+
 //const std::set<tetris::t_dist> toDistinguish(const tetris::t_dist dist)
 //{
 //	std::set<tetris::t_dist> distset;

@@ -12,6 +12,7 @@
 class TetrisUser : public TObject
 {
 public:
+	using dist = distinguishType<TetrisUser>;
 
 	enum class property
 	{
@@ -46,13 +47,15 @@ public:
 
 	void removeFilter(const tetris::t_unique);
 	void addFilter(const tetris::t_unique);
-	void add(const std::string str);
-	void addWhisper(const std::string str);
+	void sendChatMessage(const std::string str);
+	void sendWhisperMessage(const tetris::t_unique sender, const std::string str);
 	void clear();
+	
 
 protected:
 	TetrisUser(const tetris::t_socket socket);
 	void setSocketUnique(const tetris::t_socket socket) {this->m_socketUnique = socket;	}
+	
 
 private:
 	int m_order;

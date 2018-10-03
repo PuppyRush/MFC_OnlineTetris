@@ -13,6 +13,7 @@ TIWaitingRoom::TIWaitingRoom(const RoomInfo& roominfo)
 {
 	this->setRoomNumber(TAtomic::newWaitingRoomNumber());
 }
+
 tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room)
 {
     if (m_roommap.count(room.unique) == 0)
@@ -38,7 +39,7 @@ tetris::t_error TIWaitingRoom::removeGameRoom(const tetris::t_unique unique)
 
 const std::shared_ptr<vector<RoomInfo>> TIWaitingRoom::getWaitingRoomsInfo()
 {
-    const auto roomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+    const auto roomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>();
     const size_t totalRoomsize = roomcon->size();
     auto rooms = make_shared<std::vector<RoomInfo>>();
 

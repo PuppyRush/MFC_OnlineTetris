@@ -95,10 +95,10 @@ public:
 		return ContainerIterator<T>(0, m_ptrMap.size());
 	}
 
-	inline static auto get(const property_distinguish dist)
+	inline static auto get()
 	{
-		static std::shared_ptr<TObjectContainer> container =
-				std::shared_ptr<TObjectContainer>(new TObjectContainer(dist));
+		static tetris::t_ptr<TObjectContainer> container =
+				tetris::t_ptr<TObjectContainer>();
 		return container;
 	}
 
@@ -128,8 +128,7 @@ public:
 
 
 private:
-	TObjectContainer(const property_distinguish dist)
-		: ITObjectContainer(dist)
+	TObjectContainer()
 	{}
 
 };
@@ -250,10 +249,10 @@ public:
 		return ContainerIterator<T>(0, m_ptrMap.size());
 	}
 */
-	inline static auto get(const property_distinguish dist)
+	inline static auto get()
 	{
 		static std::shared_ptr<TObjectContainer<T>> container =
-				std::shared_ptr<TObjectContainer<T>>(new TObjectContainer<T>(dist));
+				std::shared_ptr<TObjectContainer<T>>(new TObjectContainer<T>());
 		return container;
 	}
 
@@ -284,8 +283,7 @@ public:
 
 
 private:
-	TObjectContainer(const property_distinguish dist)
-			: ITObjectContainer(dist)
+	TObjectContainer()
 	{}
 
 };
