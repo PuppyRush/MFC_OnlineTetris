@@ -4,10 +4,8 @@
 #include "stdafx.h"
 #include "OnlineTetris.h"
 #include "MyEdit.h"
-#include "MyDoc.h"
-#include "MyView.h"
-#include "MainFrm.h"
 #include "TClientSocket.h"
+#include "StringManager.h"
 
 #include "../Commons/TMessageObject.h"
 #include "../Commons/TMessageSender.h"
@@ -39,48 +37,32 @@ BOOL CChatEdit::PreTranslateMessage(MSG* pMsg)
 
 	if(pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
 	{
-		//특별히 메인폼의 채팅창인경우
-		if(GetFocus()->GetDlgCtrlID() == 1001)
+		if (GetWindowTextLengthW() == 0)
+			return false;
+
+		char temp[MSG_LEN];
+
+		//채팅창에 입력한걸 temp에 옮긴다
+		CString str = this->GetEditText();
+
+		switch (m_chatType)
 		{
-			const auto pMF = (CMainFrame *)AfxGetMainWnd();
-			const auto pDoc = (CMyDoc *)pMF->GetActiveDocument();
-			const auto pView = (CMyView *)pMF->GetActiveView();
-
-			if(GetWindowTextLengthW() == 0)
-				return false;
-			else if(!TClientSocket::get()->isConnected())
-			{
-				pView->MessageHandler(USER_MSG::NOT_OPENNENTER);
-				return false;
-			}
-			else if(!TClientSocket::get()->isConnected())
-			{
-				char chat[MSG_LEN];
-				char temp[MSG_LEN];
-
-				//채팅창에 입력한걸 temp에 옮긴다
-				CString str = GetEditText();
-				int len = WideCharToMultiByte(CP_ACP, 0, str, -1, NULL, 0, NULL, NULL);
-				WideCharToMultiByte(CP_ACP, 0, str, -1, temp, len, NULL, NULL);
-
-				//채팅중 ㄱㄱ가 입력되면 레디를 자동으로 누른다
-				if(strstr(temp, "ㄱㄱ") != NULL)
-					pView->ReadyBtnClicked();
-
-				//이름을 chat에 가져온다
-				str = CString(pDoc->m_name.c_str());
-				len = WideCharToMultiByte(CP_ACP, 0, str, -1, NULL, 0, NULL, NULL);
-				WideCharToMultiByte(CP_ACP, 0, str, -1, chat, len, NULL, NULL);
-
-				strcat(chat, " : ");
-				strcat(chat, temp);
-
-				//mChatMessage msg(Header( toUType( Priority::Normal), toUType(CLIENT_MSG::SEND_MESSAGE)), strlen(chat), chat);
-				//
-				//TMessageSender::get()->push(TMessageObject::toMessage(TClientSocket::get()->getUnique(), &msg));
-				//Sleep(50);
-			}
+		case TChat::property_chat::SendMsg:
+			TClientUser::get()->sendChatMessage(StringManager::ToStringFrom(str));
+			break;
+		case TChat::property_chat::SendWhisper:
+			TClientUser::get()->sendWhisperMessage(m_whispee, StringManager::ToStringFrom(str));
+			break;
+		default:
+			assert(0);
 		}
+		
+		//채팅중 ㄱㄱ가 입력되면 레디를 자동으로 누른다
+		//if(strstr(temp, "ㄱㄱ") != NULL)
+		//	pView->ReadyBtnClicked();
+
+		
+		//Sleep(50);
 		this->SetWindowTextW(_T(""));
 	}
 
@@ -89,10 +71,8 @@ BOOL CChatEdit::PreTranslateMessage(MSG* pMsg)
 
 CString CChatEdit::GetEditText()
 {
-
 	CString str;
 	this->GetWindowTextW(str);
 	return str;
-
-
 }
+

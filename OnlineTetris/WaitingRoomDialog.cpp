@@ -54,10 +54,6 @@ BEGIN_MESSAGE_MAP(WaitingRoomDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// WaitingRoomDlg 메시지 처리기입니다.
-
-
-
 BOOL WaitingRoomDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -74,7 +70,8 @@ BOOL WaitingRoomDlg::OnInitDialog()
 		m_roomList.InsertColumn(i, CString(m_columnNames.at(i).c_str()), NULL, 100);
 	}
 	
-	
+	//m_chat.setChatType(TChat::property_chat::
+
 
 	return true;
 }

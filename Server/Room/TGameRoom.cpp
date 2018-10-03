@@ -56,6 +56,5 @@ const tetris::t_error TGameRoom::_validator(const TIRoom &room) const
 bool TGameRoom::makeGameRoom(const RoomInfo& room)
 {
 	auto newroom = makeShared(room);
-	TObjectContainerFactory::get()->getContainer<TIGameRoom>(property_distinguish::GameRoom)
-			->add(newroom);
+	TObjectContainerFactory::get()->getContainer<TIGameRoom>()->add(newroom);
 }

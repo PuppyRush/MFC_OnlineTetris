@@ -14,10 +14,10 @@ TMessageThread::TMessageThread()
 	m_sendThread(nullptr)
 {
 	auto factory = TObjectContainerFactory::get();
-	m_userCon = factory->getContainer<TetrisUser>(property_distinguish::User);
-	m_socketCon = factory->getContainer<TetrisSocket>(property_distinguish::Socket);
-	m_gameroomCon = factory->getContainer<TIGameRoom>(property_distinguish::GameRoom);
-	m_waitingroomCon = factory->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+	m_userCon = factory->getContainer<TetrisUser>();
+	m_socketCon = factory->getContainer<TetrisSocket>();
+	m_gameroomCon = factory->getContainer<TIGameRoom>();
+	m_waitingroomCon = factory->getContainer<TIWaitingRoom>();
 
 	m_objcontainerAry.push_back(m_userCon);
 	m_objcontainerAry.push_back(m_gameroomCon);
@@ -54,6 +54,19 @@ void TMessageThread::_send()
 
 		if (m_socketCon->exist(sender))
 			m_socketCon->at(sender)->send(msg);
+
+		if (msg.isExceptionMe())
+		{
+			for (const auto con : m_objcontainerAry)
+			{
+				for (auto it = con->begin(); it != con->end(); it++)
+				{
+					it->second->send(msg);
+				}
+			}
+		}
+			
+
 	}
 }
 

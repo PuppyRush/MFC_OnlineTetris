@@ -44,7 +44,7 @@ void TServerUser::recvConnectionInfo(const TMessageObject& msg)
 
 	setName(message.name);
 
-    auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom);
+    auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>();
     auto waitingRoom = dynamic_cast<TWaitingRoom*>(*waitroomcon->begin());
     waitingRoom->sendWaitingUsers(this->getSocket());
 }

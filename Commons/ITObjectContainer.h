@@ -38,8 +38,7 @@ public:
 
 protected:
 
-	ITObjectContainer(const property_distinguish dist)
-		:m_dist(dist) 
+	ITObjectContainer()
 	{}
 
 

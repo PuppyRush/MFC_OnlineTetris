@@ -20,7 +20,7 @@
 
 TWaitingRoom::TWaitingRoom(const RoomInfo& roominfo)
 :TIWaitingRoom(roominfo),
- m_waitingroomCon(TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom))
+ m_waitingroomCon(TObjectContainerFactory::get()->getContainer<TIWaitingRoom>())
 {
     registryMessage();
 }
@@ -122,8 +122,7 @@ void TWaitingRoom::sendWaitingRooms(const tetris::t_socket socketUnique)
 void TWaitingRoom::sendWaitingRoomInfo(const tetris::t_socket socketUnique)
 {
 
-    const auto info = *TObjectContainerFactory::get()->getContainer<TIWaitingRoom>(property_distinguish::WaitingRoom)
-            ->begin()->getRoomInfo().get();
+    const auto info = *TObjectContainerFactory::get()->getContainer<TIWaitingRoom>()->begin()->getRoomInfo().get();
     const auto header = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOM_INFO));
     mWaitingRoomInfo roominfo(header,info);
 

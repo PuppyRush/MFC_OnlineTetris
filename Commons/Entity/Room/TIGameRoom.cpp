@@ -13,7 +13,7 @@ TIGameRoom::TIGameRoom(const RoomInfo& roominfo)
 
 const tetris::t_error TIGameRoom::enter(const UserInfo& userinfo)
 {
-	auto usercon =  TObjectContainerFactory::get()->getContainer<TetrisUser>(property_distinguish::User);
+	auto usercon =  TObjectContainerFactory::get()->getContainer<TetrisUser>();
 	if(usercon->exist(userinfo.unique))
 	{
 		//auto newroom = TGameRoom::makeGameRoom(userinfo);

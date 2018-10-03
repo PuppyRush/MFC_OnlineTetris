@@ -70,7 +70,8 @@ struct EnumIterator
 	}
 };
 
-struct distinguish
+template <class T>
+struct distinguishType
 {
 	tetris::t_dist dist;
 };

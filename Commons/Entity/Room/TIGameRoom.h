@@ -17,7 +17,8 @@
 class TIGameRoom : public TIRoom
 {
 public:
-	
+	using dist = distinguishType<TIGameRoom>;
+
 	enum class property : tetris::t_property
 	{
 		MinimunCount = 2,

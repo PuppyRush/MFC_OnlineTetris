@@ -10,12 +10,8 @@
 
 //#include <assert.h>
 
-#include "TSocket.h"
 #include "TObject.h"
-#include "../DefineInfo.h"
 #include "../Logger.h"
-#include "../TMessageObject.h"
-#include "../TType.h"
 #include "../TFunctional.h"
 
 #undef min
@@ -24,6 +20,7 @@
 class TetrisSocket : public TObject
 {
 public:
+	using dist = distinguishType<TetrisSocket>;
 
 	virtual ~TetrisSocket();
 	virtual tetris::t_error create(IPString ip, tetris::t_port port) = 0;
@@ -35,11 +32,11 @@ public:
 	}
 
 	inline const tetris::t_socket getSocket() const noexcept { return m_socket; }
-	inline void setIP(const IPString &ip)	 noexcept {m_ip = ip;}
-	inline const IPString getIP() const noexcept {	m_ip;	}
-	inline void setPort(tetris::t_port port) noexcept {m_port = port;}
-	inline const tetris::t_port  getPort() const noexcept {	return m_port;	}
-	inline void setClose(const bool close) { m_closeSocket = close;	}
+	inline void setIP(const IPString &ip)	 noexcept { m_ip = ip; }
+	inline const IPString getIP() const noexcept { m_ip; }
+	inline void setPort(tetris::t_port port) noexcept { m_port = port; }
+	inline const tetris::t_port  getPort() const noexcept { return m_port; }
+	inline void setClose(const bool close) { m_closeSocket = close; }
 	inline const bool isClose() const noexcept { return m_closeSocket; }
 
 	tetris::t_socket popSocket();
@@ -65,12 +62,12 @@ protected:
 	virtual volatile tetris::t_socket _accept() = 0;
 	virtual tetris::t_error _connect() = 0;
 	virtual tetris::t_error _close(const unsigned _socket) = 0;
-	virtual const size_t _sendTo(const char *msg,const size_t size) = 0;
+	virtual const size_t _sendTo(const char *msg, const size_t size) = 0;
 	virtual const TMessageObject _recvFrom() = 0;
 
 	void _runAccept();
 
-	inline void setSocket(tetris::t_socket socket) { m_socket = socket;	}
+	inline void setSocket(tetris::t_socket socket) { m_socket = socket; }
 
 private:
 	TetrisSocket() = delete;
@@ -80,4 +77,5 @@ private:
 
 	tetris::t_socket m_socket;
 	std::shared_ptr<std::thread> m_acceptThread;
+
 };
