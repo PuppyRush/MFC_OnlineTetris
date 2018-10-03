@@ -14,6 +14,25 @@ TIWaitingRoom::TIWaitingRoom(const RoomInfo& roominfo)
 	this->setRoomNumber(TAtomic::newWaitingRoomNumber());
 }
 
+const tetris::t_error TIWaitingRoom::enter(const UserInfo &userinfo)
+{
+
+	return this->_enter(userinfo);
+}
+
+const tetris::t_error TIWaitingRoom::enter(const TetrisUser &userinfo)
+{
+
+	return this->_enter(userinfo);
+}
+
+const tetris::t_error TIWaitingRoom::exit(const tetris::t_unique user)
+{
+
+	return this->_exit(user);
+}
+
+
 tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room)
 {
     if (m_roommap.count(room.unique) == 0)

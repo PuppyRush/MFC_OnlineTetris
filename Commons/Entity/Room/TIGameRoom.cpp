@@ -25,15 +25,15 @@ const tetris::t_error TIGameRoom::enter(const UserInfo& userinfo)
 	else
 		assert(0);
 
-	this->_enter(userinfo);
+	return this->_enter(userinfo);
 }
 const tetris::t_error TIGameRoom::enter(const TetrisUser& userinfo)
 {
 
-	this->_enter(userinfo);
+	return this->_enter(userinfo);
 }
 const tetris::t_error TIGameRoom::exit(const tetris::t_unique user)
 {
 
-	//this->_exit(userinfo);
+	return this->_exit(user);
 }

@@ -6,6 +6,8 @@
 #pragma once
 #pragma comment(lib, "UxTheme.lib")
 
+#define WINDOWS_TETRIS
+
 #ifndef _SECURE_ATL
 #define _SECURE_ATL 1
 #endif

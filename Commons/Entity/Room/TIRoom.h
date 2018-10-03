@@ -78,10 +78,6 @@ public:
 	inline const std::shared_ptr<RoomInfo> getRoomInfo() const noexcept {return m_roomInfo;	}
 
 
-
-
-
-
 protected:
 	TIRoom();
 	explicit TIRoom(const RoomInfo& roominfo);

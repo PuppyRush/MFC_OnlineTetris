@@ -24,6 +24,9 @@ public:
 
 	tetris::t_error addGameRoom(const RoomInfo&);
 	tetris::t_error removeGameRoom(const tetris::t_unique);
+	virtual const tetris::t_error enter(const UserInfo &userinfo) override;
+	virtual const tetris::t_error enter(const TetrisUser &userinfo) override;
+	virtual const tetris::t_error exit(const tetris::t_unique user) override;
 
 	static const std::shared_ptr<std::vector<RoomInfo>> getWaitingRoomsInfo();
 
