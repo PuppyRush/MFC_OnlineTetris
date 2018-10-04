@@ -15,17 +15,19 @@
 
 using namespace std;
 
-TIRoom::TIRoom()
+TIRoom::TIRoom(property_distinguish dist)
 	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>())
-	,m_roomInfo(make_shared<RoomInfo>())
+	,m_roomInfo(make_shared<RoomInfo>()),
+	m_dist(dist)
 {
 	m_roomInfo->unique = this->getUnique();
 	m_roomInfo->makeTime =  std::time(0);
 }
 
 
-TIRoom::TIRoom(const RoomInfo& roominfo)
-	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>())
+TIRoom::TIRoom(const RoomInfo& roominfo, property_distinguish dist)
+	:m_userCon(TObjectContainerFactory::get()->getContainer<TetrisUser>()),
+	 m_dist(dist)
 {
 	m_roomInfo = make_shared<RoomInfo>(roominfo);
 	m_roomInfo->unique = this->getUnique();
@@ -37,35 +39,37 @@ TIRoom::~TIRoom()
 	// TODO Auto-generated destructor stub
 }
 
-const tetris::t_error TIRoom::_enter(const UserInfo &userinfo)
+const tetris::t_error TIRoom::enter(const UserInfo &userinfo)
 {
 	if (m_userInfo.count(userinfo.unique) == 0)
 	{
 		m_userInfo.insert(make_pair(userinfo.unique, make_shared<UserInfo>(userinfo)));
-		return toUType( TIRoom::errorCode::Ok);
+
+        if(m_userCon->exist(userinfo.unique))
+        {
+            m_userCon->at(userinfo.unique)->setPlace(m_dist, this->getUnique());
+            return toUType( TIRoom::errorCode::Ok);
+        }
+        else
+            return toUType(TIRoom::errorCode::Empty);
 	}
 	else
 		return toUType(TIRoom::errorCode::Exist);
 }
 
-const tetris::t_error TIRoom::_enter(const TetrisUser &userinfo)
+const tetris::t_error TIRoom::exit(const tetris::t_unique unique, const property_distinguish otherDist)
 {
-	if (m_userInfo.count(userinfo.getUnique()) == 0)
+	if (m_userInfo.count(unique))
 	{
-		m_userInfo.insert(make_pair(userinfo.getUnique(),
-				make_shared<UserInfo>(userinfo.getUnique(), userinfo.getUserName().c_str())));
-		return toUType( TIRoom::errorCode::Ok);
-	}
-	else
-		return toUType(TIRoom::errorCode::Exist);
-}
+		m_userInfo.erase(unique);
 
-const tetris::t_error TIRoom::_exit(const tetris::t_unique user)
-{
-	if (m_userInfo.count(user))
-	{
-		m_userInfo.erase(user);
-		return toUType(TIRoom::errorCode::Ok);
+        if(m_userCon->exist(unique))
+        {
+            m_userCon->at(unique)->setPlace(otherDist, this->getUnique());
+            return toUType( TIRoom::errorCode::Ok);
+        }
+        else
+            return toUType(TIRoom::errorCode::Empty);
 	}
 	else
 		return toUType(TIRoom::errorCode::Empty);

@@ -33,6 +33,7 @@ TServerUser::~TServerUser()
 void TServerUser::registryMessage()
 {
    this->addCaller(make_pair(toUType(SERVER_MSG::CONNECTION_INFO), std::bind(&TServerUser::recvConnectionInfo, this, std::placeholders::_1)));
+   this->addCaller(make_pair(toUType(CHAT_MSG::SEND_MESSAGE), std::bind(&TServerUser::recvChatMessage, this, std::placeholders::_1)));
 }
 
 
@@ -49,3 +50,13 @@ void TServerUser::recvConnectionInfo(const TMessageObject& msg)
     waitingRoom->sendWaitingUsers(this->getSocket());
 }
 
+void TServerUser::recvChatMessage(const TMessageObject& obj)
+{
+    auto msg = TMessageObject::toMessage<mChatMessage>(obj);
+    auto usercon = TObjectContainerFactory::get()->getContainer<TetrisUser>();
+    if(usercon->exist(msg.unique))
+    {
+        auto user = usercon->at(msg.unique);
+        auto place = user->getPlace();
+    }
+}

@@ -10,6 +10,7 @@
 #include "TMessageObject.h"
 
 #define T_SEND(socket, msg) TMessageSender::get()->push(TMessageObject::toMessage(socket, msg))
+#define T_BROADCAST(msg) TMessageSender::get()->push(TMessageObject::toMessage(msg))
 
 class TMessageSender : public Uncopyable
 {

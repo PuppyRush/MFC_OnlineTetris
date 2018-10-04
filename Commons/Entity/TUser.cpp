@@ -1,10 +1,12 @@
 #pragma once
 
 #include <memory.h>
+#include <numeric>
 
 #include "../TMessageSender.h"
 #include "TUser.h"
 #include "TSocket.h"
+
 
 
 #ifdef _DEBUG
@@ -15,7 +17,8 @@ static char THIS_FILE[] = __FILE__;
 
 TetrisUser::TetrisUser(const tetris::t_socket socket)
 	:m_chat(std::make_shared<TChat>()),
-	m_socketUnique(socket)
+	m_socketUnique(socket),
+	m_place(std::make_pair(property_distinguish::WaitingRoom,std::numeric_limits<tetris::t_unique>::max()))
 {}
 
 void TetrisUser::removeFilter(const tetris::t_unique unique)

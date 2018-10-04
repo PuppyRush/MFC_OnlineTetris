@@ -36,6 +36,20 @@ public:
 		return TMessageObject(sender, false, priority, len, dest);
 	}
 
+	template <class T>
+	static const TMessageObject toMessage(T *msg)
+	{
+		const size_t len = sizeof(T);
+		assert(PACKET_LEN > len);
+
+		char* dest = new char[PACKET_LEN];
+		memcpy(dest, msg, PACKET_LEN);
+		dest[len] = 0;
+
+		tetris::t_priority priority = msg->priority;
+		return TMessageObject(false, priority, len, dest);
+	}
+
 	/*template <class T, typename std::enable_if_t<std::is_base_of_v<Client, T>,T>>
     static const TMessageObject toMessage(const tetris::t_socket sender, T *msg)
     {
@@ -68,6 +82,7 @@ public:
     inline bool operator>(const TMessageObject &msg) const noexcept
     {return this->m_priority > msg.m_priority;}
 
+    inline const tetris::t_socket isBroadcast() const noexcept { return m_broadcast;}
 	inline const tetris::t_socket getSocket() const noexcept {	return m_sender;}
 	inline const tetris::t_dist getDistinguish() const noexcept { return m_dest; }
     inline const char* getMessage() const noexcept { return m_message;}
@@ -77,6 +92,7 @@ public:
 private:
 	tetris::t_socket m_sender;
 	bool m_exceptme;
+	bool m_broadcast;
 
     tetris::t_priority m_priority;
     tetris::t_msgsize m_size;
@@ -85,6 +101,7 @@ private:
 
     tetris::t_dist m_dest;
 
+	explicit TMessageObject(const bool exception, const tetris::t_priority, const tetris::t_msgsize, const char* msg);
 	explicit TMessageObject(const tetris::t_socket socket, const bool exception, const tetris::t_priority, const tetris::t_msgsize, const char* msg);
 };
 

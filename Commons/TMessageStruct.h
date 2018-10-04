@@ -107,11 +107,11 @@ typedef struct Client
 
 typedef struct mPermit : public Header
 {
-	size_t res;
+	tetris::t_property result;
 
-	explicit mPermit(const Header h, const int res)
-		:Header(h), 
-		res(res)
+	explicit mPermit(const Header h, const tetris::t_property res)
+		:Header(h),
+		 result(res)
 	{
 		size = sizeof(mPermit) - sizeof(h);
 	}
@@ -243,6 +243,7 @@ typedef struct mChatMessage :public Header, Client
 	tetris::t_unique receiver;
 	tetris::t_enum_chat chatType;
 
+	mChatMessage(){}
 	explicit mChatMessage(const Header h, const Client client, const size_t msglen, const char* msg, tetris::t_unique receiver, tetris::t_enum_chat chatType)
 		:Header(h),
 		Client(client),
@@ -253,19 +254,6 @@ typedef struct mChatMessage :public Header, Client
 		CopyChars(this->msg, MSG_LEN, msg, msglen);
 		size = sizeof(mChatMessage) - sizeof(h);
 	}
-
-	/*static mMessage GetMessage(const char* _msg)
-	{
-		auto len = strnlen(_msg, MSG_LEN);
-		assert(len < MSG_LEN);
-
-		char *msg = new char[MSG_LEN];
-		memset(msg, 0, sizeof(char)*MSG_LEN);
-		strncat(msg, _msg, len);
-
-		const auto header = Header(Priority::Normal, std::underlying_type_t<(SERVER_MSG::ON_MESSAGE));
-		return mMessage(header, len, _msg);
-	}*/
 }mChatMessage;
 
 typedef struct mReady : public Header

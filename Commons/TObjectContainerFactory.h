@@ -14,6 +14,8 @@
 #include "Entity/Room/TIGameRoom.h"
 #include "Entity/Room/TIWaitingRoom.h"
 
+#define USER_CON() TObjectContainerFactory::get()->getContainer<TetrisUser>();
+
 class TObjectContainerFactory : public Uncopyable
 {
 public:
@@ -38,7 +40,7 @@ public:
 	}
 
 private:
-	//TObjectContainerFactory() 
+	//TObjectContainerFactory()
 	//{
 	//	auto it = EnumIterator<property_distinguish>();
 	//	for (it.begin() ; it.end() ; ++it)

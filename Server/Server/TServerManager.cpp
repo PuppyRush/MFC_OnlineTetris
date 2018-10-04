@@ -56,7 +56,7 @@ void TServerManager::_makeWaitingRoom()
 
 	RoomInfo room(-1,0,"Tetris1",0, toUType(TWaitingRoom::property::MaxSize),0);
 	auto basicWaitingRoom = TWaitingRoom::makeShared(room);
-	basicWaitingRoom->enter(*admin);
+	basicWaitingRoom->enter(UserInfo(admin->getUnique(), admin->getUserName().c_str()));
 
 	auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>();
 	waitroomcon->add(basicWaitingRoom);
@@ -96,7 +96,7 @@ void TServerManager::_HelloUser(const tetris::t_socket socketUnique)
 	auto waitroomcon = TObjectContainerFactory::get()->getContainer<TIWaitingRoom>();
 	auto waitingRoom = dynamic_cast<TWaitingRoom*>(*waitroomcon->begin());
 
-	waitingRoom->enter(*newUser.get());
+	waitingRoom->enter( UserInfo(newUser->getUnique(), newUser->getUserName().c_str() ));
 	TObjectContainerFactory::get()->getContainer<TetrisUser>()->add(newUser);
 	TObjectContainerFactory::get()->getContainer<TetrisSocket>()->add(newsocket);
 

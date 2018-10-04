@@ -12,6 +12,7 @@
 #include "../../Commons/TObjectContainerFactory.h"
 #include "../../Commons/TMessageSender.h"
 #include "../../Commons/TMessageStruct.h"
+#include "../../Commons/TMessageObject.h"
 #include "../../Commons/structs.h"
 #include "../../Commons/Validator.h"
 #include "../../Commons/TypeTraits.h"
@@ -56,19 +57,6 @@ const tetris::t_error TWaitingRoom::_validator(const TIRoom &room) const
 	////	return errorCode::Nobody;
 	//
 	//return errorCode::Ok;
-}
-
-const tetris::t_error TWaitingRoom::enter(const UserInfo &userinfo)
-{
-
-}
-const tetris::t_error TWaitingRoom::enter(const TetrisUser &userinfo)
-{
-
-}
-const tetris::t_error TWaitingRoom::exit(const tetris::t_unique user)
-{
-
 }
 
 void TWaitingRoom::sendWaitingUsers(const tetris::t_socket socketUnique)
@@ -121,7 +109,6 @@ void TWaitingRoom::sendWaitingRooms(const tetris::t_socket socketUnique)
 
 void TWaitingRoom::sendWaitingRoomInfo(const tetris::t_socket socketUnique)
 {
-
     const auto info = *TObjectContainerFactory::get()->getContainer<TIWaitingRoom>()->begin()->getRoomInfo().get();
     const auto header = Header( toUType(Priority::Normal), toUType(WAITINGROOM_MSG::WAITINGROOM_INFO));
     mWaitingRoomInfo roominfo(header,info);
@@ -133,13 +120,27 @@ void TWaitingRoom::recvCreateRoomInfo(const TMessageObject &obj)
 {
     auto msg = TMessageObject::toMessage<mRoomInitInfo>(obj);
     RoomInfo roominfo(TAtomic::newUnique(), time(0) , msg.roominfo.roomName,
-        msg.roominfo.roomNumber, msg.roominfo.fullUserCount, 1);
+                    msg.roominfo.roomNumber, msg.roominfo.fullUserCount, 1);
+    UserInfo master(msg.unique, m_userCon->at(msg.unique)->getUserName().c_str());
 
-
-
+    updateWaitingRooms(roominfo, master);
 }
 
-void TWaitingRoom::updateWaitingRooms(const RoomInfo& room)
+void TWaitingRoom::updateWaitingRooms(const RoomInfo& roominfo, const UserInfo& master)
 {
+    property_error result;
 
+    if(m_userCon->exist(master.unique))
+    {
+        addGameRoom(roominfo, master);
+        TGameRoom::makeShared(roominfo, master);
+
+        result = property_error::eOK;
+    }
+    else
+        result = property_error::eFail;
+
+    const auto header = Header( toUType(Priority::Normal), toUType(GAMEROOM_MSG::CREATE_GAMEROOM));
+    mPermit permit(header, toUType(result));
+    T_BROADCAST(&permit);
 }

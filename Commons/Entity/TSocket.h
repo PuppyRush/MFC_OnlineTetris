@@ -7,8 +7,7 @@
 #include <thread>
 #include <mutex>
 #include <limits>
-
-//#include <assert.h>
+#include <numeric>
 
 #include "TObject.h"
 #include "../Logger.h"
@@ -20,6 +19,11 @@
 class TetrisSocket : public TObject
 {
 public:
+	enum class property : tetris::t_socket
+	{
+		Broadcast = std::numeric_limits<tetris::t_socket>::max()
+	};
+
 	using dist = distinguishType<TetrisSocket>;
 
 	virtual ~TetrisSocket();

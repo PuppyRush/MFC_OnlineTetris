@@ -32,7 +32,6 @@ void TGameRoom::registryMessage()
 {
 
 }
-
 const tetris::t_error TGameRoom::_validator(const TIRoom &room) const
 {
 	const auto roominfo = room.getRoomInfo();
@@ -53,8 +52,12 @@ const tetris::t_error TGameRoom::_validator(const TIRoom &room) const
 	return toUType(errorCode::Ok);
 }
 
-bool TGameRoom::makeGameRoom(const RoomInfo& room)
+
+std::shared_ptr<TGameRoom> TGameRoom::makeShared(const RoomInfo& roominfo, const UserInfo& master)
 {
-	auto newroom = makeShared(room);
-	TObjectContainerFactory::get()->getContainer<TIGameRoom>()->add(newroom);
+    auto room = tetris::t_ptr<TGameRoom>(new TGameRoom(roominfo));
+    room->enter(master);
+
+    TObjectContainerFactory::get()->getContainer<TIGameRoom>()->add(room);
+    return room;
 }

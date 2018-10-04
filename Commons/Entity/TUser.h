@@ -39,7 +39,7 @@ public:
 	inline const bool isSurvive() const noexcept { return m_isSurvive; }
 	inline const tetris::t_socket getSocket() const noexcept { return m_socketUnique; }
 
-	inline void setPlace(const tetris::t_dist dist, const tetris::t_unique unique) { m_place = std::make_pair(dist, unique);	}
+	inline void setPlace(const property_distinguish dist, const tetris::t_unique unique) { m_place = std::make_pair(dist, unique);	}
 	inline void setSurvive(const bool n) noexcept { m_isSurvive = n; }
 	inline void setOrder(const int idx) noexcept { m_order = idx; }
 	inline void setName(const std::string name) { m_name = name; }
@@ -65,6 +65,6 @@ private:
 	bool m_isReady;
 	bool m_isSurvive;
 	std::shared_ptr<TChat> m_chat;
-	std::pair<tetris::t_dist, tetris::t_unique> m_place;
+	std::pair<property_distinguish, tetris::t_unique> m_place;
 	
 };

@@ -28,13 +28,10 @@ public:
 
 	virtual void registryMessage() override;
 	virtual const tetris::t_error _validator(const TIRoom &room) const override;
-	virtual const tetris::t_error enter(const UserInfo &userinfo) override;
-	virtual const tetris::t_error enter(const TetrisUser &userinfo) override;
-	virtual const tetris::t_error exit(const tetris::t_unique user) override;
 
 	void sendWaitingUsers(const tetris::t_socket socketUnique);
 	void sendWaitingRooms(const tetris::t_socket socketUnique);
-	void updateWaitingRooms(const RoomInfo& room);
+	void updateWaitingRooms(const RoomInfo& room, const UserInfo& master);
 	static void sendWaitingRoomInfo(const tetris::t_socket socketUnique);
 
 	static tetris::t_ptr<TWaitingRoom> makeShared(const RoomInfo& room)

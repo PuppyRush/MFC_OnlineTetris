@@ -52,9 +52,18 @@ void TMessageThread::_send()
 		const auto msg = sender->pop();
 		const auto sender = msg.getSocket();
 
-		if (m_socketCon->exist(sender))
-			m_socketCon->at(sender)->send(msg);
+		if(msg.isBroadcast())
+		{
+			for(const auto socket : *m_socketCon)
+				socket->send(msg);
+		}
+		else
+		{
+			if (m_socketCon->exist(sender))
+				m_socketCon->at(sender)->send(msg);
+		}
 
+#ifdef WINDOWS_TETRIS
 		if (msg.isExceptionMe())
 		{
 			for (const auto con : m_objcontainerAry)
@@ -65,7 +74,7 @@ void TMessageThread::_send()
 				}
 			}
 		}
-			
+#endif
 
 	}
 }

@@ -38,5 +38,5 @@ protected:
 private:
 
 	void recvConnectionInfo(const TMessageObject& msg);
-
+	void recvChatMessage(const TMessageObject& msg);
 };

@@ -8,13 +8,18 @@
 
 using namespace std;
 
+TIWaitingRoom::TIWaitingRoom()
+    :TIRoom(property_distinguish::WaitingRoom)
+{
+}
+
 TIWaitingRoom::TIWaitingRoom(const RoomInfo& roominfo)
-	:TIRoom(roominfo)
+	:TIRoom(roominfo, property_distinguish::WaitingRoom)
 {
 	this->setRoomNumber(TAtomic::newWaitingRoomNumber());
 }
 
-tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room)
+tetris::t_error TIWaitingRoom::addGameRoom(const RoomInfo& room, const UserInfo& master)
 {
     if (m_roommap.count(room.unique) == 0)
     {

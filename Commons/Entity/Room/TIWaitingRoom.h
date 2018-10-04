@@ -22,7 +22,7 @@ public:
 
 	virtual ~TIWaitingRoom() {}
 
-	tetris::t_error addGameRoom(const RoomInfo&);
+	tetris::t_error addGameRoom(const RoomInfo& roominfo, const UserInfo& master);
 	tetris::t_error removeGameRoom(const tetris::t_unique);
 
 	static const std::shared_ptr<std::vector<RoomInfo>> getWaitingRoomsInfo();
@@ -30,7 +30,7 @@ public:
 protected:
 	std::unordered_map<tetris::t_unique, tetris::t_ptr<RoomInfo>> m_roommap;
 
-	TIWaitingRoom() {}
+	TIWaitingRoom();
 	explicit TIWaitingRoom(const RoomInfo& roominfo);
 
 private:

@@ -66,6 +66,14 @@ enum class SERVER_MSG : uint16_t
 	BC_RESTART
 };
 
+enum class CHAT_MSG : tetris::t_enum_chat
+{
+	SEND_MESSAGE=0,
+	RECV_MESSAGE,
+	SEND_WHISPER
+};
+
+
 enum class WAITINGROOM_MSG : tetris::t_enum_room
 {
 	WAITINGROOMS_INFO,
