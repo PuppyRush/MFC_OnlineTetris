@@ -34,23 +34,13 @@ TetrisSocket::~TetrisSocket()
 
 }
 
-tetris::t_socket TetrisSocket::popSocket()
-{
-    while (true)
-    {
-        if (!m_acceptedSocketQ.empty())
-        {
-            const unsigned socket = m_acceptedSocketQ.front();
-            m_acceptedSocketQ.pop();
-            return socket;
-        }
-    }
-}
-
 tetris::t_error TetrisSocket::accept()
 {
-    _callRunAcception();
-    return 0u;
+    tetris::t_socket socket = _accept();
+    if (socket>=0)
+        return socket;
+    else
+        std::numeric_limits<tetris::t_socket>::max();
 }
 
 tetris::t_error TetrisSocket::connect()
@@ -62,12 +52,6 @@ tetris::t_error TetrisSocket::close()
 {
     _end();
     return _close(m_socket);
-}
-
-void TetrisSocket::_callRunAcception()
-{
-    const auto acceptFn = &TetrisSocket::_runAccept;
-    m_acceptThread = make_shared<thread>(acceptFn, this);
 }
 
 void TetrisSocket::_end()
@@ -88,21 +72,3 @@ const TMessageObject TetrisSocket::recv()
 {
     return _recvFrom();
 }
-
-
-void TetrisSocket::_runAccept()
-{
-    while (m_closeSocket)
-    {
-        tetris::t_socket socket = _accept();
-        if (socket == -1)
-        {
-            ;//writeLog("error recvfrom");
-        }
-        else
-        {
-            m_acceptedSocketQ.push(socket);
-        }
-    }
-}
-

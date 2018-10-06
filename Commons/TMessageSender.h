@@ -4,6 +4,7 @@
 #include <mutex>
 #include <algorithm>
 #include <memory>
+#include <condition_variable>
 
 #include "Uncopyable.h"
 #include "TType.h"
@@ -24,11 +25,14 @@ public:
 	{
 		std::lock_guard<std::mutex> lock(m_qMutex);
 		m_sendQ.push(msg);
+		m_cond.notify_one();
 	}
 
 	inline const bool exist()
 	{
-		std::lock_guard<std::mutex> lock(m_qMutex);
+		std::unique_lock<std::mutex> lock(m_qMutex);
+		m_cond.wait(lock, [=](){return !m_sendQ.empty() || !m_isContinue;});
+
 		return m_sendQ.empty();
 	}
 
@@ -39,13 +43,15 @@ public:
 	}
 
 private:
+	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject>> m_sendQ;
+	std::mutex	m_qMutex;
+	bool m_isContinue;
+	std::condition_variable m_cond;
+
 	TMessageSender()
 	:m_isContinue(true)
 	{}
 
-	std::queue<TMessageObject> m_messqgeQ;
-	std::priority_queue<TMessageObject, std::vector<TMessageObject>, std::greater<TMessageObject>> m_sendQ;
-	std::mutex	m_qMutex;
-	bool m_isContinue;
+
 };
 

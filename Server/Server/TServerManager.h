@@ -24,7 +24,6 @@ public:
 	
 	virtual ~TServerManager();
 
-	void run();
 	void beginServer();
 
 	inline static std::shared_ptr<TServerManager> get()

@@ -38,10 +38,7 @@ public:
 		return std::shared_ptr<TServerSocket>(new TServerSocket(socket));
 	}
 
-	void sendConnectionInfo();
-
 private:
 
 	explicit TServerSocket(tetris::t_socket socekt);
-	void recvConnectionInfo(const TMessageObject& msg);
 };

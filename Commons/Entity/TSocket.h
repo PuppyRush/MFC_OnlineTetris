@@ -21,7 +21,8 @@ class TetrisSocket : public TObject
 public:
 	enum class property : tetris::t_socket
 	{
-		Broadcast = std::numeric_limits<tetris::t_socket>::max()
+		Broadcast = std::numeric_limits<tetris::t_socket>::max(),
+		Invalidation = Broadcast-1
 	};
 
 	using dist = distinguishType<TetrisSocket>;
@@ -43,7 +44,6 @@ public:
 	inline void setClose(const bool close) { m_closeSocket = close; }
 	inline const bool isClose() const noexcept { return m_closeSocket; }
 
-	tetris::t_socket popSocket();
 	tetris::t_error connect();
 	tetris::t_error accept();
 	void send(const TMessageObject& msg);
@@ -57,7 +57,6 @@ protected:
 	IPString m_ip;
 	tetris::t_port m_port;
 
-	std::queue<tetris::t_socket> m_acceptedSocketQ;
 	bool m_closeSocket;
 
 	explicit TetrisSocket(const int domain, const int type, const int protocol, const IPString ip, const tetris::t_port port);
@@ -69,14 +68,11 @@ protected:
 	virtual const size_t _sendTo(const char *msg, const size_t size) = 0;
 	virtual const TMessageObject _recvFrom() = 0;
 
-	void _runAccept();
-
 	inline void setSocket(tetris::t_socket socket) { m_socket = socket; }
 
 private:
 	TetrisSocket() = delete;
 
-	void _callRunAcception();
 	void _end();
 
 	tetris::t_socket m_socket;

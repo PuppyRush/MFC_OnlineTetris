@@ -6,6 +6,7 @@
 
 #include <cassert>
 
+//#include "Entity/TSocket.h"
 #include "TMessageStruct.h"
 #include "DefineInfo.h"
 #include "TType.h"
@@ -71,9 +72,9 @@ public:
 		return TMessageObject(socket, false, prio, size, msg);
 	}
 
-	inline static const TMessageObject emptyMessage(const tetris::t_socket socket)
+	inline static const TMessageObject emptyMessage()
 	{
-		return TMessageObject(socket, false, static_cast<tetris::t_priority>(Priority::VeryLow), 0, nullptr);
+		return TMessageObject( std::numeric_limits<tetris::t_socket>::max(), false, static_cast<tetris::t_priority>(Priority::VeryLow), 0, nullptr);
 	}
 
     inline bool operator<(const TMessageObject &msg) const noexcept

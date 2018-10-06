@@ -30,12 +30,6 @@ public:
 	}
 
 private:
-	TMessageThread();
-
-	void _send() ;
-	void _recv() ;
-	void _switchingMessage();
-
 	bool m_continue;
 	tetris::t_ptr<std::thread> m_recvThread;
 	tetris::t_ptr<std::thread> m_sendThread;
@@ -48,4 +42,8 @@ private:
 
 	std::vector<tetris::t_ptr<ITObjectContainer>> m_objcontainerAry;
 
+	TMessageThread();
+	void _send() ;
+	void _recv() ;
+	void _switchingMessage();
 };

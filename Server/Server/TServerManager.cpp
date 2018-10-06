@@ -38,7 +38,7 @@ TServerManager::TServerManager()
 {
 	// TODO Auto-generated constructor stub
 	m_mainServerSocket = TServerSocket::get();
-	_makeWaitingRoom();
+
 }
 
 TServerManager::~TServerManager()
@@ -66,27 +66,22 @@ void TServerManager::beginServer()
 {
 	if (m_mainServerSocket->listen(5905u, 100))
 	{
-		if (m_mainServerSocket->accept() == 0)
+		_makeWaitingRoom();
+		
+		auto socketThread = TMessageThread::get();
+		socketThread->run();
+
+		while(true)
 		{
-			auto socketThread = TMessageThread::get();
-			socketThread->run();
-
-			const auto runfn = &TServerManager::run;
-			m_severManagerThread = std::make_shared<std::thread>(runfn, this);
-			m_severManagerThread->join();
+			tetris::t_socket newsocket;
+			if ( (newsocket=m_mainServerSocket->accept()) >= 0)
+			{
+				_HelloUser(newsocket);
+			}
 		}
+
 	}
 }
-
-void TServerManager::run()
-{
-	while (m_closedServer)
-	{
-		auto socketUnique = m_mainServerSocket->popSocket();
-		_HelloUser(socketUnique);
-	}
-}
-
 
 void TServerManager::_HelloUser(const tetris::t_socket socketUnique)
 {
@@ -107,6 +102,4 @@ void TServerManager::_HelloUser(const tetris::t_socket socketUnique)
 
 	waitingRoom->sendWaitingRooms(socketUnique);
 	TWaitingRoom::sendWaitingRoomInfo(socketUnique);
-
-
 }

@@ -75,7 +75,6 @@ void TMessageThread::_send()
 			}
 		}
 #endif
-
 	}
 }
 

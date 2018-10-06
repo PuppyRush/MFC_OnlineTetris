@@ -39,13 +39,3 @@ void TServerSocket::registryMessage()
 {
 
 }
-
-void TServerSocket::recvConnectionInfo(const TMessageObject& msg)
-{
-
-}
-
-void TServerSocket::sendConnectionInfo()
-{
-
-}

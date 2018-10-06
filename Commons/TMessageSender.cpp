@@ -13,16 +13,13 @@ void TMessageSender::run()
 
 const TMessageObject TMessageSender::pop()
 {
-	while (m_isContinue)
-	{
-		if (m_sendQ.empty())
-			continue;
+	std::unique_lock<std::mutex> lock(m_qMutex);
+	m_cond.wait(lock, [=](){return !m_sendQ.empty() || !m_isContinue;});
 
-		std::lock_guard<std::mutex> lock(m_qMutex);
+	if(m_sendQ.empty() || !m_isContinue)
+		return TMessageObject::emptyMessage();
 
-		const auto msg = m_sendQ.top();
-		m_sendQ.pop();
-		return msg;
-	}
-
+	const auto msg = m_sendQ.top();
+	m_sendQ.pop();
+	return msg;
 }

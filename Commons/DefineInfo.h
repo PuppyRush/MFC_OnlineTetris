@@ -15,7 +15,7 @@ enum class Priority : tetris::t_priority
 
 enum class USER_MSG : uint16_t
 {
-	EMPTY_MESSAGE = 0,
+	EMPTY_MESSAGE = static_cast<uint16_t>(1) << 0,
 	SUCC_SERVEROPEN,
 	FAIL_SERVEROPEN,
 	PREUSE_PORT,
@@ -35,7 +35,7 @@ enum class USER_MSG : uint16_t
 
 enum class CLIENT_MSG : uint16_t
 {
-	EMPTY_MESSAGE = 0,
+	EMPTY_MESSAGE = static_cast<uint16_t>(1) << 4,
 	PER_NAME,
 	CONNECTION_INFO,
 	SEND_MESSAGE,
@@ -54,7 +54,7 @@ enum class CLIENT_MSG : uint16_t
 
 enum class SERVER_MSG : uint16_t
 {
-	EMPTY_MESSAGE = 0,
+	EMPTY_MESSAGE = static_cast<uint16_t>(1) << 6,
 	ON_NAME,
 	CONNECTION_INFO,
 	ON_MESSAGE,
@@ -68,7 +68,7 @@ enum class SERVER_MSG : uint16_t
 
 enum class CHAT_MSG : tetris::t_enum_chat
 {
-	SEND_MESSAGE=0,
+	SEND_MESSAGE = static_cast<tetris::t_enum_chat>(1) << 8,
 	RECV_MESSAGE,
 	SEND_WHISPER
 };
@@ -76,14 +76,14 @@ enum class CHAT_MSG : tetris::t_enum_chat
 
 enum class WAITINGROOM_MSG : tetris::t_enum_room
 {
-	WAITINGROOMS_INFO,
+	WAITINGROOMS_INFO = static_cast<tetris::t_enum_room>(1) << 9,
     WAITINGROOM_INFO,
 	WAITINGROOM_USER,
 };
 
 enum class GAMEROOM_MSG : tetris::t_enum_room
 {
-	CREAT_INIT = 0,
+	CREAT_INIT = static_cast<tetris::t_enum_room>(1) << 10,
 	CREATE_GAMEROOM,
 };
 
