@@ -83,7 +83,7 @@ void WaitingRoomDlg::OnBnClickedOk()
 	CDialogEx::OnOK();
 }
 
-void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomsInfo& info)
+void WaitingRoomDlg::updateGameRooms(const mWaitingGameRoomInfo& info)
 {
 	auto lastrow = m_roomList.GetItemCount();
 	for (size_t i = 0; i < info.waitingRoomSize; i++)
@@ -118,7 +118,13 @@ void WaitingRoomDlg::updateRoomInfo(const mWaitingRoomsInfo& info)
 	}
 }
 
-void WaitingRoomDlg::updateRoomUserInfo(const mWaitingUserInfo& info)
+void WaitingRoomDlg::updateWaitingRoom(const mWaitingRoomInfo& info)
+{
+
+
+}
+
+void WaitingRoomDlg::updateRoomUser(const mWaitingUserInfo& info)
 {
 	for (size_t i = 0; i < info.userInfoSize; i++)
 	{

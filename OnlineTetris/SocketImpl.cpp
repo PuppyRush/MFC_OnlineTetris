@@ -20,12 +20,6 @@ SocketImpl::~SocketImpl()
 		_close(getSocket());
 	m_closeSocket = false;
 
-	while(!m_acceptedSocketQ.empty())
-	{
-		const auto socket = m_acceptedSocketQ.front();
-		m_acceptedSocketQ.pop();
-		_close(socket);
-	}
 }
 
 tetris::t_error SocketImpl::create(IPString ip, tetris::t_port port)
@@ -88,7 +82,7 @@ const TMessageObject SocketImpl::_recvFrom()
 	if (recvLen == 0)
 	{
 		delete buf;
-		TMessageObject::emptyMessage(getSocket());
+		TMessageObject::emptyMessage();
 	}
 	return TMessageObject::toMessage(getSocket(), buf, recvLen);
 }

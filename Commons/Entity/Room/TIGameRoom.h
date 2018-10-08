@@ -26,7 +26,7 @@ public:
 	};
 
 	virtual ~TIGameRoom() {}
-
+	static std::string getBasicGoomNameArbitary();
 protected:
 	TIGameRoom();
 	explicit TIGameRoom(const RoomInfo& roominfo);

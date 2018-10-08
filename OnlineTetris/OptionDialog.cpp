@@ -56,6 +56,9 @@ BOOL CreateRoomDialog::OnInitDialog()
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
 	
+	m_roomname = TIGameRoom::getBasicGoomNameArbitary();
+	m_edt_roomname.SetWindowTextW(CString(m_roomname.c_str()));
+	
 	auto it = EnumIterator<TIRoom::property_map>();
 	for (it.begin(); it.end(); ++it)
 	{
@@ -87,7 +90,7 @@ BOOL CreateRoomDialog::OnInitDialog()
 			assert(0);
 		}
 	}
-
+	m_cmb_map.SetCurSel(0);
 
 	auto _it = EnumIterator<TIRoom::property_level>();
 	for (_it.begin(); _it.end(); ++_it)
@@ -99,6 +102,7 @@ BOOL CreateRoomDialog::OnInitDialog()
 
 	for(auto i= toUType(TIGameRoom::property::MinimunCount) ; i < toUType(TIGameRoom::property::MaxCount) ; i++)
 		m_cmb_usercount.AddString(StringManager::ToCStringFrom(i));
+	m_cmb_usercount.SetCurSel(2);
 
 	return TRUE;  
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.

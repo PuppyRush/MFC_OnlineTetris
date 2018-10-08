@@ -33,7 +33,7 @@ public:
 	enum class property : tetris::t_property
 	{
 		LengthMin = 5,
-		LengthMax = 20,
+		LengthMax = ROOMNAME_LEN,
 	};
 
 	enum class property_level : tetris::t_property

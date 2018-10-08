@@ -24,8 +24,9 @@ public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedBtnCreateroom();
 	
-	void updateRoomUserInfo(const mWaitingUserInfo& info);
-	void updateRoomInfo(const mWaitingRoomsInfo& info);
+	void updateRoomUser(const mWaitingUserInfo& info);
+	void updateWaitingRoom(const mWaitingRoomInfo& info);
+	void updateGameRooms(const mWaitingRoomsInfo& info);
 	
 	static shared_ptr<WaitingRoomDlg> getDialog()
 	{

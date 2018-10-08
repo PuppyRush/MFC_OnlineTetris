@@ -97,6 +97,7 @@ typedef struct Client
 {
 	tetris::t_unique unique;
 	bool exceptme;
+	char zero[3];
 
 	Client() {}
 	explicit Client(const tetris::t_unique unique, bool exception=false)
@@ -162,14 +163,14 @@ typedef struct mWaitingUserInfo : public Header
 }mWaitingUserInfo;
 
 
-typedef struct mWaitingRoomsInfo : public Header
+typedef struct mWaitingGameRoomInfo : public Header
 {
 #define ROOM_LENGTH 2
     RoomInfo waitingRoom[ROOM_LENGTH];
     size_t waitingRoomSize;
 
-	mWaitingRoomsInfo() {}
-	explicit mWaitingRoomsInfo
+	mWaitingGameRoomInfo() {}
+	explicit mWaitingGameRoomInfo
 	(
 		const Header h,
 		const RoomInfo* _roominfo,
